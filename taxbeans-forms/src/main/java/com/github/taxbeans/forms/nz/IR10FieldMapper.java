@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class IR10FieldMapper {
 
-	final static Logger logger = LoggerFactory.getLogger(IR10FieldMapperTest.class);
+	final static Logger logger = LoggerFactory.getLogger(IR10FieldMapper.class);
 
 	private static volatile Map<String, String[]> map = null;
 
