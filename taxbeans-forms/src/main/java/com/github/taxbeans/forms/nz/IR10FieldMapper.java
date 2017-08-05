@@ -20,7 +20,7 @@ public class IR10FieldMapper {
 
 	public static String getFieldName(IR10Fields fieldName, int year) {
 		if (map == null) {
-			synchronized (IR10FieldMapperTest.class) {
+			synchronized (IR10FieldMapper.class) {
 				if (map == null) {
 					map = new HashMap<String, String[]>();
 					Reader in;
