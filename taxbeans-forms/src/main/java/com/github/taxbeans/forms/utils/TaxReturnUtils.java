@@ -86,7 +86,7 @@ public class TaxReturnUtils {
 				firstDateOfAccessibleIncome.compareTo(LocalDate.of(year, 4, 1)) < 0;
 	}
 	
-	public String formatAsOFXString(Transaction transaction) {
+	public static String formatAsOFXString(Transaction transaction) {
 		/*
 		              <STMTTRN>
               <TRNTYPE>OTHER

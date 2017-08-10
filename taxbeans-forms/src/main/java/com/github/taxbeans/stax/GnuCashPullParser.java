@@ -246,8 +246,8 @@ public class GnuCashPullParser {
 		logger.info("About to parse: " + fileName2.getCanonicalPath());
 		XMLStreamReader streamReader = XMLInputFactory.newFactory().createXMLStreamReader(
 				new FileReader(fileName2));
-		int transactionCount = 0;
-		int accountCount = 0;
+		//int transactionCount = 0;
+		//int accountCount = 0;
 		List<Transaction> transactions = new ArrayList<Transaction>();
 		List<Account> accounts = new ArrayList<Account>();
 		while(streamReader.hasNext()){
@@ -257,7 +257,7 @@ public class GnuCashPullParser {
 					Transaction transaction = new Transaction();
 					transactions.add(transaction);
 					parseTransaction(streamReader, transaction);
-					transactionCount++;
+					//transactionCount++;
 				} else if ("account".equals(streamReader.getLocalName())) {
 					if (!"http://www.gnucash.org/XML/gnc".equals(streamReader.getNamespaceURI()))
 						continue;
@@ -265,7 +265,7 @@ public class GnuCashPullParser {
 					accounts.add(account);
 					parseAccount(streamReader, account);
 					guidToAccountNameMap.put(account.getGuid(), account.getName());
-					accountCount++;
+					//accountCount++;
 
 				}
 			}
