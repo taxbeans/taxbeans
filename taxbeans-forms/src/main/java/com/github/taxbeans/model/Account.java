@@ -150,11 +150,11 @@ public class Account {
 
 		Collections.sort(transactions);
 		BigDecimal balance = BigDecimal.ZERO;
-		int transactionNum = -1;
+		//int transactionNum = -1;
 		for (Transaction transaction : transactions) {
 			if (transaction.getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0)
 				return balance;
-			transactionNum++;
+			//transactionNum++;
 			//logger.debug("amount = " + transaction.getAmount());
 			if (transaction.getCreditAccount() == this) {
 				//logger.debug("credit");
