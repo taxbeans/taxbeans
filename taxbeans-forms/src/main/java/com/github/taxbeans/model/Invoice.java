@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.javamoney.moneta.Money;
 
-public class Invoice {
-	
+public class Invoice { 
+
 	private LocalDate date;
 	
 	private Money amount;
