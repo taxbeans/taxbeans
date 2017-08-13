@@ -13,5 +13,9 @@ public class Invoice {
 	
 	private List<Payment> payments;
 	
+	private ReceiptReference receiptReference;
+	
+	private TaxReference taxReference;
+	
 
 }
