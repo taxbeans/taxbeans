@@ -6,3 +6,22 @@ salutation.mrs,1
 salutation.miss,2
 salutation.ms,3
 salutation.none,Off
+firstname,first names
+surname,surname
+postalAddressLine1,3 street address
+postalAddressLine2,3 town or city
+streetAddressLine1,4 street address
+streetAddressLine2,4 town or city
+birthDay,5 day
+birthMonth,5 month
+birthYear,5 year
+businessIndustryClassificationCode,6 business
+phonePrefix,7 prefix
+phoneNumberExcludingPrefix,7 phone number
+bankNumber,8 bank
+branchNumber,8 branch
+bankAccountNumber,8 account no
+bankSuffix,8 suffix
+incomeAdjustmentsRequired,9A Check Box
+incomeAdjustmentsRequired.true,Yes
+incomeAdjustmentsRequired.false,Off

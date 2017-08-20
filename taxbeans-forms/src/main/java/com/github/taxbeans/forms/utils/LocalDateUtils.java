@@ -23,4 +23,20 @@ public class LocalDateUtils {
 		return LocalDate.parse(dateString, fmt);
 	}
 
+	public static String formatDay(LocalDate dateOfBirth) {
+		String day = String.valueOf(dateOfBirth.getDayOfMonth());
+		if (day.length() == 1) {
+			day = String.format("0%1$s", day);
+		}
+		return day;
+	}
+
+	public static String formatMonth(LocalDate dateOfBirth) {
+		String month = String.valueOf(dateOfBirth.getMonthValue());
+		if (month.length() == 1) {
+			month = String.format("0%1$s", month);
+		}
+		return month;
+	}
+
 }

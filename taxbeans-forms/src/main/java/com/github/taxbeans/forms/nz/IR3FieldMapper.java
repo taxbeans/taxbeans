@@ -6,6 +6,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.model.nz.Salutation;
+
 public class IR3FieldMapper {
 
 	final static Logger logger = LoggerFactory.getLogger(IR3FieldMapper.class);
@@ -33,6 +35,11 @@ public class IR3FieldMapper {
 
 	public static String getSalutationFieldValue(Salutation salutation, int year) {
 		String fieldName = String.format("%1$s.%2$s", IR3Fields.salutation.name(), salutation.name());
+		return getFieldNameViaString(fieldName, year);
+	}
+	
+	public static String getBooleanFieldValue(String name, boolean value, int year) {
+		String fieldName = String.format("%1$s.%2$s", name, String.valueOf(value));
 		return getFieldNameViaString(fieldName, year);
 	}
 }
