@@ -1,4 +1,4 @@
-package com.github.taxbeans.forms.nz;
+package com.github.taxbeans.model.nz;
 
 public enum Salutation {
 	mr, mrs, miss, ms
