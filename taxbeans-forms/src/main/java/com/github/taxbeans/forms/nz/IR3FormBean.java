@@ -9,12 +9,17 @@ import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.exception.TaxBeansException;
 import com.github.taxbeans.forms.utils.LocalDateUtils;
+import com.github.taxbeans.forms.utils.TaxReturnUtils;
 import com.github.taxbeans.model.nz.NZBankAccount;
 import com.github.taxbeans.model.nz.Salutation;
+import com.github.taxbeans.pdf.PDFAlignment;
+import com.github.taxbeans.pdf.PDFUtils;
 
 public class IR3FormBean {
 	
@@ -49,6 +54,22 @@ public class IR3FormBean {
 	private NZBankAccount account;
 	
 	private boolean incomeAdjustmentsRequired;
+	
+	private boolean familyTaxCreditReceived;
+	
+	private Money familyTaxCreditAmount;
+	
+	private boolean incomeWithTaxDeductedReceived;
+	
+	private Money totalPAYEDeducted;
+	
+	private Money totalGrossIncome;
+	
+	private Money accEarnersLevy;
+	
+	private Money incomeNotLiableForAccEarnersLevy;
+	
+	private Money totalTaxDeducted;
 
 	public String getIrdNumber() {
 		return irdNumber;
@@ -170,6 +191,70 @@ public class IR3FormBean {
 		this.incomeAdjustmentsRequired = incomeAdjustmentsRequired;
 	}
 
+	public boolean isFamilyTaxCreditReceived() {
+		return familyTaxCreditReceived;
+	}
+
+	public void setFamilyTaxCreditReceived(boolean familyTaxCreditReceived) {
+		this.familyTaxCreditReceived = familyTaxCreditReceived;
+	}
+
+	public Money getFamilyTaxCreditAmount() {
+		return familyTaxCreditAmount;
+	}
+
+	public void setFamilyTaxCreditAmount(Money familyTaxCreditAmount) {
+		this.familyTaxCreditAmount = familyTaxCreditAmount;
+	}
+
+	public boolean isIncomeWithTaxDeductedReceived() {
+		return incomeWithTaxDeductedReceived;
+	}
+
+	public void setIncomeWithTaxDeductedReceived(boolean incomeWithTaxDeductedReceived) {
+		this.incomeWithTaxDeductedReceived = incomeWithTaxDeductedReceived;
+	}
+
+	public Money getTotalPAYEDeducted() {
+		return totalPAYEDeducted;
+	}
+
+	public void setTotalPAYEDeducted(Money totalPAYEDeducted) {
+		this.totalPAYEDeducted = totalPAYEDeducted;
+	}
+
+	public Money getTotalGrossIncome() {
+		return totalGrossIncome;
+	}
+
+	public void setTotalGrossIncome(Money totalGrossIncome) {
+		this.totalGrossIncome = totalGrossIncome;
+	}
+
+	public Money getAccEarnersLevy() {
+		return accEarnersLevy;
+	}
+
+	public void setAccEarnersLevy(Money accEarnersLevy) {
+		this.accEarnersLevy = accEarnersLevy;
+	}
+
+	public Money getIncomeNotLiableForAccEarnersLevy() {
+		return incomeNotLiableForAccEarnersLevy;
+	}
+
+	public void setIncomeNotLiableForAccEarnersLevy(Money incomeNotLiableForAccEarnersLevy) {
+		this.incomeNotLiableForAccEarnersLevy = incomeNotLiableForAccEarnersLevy;
+	}
+
+	public Money getTotalTaxDeducted() {
+		return totalTaxDeducted;
+	}
+
+	public void setTotalTaxDeducted(Money totalTaxDeducted) {
+		this.totalTaxDeducted = totalTaxDeducted;
+	}
+
 	//assumes the forms are in the user's Downloads folder
 	public void publishDraft() {
 		try {
@@ -254,15 +339,42 @@ public class IR3FormBean {
 						IR3Fields.incomeAdjustmentsRequired, year))) {
 					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.incomeAdjustmentsRequired.name(), 
 							this.incomeAdjustmentsRequired, year));
-				}
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.familyTaxCreditReceived, year))) {
+					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.familyTaxCreditReceived.name(), 
+							this.familyTaxCreditReceived, year));
+				} else if (f.equals(IR3FieldMapper.getFieldName(
+						IR3Fields.familyTaxCreditAmount, year))) {
+					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.familyTaxCreditAmount), PDFAlignment.RIGHT, 11);
+				} else if (f.equals(IR3FieldMapper.getFieldName(
+						IR3Fields.incomeWithTaxDeductedReceived, year))) {
+					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.incomeWithTaxDeductedReceived.name(), 
+							this.incomeWithTaxDeductedReceived, year));
+				} else if (f.equals(IR3FieldMapper.getFieldName(
+						IR3Fields.totalPAYEDeducted, year))) {
+					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalPAYEDeducted), PDFAlignment.RIGHT, 11);
+				} else if (f.equals(IR3FieldMapper.getFieldName(
+						IR3Fields.totalGrossIncome, year))) {
+					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalGrossIncome), PDFAlignment.RIGHT, 11);
+				} else if (f.equals(IR3FieldMapper.getFieldName(
+						IR3Fields.accEarnersLevy, year))) {
+					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.accEarnersLevy), PDFAlignment.RIGHT, 11);
+				} else if (f.equals(IR3FieldMapper.getFieldName(
+						IR3Fields.incomeNotLiableForAccEarnersLevy, year))) {
+					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.incomeNotLiableForAccEarnersLevy), PDFAlignment.RIGHT, 11);
+				} else if (f.equals(IR3FieldMapper.getFieldName(
+						IR3Fields.totalTaxDeducted, year))) {
+					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalTaxDeducted), PDFAlignment.RIGHT, 11);
+				} 
 			}
 			File ir3DraftForm = new File(
 					new File(System.getProperty("user.home"), "Downloads"),
 					String.format("ir3-%1$s-draft.pdf", year));
 			pdfTemplate.save(ir3DraftForm);
 			pdfTemplate.close();
+			logger.info("IR3 Form Completed Successfully");
 		} catch (Exception e) {
-			throw new IllegalStateException(e);
+			throw new TaxBeansException(e);
 		}
 	}
 }

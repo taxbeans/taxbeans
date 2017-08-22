@@ -20,5 +20,13 @@ public enum IR3Fields {
 	branchNumber,
 	bankAccountNumber,
 	bankSuffix,
-	incomeAdjustmentsRequired
+	incomeAdjustmentsRequired, 
+	familyTaxCreditReceived,
+	familyTaxCreditAmount,
+	incomeWithTaxDeductedReceived, 
+	totalPAYEDeducted, 
+	totalGrossIncome,
+	accEarnersLevy, 
+	incomeNotLiableForAccEarnersLevy, 
+	totalTaxDeducted
 }

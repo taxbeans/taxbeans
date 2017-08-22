@@ -25,3 +25,17 @@ bankSuffix,8 suffix
 incomeAdjustmentsRequired,9A Check Box
 incomeAdjustmentsRequired.true,Yes
 incomeAdjustmentsRequired.false,Off
+familyTaxCreditReceived,11 Yes/No
+familyTaxCreditReceived.true,Yes
+familyTaxCreditReceived.false,No
+familyTaxCreditAmount,box 11
+incomeWithTaxDeductedReceived,11a yes/no
+incomeWithTaxDeductedReceived.true,1
+incomeWithTaxDeductedReceived.false,0
+totalPAYEDeducted,box 11A
+totalGrossIncome,box 11B
+accEarnersLevy,box 11D
+incomeNotLiableForAccEarnersLevy,box 11C
+totalTaxDeducted,box 11E
+
+
