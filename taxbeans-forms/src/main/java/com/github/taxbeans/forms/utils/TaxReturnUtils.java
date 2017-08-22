@@ -5,6 +5,8 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Locale;
 
+import org.javamoney.moneta.Money;
+
 import com.github.taxbeans.model.Transaction;
 
 import java.time.LocalDate;
@@ -109,5 +111,9 @@ public class TaxReturnUtils {
 		sb.append(String.format("<MEMO>%1$s\n", transaction.getMemo()));
 		sb.append("</STMTTRN>\n");
 		return sb.toString();
+	}
+
+	public static String formatMoneyField(Money amount) {
+		return TaxReturnUtils.formatMoneyField(amount.getNumberStripped());
 	}
 }

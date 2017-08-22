@@ -1,7 +1,9 @@
 package com.github.taxbeans.forms.nz;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.javamoney.moneta.Money;
 import org.junit.Test;
 
 import com.github.taxbeans.model.nz.NZBankAccount;
@@ -31,6 +33,14 @@ public class IR3FormBeanTest {
 		nzBankAccount.setSuffix("55");
 		bean.setAccount(nzBankAccount);
 		bean.setIncomeAdjustmentsRequired(true);
+		bean.setFamilyTaxCreditReceived(true);
+		bean.setFamilyTaxCreditAmount(Money.of(new BigDecimal("5555.55"), "NZD"));
+		bean.setIncomeWithTaxDeductedReceived(true);
+		bean.setTotalPAYEDeducted(Money.of(new BigDecimal("7777.77"), "NZD"));
+		bean.setTotalGrossIncome(Money.of(new BigDecimal("88888.88"), "NZD"));
+		bean.setAccEarnersLevy(Money.of(new BigDecimal("999.99"), "NZD"));
+		bean.setIncomeNotLiableForAccEarnersLevy(Money.of(new BigDecimal("55555.55"), "NZD"));
+		bean.setTotalTaxDeducted(Money.of(new BigDecimal("22222.22"), "NZD"));
 		bean.publishDraft();
 	}
 
