@@ -6,9 +6,9 @@ public class NZBankAccount {
 	
 	private String branchNumber;
 	
-	private String accountNumber;
+	private String bankAccountNumber;
 	
-	private String suffix;
+	private String bankSuffix;
 
 	public String getBankNumber() {
 		return bankNumber;
@@ -26,20 +26,20 @@ public class NZBankAccount {
 		this.branchNumber = branchNumber;
 	}
 
-	public String getAccountNumber() {
-		return accountNumber;
+	public String getBankAccountNumber() {
+		return bankAccountNumber;
 	}
 
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
 	}
 
-	public String getSuffix() {
-		return suffix;
+	public String getBankSuffix() {
+		return bankSuffix;
 	}
 
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
+	public void setBankSuffix(String bankSuffix) {
+		this.bankSuffix = bankSuffix;
 	}
 
 }
