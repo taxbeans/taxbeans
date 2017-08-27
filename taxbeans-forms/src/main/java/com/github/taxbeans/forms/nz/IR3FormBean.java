@@ -96,6 +96,18 @@ public class IR3FormBean {
 	
 	@UseTrueFalseMappings
 	private boolean schedularPaymentsReceived;
+	
+	@RightAlign(11)
+	private Money totalSchedularTaxDeducted;
+	
+	@RightAlign(11)
+	private Money totalSchedularGrossPayments;
+	
+	@RightAlign(11)
+	private Money schedularPaymentExpenses;
+	
+	@RightAlign(11)
+	private Money netSchedularPayments;
 
 	public String getIrdNumber() {
 		return irdNumber;
@@ -287,6 +299,38 @@ public class IR3FormBean {
 
 	public void setSchedularPaymentsReceived(boolean schedularPaymentsReceived) {
 		this.schedularPaymentsReceived = schedularPaymentsReceived;
+	}
+
+	public Money getTotalSchedularTaxDeducted() {
+		return totalSchedularTaxDeducted;
+	}
+
+	public void setTotalSchedularTaxDeducted(Money totalSchedularTaxDeducted) {
+		this.totalSchedularTaxDeducted = totalSchedularTaxDeducted;
+	}
+
+	public Money getTotalSchedularGrossPayments() {
+		return totalSchedularGrossPayments;
+	}
+
+	public void setTotalSchedularGrossPayments(Money totalSchedularGrossPayments) {
+		this.totalSchedularGrossPayments = totalSchedularGrossPayments;
+	}
+
+	public Money getSchedularPaymentExpenses() {
+		return schedularPaymentExpenses;
+	}
+
+	public void setSchedularPaymentExpenses(Money schedularPaymentExpenses) {
+		this.schedularPaymentExpenses = schedularPaymentExpenses;
+	}
+
+	public Money getNetSchedularPayments() {
+		return netSchedularPayments;
+	}
+
+	public void setNetSchedularPayments(Money netSchedularPayments) {
+		this.netSchedularPayments = netSchedularPayments;
 	}
 
 	private Map<String, String> getPropertyToFieldMap() {

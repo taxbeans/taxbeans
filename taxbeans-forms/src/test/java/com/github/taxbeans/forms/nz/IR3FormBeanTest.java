@@ -42,6 +42,10 @@ public class IR3FormBeanTest {
 		bean.setIncomeNotLiableForAccEarnersLevy(Money.of(new BigDecimal("55555.55"), "NZD"));
 		bean.setTotalTaxDeducted(Money.of(new BigDecimal("22222.22"), "NZD"));
 		bean.setSchedularPaymentsReceived(true);
+		bean.setTotalSchedularTaxDeducted(Money.of(new BigDecimal("33333.33"), "NZD"));
+		bean.setTotalSchedularGrossPayments(Money.of(new BigDecimal("44444.44"), "NZD"));
+		bean.setNetSchedularPayments(Money.of(new BigDecimal("11111.11"), "NZD"));
+		bean.setSchedularPaymentExpenses(Money.of(new BigDecimal("12121.12"), "NZD"));
 		bean.publishDraft();
 	}
 
