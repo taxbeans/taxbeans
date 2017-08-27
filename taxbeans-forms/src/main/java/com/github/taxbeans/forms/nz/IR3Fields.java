@@ -38,5 +38,8 @@ public enum IR3Fields {
 	totalGrossIncome,
 	accEarnersLevy, 
 	incomeNotLiableForAccEarnersLevy, 
-	totalTaxDeducted
+	totalTaxDeducted,
+	schedularPaymentsReceived_false,
+	schedularPaymentsReceived_true,
+	schedularPaymentsReceived, 
 }
