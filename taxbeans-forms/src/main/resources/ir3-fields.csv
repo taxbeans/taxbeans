@@ -40,5 +40,9 @@ totalTaxDeducted,box 11E
 schedularPaymentsReceived,12 no/yes
 schedularPaymentsReceived_true,1
 schedularPaymentsReceived_false,0
+totalSchedularTaxDeducted,box 12A
+totalSchedularGrossPayments,box 12B
+schedularPaymentExpenses,box 12C
+netSchedularPayments,box 12D
 
 

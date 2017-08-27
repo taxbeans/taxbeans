@@ -41,5 +41,9 @@ public enum IR3Fields {
 	totalTaxDeducted,
 	schedularPaymentsReceived_false,
 	schedularPaymentsReceived_true,
-	schedularPaymentsReceived, 
+	schedularPaymentsReceived,
+	totalSchedularTaxDeducted,
+	totalSchedularGrossPayments,
+	schedularPaymentExpenses,
+	netSchedularPayments
 }
