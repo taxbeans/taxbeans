@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.exception.TaxBeansException;
+import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
@@ -35,6 +37,7 @@ public class IR3FormBean {
 
 	private int year = 2017;
 
+	@RightAlign(9)
 	private String irdNumber;
 
 	@UseValueMappings
@@ -70,19 +73,25 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean familyTaxCreditReceived;
 
+	@RightAlign(11)
 	private Money familyTaxCreditAmount;
 
 	@UseTrueFalseMappings
 	private boolean incomeWithTaxDeductedReceived;
 
+	@RightAlign(11)
 	private Money totalPAYEDeducted;
 
+	@RightAlign(11)
 	private Money totalGrossIncome;
 
+	@RightAlign(11)
 	private Money accEarnersLevy;
 
+	@RightAlign(11)
 	private Money incomeNotLiableForAccEarnersLevy;
 
+	@RightAlign(11)
 	private Money totalTaxDeducted;
 
 	public String getIrdNumber() {
@@ -321,31 +330,32 @@ public class IR3FormBean {
 						System.out.println(fieldName + "->" + pdField);
 					}
 				} else {
-					String fieldName = propertyToFieldMap.get(key);
+					//String fieldName = propertyToFieldMap.get(key);
 					if (f.getAnnotation(UseDayMonthYear.class) != null) {
-						processField(acroForm, propertyToFieldMap.get(key + "_day"), value);
-						processField(acroForm, propertyToFieldMap.get(key + "_month"), value);
-						processField(acroForm, propertyToFieldMap.get(key + "_year"), value);
+						processField(acroForm, propertyToFieldMap.get(key + "_day"), value, f);
+						processField(acroForm, propertyToFieldMap.get(key + "_month"), value, f);
+						processField(acroForm, propertyToFieldMap.get(key + "_year"), value, f);
 					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
 						String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true") : propertyToFieldMap.get(key + "_false");
-						processField(acroForm, propertyToFieldMap.get(key), mappedValue);
+						processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
 					} else if (f.getAnnotation(UseValueMappings.class) != null) {
 						String mappedValue = propertyToFieldMap.get(key + "_" + value);
-						processField(acroForm, propertyToFieldMap.get(key), mappedValue);
+						processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
 					} else {
-						if (fieldName == null) {
-							throw new IllegalStateException("No field mapping for: " + key);
-						}
-						PDField pdField = acroForm.getField(fieldName);
-						System.out.println(fieldName + "->" + pdField);
-						if (pdField == null) {
-							List<PDField> fields = acroForm.getFields();
-							for (PDField field1 : fields) {
-								System.out.println("Candidate field: " + field1.getFullyQualifiedName());
-							}
-						}
-						pdField.setValue(String.valueOf(value));
-						System.out.println(fieldName + "->" + pdField);
+						processField(acroForm, propertyToFieldMap.get(key), value, f);
+						//						if (fieldName == null) {
+						//							throw new IllegalStateException("No field mapping for: " + key);
+						//						}
+						//						PDField pdField = acroForm.getField(fieldName);
+						//						System.out.println(fieldName + "->" + pdField);
+						//						if (pdField == null) {
+						//							List<PDField> fields = acroForm.getFields();
+						//							for (PDField field1 : fields) {
+						//								System.out.println("Candidate field: " + field1.getFullyQualifiedName());
+						//							}
+						//						}
+						//						pdField.setValue(String.valueOf(value));
+						//						System.out.println(fieldName + "->" + pdField);
 					}
 				}
 			}
@@ -361,9 +371,16 @@ public class IR3FormBean {
 		}
 	}
 
-	public void processField(PDAcroForm acroForm, String fieldName, Object value) throws IOException {
+	public void processField(PDAcroForm acroForm, String fieldName, Object value, Field f) throws IOException {
 		PDField pdField = acroForm.getField(fieldName);
 		System.out.println(fieldName + "->" + pdField);
+		if (value instanceof Money) {
+			value = TaxReturnUtils.formatMoneyField((Money) value);
+		}
+		if (f.getAnnotation(RightAlign.class) != null) {
+			int size = f.getAnnotation(RightAlign.class).value();
+			value = StringUtils.leftPad(String.valueOf(value), size);
+		}
 		if (pdField == null) {
 			List<PDField> fields = acroForm.getFields();
 			for (PDField field1 : fields) {
