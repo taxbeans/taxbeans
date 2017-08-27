@@ -24,13 +24,13 @@ public class IR3FormBeanTest {
 		bean.setStreetAddressLine2("Street Address Line 2");
 		bean.setDateOfBirth(LocalDate.of(1996, 1, 1));
 		bean.setBusinessIndustryClassificationCode("BICC");
-		bean.setPhoneNumberPrefix("55");
+		bean.setPhonePrefix("55");
 		bean.setPhoneNumberExcludingPrefix("555555");
 		NZBankAccount nzBankAccount = new NZBankAccount();
 		nzBankAccount.setBankNumber("55");
 		nzBankAccount.setBranchNumber("5555");
-		nzBankAccount.setAccountNumber("5555555");
-		nzBankAccount.setSuffix("55");
+		nzBankAccount.setBankAccountNumber("5555555");
+		nzBankAccount.setBankSuffix("55");
 		bean.setAccount(nzBankAccount);
 		bean.setIncomeAdjustmentsRequired(true);
 		bean.setFamilyTaxCreditReceived(true);
