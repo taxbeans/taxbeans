@@ -37,5 +37,8 @@ totalGrossIncome,box 11B
 accEarnersLevy,box 11D
 incomeNotLiableForAccEarnersLevy,box 11C
 totalTaxDeducted,box 11E
+schedularPaymentsReceived,12 no/yes
+schedularPaymentsReceived_true,1
+schedularPaymentsReceived_false,0
 
 

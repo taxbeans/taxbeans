@@ -93,6 +93,9 @@ public class IR3FormBean {
 
 	@RightAlign(11)
 	private Money totalTaxDeducted;
+	
+	@UseTrueFalseMappings
+	private boolean schedularPaymentsReceived;
 
 	public String getIrdNumber() {
 		return irdNumber;
@@ -278,6 +281,14 @@ public class IR3FormBean {
 		this.totalTaxDeducted = totalTaxDeducted;
 	}
 
+	public boolean isSchedularPaymentsReceived() {
+		return schedularPaymentsReceived;
+	}
+
+	public void setSchedularPaymentsReceived(boolean schedularPaymentsReceived) {
+		this.schedularPaymentsReceived = schedularPaymentsReceived;
+	}
+
 	private Map<String, String> getPropertyToFieldMap() {
 		return IR3FieldMapper.getPropertyToFieldMap(year);
 	}
@@ -301,6 +312,22 @@ public class IR3FormBean {
 			for (Map.Entry<String, Object> entry : describe.entrySet()) {
 				String key = entry.getKey();
 				Object value = entry.getValue();
+				if ("describeForm".equals(value)) {
+					//acroForm.get
+					List<PDField> fieldList = acroForm.getFields();
+
+					String[] fieldArray = new String[fieldList.size()];
+					int i = 0;
+					for (PDField sField : fieldList) {
+						fieldArray[i] = sField.getFullyQualifiedName();
+						i++;
+					}
+					for (String f : fieldArray) {
+						//PDField field = acroForm.getField(f);
+						logger.info("Field name is: " + f);
+					}
+					System.exit(0);
+				}
 				System.out.println(key + "->" + value);
 				if (key.equals("bankAccount")) {
 					System.out.println("bank account");
