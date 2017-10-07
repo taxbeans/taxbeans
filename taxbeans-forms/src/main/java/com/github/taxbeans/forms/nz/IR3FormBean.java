@@ -108,9 +108,518 @@ public class IR3FormBean {
 	
 	@RightAlign(11)
 	private Money netSchedularPayments;
+	
+	@RightAlign(11)
+	private Money totalRWT;
+	
+	@RightAlign(11)
+	private Money totalGrossInterest;
+	
+	@RightAlign(11)
+	private Money totalDividendImputationCredits;
+	
+	@RightAlign(11)
+	private Money totalDividendRWTAndPaymentsForForeignDividends;
+	
+	@RightAlign(11)
+	private Money totalGrossDividends;
+	
+	@RightAlign(11)
+	private Money totalMaoriAuthorityCredits;
+
+	@RightAlign(11)
+	private Money totalMaoriAuthorityDistributions;
+
+	@RightAlign(11)
+	private Money totalTaxPaidByTrustees;
+
+	@RightAlign(11)
+	private Money totalEstateOrTrustIncome;
+
+	@RightAlign(11)
+	private Money totalTaxableDistributionsFromNonComplyingTrusts;
+	
+	@RightAlign(11)
+	private Money totalOverseasTaxPaid;
+	
+	@RightAlign(11)
+	private Money totalOverseasIncome;
+	
+	@RightAlign(11)
+	private Money totalPartnershipTaxCredits;
+	
+	@RightAlign(11)
+	private Money totalActivePartnershipIncome;
+
+	@RightAlign(11)
+	private Money totalLTCTaxCredits;
+	
+	@RightAlign(11)
+	private Money totalActiveLTCIncome;
+	
+	@RightAlign(11)
+	private Money nonAllowableDeductionsThisYear;
+
+	@RightAlign(11)
+	private Money priorYearsNonAllowableDeductionsClaimedThisYear;
+	
+	@RightAlign(11)
+	private Money adjustedLTCIncome;
+	
+	@RightAlign(11)
+	private Money taxCreditSubtotal;
+	
+	@RightAlign(11)
+	private Money incomeSubtotal;
+
+	@RightAlign(11)
+	private Money totalShareholderEmployeeSalary;
+	
+	@RightAlign(11)
+	private Money netRents;
+	
+	@RightAlign(11)
+	private Money selfEmployedNetIncome;
+	
+	@RightAlign(11)
+	private Money totalOtherNetIncome;
+
+	@RightAlign(11)
+	private Money residentialLandWithholdingTaxCredit;
+
+	@RightAlign(11)
+	private Money totalIncome;
+
+	@RightAlign(11)
+	private Money totalOtherExpensesClaimed;
+
+	@RightAlign(11)
+	private Money incomeAfterExpenses;
+	
+	@RightAlign(11)
+	private Money amountBroughtForward;
+	
+	@RightAlign(11)
+	private Money amountClaimedThisYear;
+	
+	@RightAlign(11)
+	private Money taxableIncome;
+
+	@RightAlign(11)
+	private Money excessImputationCreditsBroughtForward;
+	
+	@RightAlign(11)
+	private Money taxOnTaxableIncome;
+	
+	@RightAlign(11)
+	private Money residualIncomeTax;
+	
+	@RightAlign(11)
+	private Money taxCalculationResult;
+	
+	@RightAlign(11)
+	private Money refundCopied;
+	
+	@RightAlign(11)
+	private Money refundOverpayment2018;
+	
+	@RightAlign(11)
+	private Money refundCopiedPlusOverpayment2018;
+	
+	@RightAlign(11)
+	private Money refundTransferTo2018;
+	
+	@RightAlign(11)
+	private Money refundTransferToStudentLoan;
+	
+	@RightAlign(11)
+	private Money refundTotal;
+	
+	@RightAlign(11)
+	private Money taxPayment2018;
+	
+	@UseDayMonthYear
+	private LocalDate dateStart2018TaxReturn;
+	
+	@UseDayMonthYear
+	private LocalDate dateEnd2018TaxReturn;
+	
+	@UseDayMonthYear
+	private LocalDate dateStartExcludedOverseasIncome;
+	
+	@UseDayMonthYear
+	private LocalDate dateEndExcludedOverseasIncome;
+	
+	public LocalDate getDateEndExcludedOverseasIncome() {
+		return dateEndExcludedOverseasIncome;
+	}
+
+	public void setDateEndExcludedOverseasIncome(LocalDate dateEndExcludedOverseasIncome) {
+		this.dateEndExcludedOverseasIncome = dateEndExcludedOverseasIncome;
+	}
+
+	public LocalDate getDateStartExcludedOverseasIncome() {
+		return dateStartExcludedOverseasIncome;
+	}
+
+	public void setDateStartExcludedOverseasIncome(LocalDate dateStartExcludedOverseasIncome) {
+		this.dateStartExcludedOverseasIncome = dateStartExcludedOverseasIncome;
+	}
+
+	public LocalDate getDateEnd2018TaxReturn() {
+		return dateEnd2018TaxReturn;
+	}
+
+	public void setDateEnd2018TaxReturn(LocalDate dateEnd2018TaxReturn) {
+		this.dateEnd2018TaxReturn = dateEnd2018TaxReturn;
+	}
+
+	public LocalDate getDateStart2018TaxReturn() {
+		return dateStart2018TaxReturn;
+	}
+
+	public void setDateStart2018TaxReturn(LocalDate dateStart2018TaxReturn) {
+		this.dateStart2018TaxReturn = dateStart2018TaxReturn;
+	}
+
+	public Money getTaxPayment2018() {
+		return taxPayment2018;
+	}
+
+	public void setTaxPayment2018(Money taxPayment2018) {
+		this.taxPayment2018 = taxPayment2018;
+	}
+
+	public Money getRefundTotal() {
+		return refundTotal;
+	}
+
+	public void setRefundTotal(Money refundTotal) {
+		this.refundTotal = refundTotal;
+	}
+
+	public Money getRefundTransferToStudentLoan() {
+		return refundTransferToStudentLoan;
+	}
+
+	public void setRefundTransferToStudentLoan(Money refundTransferToStudentLoan) {
+		this.refundTransferToStudentLoan = refundTransferToStudentLoan;
+	}
+
+	public Money getRefundTransferTo2018() {
+		return refundTransferTo2018;
+	}
+
+	public void setRefundTransferTo2018(Money refundTransferTo2018) {
+		this.refundTransferTo2018 = refundTransferTo2018;
+	}
+
+	public Money getRefundOverpayment2018() {
+		return refundOverpayment2018;
+	}
+
+	public void setRefundOverpayment2018(Money refundOverpayment2018) {
+		this.refundOverpayment2018 = refundOverpayment2018;
+	}
+
+	public Money getRefundCopied() {
+		return refundCopied;
+	}
+
+	public void setRefundCopied(Money refundCopied) {
+		this.refundCopied = refundCopied;
+	}
+
+	public Money getTaxCalculationResult() {
+		return taxCalculationResult;
+	}
+
+	public void setTaxCalculationResult(Money taxCalculationResult) {
+		this.taxCalculationResult = taxCalculationResult;
+	}
+
+	public Money getResidualIncomeTax() {
+		return residualIncomeTax;
+	}
+
+	public void setResidualIncomeTax(Money residualIncomeTax) {
+		this.residualIncomeTax = residualIncomeTax;
+	}
+
+	public Money getTaxOnTaxableIncome() {
+		return taxOnTaxableIncome;
+	}
+
+	public void setTaxOnTaxableIncome(Money taxOnTaxableIncome) {
+		this.taxOnTaxableIncome = taxOnTaxableIncome;
+	}
+
+	public Money getTotalOtherNetIncome() {
+		return totalOtherNetIncome;
+	}
+
+	public void setTotalOtherNetIncome(Money totalOtherNetIncome) {
+		this.totalOtherNetIncome = totalOtherNetIncome;
+	}
+
+	public Money getResidentialLandWithholdingTaxCredit() {
+		return residentialLandWithholdingTaxCredit;
+	}
+
+	public void setResidentialLandWithholdingTaxCredit(Money residentialLandWithholdingTaxCredit) {
+		this.residentialLandWithholdingTaxCredit = residentialLandWithholdingTaxCredit;
+	}
+
+	public Money getTotalIncome() {
+		return totalIncome;
+	}
+
+	public void setTotalIncome(Money totalIncome) {
+		this.totalIncome = totalIncome;
+	}
+
+	public Money getTotalOtherExpensesClaimed() {
+		return totalOtherExpensesClaimed;
+	}
+
+	public void setTotalOtherExpensesClaimed(Money totalOtherExpensesClaimed) {
+		this.totalOtherExpensesClaimed = totalOtherExpensesClaimed;
+	}
+
+	public Money getIncomeAfterExpenses() {
+		return incomeAfterExpenses;
+	}
+
+	public void setIncomeAfterExpenses(Money incomeAfterExpenses) {
+		this.incomeAfterExpenses = incomeAfterExpenses;
+	}
+
+	public Money getAmountBroughtForward() {
+		return amountBroughtForward;
+	}
+
+	public void setAmountBroughtForward(Money amountBroughtForward) {
+		this.amountBroughtForward = amountBroughtForward;
+	}
+
+	public Money getAmountClaimedThisYear() {
+		return amountClaimedThisYear;
+	}
+
+	public void setAmountClaimedThisYear(Money amountClaimedThisYear) {
+		this.amountClaimedThisYear = amountClaimedThisYear;
+	}
+
+	public Money getTaxableIncome() {
+		return taxableIncome;
+	}
+
+	public void setTaxableIncome(Money taxableIncome) {
+		this.taxableIncome = taxableIncome;
+	}
+
+	public Money getExcessImputationCreditsBroughtForward() {
+		return excessImputationCreditsBroughtForward;
+	}
+
+	public void setExcessImputationCreditsBroughtForward(Money excessImputationCreditsBroughtForward) {
+		this.excessImputationCreditsBroughtForward = excessImputationCreditsBroughtForward;
+	}
+
+	public Money getSelfEmployedNetIncome() {
+		return selfEmployedNetIncome;
+	}
+
+	public void setSelfEmployedNetIncome(Money selfEmployedNetIncome) {
+		this.selfEmployedNetIncome = selfEmployedNetIncome;
+	}
+
+	public Money getNetRents() {
+		return netRents;
+	}
+
+	public void setNetRents(Money netRents) {
+		this.netRents = netRents;
+	}
+
+	public Money getTotalShareholderEmployeeSalary() {
+		return totalShareholderEmployeeSalary;
+	}
+
+	public void setTotalShareholderEmployeeSalary(Money totalShareholderEmployeeSalary) {
+		this.totalShareholderEmployeeSalary = totalShareholderEmployeeSalary;
+	}
+
+	public Money getincomeSubtotal() {
+		return incomeSubtotal;
+	}
+
+	public void setIncomeSubtotal(Money incomeSubtotal) {
+		this.incomeSubtotal = incomeSubtotal;
+	}
+
+	public Money getTaxCreditSubtotal() {
+		return taxCreditSubtotal;
+	}
+
+	public void setTaxCreditSubtotal(Money taxCreditSubtotal) {
+		this.taxCreditSubtotal = taxCreditSubtotal;
+	}
+
+	public Money getAdjustedLTCIncome() {
+		return adjustedLTCIncome;
+	}
+
+	public void setAdjustedLTCIncome(Money adjustedLTCIncome) {
+		this.adjustedLTCIncome = adjustedLTCIncome;
+	}
+
+	public Money getPriorYearsNonAllowableDeductionsClaimedThisYear() {
+		return priorYearsNonAllowableDeductionsClaimedThisYear;
+	}
+
+	public void setPriorYearsNonAllowableDeductionsClaimedThisYear(Money priorYearsNonAllowableDeductionsClaimedThisYear) {
+		this.priorYearsNonAllowableDeductionsClaimedThisYear = priorYearsNonAllowableDeductionsClaimedThisYear;
+	}
+
+	public Money getNonAllowableDeductionsThisYear() {
+		return nonAllowableDeductionsThisYear;
+	}
+
+	public void setNonAllowableDeductionsThisYear(Money nonAllowableDeductionsThisYear) {
+		this.nonAllowableDeductionsThisYear = nonAllowableDeductionsThisYear;
+	}
+
+	public Money getTotalActiveLTCIncome() {
+		return totalActiveLTCIncome;
+	}
+
+	public void setTotalActiveLTCIncome(Money totalActiveLTCIncome) {
+		this.totalActiveLTCIncome = totalActiveLTCIncome;
+	}
+
+	public Money getTotalLTCTaxCredits() {
+		return totalLTCTaxCredits;
+	}
+
+	public void setTotalLTCtaxcredits(Money totalLTCTaxCredits) {
+		this.totalLTCTaxCredits = totalLTCTaxCredits;
+	}
+
+	public Money getTotalActivePartnershipIncome() {
+		return totalActivePartnershipIncome;
+	}
+
+	public void setTotalActivePartnershipIncome(Money totalActivePartnershipIncome) {
+		this.totalActivePartnershipIncome = totalActivePartnershipIncome;
+	}
+
+	public Money getTotalPartnershipTaxCredits() {
+		return totalPartnershipTaxCredits;
+	}
+
+	public void setTotalPartnershipTaxCredits(Money totalPartnershipTaxCredits) {
+		this.totalPartnershipTaxCredits = totalPartnershipTaxCredits;
+	}
+	
+	public Money getTotalOverseasIncome() {
+		return totalOverseasIncome;
+	}
+
+	public void setTotalOverseasIncome(Money totalOverseasIncome) {
+		this.totalOverseasIncome = totalOverseasIncome;
+	}
+	
+	public Money getTotalOverseasTaxPaid() {
+		return totalOverseasTaxPaid;
+	}
+
+	public void setTotalOverseasTaxPaid(Money totalOverseasTaxPaid) {
+		this.totalOverseasTaxPaid = totalOverseasTaxPaid;
+	}
+
+	public Money getTotalMaoriAuthorityCredits() {
+		return totalMaoriAuthorityCredits;
+	}
+
+	public void setTotalMaoriAuthorityCredits(Money totalMaoriAuthorityCredits) {
+		this.totalMaoriAuthorityCredits = totalMaoriAuthorityCredits;
+	}
+	
+	public Money getTotalMaoriAuthorityDistributions() {
+		return totalMaoriAuthorityDistributions;
+	}
+
+	public void setTotalMaoriAuthorityDistributions(Money totalMaoriAuthorityDistributions) {
+		this.totalMaoriAuthorityDistributions = totalMaoriAuthorityDistributions;
+	}
+
+	public Money getTotalTaxPaidByTrustees() {
+		return totalTaxPaidByTrustees;
+	}
+
+	public void setTotalTaxPaidByTrustees(Money totalTaxPaidByTrustees) {
+		this.totalTaxPaidByTrustees = totalTaxPaidByTrustees;
+	}
+	
+	public Money getTotalEstateOrTrustIncome() {
+		return totalEstateOrTrustIncome;
+	}
+
+	public void setTotalEstateOrTrustIncome(Money totalEstateOrTrustIncome) {
+		this.totalEstateOrTrustIncome = totalEstateOrTrustIncome;
+	}
+	
+	public Money getTotalTaxableDistributionsFromNonComplyingTrusts() {
+		return totalTaxableDistributionsFromNonComplyingTrusts;
+	}
+
+	public void setTotalTaxableDistributionsFromNonComplyingTrusts(Money totalTaxableDistributionsFromNonComplyingTrusts) {
+		this.totalTaxableDistributionsFromNonComplyingTrusts = totalTaxableDistributionsFromNonComplyingTrusts;
+	}
+
+	public Money getTotalGrossDividends() {
+		return totalGrossDividends;
+	}
+
+	public void setTotalGrossDividends(Money totalGrossDividends) {
+		this.totalGrossDividends = totalGrossDividends;
+	}
+
+	public Money getTotalDividendRWTAndPaymentsForForeignDividends() {
+		return totalDividendRWTAndPaymentsForForeignDividends;
+	}
+
+	public void setTotalDividendRWTAndPaymentsForForeignDividends(Money totalDividendRWTAndPaymentsForForeignDividends) {
+		this.totalDividendRWTAndPaymentsForForeignDividends = totalDividendRWTAndPaymentsForForeignDividends;
+	}
+
+	public Money getTotalDividendImputationCredits() {
+		return totalDividendImputationCredits;
+	}
+
+	public void setTotalDividendImputationCredits(Money totalDividendImputationCredits) {
+		this.totalDividendImputationCredits = totalDividendImputationCredits;
+	}
+
+	public Money getTotalGrossInterest() {
+		return totalGrossInterest;
+	}
+
+	public void setTotalGrossInterest(Money totalGrossInterest) {
+		this.totalGrossInterest = totalGrossInterest;
+	}
 
 	public String getIrdNumber() {
 		return irdNumber;
+	}
+
+	public Money getTotalRWT() {
+		return totalRWT;
+	}
+
+	public void setTotalRWT(Money totalRWT) {
+		this.totalRWT = totalRWT;
 	}
 
 	public void setIrdNumber(String irdNumber) {
@@ -403,9 +912,19 @@ public class IR3FormBean {
 				} else {
 					//String fieldName = propertyToFieldMap.get(key);
 					if (f.getAnnotation(UseDayMonthYear.class) != null) {
-						processField(acroForm, propertyToFieldMap.get(key + "_day"), value, f);
-						processField(acroForm, propertyToFieldMap.get(key + "_month"), value, f);
-						processField(acroForm, propertyToFieldMap.get(key + "_year"), value, f);
+						LocalDate localDate = (LocalDate) value;
+						int dayOfMonth = localDate.getDayOfMonth();
+						processField(acroForm, propertyToFieldMap.get(key + "_day"), 
+								dayOfMonth >= 10 ? dayOfMonth : "0" + dayOfMonth,
+								f);
+						int monthValue = localDate.getMonthValue();
+						processField(acroForm, propertyToFieldMap.get(key + "_month"),
+								monthValue >= 10 ? monthValue : "0" + monthValue,
+								f);
+						int year2 = localDate.getYear();
+						processField(acroForm, propertyToFieldMap.get(key + "_year"),
+								year2 >= 10 ? year2 : "0" + year2,
+								f);
 					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
 						String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true") : propertyToFieldMap.get(key + "_false");
 						processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
@@ -523,6 +1042,42 @@ public class IR3FormBean {
 				} else if (f.contains(IR3FieldMapper.getFieldName(
 						IR3Fields.dateOfBirth_year, year))) {
 					field.setValue(String.valueOf(this.getDateOfBirth().getYear()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateStartExcludedOverseasIncome_day, year))) {
+					field.setValue(LocalDateUtils.formatDay(this.getDateStartExcludedOverseasIncome()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateStartExcludedOverseasIncome_month, year))) {
+					field.setValue(LocalDateUtils.formatMonth(this.getDateStartExcludedOverseasIncome()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateStartExcludedOverseasIncome_year, year))) {
+					field.setValue(String.valueOf(this.getDateStartExcludedOverseasIncome().getYear()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateEndExcludedOverseasIncome_day, year))) {
+					field.setValue(LocalDateUtils.formatDay(this.getDateEndExcludedOverseasIncome()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateEndExcludedOverseasIncome_month, year))) {
+					field.setValue(LocalDateUtils.formatMonth(this.getDateEndExcludedOverseasIncome()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateEndExcludedOverseasIncome_year, year))) {
+					field.setValue(String.valueOf(this.getDateEndExcludedOverseasIncome().getYear()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateStart2018TaxReturn_day, year))) {
+					field.setValue(LocalDateUtils.formatDay(this.getDateStart2018TaxReturn()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateStart2018TaxReturn_month, year))) {
+					field.setValue(LocalDateUtils.formatMonth(this.getDateStart2018TaxReturn()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateStart2018TaxReturn_year, year))) {
+					field.setValue(String.valueOf(this.getDateStart2018TaxReturn().getYear()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateEnd2018TaxReturn_day, year))) {
+					field.setValue(LocalDateUtils.formatDay(this.getDateEnd2018TaxReturn()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateEnd2018TaxReturn_month, year))) {
+					field.setValue(LocalDateUtils.formatMonth(this.getDateEnd2018TaxReturn()));
+				} else if (f.contains(IR3FieldMapper.getFieldName(
+						IR3Fields.dateEnd2018TaxReturn_year, year))) {
+					field.setValue(String.valueOf(this.getDateEnd2018TaxReturn().getYear()));
 				} else if (f.contains(IR3FieldMapper.getFieldName(
 						IR3Fields.businessIndustryClassificationCode, year))) {
 					field.setValue(this.getBusinessIndustryClassificationCode());
