@@ -44,5 +44,60 @@ totalSchedularTaxDeducted,box 12A
 totalSchedularGrossPayments,box 12B
 schedularPaymentExpenses,box 12C
 netSchedularPayments,box 12D
+totalRWT,box 13A
+totalGrossInterest,box 13B
+totalDividendImputationCredits,box 14
+totalDividendRWTAndPaymentsForForeignDividends,box 14A
+totalGrossDividends,box 14B
+totalMaoriAuthorityCredits,box 15A
+totalMaoriAuthorityDistributions,box 15B
+totalTaxPaidByTrustees,box 16A
+totalEstateOrTrustIncome,box 16B
+totalTaxableDistributionsFromNonComplyingTrusts,box 16C
+totalOverseasTaxPaid,box17A
+totalOverseasIncome,box17B
+totalPartnershipTaxCredits,box 18A
+totalActivePartnershipIncome,box 18B
+totalLTCTaxCredits,box 19A
+totalActiveLTCIncome,box 19B
+nonAllowableDeductionsThisYear,box 19C
+priorYearsNonAllowableDeductionsClaimedThisYear,box 19D
+adjustedLTCIncome,box 19E
+taxCreditSubtotal,box 20A
+incomeSubtotal,box 20B
+totalShareholderEmployeeSalary,box 21
+netRents,box 22
+selfEmployedNetIncome,box 23
+totalOtherNetIncome,box 24
+residentialLandWithholdingTaxCredit,box 24A
+totalIncome,box 25
+totalOtherExpensesClaimed,box 26
+incomeAfterExpenses,box 27
+amountBroughtForward,box 28A
+amountClaimedThisYear,box 28B
+taxableIncome,box 29
+excessImputationCreditsBroughtForward,box 31
+taxOnTaxableIncome,box 32
+residualIncomeTax,box 32A
+taxCalculationResult,box 32B
+refundCopied,box 34
+refundOverpayment2018,box 34A
+refundCopiedPlusOverpayment2018,box 34B
+refundTransferTo2018,box 34C
+refundTransferToStudentLoan,box 34D
+refundTotal,box 34K
+taxPayment2018,box 35B
+dateStart2018TaxReturn_day,37B from day
+dateStart2018TaxReturn_month,37B from month
+dateStart2018TaxReturn_year,37B from year
+dateEnd2018TaxReturn_day,37C to day
+dateEnd2018TaxReturn_month,37C to month
+dateEnd2018TaxReturn_year,37C to year
+dateEndExcludedOverseasIncome_day,30B end day
+dateEndExcludedOverseasIncome_month,30B end month
+dateEndExcludedOverseasIncome_year,30B end year
+dateStartExcludedOverseasIncome_day,30B day
+dateStartExcludedOverseasIncome_month,30B month
+dateStartExcludedOverseasIncome_year,30B year
 
 
