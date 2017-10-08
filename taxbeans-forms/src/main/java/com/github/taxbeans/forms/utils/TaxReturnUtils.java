@@ -116,4 +116,8 @@ public class TaxReturnUtils {
 	public static String formatMoneyField(Money amount) {
 		return TaxReturnUtils.formatMoneyField(amount.getNumberStripped());
 	}
+	
+	public static String formatDollarsField(Money amount) {
+		return TaxReturnUtils.formatDollarsField(amount.getNumberStripped());
+	}
 }

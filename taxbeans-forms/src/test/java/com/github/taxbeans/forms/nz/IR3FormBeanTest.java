@@ -42,6 +42,36 @@ public class IR3FormBeanTest {
 		bean.setIncomeNotLiableForAccEarnersLevy(Money.of(new BigDecimal("55555.55"), "NZD"));
 		bean.setTotalTaxDeducted(Money.of(new BigDecimal("22222.22"), "NZD"));
 		bean.setSchedularPaymentsReceived(true);
+		bean.setInterestFromNZReceived(true);
+		bean.setDividendsFromNZReceived(true);
+		bean.setTaxableDistributionsFromMaoriAuthorityReceived(true);
+		bean.setTrustOrEstateIncomeFromNZReceived(true);
+		bean.setOverseasIncomeReceived(true);
+		bean.setPartnershipIncomeReceived(true);
+		bean.setTaxableDistributionsFromMaoriAuthorityReceived(true);
+		bean.setIncomeFromLTCReceived(true);
+		bean.setTrustOrEstateIncomeFromNZReceived(true);
+		bean.setSalaryShareholderEmployeeNotTaxed(true);
+		bean.setRentsReceived(true);
+		bean.setIncomeFromSelfEmploymentReceived(true);
+		bean.setIncomeOtherReceived(true);
+		bean.setExpensesOtherReceived(true);
+		bean.setNetLossesBroughtForwardClaimed(true);
+		bean.setIndependentEarnerTaxCreditEligible(true);
+		bean.setExcessImputationCreditsBroughtForwardEligible(true);
+		bean.setEarlyPaymentDiscountEntitled(true);
+		bean.setTransferRefundToSomeoneElsesIncomeTaxAccount(true);
+		bean.setTransferRefundToSomeoneElsesStudentLoan(true);
+		bean.setResidualIncomeTaxDebitHigherThan2500Dollars(true);
+		bean.setDisclosureRequiredToHoldRightsDuringIncomeYear(true);
+		bean.setReturnForPartYear(true);
+		bean.setTaxOnTaxableIncomeIsCredit(true);
+		bean.setResidualIncomeTaxIsCredit(true);
+		bean.setInterestFromEligibleEntitiesReceived(true);
+		bean.setDividendsFromEligibleEntitiesReceived(true);
+		bean.setSuperannuationSchemeIncomeFromOverseas(true);
+		bean.setInterestFromEligibleEntitiesReceived(true);
+		bean.setUnpaidMajorWorkingShareholderWfFTCELigible(true);
 		bean.setTotalSchedularTaxDeducted(Money.of(new BigDecimal("33333.33"), "NZD"));
 		bean.setTotalSchedularGrossPayments(Money.of(new BigDecimal("44444.44"), "NZD"));
 		bean.setNetSchedularPayments(Money.of(new BigDecimal("11111.11"), "NZD"));
@@ -92,6 +122,7 @@ public class IR3FormBeanTest {
 		bean.setDateEnd2018TaxReturn(LocalDate.of(2018, 2, 26));
 		bean.setDateStartExcludedOverseasIncome(LocalDate.of(2017, 5, 13));
 		bean.setDateEndExcludedOverseasIncome(LocalDate.of(2018, 2, 16));
+		bean.setReasonForTaxReturnPartYear(2);
 		bean.publishDraft();
 	}
 
