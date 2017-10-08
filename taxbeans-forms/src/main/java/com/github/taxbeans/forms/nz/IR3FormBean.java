@@ -6,19 +6,27 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.cos.COSArray;
+import org.apache.pdfbox.cos.COSBase;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.cos.COSObject;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.exception.TaxBeansException;
+import com.github.taxbeans.forms.IncludeFormatSpacing;
+import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
@@ -97,6 +105,291 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean schedularPaymentsReceived;
 	
+	@UseTrueFalseMappings
+	private boolean interestFromNZReceived;
+	
+	@UseTrueFalseMappings
+	private boolean dividendsFromNZReceived;
+
+	@UseTrueFalseMappings
+	private boolean taxableDistributionsFromMaoriAuthorityReceived;
+	
+	@UseTrueFalseMappings
+	private boolean trustOrEstateIncomeFromNZReceived;
+	
+	@UseTrueFalseMappings
+	private boolean overseasIncomeReceived;
+
+	@UseTrueFalseMappings
+	private boolean partnershipIncomeReceived;
+
+	@UseTrueFalseMappings
+	private boolean incomeFromLTCReceived;
+
+	@UseTrueFalseMappings
+	private boolean salaryShareholderEmployeeNotTaxed;
+
+	@UseTrueFalseMappings
+	private boolean rentsReceived;
+
+	@UseTrueFalseMappings
+	private boolean taxOnTaxableIncomeIsCredit;
+	
+	@UseTrueFalseMappings
+	private boolean interestFromEligibleEntitiesReceived;
+	
+	@UseTrueFalseMappings
+	private boolean unpaidMajorWorkingShareholderWfFTCELigible;
+	
+	@UseValueMappings
+	private int reasonForTaxReturnPartYear;
+	
+	public int getReasonForTaxReturnPartYear() {
+		return reasonForTaxReturnPartYear;
+	}
+
+	public void setReasonForTaxReturnPartYear(int reasonForTaxReturnPartYear) {
+		this.reasonForTaxReturnPartYear = reasonForTaxReturnPartYear;
+	}
+
+	public boolean isUnpaidMajorWorkingShareholderWfFTCELigible() {
+		return unpaidMajorWorkingShareholderWfFTCELigible;
+	}
+
+	public void setUnpaidMajorWorkingShareholderWfFTCELigible(boolean unpaidMajorWorkingShareholderWfFTCELigible) {
+		this.unpaidMajorWorkingShareholderWfFTCELigible = unpaidMajorWorkingShareholderWfFTCELigible;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean superannuationSchemeIncomeFromOverseas;
+	
+	
+	public boolean isSuperannuationSchemeIncomeFromOverseas() {
+		return superannuationSchemeIncomeFromOverseas;
+	}
+
+	public void setSuperannuationSchemeIncomeFromOverseas(boolean superannuationSchemeIncomeFromOverseas) {
+		this.superannuationSchemeIncomeFromOverseas = superannuationSchemeIncomeFromOverseas;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean shareholderEmployeeSalaryOnlyInFuture;
+	
+	public boolean isShareholderEmployeeSalaryOnlyInFuture() {
+		return shareholderEmployeeSalaryOnlyInFuture;
+	}
+
+	public void setShareholderEmployeeSalaryOnlyInFuture(boolean shareholderEmployeeSalaryOnlyInFuture) {
+		this.shareholderEmployeeSalaryOnlyInFuture = shareholderEmployeeSalaryOnlyInFuture;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean dividendsFromEligibleEntitiesReceived;
+	
+	public boolean isDividendsFromEligibleEntitiesReceived() {
+		return dividendsFromEligibleEntitiesReceived;
+	}
+
+	public void setDividendsFromEligibleEntitiesReceived(boolean dividendsFromEligibleEntitiesReceived) {
+		this.dividendsFromEligibleEntitiesReceived = dividendsFromEligibleEntitiesReceived;
+	}
+
+	public boolean isInterestFromEligibleEntitiesReceived() {
+		return interestFromEligibleEntitiesReceived;
+	}
+
+	public void setInterestFromEligibleEntitiesReceived(boolean interestFromEligibleEntitiesReceived) {
+		this.interestFromEligibleEntitiesReceived = interestFromEligibleEntitiesReceived;
+	}
+
+	public boolean isTaxOnTaxableIncomeIsCredit() {
+		return taxOnTaxableIncomeIsCredit;
+	}
+
+	public void setTaxOnTaxableIncomeIsCredit(boolean taxOnTaxableIncomeIsCredit) {
+		this.taxOnTaxableIncomeIsCredit = taxOnTaxableIncomeIsCredit;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean residualIncomeTaxIsCredit;
+
+	public boolean isResidualIncomeTaxIsCredit() {
+		return residualIncomeTaxIsCredit;
+	}
+
+	public void setResidualIncomeTaxIsCredit(boolean residualIncomeTaxIsCredit) {
+		this.residualIncomeTaxIsCredit = residualIncomeTaxIsCredit;
+	}
+
+	public boolean isRentsReceived() {
+		return rentsReceived;
+	}
+
+	public void setRentsReceived(boolean rentsReceived) {
+		this.rentsReceived = rentsReceived;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean incomeFromSelfEmploymentReceived;
+
+
+	public boolean isIncomeFromSelfEmploymentReceived() {
+		return incomeFromSelfEmploymentReceived;
+	}
+
+	public void setIncomeFromSelfEmploymentReceived(boolean incomeFromSelfEmploymentReceived) {
+		this.incomeFromSelfEmploymentReceived = incomeFromSelfEmploymentReceived;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean incomeOtherReceived;
+
+
+	public boolean isIncomeOtherReceived() {
+		return incomeOtherReceived;
+	}
+
+	public void setIncomeOtherReceived(boolean incomeOtherReceived) {
+		this.incomeOtherReceived = incomeOtherReceived;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean expensesOtherReceived;
+
+
+	public boolean isExpensesOtherReceived() {
+		return expensesOtherReceived;
+	}
+
+	public void setExpensesOtherReceived(boolean expensesOtherReceived) {
+		this.expensesOtherReceived = expensesOtherReceived;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean netLossesBroughtForwardClaimed;
+
+
+	public boolean isNetLossesBroughtForwardClaimed() {
+		return netLossesBroughtForwardClaimed;
+	}
+
+	public void setNetLossesBroughtForwardClaimed(boolean netLossesBroughtForwardClaimed) {
+		this.netLossesBroughtForwardClaimed = netLossesBroughtForwardClaimed;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean independentEarnerTaxCreditEligible;
+
+
+	public boolean isIndependentEarnerTaxCreditEligible() {
+		return independentEarnerTaxCreditEligible;
+	}
+
+	public void setIndependentEarnerTaxCreditEligible(boolean independentEarnerTaxCreditEligible) {
+		this.independentEarnerTaxCreditEligible = independentEarnerTaxCreditEligible;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean excessImputationCreditsBroughtForwardEligible;
+
+
+	public boolean isExcessImputationCreditsBroughtForwardEligible() {
+		return excessImputationCreditsBroughtForwardEligible;
+	}
+
+	public void setExcessImputationCreditsBroughtForwardEligible(boolean excessImputationCreditsBroughtForwardEligible) {
+		this.excessImputationCreditsBroughtForwardEligible = excessImputationCreditsBroughtForwardEligible;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean earlyPaymentDiscountEntitled;
+
+
+	public boolean isEarlyPaymentDiscountEntitled() {
+		return earlyPaymentDiscountEntitled;
+	}
+
+	public void setEarlyPaymentDiscountEntitled(boolean earlyPaymentDiscountEntitled) {
+		this.earlyPaymentDiscountEntitled = earlyPaymentDiscountEntitled;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean transferRefundToSomeoneElsesIncomeTaxAccount;
+
+
+	public boolean isTransferRefundToSomeoneElsesIncomeTaxAccount() {
+		return transferRefundToSomeoneElsesIncomeTaxAccount;
+	}
+
+	public void setTransferRefundToSomeoneElsesIncomeTaxAccount(boolean transferRefundToSomeoneElsesIncomeTaxAccount) {
+		this.transferRefundToSomeoneElsesIncomeTaxAccount = transferRefundToSomeoneElsesIncomeTaxAccount;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean transferRefundToSomeoneElsesStudentLoan;
+
+
+	public boolean isTransferRefundToSomeoneElsesStudentLoan() {
+		return transferRefundToSomeoneElsesStudentLoan;
+	}
+
+	public void setTransferRefundToSomeoneElsesStudentLoan(boolean transferRefundToSomeoneElsesStudentLoan) {
+		this.transferRefundToSomeoneElsesStudentLoan = transferRefundToSomeoneElsesStudentLoan;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean residualIncomeTaxDebitHigherThan2500Dollars;
+
+
+	public boolean isResidualIncomeTaxDebitHigherThan2500Dollars() {
+		return residualIncomeTaxDebitHigherThan2500Dollars;
+	}
+
+	public void setResidualIncomeTaxDebitHigherThan2500Dollars(boolean residualIncomeTaxDebitHigherThan2500Dollars) {
+		this.residualIncomeTaxDebitHigherThan2500Dollars = residualIncomeTaxDebitHigherThan2500Dollars;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean disclosureRequiredToHoldRightsDuringIncomeYear;
+
+
+	public boolean isDisclosureRequiredToHoldRightsDuringIncomeYear() {
+		return disclosureRequiredToHoldRightsDuringIncomeYear;
+	}
+
+	public void setDisclosureRequiredToHoldRightsDuringIncomeYear(boolean disclosureRequiredToHoldRightsDuringIncomeYear) {
+		this.disclosureRequiredToHoldRightsDuringIncomeYear = disclosureRequiredToHoldRightsDuringIncomeYear;
+	}
+
+
+	@UseTrueFalseMappings
+	private boolean returnForPartYear;
+
+
+	public boolean isReturnForPartYear() {
+		return returnForPartYear;
+	}
+
+	public void setReturnForPartYear(boolean returnForPartYear) {
+		this.returnForPartYear = returnForPartYear;
+	}
+
+
 	@RightAlign(11)
 	private Money totalSchedularTaxDeducted;
 	
@@ -236,6 +529,8 @@ public class IR3FormBean {
 	private Money refundTotal;
 	
 	@RightAlign(11)
+	@OmitCents
+	@IncludeFormatSpacing
 	private Money taxPayment2018;
 	
 	@UseDayMonthYear
@@ -250,6 +545,62 @@ public class IR3FormBean {
 	@UseDayMonthYear
 	private LocalDate dateEndExcludedOverseasIncome;
 	
+	public boolean isIncomeFromLTCReceived() {
+		return incomeFromLTCReceived;
+	}
+
+	public void setIncomeFromLTCReceived(boolean incomeFromLTCReceived) {
+		this.incomeFromLTCReceived = incomeFromLTCReceived;
+	}
+
+	public boolean isPartnershipIncomeReceived() {
+		return partnershipIncomeReceived;
+	}
+
+	public void setPartnershipIncomeReceived(boolean partnershipIncomeReceived) {
+		this.partnershipIncomeReceived = partnershipIncomeReceived;
+	}
+
+	public boolean isSalaryShareholderEmployeeNotTaxed() {
+		return salaryShareholderEmployeeNotTaxed;
+	}
+
+	public void setSalaryShareholderEmployeeNotTaxed(boolean salaryShareholderEmployeeNotTaxed) {
+		this.salaryShareholderEmployeeNotTaxed = salaryShareholderEmployeeNotTaxed;
+	}
+
+	public boolean isOverseasIncomeReceived() {
+		return overseasIncomeReceived;
+	}
+
+	public void setOverseasIncomeReceived(boolean overseasIncomeReceived) {
+		this.overseasIncomeReceived = overseasIncomeReceived;
+	}
+
+	public boolean isTrustOrEstateIncomeFromNZReceived() {
+		return trustOrEstateIncomeFromNZReceived;
+	}
+
+	public void setTrustOrEstateIncomeFromNZReceived(boolean trustOrEstateIncomeFromNZReceived) {
+		this.trustOrEstateIncomeFromNZReceived = trustOrEstateIncomeFromNZReceived;
+	}
+
+	public boolean isTaxableDistributionsFromMaoriAuthorityReceived() {
+		return taxableDistributionsFromMaoriAuthorityReceived;
+	}
+
+	public void setTaxableDistributionsFromMaoriAuthorityReceived(boolean taxableDistributionsFromMaoriAuthorityReceived) {
+		this.taxableDistributionsFromMaoriAuthorityReceived = taxableDistributionsFromMaoriAuthorityReceived;
+	}
+
+	public boolean isDividendsFromNZReceived() {
+		return dividendsFromNZReceived;
+	}
+
+	public void setDividendsFromNZReceived(boolean dividendsFromNZReceived) {
+		this.dividendsFromNZReceived = dividendsFromNZReceived;
+	}
+
 	public LocalDate getDateEndExcludedOverseasIncome() {
 		return dateEndExcludedOverseasIncome;
 	}
@@ -801,6 +1152,14 @@ public class IR3FormBean {
 	public void setTotalTaxDeducted(Money totalTaxDeducted) {
 		this.totalTaxDeducted = totalTaxDeducted;
 	}
+	
+	public boolean isInterestFromNZReceived() {
+		return interestFromNZReceived;
+	}
+
+	public void setInterestFromNZReceived(boolean interestFromNZReceived) {
+		this.interestFromNZReceived = interestFromNZReceived;
+	}
 
 	public boolean isSchedularPaymentsReceived() {
 		return schedularPaymentsReceived;
@@ -882,11 +1241,8 @@ public class IR3FormBean {
 					System.exit(0);
 				}
 				System.out.println(key + "->" + value);
-				if (key.equals("bankAccount")) {
-					System.out.println("bank account");
-				}
-				if (key.equals("familyTaxCreditReceived")) {
-					System.out.println("bank account");
+				if (key.equals("reasonForTaxReturnPartYear")) {
+					System.out.println("incomeOtherReceived");
 				}
 				if (key.equals("class") || key.equals("year")) {
 					//todo exclude fields by annotation
@@ -965,11 +1321,27 @@ public class IR3FormBean {
 		PDField pdField = acroForm.getField(fieldName);
 		System.out.println(fieldName + "->" + pdField);
 		if (value instanceof Money) {
-			value = TaxReturnUtils.formatMoneyField((Money) value);
+			if (f.getAnnotation(OmitCents.class) != null) {
+				value = TaxReturnUtils.formatDollarsField((Money) value);
+				if (f.getAnnotation(IncludeFormatSpacing.class) != null) {
+					String valueText = (String)value;
+					if (valueText.length() >= 4) {
+						valueText = valueText.substring(0, valueText.length()-3) + " " + 
+								valueText.substring(valueText.length()-3);
+						value = valueText;
+					}
+				}
+			} else {
+				value = TaxReturnUtils.formatMoneyField((Money) value);
+			}
 		}
 		if (f.getAnnotation(RightAlign.class) != null) {
 			int size = f.getAnnotation(RightAlign.class).value();
 			value = StringUtils.leftPad(String.valueOf(value), size);
+		}
+		if (f.getAnnotation(UseValueMappings.class) != null && pdField instanceof PDNonTerminalField) {
+			PDNonTerminalField nonTerminalField = (PDNonTerminalField) pdField;
+			nonTerminalField.getChildren().get(Integer.parseInt(String.valueOf(value))).setValue("a");
 		}
 		if (pdField == null) {
 			List<PDField> fields = acroForm.getFields();
