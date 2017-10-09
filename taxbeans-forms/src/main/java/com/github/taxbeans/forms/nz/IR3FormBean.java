@@ -62,6 +62,82 @@ public class IR3FormBean {
 	private String streetAddressLine1;
 
 	private String streetAddressLine2;
+	
+	@RightAlign(11)
+	private Money refundCopiedPlusOverpayment2018;
+	
+	private String otherIncomePayer;
+	
+	public Money getRefundCopiedPlusOverpayment2018() {
+		return refundCopiedPlusOverpayment2018;
+	}
+
+	public void setRefundCopiedPlusOverpayment2018(Money refundCopiedPlusOverpayment2018) {
+		this.refundCopiedPlusOverpayment2018 = refundCopiedPlusOverpayment2018;
+	}
+
+	public String getOtherIncomePayer() {
+		return otherIncomePayer;
+	}
+
+	public void setOtherIncomePayer(String otherIncomePayer) {
+		this.otherIncomePayer = otherIncomePayer;
+	}
+
+	@RightAlign(5)
+	private Money taxCreditValue;
+	
+	public Money getTaxCreditValue() {
+		return taxCreditValue;
+	}
+
+	public void setTaxCreditValue(Money taxCreditValue) {
+		this.taxCreditValue = taxCreditValue;
+	}
+
+	@RightAlign(2)
+	private String taxCreditQualifyingMonthsNumber;
+	
+	public String getTaxCreditQualifyingMonthsNumber() {
+		return taxCreditQualifyingMonthsNumber;
+	}
+
+	public void setTaxCreditQualifyingMonthsNumber(String taxCreditQualifyingMonthsNumber) {
+		this.taxCreditQualifyingMonthsNumber = taxCreditQualifyingMonthsNumber;
+	}
+
+	private String otherIncomeType;
+	
+	public String getOtherIncomeType() {
+		return otherIncomeType;
+	}
+
+	public void setOtherIncomeType(String otherIncomeType) {
+		this.otherIncomeType = otherIncomeType;
+	}
+
+
+	private String alternativePersonFirstNamesCompletedReturn;
+	
+	public String getAlternativePersonFirstNamesCompletedReturn() {
+		return alternativePersonFirstNamesCompletedReturn;
+	}
+
+	public void setAlternativePersonFirstNamesCompletedReturn(String alternativePersonFirstNamesCompletedReturn) {
+		this.alternativePersonFirstNamesCompletedReturn = alternativePersonFirstNamesCompletedReturn;
+	}
+
+
+	private String alternativePersonSurnameCompletedReturn;
+
+	public String getAlternativePersonSurnameCompletedReturn() {
+		return alternativePersonSurnameCompletedReturn;
+	}
+
+	public void setAlternativePersonSurnameCompletedReturn(String alternativePersonSurnameCompletedReturn) {
+		this.alternativePersonSurnameCompletedReturn = alternativePersonSurnameCompletedReturn;
+	}
+
 
 	@UseDayMonthYear
 	private LocalDate dateOfBirth;
@@ -326,28 +402,28 @@ public class IR3FormBean {
 
 
 	@UseTrueFalseMappings
-	private boolean transferRefundToSomeoneElsesIncomeTaxAccount;
+	private boolean transferRefundToSomeoneElsesIncomeTaxAccountAssociated;
 
 
-	public boolean isTransferRefundToSomeoneElsesIncomeTaxAccount() {
-		return transferRefundToSomeoneElsesIncomeTaxAccount;
+	public boolean isTransferRefundToSomeoneElsesIncomeTaxAccountAssociated() {
+		return transferRefundToSomeoneElsesIncomeTaxAccountAssociated;
 	}
 
-	public void setTransferRefundToSomeoneElsesIncomeTaxAccount(boolean transferRefundToSomeoneElsesIncomeTaxAccount) {
-		this.transferRefundToSomeoneElsesIncomeTaxAccount = transferRefundToSomeoneElsesIncomeTaxAccount;
+	public void setTransferRefundToSomeoneElsesIncomeTaxAccountAssociated(boolean transferRefundToSomeoneElsesIncomeTaxAccountAssociated) {
+		this.transferRefundToSomeoneElsesIncomeTaxAccountAssociated = transferRefundToSomeoneElsesIncomeTaxAccountAssociated;
 	}
 
 
 	@UseTrueFalseMappings
-	private boolean transferRefundToSomeoneElsesStudentLoan;
+	private boolean transferRefundToSomeoneElsesStudentLoanAssociated;
 
 
-	public boolean isTransferRefundToSomeoneElsesStudentLoan() {
-		return transferRefundToSomeoneElsesStudentLoan;
+	public boolean isTransferRefundToSomeoneElsesStudentLoanAssociated() {
+		return transferRefundToSomeoneElsesStudentLoanAssociated;
 	}
 
-	public void setTransferRefundToSomeoneElsesStudentLoan(boolean transferRefundToSomeoneElsesStudentLoan) {
-		this.transferRefundToSomeoneElsesStudentLoan = transferRefundToSomeoneElsesStudentLoan;
+	public void setTransferRefundToSomeoneElsesStudentLoanAssociated(boolean transferRefundToSomeoneElsesStudentLoanAssociated) {
+		this.transferRefundToSomeoneElsesStudentLoanAssociated = transferRefundToSomeoneElsesStudentLoanAssociated;
 	}
 
 
@@ -389,6 +465,134 @@ public class IR3FormBean {
 		this.returnForPartYear = returnForPartYear;
 	}
 
+	@UseTrueFalseMappings
+	private boolean refundIsTransferredTo2018;
+	
+	public boolean isRefundIsTransferredTo2018() {
+		return refundIsTransferredTo2018;
+	}
+
+	public void setRefundIsTransferredTo2018(boolean refundIsTransferredTo2018) {
+		this.refundIsTransferredTo2018 = refundIsTransferredTo2018;
+	}
+
+	@UseTrueFalseMappings
+	private boolean refundIsTransferredToStudentLoan;
+	
+	public boolean isRefundIsTransferredToStudentLoan() {
+		return refundIsTransferredToStudentLoan;
+	}
+
+	public void setRefundIsTransferredToStudentLoan(boolean refundIsTransferredToStudentLoan) {
+		this.refundIsTransferredToStudentLoan = refundIsTransferredToStudentLoan;
+	}
+
+	@UseTrueFalseMappings
+	private boolean refundIsTransferredToSomeoneElsesTaxAccount;
+	
+	public boolean isRefundIsTransferredToSomeoneElsesTaxAccount() {
+		return refundIsTransferredToSomeoneElsesTaxAccount;
+	}
+
+	public void setRefundIsTransferredToSomeoneElsesTaxAccount(boolean refundIsTransferredToSomeoneElsesTaxAccount) {
+		this.refundIsTransferredToSomeoneElsesTaxAccount = refundIsTransferredToSomeoneElsesTaxAccount;
+	}
+
+	@UseTrueFalseMappings
+	private boolean refundIsTransferredToSomeoneElsesStudentLoan;
+	
+	public boolean isRefundIsTransferredToSomeoneElsesStudentLoan() {
+		return refundIsTransferredToSomeoneElsesStudentLoan;
+	}
+
+	public void setRefundIsTransferredToSomeoneElsesStudentLoan(boolean refundIsTransferredToSomeoneElsesStudentLoan) {
+		this.refundIsTransferredToSomeoneElsesStudentLoan = refundIsTransferredToSomeoneElsesStudentLoan;
+	}
+
+	@UseTrueFalseMappings
+	private boolean refundIsTransferredToOther;
+	
+	public boolean isRefundIsTransferredToOther() {
+		return refundIsTransferredToOther;
+	}
+
+	public void setRefundIsTransferredToOther(boolean refundIsTransferredToOther) {
+		this.refundIsTransferredToOther = refundIsTransferredToOther;
+	}
+	private String refundOtherTaxAccountReceiverName;
+	
+	public String getRefundOtherTaxAccountReceiverName() {
+		return refundOtherTaxAccountReceiverName;
+	}
+
+	public void setRefundOtherTaxAccountReceiverName(String refundOtherTaxAccountReceiverName) {
+		this.refundOtherTaxAccountReceiverName = refundOtherTaxAccountReceiverName;
+	}
+
+	@RightAlign(9)
+	private String refundOtherTaxAccountReceiverIRD;
+	
+	public String getRefundOtherTaxAccountReceiverIRD() {
+		return refundOtherTaxAccountReceiverIRD;
+	}
+
+	public void setRefundOtherTaxAccountReceiverIRD(String refundOtherTaxAccountReceiverIRD) {
+		this.refundOtherTaxAccountReceiverIRD = refundOtherTaxAccountReceiverIRD;
+	}
+
+	@RightAlign(11)
+	private Money refundOtherTaxAccountReceiverAmount;
+	
+	public Money getRefundOtherTaxAccountReceiverAmount() {
+		return refundOtherTaxAccountReceiverAmount;
+	}
+
+	public void setRefundOtherTaxAccountReceiverAmount(Money refundOtherTaxAccountReceiverAmount) {
+		this.refundOtherTaxAccountReceiverAmount = refundOtherTaxAccountReceiverAmount;
+	}
+
+	@RightAlign(4)
+	private String refundOtherTaxAccountReceiverYearEnded31March;
+	
+	public String getRefundOtherTaxAccountReceiverYearEnded31March() {
+		return refundOtherTaxAccountReceiverYearEnded31March;
+	}
+
+	public void setRefundOtherTaxAccountReceiverYearEnded31March(String refundOtherTaxAccountReceiverYearEnded31March) {
+		this.refundOtherTaxAccountReceiverYearEnded31March = refundOtherTaxAccountReceiverYearEnded31March;
+	}
+
+	private String refundOtherStudentLoanReceiverName;
+	
+	public String getRefundOtherStudentLoanReceiverName() {
+		return refundOtherStudentLoanReceiverName;
+	}
+
+	public void setRefundOtherStudentLoanReceiverName(String refundOtherStudentLoanReceiverName) {
+		this.refundOtherStudentLoanReceiverName = refundOtherStudentLoanReceiverName;
+	}
+
+	@RightAlign(9)
+	private String refundOtherStudentLoanReceiverIRD;
+	
+	public String getRefundOtherStudentLoanReceiverIRD() {
+		return refundOtherStudentLoanReceiverIRD;
+	}
+
+	public void setRefundOtherStudentLoanReceiverIRD(String refundOtherStudentLoanReceiverIRD) {
+		this.refundOtherStudentLoanReceiverIRD = refundOtherStudentLoanReceiverIRD;
+	}
+
+	@RightAlign(11)
+	private Money refundOtherStudentLoanReceiverAmount;
+
+	public Money getRefundOtherStudentLoanReceiverAmount() {
+		return refundOtherStudentLoanReceiverAmount;
+	}
+
+	public void setRefundOtherStudentLoanReceiverAmount(Money refundOtherStudentLoanReceiverAmount) {
+		this.refundOtherStudentLoanReceiverAmount = refundOtherStudentLoanReceiverAmount;
+	}
 
 	@RightAlign(11)
 	private Money totalSchedularTaxDeducted;
@@ -516,9 +720,17 @@ public class IR3FormBean {
 	@RightAlign(11)
 	private Money refundOverpayment2018;
 	
-	@RightAlign(11)
-	private Money refundCopiedPlusOverpayment2018;
+	@RightAlign(1)
+	private String taxPaymentSEROption2018;
 	
+	public String getTaxPaymentSEROption2018() {
+		return taxPaymentSEROption2018;
+	}
+
+	public void setTaxPaymentSEROption2018(String taxPaymentSEROption2018) {
+		this.taxPaymentSEROption2018 = taxPaymentSEROption2018;
+	}
+
 	@RightAlign(11)
 	private Money refundTransferTo2018;
 	
@@ -545,6 +757,188 @@ public class IR3FormBean {
 	@UseDayMonthYear
 	private LocalDate dateEndExcludedOverseasIncome;
 	
+	private String minusSignForSchedularPaymentsExpenses;
+	
+	public String getMinusSignForSchedularPaymentsExpenses() {
+		return minusSignForSchedularPaymentsExpenses;
+	}
+
+	public void setMinusSignForSchedularPaymentsExpenses(String minusSignForSchedularPaymentsExpenses) {
+		this.minusSignForSchedularPaymentsExpenses = minusSignForSchedularPaymentsExpenses;
+	}
+
+	private String minusSignForSchedularNetPayments;
+	
+	public String getMinusSignForSchedularNetPayments() {
+		return minusSignForSchedularNetPayments;
+	}
+
+	public void setMinusSignForSchedularNetPayments(String minusSignForSchedularNetPayments) {
+		this.minusSignForSchedularNetPayments = minusSignForSchedularNetPayments;
+	}
+
+	private String minusSignForTotalGrossInterestReceivedFromEligibleEntities;
+	
+	public String getMinusSignForTotalGrossInterestReceivedFromEligibleEntities() {
+		return minusSignForTotalGrossInterestReceivedFromEligibleEntities;
+	}
+
+	public void setMinusSignForTotalGrossInterestReceivedFromEligibleEntities(
+			String minusSignForTotalGrossInterestReceivedFromEligibleEntities) {
+		this.minusSignForTotalGrossInterestReceivedFromEligibleEntities = minusSignForTotalGrossInterestReceivedFromEligibleEntities;
+	}
+
+	private String minusSignForNZTotalEstateOrCompliantTrustIncome;
+	
+	public String getMinusSignForNZTotalEstateOrCompliantTrustIncome() {
+		return minusSignForNZTotalEstateOrCompliantTrustIncome;
+	}
+
+	public void setMinusSignForNZTotalEstateOrCompliantTrustIncome(String minusSignForNZTotalEstateOrCompliantTrustIncome) {
+		this.minusSignForNZTotalEstateOrCompliantTrustIncome = minusSignForNZTotalEstateOrCompliantTrustIncome;
+	}
+
+	private String minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
+	
+	public String getMinusSignForNZTotalTaxableDistrbutionsNonCompliantTrust() {
+		return minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
+	}
+
+	public void setMinusSignForNZTotalTaxableDistrbutionsNonCompliantTrust(
+			String minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust) {
+		this.minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust = minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
+	}
+
+	private String minusSignForTotalOverseasIncome;
+	
+	public String getMinusSignForTotalOverseasIncome() {
+		return minusSignForTotalOverseasIncome;
+	}
+
+	public void setMinusSignForTotalOverseasIncome(String minusSignForTotalOverseasIncome) {
+		this.minusSignForTotalOverseasIncome = minusSignForTotalOverseasIncome;
+	}
+
+	private String minusSignForTotalActivePartnershipIncome;
+	
+	public String getMinusSignForTotalActivePartnershipIncome() {
+		return minusSignForTotalActivePartnershipIncome;
+	}
+
+	public void setMinusSignForTotalActivePartnershipIncome(String minusSignForTotalActivePartnershipIncome) {
+		this.minusSignForTotalActivePartnershipIncome = minusSignForTotalActivePartnershipIncome;
+	}
+
+	private String minusSignForTotalActiveLTCIncome;
+	
+	public String getMinusSignForTotalActiveLTCIncome() {
+		return minusSignForTotalActiveLTCIncome;
+	}
+
+	public void setMinusSignForTotalActiveLTCIncome(String minusSignForTotalActiveLTCIncome) {
+		this.minusSignForTotalActiveLTCIncome = minusSignForTotalActiveLTCIncome;
+	}
+
+	private String minusSignForAdjustedLTCIncome;
+	
+	public String getMinusSignForAdjustedLTCIncome() {
+		return minusSignForAdjustedLTCIncome;
+	}
+
+	public void setMinusSignForAdjustedLTCIncome(String minusSignForAdjustedLTCIncome) {
+		this.minusSignForAdjustedLTCIncome = minusSignForAdjustedLTCIncome;
+	}
+
+	private String minusSignForIncomeSubtotal;
+	
+	public String getMinusSignForIncomeSubtotal() {
+		return minusSignForIncomeSubtotal;
+	}
+
+	public void setMinusSignForIncomeSubtotal(String minusSignForIncomeSubtotal) {
+		this.minusSignForIncomeSubtotal = minusSignForIncomeSubtotal;
+	}
+
+	private String minusSignForTotalShareholderEmployeeSalary;
+	
+	public String getMinusSignForTotalShareholderEmployeeSalary() {
+		return minusSignForTotalShareholderEmployeeSalary;
+	}
+
+	public void setMinusSignForTotalShareholderEmployeeSalary(String minusSignForTotalShareholderEmployeeSalary) {
+		this.minusSignForTotalShareholderEmployeeSalary = minusSignForTotalShareholderEmployeeSalary;
+	}
+
+	private String minusSignForNetRents;
+	
+	public String getMinusSignForNetRents() {
+		return minusSignForNetRents;
+	}
+
+	public void setMinusSignForNetRents(String minusSignForNetRents) {
+		this.minusSignForNetRents = minusSignForNetRents;
+	}
+
+	private String minusSignForSelfEmployedNetIncome;
+	
+	public String getMinusSignForSelfEmployedNetIncome() {
+		return minusSignForSelfEmployedNetIncome;
+	}
+
+	public void setMinusSignForSelfEmployedNetIncome(String minusSignForSelfEmployedNetIncome) {
+		this.minusSignForSelfEmployedNetIncome = minusSignForSelfEmployedNetIncome;
+	}
+
+	private String minusSignForTotalOtherNetIncome;
+	
+	public String getMinusSignForTotalOtherNetIncome() {
+		return minusSignForTotalOtherNetIncome;
+	}
+
+	public void setMinusSignForTotalOtherNetIncome(String minusSignForTotalOtherNetIncome) {
+		this.minusSignForTotalOtherNetIncome = minusSignForTotalOtherNetIncome;
+	}
+
+	private String minusSignForRLWTTaxCredit;
+	
+	public String getMinusSignForRLWTTaxCredit() {
+		return minusSignForRLWTTaxCredit;
+	}
+
+	public void setMinusSignForRLWTTaxCredit(String minusSignForRLWTTaxCredit) {
+		this.minusSignForRLWTTaxCredit = minusSignForRLWTTaxCredit;
+	}
+
+	private String minusSignForTotalIncome;
+	
+	public String getMinusSignForTotalIncome() {
+		return minusSignForTotalIncome;
+	}
+
+	public void setMinusSignForTotalIncome(String minusSignForTotalIncome) {
+		this.minusSignForTotalIncome = minusSignForTotalIncome;
+	}
+
+	private String minusSignForIncomeAfterExpenses;
+	
+	public String getMinusSignForIncomeAfterExpenses() {
+		return minusSignForIncomeAfterExpenses;
+	}
+
+	public void setMinusSignForIncomeAfterExpenses(String minusSignForIncomeAfterExpenses) {
+		this.minusSignForIncomeAfterExpenses = minusSignForIncomeAfterExpenses;
+	}
+
+	private String minusSignForTaxableIncome;
+	
+	public String getMinusSignForTaxableIncome() {
+		return minusSignForTaxableIncome;
+	}
+
+	public void setMinusSignForTaxableIncome(String minusSignForTaxableIncome) {
+		this.minusSignForTaxableIncome = minusSignForTaxableIncome;
+	}
+
 	public boolean isIncomeFromLTCReceived() {
 		return incomeFromLTCReceived;
 	}
