@@ -42,7 +42,7 @@ public class GnuCashPullParser {
 
 	private String filename;
 
-	private boolean cacheData = false;
+	private boolean cacheData = true;
 
 	private static Map<String, BookOfAccounts> map = new ConcurrentHashMap<String, BookOfAccounts>();
 

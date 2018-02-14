@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,10 @@ public class Account {
 
 	final static Logger logger = LoggerFactory.getLogger(Account.class);
 
+	public static Account createFromGUID(UUID randomUUID) {
+		return Account.createFromGUID(randomUUID.toString());
+	}
+	
 	public static Account createFromGUID(String text) {
 		return new Account(text);
 	}
@@ -34,6 +38,12 @@ public class Account {
 	private String guid;
 
 	private String name;
+	
+	// Optional field to hold commodityUnits
+	private BigDecimal commodityUnits;
+	
+	// Optional field to hold commodityName
+	private String commodityName;
 
 	public Account() {}
 
@@ -223,12 +233,38 @@ public class Account {
 	public final void setName(final String argName) {
 		this.name = argName;
 	}
+	
+
+	public BigDecimal getCommodityUnits() {
+		return commodityUnits;
+	}
+
+	public void setCommodityUnits(BigDecimal commodityUnits) {
+		this.commodityUnits = commodityUnits;
+	}
+
+	public String getCommodityName() {
+		return commodityName;
+	}
+
+	public void setCommodityName(String commodityName) {
+		this.commodityName = commodityName;
+	}
+	
+	public boolean isCommodity() {
+		return commodityUnits != null || commodityName != null;
+	}
 
 	@Override
 	public String toString() {
 		return "Account [accountClassification=" + accountClassification
 				+ ", guid=" + guid + ", accountType=" + accountType + ", name="
 				+ name + "]";
+	}
+
+	public Account withName(String string) {
+		this.setName(string);
+		return this;
 	}
 }
 

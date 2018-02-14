@@ -2,8 +2,17 @@ package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+import javax.money.MonetaryAmount;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ConversionQueryBuilder;
+import javax.money.convert.CurrencyConversion;
+import javax.money.convert.MonetaryConversions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +36,21 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	private String num;
 
 	private List<TransactionSplit> transactionSplits = new ArrayList<TransactionSplit>();
+	
+	public void translate(LocalDate translationDate, CurrencyUnit from, CurrencyUnit to) {
+		CurrencyUnit baseCurrency = Monetary.getCurrency("USD");
+		ConversionQuery conversionQuery = ConversionQueryBuilder.of()
+                .setProviderName("ECB")
+                .setBaseCurrency(baseCurrency)
+                .setTermCurrency(Monetary.getCurrency("NZD"))
+                .set(LocalDate.class, LocalDate.of(2017, Month.SEPTEMBER, 10))
+                .build();
+		CurrencyConversion currencyConversion = 
+				MonetaryConversions.getExchangeRateProvider().getCurrencyConversion(conversionQuery);
+		MonetaryAmount oneDollar = Monetary.getDefaultAmountFactory().setCurrency(baseCurrency).setNumber(this.amount).create();
+		oneDollar.with(currencyConversion);
+		amount = new BigDecimal(oneDollar.getNumber().toString());
+	}
 
 	public BigDecimal calculateIncome(List<Transaction> transactions, int year) {
 		BigDecimal sum = BigDecimal.ZERO;
@@ -160,7 +184,10 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		sb.append("creditAccount=").append(creditAccount);
 		sb.append(variableSeparator);
 		sb.append("debitAccount=").append(debitAccount);
-
+		for (TransactionSplit transactionSplit : transactionSplits) {
+			sb.append("\r\n");
+			sb.append("\t" + transactionSplit);
+		}
 		return sb.toString();
 	}
 
