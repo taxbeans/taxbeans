@@ -14,6 +14,8 @@ import javax.money.convert.ConversionQueryBuilder;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.MonetaryConversions;
 
+import com.github.taxbeans.currency.ExhangeRateUtils;
+
 import java.time.LocalDate;
 import java.time.Month;
 
@@ -42,8 +44,16 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 	
 	private String commodityName;
 	
-	private Currency currency;
+	private CurrencyUnit currency = Monetary.getCurrency("NZD");
 	
+	public CurrencyUnit getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(CurrencyUnit currency) {
+		this.currency = currency;
+	}
+
 	private Stack<CurrencyTranslation> currencyTranslations = new Stack<CurrencyTranslation>();
 
 	public String getDescription() {
@@ -113,23 +123,31 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 	}
 	
 	public void translate(LocalDate translationDate, CurrencyUnit from, CurrencyUnit to) {
-		CurrencyUnit baseCurrency = from;
-		ConversionQuery conversionQuery = ConversionQueryBuilder.of()
-                .setProviderName("ECB")
-                .setBaseCurrency(from)
-                .setTermCurrency(to)
-                .set(LocalDate.class, translationDate)
-                .build();
-		CurrencyConversion currencyConversion = 
-				MonetaryConversions.getExchangeRateProvider().getCurrencyConversion(conversionQuery);
-		MonetaryAmount oneDollar = Monetary.getDefaultAmountFactory().setCurrency(baseCurrency).setNumber(this.amount).create();
-		oneDollar.with(currencyConversion);
-		amount = new BigDecimal(oneDollar.getNumber().toString());
+		CurrencyTranslation translation = new CurrencyTranslation();
+		translation.setOriginalCurrency(from);
+		translation.setTranslatedCurrency(to);
+		translation.setOriginalAmount(amount);
+		amount = ExhangeRateUtils.exchange(translationDate, from, to, amount);
+		currency = to;
+		translation.setTranslatedAmount(amount);
+		currencyTranslations.push(translation);
+//		CurrencyUnit baseCurrency = from;
+//		ConversionQuery conversionQuery = ConversionQueryBuilder.of()
+//                .setProviderName("ECB")
+//                .setBaseCurrency(from)
+//                .setTermCurrency(to)
+//                .set(LocalDate.class, translationDate)
+//                .build();
+//		CurrencyConversion currencyConversion = 
+//				MonetaryConversions.getExchangeRateProvider().getCurrencyConversion(conversionQuery);
+//		MonetaryAmount oneDollar = Monetary.getDefaultAmountFactory().setCurrency(baseCurrency).setNumber(this.amount).create();
+//		oneDollar.with(currencyConversion);
+//		amount = new BigDecimal(oneDollar.getNumber().toString());
 	}
 
 	@Override
 	public String toString() {
-		return "TransactionSplit [amount=" + amount + ", account=" + account
+		return "TransactionSplit [currencyUnit=" + currency + ", amount=" + amount + ", account=" + account
 				+ ", date = " + transaction.getDate() +  ", description = " + transaction.getDescription() + "]";
 	}
 }

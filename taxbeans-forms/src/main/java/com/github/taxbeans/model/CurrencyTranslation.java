@@ -4,15 +4,17 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Currency;
 
+import javax.money.CurrencyUnit;
+
 public class CurrencyTranslation {
 	
 	private BigDecimal originalAmount;
 	
-	private Currency originalCurrency;
+	private CurrencyUnit originalCurrency;
 	
 	private BigDecimal translatedAmount;
 	
-	private Currency translatedCurrency;
+	private CurrencyUnit translatedCurrency;
 	
 	private BigDecimal translationSpotRate;
 	
@@ -33,11 +35,11 @@ public class CurrencyTranslation {
 		this.originalAmount = originalAmount;
 	}
 
-	public Currency getOriginalCurrency() {
+	public CurrencyUnit getOriginalCurrency() {
 		return originalCurrency;
 	}
 
-	public void setOriginalCurrency(Currency originalCurrency) {
+	public void setOriginalCurrency(CurrencyUnit originalCurrency) {
 		this.originalCurrency = originalCurrency;
 	}
 
@@ -49,11 +51,11 @@ public class CurrencyTranslation {
 		this.translatedAmount = translatedAmount;
 	}
 
-	public Currency getTranslatedCurrency() {
+	public CurrencyUnit getTranslatedCurrency() {
 		return translatedCurrency;
 	}
 
-	public void setTranslatedCurrency(Currency translatedCurrency) {
+	public void setTranslatedCurrency(CurrencyUnit translatedCurrency) {
 		this.translatedCurrency = translatedCurrency;
 	}
 
