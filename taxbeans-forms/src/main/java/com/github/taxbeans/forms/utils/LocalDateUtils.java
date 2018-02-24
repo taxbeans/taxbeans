@@ -3,12 +3,17 @@ package com.github.taxbeans.forms.utils;
 import java.util.Date;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class LocalDateUtils {
 	
 	public static LocalDate convert(Date date) {
 		 return new java.sql.Date(date.getTime()).toLocalDate();
+	}
+	
+	public static Date convert(LocalDate localDate) {
+		 return  Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 
 	public static String format(LocalDate date, String pattern) {
