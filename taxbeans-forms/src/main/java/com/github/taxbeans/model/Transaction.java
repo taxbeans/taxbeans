@@ -2,17 +2,8 @@ package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConversionQueryBuilder;
-import javax.money.convert.CurrencyConversion;
-import javax.money.convert.MonetaryConversions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +11,6 @@ import org.slf4j.LoggerFactory;
 public class Transaction implements Comparable<Transaction>, Cloneable {
 
 	final static Logger logger = LoggerFactory.getLogger(Transaction.class);
-
-	private BigDecimal amount;
 
 	private Account creditAccount;
 
@@ -36,37 +25,22 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	private String num;
 
 	private List<TransactionSplit> transactionSplits = new ArrayList<TransactionSplit>();
-	
-	public void translate(LocalDate translationDate, CurrencyUnit from, CurrencyUnit to) {
-		CurrencyUnit baseCurrency = Monetary.getCurrency("USD");
-		ConversionQuery conversionQuery = ConversionQueryBuilder.of()
-                .setProviderName("ECB")
-                .setBaseCurrency(baseCurrency)
-                .setTermCurrency(Monetary.getCurrency("NZD"))
-                .set(LocalDate.class, LocalDate.of(2017, Month.SEPTEMBER, 10))
-                .build();
-		CurrencyConversion currencyConversion = 
-				MonetaryConversions.getExchangeRateProvider().getCurrencyConversion(conversionQuery);
-		MonetaryAmount oneDollar = Monetary.getDefaultAmountFactory().setCurrency(baseCurrency).setNumber(this.amount).create();
-		oneDollar.with(currencyConversion);
-		amount = new BigDecimal(oneDollar.getNumber().toString());
-	}
 
-	public BigDecimal calculateIncome(List<Transaction> transactions, int year) {
-		BigDecimal sum = BigDecimal.ZERO;
-		for (Transaction transaction : transactions) {
-			if (!transaction.getCreditAccount().getAccountType().equals(AccountType.income))
-				continue;
-			if (transaction.getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0 &&
-					transaction.getDate().compareTo(LocalDate.of(year, 4, 1)) < 0) {
-				//logger.info("Date of transaction = " + transaction.getDate());
-				sum = sum.add(transaction.getAmount());
-				//		logger.info("Sum for " + year + "=" + sum);
-			}
-		}
-		logger.info("Income Sum for " + year + "=" + sum);
-		return sum;
-	}
+//	public BigDecimal calculateIncome(List<Transaction> transactions, int year) {
+//		BigDecimal sum = BigDecimal.ZERO;
+//		for (Transaction transaction : transactions) {
+//			if (!transaction.getCreditAccount().getAccountType().equals(AccountType.income))
+//				continue;
+//			if (transaction.getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0 &&
+//					transaction.getDate().compareTo(LocalDate.of(year, 4, 1)) < 0) {
+//				//logger.info("Date of transaction = " + transaction.getDate());
+//				sum = sum.add(transaction.getAmount());
+//				//		logger.info("Sum for " + year + "=" + sum);
+//			}
+//		}
+//		logger.info("Income Sum for " + year + "=" + sum);
+//		return sum;
+//	}
 
 	public Object clone() {
 		try {
@@ -87,10 +61,6 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	@Override
 	public int compareTo(Transaction arg0) {
 		return this.getDate().compareTo(arg0.getDate());
-	}
-
-	public final BigDecimal getAmount() {
-		return this.amount;
 	}
 
 	public final Account getCreditAccount() {
@@ -138,24 +108,12 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return this.getDate().compareTo(LocalDate.of(year, 4, 1)) < 0;
 	}
 
-	public final void setAmount(final BigDecimal argAmount) {
-		this.amount = argAmount;
-	}
-
-	public final void setCreditAccount(final Account argCreditAccount) {
-		this.creditAccount = argCreditAccount;
-	}
-
 	public final void setDate(final LocalDate argDate) {
 		this.date = argDate;
 	}
 
 	public void setDateEntered(LocalDate dateEntered) {
 		this.dateEntered = dateEntered;
-	}
-
-	public final void setDebitAccount(final Account argDebitAccount) {
-		this.debitAccount = argDebitAccount;
 	}
 
 	public final void setDescription(final String argDescription) {
@@ -179,8 +137,6 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		sb.append(variableSeparator);
 		sb.append("description=").append(description);
 		sb.append(variableSeparator);
-		sb.append("amount=").append(amount);
-		sb.append(variableSeparator);
 		sb.append("creditAccount=").append(creditAccount);
 		sb.append(variableSeparator);
 		sb.append("debitAccount=").append(debitAccount);
@@ -189,6 +145,22 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 			sb.append("\t" + transactionSplit);
 		}
 		return sb.toString();
+	}
+
+	// adds a split to this transaction, throws an error if the split
+	// already belongs to a different transaction
+	public void addSplit(TransactionSplit split) {
+		this.getTransactionSplits().add(split);
+		if (split.getTransaction() != null && split.getTransaction() != this) {
+			throw new IllegalStateException("split already belongs to another tx");
+		}
+		split.setTransaction(this);
+	}
+
+	public void addSplitWithAmount(BigDecimal bigDecimal) {
+		TransactionSplit split = new TransactionSplit();
+		split.setAmount(bigDecimal);
+		split.setDescription(this.getDescription());
 	}
 
 }

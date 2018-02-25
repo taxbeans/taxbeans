@@ -88,6 +88,7 @@ public class TaxReturnUtils {
 				firstDateOfAccessibleIncome.compareTo(LocalDate.of(year, 4, 1)) < 0;
 	}
 	
+	// N.B. that this only uses the amount from the first split
 	public static String formatAsOFXString(Transaction transaction) {
 		/*
 		              <STMTTRN>
@@ -105,7 +106,7 @@ public class TaxReturnUtils {
 		sb.append("<TRNTYPE>OTHER\n");
 		sb.append(String.format("<DTPOSTED>%1$s\n", TaxReturnUtils.formatDate(transaction.getDate())));
 		sb.append(String.format("<DTUSER>%1$s\n", TaxReturnUtils.formatDate(transaction.getDate())));
-		sb.append(String.format("<TRNAMT>%1$s\n", TaxReturnUtils.formatMoney(transaction.getAmount())));
+		sb.append(String.format("<TRNAMT>%1$s\n", TaxReturnUtils.formatMoney(transaction.getTransactionSplits().get(0).getAmount())));
 		sb.append("<FITID>" + System.currentTimeMillis() + "\n"); //980310001\n");
 		sb.append(String.format("<NAME>%1$s\n", transaction.getName()));
 		sb.append(String.format("<MEMO>%1$s\n", transaction.getMemo()));

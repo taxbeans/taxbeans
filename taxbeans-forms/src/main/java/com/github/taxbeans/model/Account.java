@@ -1,13 +1,14 @@
 package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.time.LocalDate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,10 +32,8 @@ public class Account {
 
 	private List<BalanceAssertion> balanceAssertions = new ArrayList<BalanceAssertion>();
 	
-	private List<Transaction> creditTransactions = new ArrayList<Transaction>();
+	private List<TransactionSplit> splits = new ArrayList<TransactionSplit>();
 	
-	private List<Transaction> debitTransactions = new ArrayList<Transaction>();
-
 	private String guid;
 
 	private String name;
@@ -65,28 +64,16 @@ public class Account {
 			balanceAssertions.add(balanceAssertion);
 			balanceAssertionMap.put(balanceAssertion.getDate(), balanceAssertions);
 		}
-		List<Transaction> transactions = new ArrayList<Transaction>();
-		logger.debug("debit transaction size = " + debitTransactions.size());
-		logger.debug("credit transaction size = " + creditTransactions.size());
-		transactions.addAll(debitTransactions);
-		transactions.addAll(creditTransactions);
-		logger.debug("transactions size = " + transactions.size());
-		Collections.sort(transactions);
+		logger.debug("transaction splits size = " + splits.size());
+		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
 		int transactionNum = -1;
-		for (Transaction transaction : transactions) {
+		for (TransactionSplit split : splits) {
 			transactionNum++;
-			logger.debug("amount = " + transaction.getAmount());
-			if (transaction.getCreditAccount() == this) {
-				logger.debug("credit");
-				balance = balance.subtract(transaction.getAmount());
-			}
-			if (transaction.getDebitAccount() == this) {
-				logger.debug("debit");
-				balance = balance.add(transaction.getAmount());
-			}
-			logger.debug("balance = " + balance);
-			LocalDate transactionDate = transaction.getDate();
+				logger.debug("amount = " + split.getAmount());
+				balance = balance.add(split.getAmount());
+				logger.debug("balance = " + balance);
+			LocalDate transactionDate = split.getTransaction().getDate();
 			List<BalanceAssertion> balanceAssertions = balanceAssertionMap.get(transactionDate);
 			logger.debug("Transaction date = " + transactionDate);
 			if (balanceAssertions == null)
@@ -98,13 +85,13 @@ public class Account {
 					found = true;
 				}
 			}
-			try {
-				Transaction nextTransaction = transactions.get(transactionNum+1);
-				if (nextTransaction != null && transaction.getDate().equals(nextTransaction.getDate()))
-					continue;
-			} catch (IndexOutOfBoundsException e) {
-				//last transaction anyway, so continue
-			}
+//			try {
+//				Transaction nextTransaction = transactions.get(transactionNum+1);
+//				if (nextTransaction != null && transaction.getDate().equals(nextTransaction.getDate()))
+//					continue;
+//			} catch (IndexOutOfBoundsException e) {
+//				//last transaction anyway, so continue
+//			}
 			if (!found) {
 				System.out.flush();
 				try {
@@ -137,12 +124,9 @@ public class Account {
 	public BigDecimal getClosingBalanceForTaxYear(int year) {
 		return getOpeningBalanceForTaxYear(year+1);
 	}
-	public List<Transaction> getCreditTransactions() {
-		return creditTransactions;
-	}
-
-	public List<Transaction> getDebitTransactions() {
-		return debitTransactions;
+	
+	public List<TransactionSplit> getSplits() {
+		return splits;
 	}
 
 	public String getGuid() {
@@ -154,55 +138,39 @@ public class Account {
 	}
 
 	public BigDecimal getOpeningBalanceForTaxYear(int year) {
-		List<Transaction> transactions = new ArrayList<Transaction>();
-		transactions.addAll(debitTransactions);
-		transactions.addAll(creditTransactions);
-
-		Collections.sort(transactions);
+		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
-		//int transactionNum = -1;
-		for (Transaction transaction : transactions) {
-			if (transaction.getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0)
+
+		for (TransactionSplit split : splits) {
+			if (split.getTransaction().getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0)
 				return balance;
-			//transactionNum++;
-			//logger.debug("amount = " + transaction.getAmount());
-			if (transaction.getCreditAccount() == this) {
-				//logger.debug("credit");
-				balance = balance.subtract(transaction.getAmount());
-			}
-			if (transaction.getDebitAccount() == this) {
-				//logger.debug("debit");
-				balance = balance.add(transaction.getAmount());
-			}
+			logger.debug("amount = " + split.getAmount());
+			balance = balance.add(split.getAmount());
+			logger.debug("balance = " + balance);
 
 		}
 		return balance;
 	}
 
 	public BigDecimal getTotalForTaxYear(int year) {
-		List<Transaction> transactions = new ArrayList<Transaction>();
-		transactions.addAll(debitTransactions);
-		transactions.addAll(creditTransactions);
-		Collections.sort(transactions);
+		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
-		for (Transaction transaction : transactions) {
-			if (transaction.getDate().compareTo(LocalDate.of(year, 3, 31)) > 0)
+		for (TransactionSplit split : splits) {
+			if (split.getTransaction().getDate().compareTo(LocalDate.of(year, 3, 31)) > 0)
 				return balance;
-			if (!transaction.isInTaxYear(year))
+			if (!split.getTransaction().isInTaxYear(year))
 				continue;
-			if (transaction.getCreditAccount() == this) {
-				balance = balance.subtract(transaction.getAmount());
-			}
-			if (transaction.getDebitAccount() == this) {
-				balance = balance.add(transaction.getAmount());
-			}
+			logger.debug("amount = " + split.getAmount());
+			balance = balance.add(split.getAmount());
+			logger.debug("balance = " + balance);
+
 		}
 		return balance;
 	}
 
 	public void printTransactions() {
-		for (Transaction transaction : debitTransactions) {
-			logger.debug("tx: " + transaction);
+		for (TransactionSplit split : splits) {
+			logger.debug("tx: " + split);
 		}
 	}
 
@@ -216,14 +184,6 @@ public class Account {
 
 	public void setBalanceAssertions(List<BalanceAssertion> balanceAssertions) {
 		this.balanceAssertions = balanceAssertions;
-	}
-
-	public void setCreditTransactions(List<Transaction> creditTransactions) {
-		this.creditTransactions = creditTransactions;
-	}
-
-	public void setDebitTransactions(List<Transaction> debitTransactions) {
-		this.debitTransactions = debitTransactions;
 	}
 
 	public void setGuid(String guid) {
@@ -268,7 +228,17 @@ public class Account {
 	}
 
 	public void assignSplit(TransactionSplit transactionSplit) {
-		
+		if (splits == null) {
+			splits = new ArrayList<TransactionSplit>();
+		}
+		this.splits.add(transactionSplit);
+	}
+
+	public void setSplits(List<TransactionSplit> list) {
+		if (splits != null && splits.size() > 0) {
+			throw new IllegalStateException("Existing splits may not be overridden");
+		}
+		this.splits = list;
 	}
 }
 
