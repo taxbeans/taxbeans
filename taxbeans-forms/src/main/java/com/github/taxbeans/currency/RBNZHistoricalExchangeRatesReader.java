@@ -26,16 +26,22 @@ public class RBNZHistoricalExchangeRatesReader {
 
 	final static Logger logger = LoggerFactory.getLogger(IR3FormBean.class);
 	
-	private static volatile ExchangeRateInfo exchangeRateInfo;
-	
-	
+	private static volatile Map<String, ExchangeRateInfo> exchangeRateInfo = new HashMap<>();
 
 	public static void main(String[] args) throws IOException {
-		logger.info(String.format("1 NZD is %1$s USD", getUSDtoNZDRate(new Date(117,1,17))));
+		logger.info(String.format("1 NZD is %1$s USD", getForeignToNZDRate(new Date(117,1,17), "USD")));
 		//loadAllRates();
 	}
 
-	private static ExchangeRateInfo loadAllRates() {
+	private static ExchangeRateInfo loadAllRates(String currency) {
+		String currencyColumn;
+		if (currency.equals("USD")) {
+			currencyColumn = "C";
+		} else if (currency.equals("EUR")) {
+			currencyColumn = "G";
+		} else {
+ 			throw new IllegalStateException("Unsupported currency: " + currency);
+		}
 		Workbook wb;
 		try {
 			InputStream resourceAsStream = RBNZHistoricalExchangeRatesReader.class
@@ -50,7 +56,7 @@ public class RBNZHistoricalExchangeRatesReader {
 		Map<Date, BigDecimal> exchangeRates = new HashMap<>();
 		// suppose your formula is in B3
 		for (int rowNum = 6;rowNum<2000;rowNum++) {
-			CellReference cellReference = new CellReference(String.format("C%1$s", rowNum)); 
+			CellReference cellReference = new CellReference(String.format("%1$s%2$s", currencyColumn, rowNum)); 
 			Row row = sheet.getRow(cellReference.getRow());	
 			if (row == null) {
 				logger.info("NZD/USD Rate Loading Complete, number of rates loaded = " + exchangeRates.size());
@@ -78,9 +84,9 @@ public class RBNZHistoricalExchangeRatesReader {
 		return exchangeRateInfo;
 	}
 
-	public static BigDecimal getUSDtoNZDRate(Date date) {
+	public static BigDecimal getForeignToNZDRate(Date date, String foreignCurrency) {
 		
-		return BigDecimal.ONE.divide(getNZDtoUSDRate(date), 6, RoundingMode.HALF_UP);
+		return BigDecimal.ONE.divide(getNZDtoForeignRate(date, foreignCurrency), 6, RoundingMode.HALF_UP);
 		//FileInputStream fis = new FileInputStream("/rbnz-historical-exchange-rates.xlsx");
 //		Workbook wb = new XSSFWorkbook("./target/classes/rbnz-historical-exchange-rates.xlsx");
 //		Sheet sheet = wb.getSheetAt(0);
@@ -93,13 +99,14 @@ public class RBNZHistoricalExchangeRatesReader {
 //		return new BigDecimal(cell.getNumericCellValue()+"");
 	}
 
-	public static BigDecimal getNZDtoUSDRate(Date date) {
+	public static BigDecimal getNZDtoForeignRate(Date date, String foreignCurrency) {
 		logger.info("date = " + date);
 		logger.info("Day of week = " + date.getDay());
-		if (exchangeRateInfo == null) {
-			exchangeRateInfo = loadAllRates();
-		}// TODO Auto-generated method stub
-		if (exchangeRateInfo.isWeekdaysOnly()) {
+		ExchangeRateInfo exchangeRateInfo2 = exchangeRateInfo.get(foreignCurrency);
+		if (exchangeRateInfo2 == null) {
+			exchangeRateInfo.put(foreignCurrency, (exchangeRateInfo2 = loadAllRates(foreignCurrency)));
+		}
+		if (exchangeRateInfo2.isWeekdaysOnly()) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
 			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
@@ -113,7 +120,7 @@ public class RBNZHistoricalExchangeRatesReader {
 			date = calendar.getTime();
 		}
 		logger.warn("Date = " + date);
-		return exchangeRateInfo.getExchangeRates().get(date);
+		return exchangeRateInfo2.getExchangeRates().get(date);
 	}
 
 }

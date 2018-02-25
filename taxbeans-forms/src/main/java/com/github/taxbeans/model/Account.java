@@ -266,5 +266,9 @@ public class Account {
 		this.setName(string);
 		return this;
 	}
+
+	public void assignSplit(TransactionSplit transactionSplit) {
+		
+	}
 }
 
