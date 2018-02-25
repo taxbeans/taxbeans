@@ -83,58 +83,6 @@ class AccountBuilderBase<GeneratorT extends AccountBuilderBase<GeneratorT>> {
 		return new AddedBalanceAssertionBalanceAssertionBuilder(obj);
 	}
 
-	@SuppressWarnings("unchecked")
-	public GeneratorT withCreditTransactions(List<Transaction> aValue) {
-		instance.setCreditTransactions(aValue);
-
-		return (GeneratorT) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public GeneratorT withAddedCreditTransaction(Transaction aValue) {
-		if (instance.getCreditTransactions() == null) {
-			instance.setCreditTransactions(new ArrayList<Transaction>());
-		}
-
-		((ArrayList<Transaction>) instance.getCreditTransactions()).add(aValue);
-
-		return (GeneratorT) this;
-	}
-
-	public AddedCreditTransactionTransactionBuilder withAddedCreditTransaction() {
-		Transaction obj = new Transaction();
-
-		withAddedCreditTransaction(obj);
-
-		return new AddedCreditTransactionTransactionBuilder(obj);
-	}
-
-	@SuppressWarnings("unchecked")
-	public GeneratorT withDebitTransactions(List<Transaction> aValue) {
-		instance.setDebitTransactions(aValue);
-
-		return (GeneratorT) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public GeneratorT withAddedDebitTransaction(Transaction aValue) {
-		if (instance.getDebitTransactions() == null) {
-			instance.setDebitTransactions(new ArrayList<Transaction>());
-		}
-
-		((ArrayList<Transaction>) instance.getDebitTransactions()).add(aValue);
-
-		return (GeneratorT) this;
-	}
-
-	public AddedDebitTransactionTransactionBuilder withAddedDebitTransaction() {
-		Transaction obj = new Transaction();
-
-		withAddedDebitTransaction(obj);
-
-		return new AddedDebitTransactionTransactionBuilder(obj);
-	}
-
 	public class AddedBalanceAssertionBalanceAssertionBuilder
 	extends
 	BalanceAssertionBuilderBase<AddedBalanceAssertionBalanceAssertionBuilder> {
@@ -196,43 +144,6 @@ class AccountBuilderBase<GeneratorT extends AccountBuilderBase<GeneratorT>> {
 			instance.setDescription(aValue);
 
 			return (GeneratorT) this;
-		}
-
-		@SuppressWarnings("unchecked")
-		public GeneratorT withAmount(BigDecimal aValue) {
-			instance.setAmount(aValue);
-
-			return (GeneratorT) this;
-		}
-
-		@SuppressWarnings("unchecked")
-		public GeneratorT withCreditAccount(Account aValue) {
-			instance.setCreditAccount(aValue);
-
-			return (GeneratorT) this;
-		}
-
-		public CreditAccountAccountBuilder withCreditAccount() {
-			Account obj = new Account();
-
-			withCreditAccount(obj);
-
-			return new CreditAccountAccountBuilder(obj);
-		}
-
-		@SuppressWarnings("unchecked")
-		public GeneratorT withDebitAccount(Account aValue) {
-			instance.setDebitAccount(aValue);
-
-			return (GeneratorT) this;
-		}
-
-		public DebitAccountAccountBuilder withDebitAccount() {
-			Account obj = new Account();
-
-			withDebitAccount(obj);
-
-			return new DebitAccountAccountBuilder(obj);
 		}
 
 		public class CreditAccountAccountBuilder extends

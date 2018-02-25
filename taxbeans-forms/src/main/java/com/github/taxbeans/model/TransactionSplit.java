@@ -70,9 +70,20 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 
 	private Transaction adaptToMergedTransaction(Account debitAccount, Account creditAccount) {
 		Transaction tx = this.transaction.cloneThis();
-		tx.setAmount(this.getAmount());
-		tx.setDebitAccount(debitAccount);
-		tx.setCreditAccount(creditAccount);
+		if (debitAccount != null) {
+			TransactionSplit debitSplit = new TransactionSplit();
+			debitSplit.setTransaction(tx);
+			debitSplit.setAmount(this.getAmount());
+			debitSplit.setAccount(debitAccount);
+			tx.getTransactionSplits().add(debitSplit);
+		}
+		if (creditAccount != null) {
+			TransactionSplit creditSplit = new TransactionSplit();
+			creditSplit.setTransaction(tx);
+			creditSplit.setAmount(this.getAmount().negate());
+			creditSplit.setAccount(creditAccount);
+			tx.getTransactionSplits().add(creditSplit);
+		}
 		return tx;
 	}
 
@@ -95,6 +106,9 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 
 	//automatically assigns the split to the account object as well
 	public void setAccount(Account account) {
+		if (account == null) {
+			throw new IllegalArgumentException("Account may not be null");
+		}
 		this.account = account;
 		//automatically assign the split to the account to
 		this.account.assignSplit(this);
