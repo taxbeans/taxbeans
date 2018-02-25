@@ -12,17 +12,23 @@ public class ExhangeRateUtils {
 
 	public static BigDecimal exchange(LocalDate translationDate, CurrencyUnit from, CurrencyUnit to,
 			BigDecimal amount) {
-		if (!from.equals(Monetary.getCurrency("USD")) && !from.equals(Monetary.getCurrency("NZD"))) {
+		if (!from.equals(Monetary.getCurrency("USD")) && !from.equals(Monetary.getCurrency("EUR"))
+				&& !from.equals(Monetary.getCurrency("NZD"))) {
 			throw new IllegalStateException("Source currency not yet supported");
 		} 
-		if (!from.equals(Monetary.getCurrency("NZD")) && !from.equals(Monetary.getCurrency("USD"))) {
+		if (!from.equals(Monetary.getCurrency("NZD")) && !from.equals(Monetary.getCurrency("EUR"))
+				&& !from.equals(Monetary.getCurrency("USD"))) {
 			throw new IllegalStateException("Target currency not yet supported");
 		}
 		BigDecimal rate = null;
 		if (from.equals(Monetary.getCurrency("USD")) && to.equals(Monetary.getCurrency("NZD"))) {
-			rate = RBNZHistoricalExchangeRatesReader.getUSDtoNZDRate(LocalDateUtils.convert(translationDate));
+			rate = RBNZHistoricalExchangeRatesReader.getForeignToNZDRate(LocalDateUtils.convert(translationDate), "USD");
 		} else if (from.equals(Monetary.getCurrency("NZD")) && to.equals(Monetary.getCurrency("USD"))) {
-			rate = RBNZHistoricalExchangeRatesReader.getNZDtoUSDRate(LocalDateUtils.convert(translationDate));
+			rate = RBNZHistoricalExchangeRatesReader.getNZDtoForeignRate(LocalDateUtils.convert(translationDate), "USD");
+		} else if (from.equals(Monetary.getCurrency("EUR")) && to.equals(Monetary.getCurrency("NZD"))) {
+			rate = RBNZHistoricalExchangeRatesReader.getForeignToNZDRate(LocalDateUtils.convert(translationDate), "EUR");
+		} else if (from.equals(Monetary.getCurrency("NZD")) && to.equals(Monetary.getCurrency("EUR"))) {
+			rate = RBNZHistoricalExchangeRatesReader.getNZDtoForeignRate(LocalDateUtils.convert(translationDate), "EUR");
 		}
 		return rate.multiply(amount);
 	}

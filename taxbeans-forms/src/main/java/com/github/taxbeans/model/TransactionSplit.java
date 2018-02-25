@@ -1,25 +1,27 @@
 package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Stack;
+import java.util.UUID;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConversionQueryBuilder;
-import javax.money.convert.CurrencyConversion;
-import javax.money.convert.MonetaryConversions;
 
 import com.github.taxbeans.currency.ExhangeRateUtils;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 public class TransactionSplit implements Comparable<TransactionSplit> {
+
+	public TransactionSplit() {
+		super();
+		uuid = UUID.randomUUID();
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
 
 	public static List<Transaction> adaptToMergedTransactionList(List<TransactionSplit> transactionSplits, Account debitAccount, Account creditAccount) {
 		List<Transaction> transactionList = new ArrayList<Transaction>();
@@ -28,6 +30,8 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 		}
 		return transactionList;
 	}
+	
+	private UUID uuid;
 
 	private Account account;
 
@@ -89,8 +93,11 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 		return this.transaction;
 	}
 
+	//automatically assigns the split to the account object as well
 	public void setAccount(Account account) {
 		this.account = account;
+		//automatically assign the split to the account to
+		this.account.assignSplit(this);
 	}
 
 	public void setAmount(BigDecimal amount) {
@@ -131,23 +138,12 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 		currency = to;
 		translation.setTranslatedAmount(amount);
 		currencyTranslations.push(translation);
-//		CurrencyUnit baseCurrency = from;
-//		ConversionQuery conversionQuery = ConversionQueryBuilder.of()
-//                .setProviderName("ECB")
-//                .setBaseCurrency(from)
-//                .setTermCurrency(to)
-//                .set(LocalDate.class, translationDate)
-//                .build();
-//		CurrencyConversion currencyConversion = 
-//				MonetaryConversions.getExchangeRateProvider().getCurrencyConversion(conversionQuery);
-//		MonetaryAmount oneDollar = Monetary.getDefaultAmountFactory().setCurrency(baseCurrency).setNumber(this.amount).create();
-//		oneDollar.with(currencyConversion);
-//		amount = new BigDecimal(oneDollar.getNumber().toString());
 	}
 
 	@Override
 	public String toString() {
 		return "TransactionSplit [currencyUnit=" + currency + ", amount=" + amount + ", account=" + account
-				+ ", date = " + transaction.getDate() +  ", description = " + transaction.getDescription() + "]";
+				+ ", date = " + transaction.getDate() +  ", description = " + this.getDescription() + 
+				", commodityName = " + this.getCommodityName() + ", commodityUnits = " + this.getCommodityUnits() + "]";
 	}
 }
