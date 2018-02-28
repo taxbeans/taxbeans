@@ -24,6 +24,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 
 	private String num;
 
+	//TODO add a validate method to ensure total debits = total credits and rename TransactionSplit to Entry
 	private List<TransactionSplit> transactionSplits = new ArrayList<TransactionSplit>();
 
 //	public BigDecimal calculateIncome(List<Transaction> transactions, int year) {
