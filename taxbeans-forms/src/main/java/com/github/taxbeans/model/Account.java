@@ -36,7 +36,13 @@ public class Account {
 	
 	private String guid;
 
+	private String accountNumber;
+	
 	private String name;
+	
+	private String description;
+	
+	private boolean debitIncreases;
 	
 	// Optional field to hold commodityUnits
 	private BigDecimal commodityUnits;
