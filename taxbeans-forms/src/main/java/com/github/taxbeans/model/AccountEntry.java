@@ -12,9 +12,9 @@ import javax.money.Monetary;
 
 import com.github.taxbeans.currency.ExhangeRateUtils;
 
-public class TransactionSplit implements Comparable<TransactionSplit> {
+public class AccountEntry implements Comparable<AccountEntry> {
 
-	public TransactionSplit() {
+	public AccountEntry() {
 		super();
 		uuid = UUID.randomUUID();
 	}
@@ -23,9 +23,9 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 		return uuid;
 	}
 
-	public static List<Transaction> adaptToMergedTransactionList(List<TransactionSplit> transactionSplits, Account debitAccount, Account creditAccount) {
+	public static List<Transaction> adaptToMergedTransactionList(List<AccountEntry> transactionSplits, Account debitAccount, Account creditAccount) {
 		List<Transaction> transactionList = new ArrayList<Transaction>();
-		for (TransactionSplit transactionSplit : transactionSplits) {
+		for (AccountEntry transactionSplit : transactionSplits) {
 			transactionList.add(transactionSplit.adaptToMergedTransaction(debitAccount, creditAccount));
 		}
 		return transactionList;
@@ -76,14 +76,14 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 	private Transaction adaptToMergedTransaction(Account debitAccount, Account creditAccount) {
 		Transaction tx = this.transaction.cloneThis();
 		if (debitAccount != null) {
-			TransactionSplit debitSplit = new TransactionSplit();
+			AccountEntry debitSplit = new AccountEntry();
 			debitSplit.setTransaction(tx);
 			debitSplit.setAmount(this.getAmount());
 			debitSplit.setAccount(debitAccount);
 			tx.getTransactionSplits().add(debitSplit);
 		}
 		if (creditAccount != null) {
-			TransactionSplit creditSplit = new TransactionSplit();
+			AccountEntry creditSplit = new AccountEntry();
 			creditSplit.setTransaction(tx);
 			creditSplit.setAmount(this.getAmount().negate());
 			creditSplit.setAccount(creditAccount);
@@ -92,7 +92,7 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 		return tx;
 	}
 
-	public int compareTo(TransactionSplit split) {
+	public int compareTo(AccountEntry split) {
 		LocalDate splitDate = split.getTransaction().getDate();
 		return this.getTransaction().getDate().compareTo(splitDate);
 	}

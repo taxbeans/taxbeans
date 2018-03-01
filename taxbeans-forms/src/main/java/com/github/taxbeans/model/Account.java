@@ -32,7 +32,7 @@ public class Account {
 
 	private List<BalanceAssertion> balanceAssertions = new ArrayList<BalanceAssertion>();
 	
-	private List<TransactionSplit> splits = new ArrayList<TransactionSplit>();
+	private List<AccountEntry> splits = new ArrayList<AccountEntry>();
 	
 	private String guid;
 
@@ -74,7 +74,7 @@ public class Account {
 		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
 		int transactionNum = -1;
-		for (TransactionSplit split : splits) {
+		for (AccountEntry split : splits) {
 			transactionNum++;
 				logger.debug("amount = " + split.getAmount());
 				balance = balance.add(split.getAmount());
@@ -131,7 +131,7 @@ public class Account {
 		return getOpeningBalanceForTaxYear(year+1);
 	}
 	
-	public List<TransactionSplit> getSplits() {
+	public List<AccountEntry> getSplits() {
 		return splits;
 	}
 
@@ -147,7 +147,7 @@ public class Account {
 		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
 
-		for (TransactionSplit split : splits) {
+		for (AccountEntry split : splits) {
 			if (split.getTransaction().getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0)
 				return balance;
 			logger.debug("amount = " + split.getAmount());
@@ -161,7 +161,7 @@ public class Account {
 	public BigDecimal getTotalForTaxYear(int year) {
 		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
-		for (TransactionSplit split : splits) {
+		for (AccountEntry split : splits) {
 			if (split.getTransaction().getDate().compareTo(LocalDate.of(year, 3, 31)) > 0)
 				return balance;
 			if (!split.getTransaction().isInTaxYear(year))
@@ -175,7 +175,7 @@ public class Account {
 	}
 
 	public void printTransactions() {
-		for (TransactionSplit split : splits) {
+		for (AccountEntry split : splits) {
 			logger.debug("tx: " + split);
 		}
 	}
@@ -233,14 +233,14 @@ public class Account {
 		return this;
 	}
 
-	public void assignSplit(TransactionSplit transactionSplit) {
+	public void assignSplit(AccountEntry transactionSplit) {
 		if (splits == null) {
-			splits = new ArrayList<TransactionSplit>();
+			splits = new ArrayList<AccountEntry>();
 		}
 		this.splits.add(transactionSplit);
 	}
 
-	public void setSplits(List<TransactionSplit> list) {
+	public void setSplits(List<AccountEntry> list) {
 		if (splits != null && splits.size() > 0) {
 			throw new IllegalStateException("Existing splits may not be overridden");
 		}
