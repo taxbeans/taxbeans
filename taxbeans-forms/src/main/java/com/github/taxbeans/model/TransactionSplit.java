@@ -37,6 +37,9 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 
 	private BigDecimal amount;
 
+	// Whether this entry is a debit or credit
+	private AccountSide accountSide;
+
 	/**
 	 * the outer transaction
 	 */
@@ -67,6 +70,8 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	
 
 	private Transaction adaptToMergedTransaction(Account debitAccount, Account creditAccount) {
 		Transaction tx = this.transaction.cloneThis();
@@ -112,6 +117,14 @@ public class TransactionSplit implements Comparable<TransactionSplit> {
 		this.account = account;
 		//automatically assign the split to the account to
 		this.account.assignSplit(this);
+	}
+
+	public AccountSide getAccountSide() {
+	    return accountSide;
+	}
+
+	public void setAccountSide(AccountSide side) {
+	    this.accountSide = accountSide;
 	}
 
 	public void setAmount(BigDecimal amount) {
