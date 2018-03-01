@@ -25,7 +25,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	private String num;
 
 	//TODO add a validate method to ensure total debits = total credits and rename TransactionSplit to Entry
-	private List<TransactionSplit> transactionSplits = new ArrayList<TransactionSplit>();
+	private List<AccountEntry> transactionSplits = new ArrayList<AccountEntry>();
 
 //	public BigDecimal calculateIncome(List<Transaction> transactions, int year) {
 //		BigDecimal sum = BigDecimal.ZERO;
@@ -96,7 +96,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return num;
 	}
 
-	public List<TransactionSplit> getTransactionSplits() {
+	public List<AccountEntry> getTransactionSplits() {
 		return transactionSplits;
 	}
 
@@ -125,7 +125,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		this.num = num;
 	}
 
-	public void setTransactionSplits(List<TransactionSplit> transactionSplits) {
+	public void setTransactionSplits(List<AccountEntry> transactionSplits) {
 		this.transactionSplits = transactionSplits;
 	}
 
@@ -141,7 +141,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		sb.append("creditAccount=").append(creditAccount);
 		sb.append(variableSeparator);
 		sb.append("debitAccount=").append(debitAccount);
-		for (TransactionSplit transactionSplit : transactionSplits) {
+		for (AccountEntry transactionSplit : transactionSplits) {
 			sb.append("\r\n");
 			sb.append("\t" + transactionSplit);
 		}
@@ -150,7 +150,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 
 	// adds a split to this transaction, throws an error if the split
 	// already belongs to a different transaction
-	public void addSplit(TransactionSplit split) {
+	public void addSplit(AccountEntry split) {
 		this.getTransactionSplits().add(split);
 		if (split.getTransaction() != null && split.getTransaction() != this) {
 			throw new IllegalStateException("split already belongs to another tx");
@@ -159,7 +159,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	}
 
 	public void addSplitWithAmount(BigDecimal bigDecimal) {
-		TransactionSplit split = new TransactionSplit();
+		AccountEntry split = new AccountEntry();
 		split.setAmount(bigDecimal);
 		split.setDescription(this.getDescription());
 	}

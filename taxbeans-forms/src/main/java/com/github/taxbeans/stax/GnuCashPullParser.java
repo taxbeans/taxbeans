@@ -30,9 +30,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.model.Account;
 import com.github.taxbeans.model.AccountClassification;
-import com.github.taxbeans.model.BookOfAccounts;
+import com.github.taxbeans.model.Ledger;
 import com.github.taxbeans.model.Transaction;
-import com.github.taxbeans.model.TransactionSplit;
+import com.github.taxbeans.model.AccountEntry;
 
 public class GnuCashPullParser {
 
@@ -44,15 +44,15 @@ public class GnuCashPullParser {
 
 	private boolean cacheData = true;
 
-	private static Map<String, BookOfAccounts> map = new ConcurrentHashMap<String, BookOfAccounts>();
+	private static Map<String, Ledger> map = new ConcurrentHashMap<String, Ledger>();
 
 	public GnuCashPullParser(String filename) {
 		super();
 		this.filename = filename;
 	}
 
-	public List<TransactionSplit> parseSplits(XMLStreamReader streamReader, Transaction transaction) throws XMLStreamException, ParseException {
-		List<TransactionSplit> transactionSplits = new ArrayList<TransactionSplit>();
+	public List<AccountEntry> parseSplits(XMLStreamReader streamReader, Transaction transaction) throws XMLStreamException, ParseException {
+		List<AccountEntry> transactionSplits = new ArrayList<AccountEntry>();
 		outer:
 			while (streamReader.hasNext()) {
 				int eventType = streamReader.next();
@@ -60,7 +60,7 @@ public class GnuCashPullParser {
 					return transactionSplits;
 				if(eventType == XMLStreamReader.START_ELEMENT){
 					if ("split".equals(streamReader.getLocalName())) {
-						TransactionSplit transactionSplit = new TransactionSplit();
+						AccountEntry transactionSplit = new AccountEntry();
 						transactionSplit.setTransaction(transaction);
 						transactionSplits.add(transactionSplit);
 						while (streamReader.hasNext()) {
@@ -206,7 +206,7 @@ public class GnuCashPullParser {
 	}
 
 
-	public BookOfAccounts parse() throws Exception {
+	public Ledger parse() throws Exception {
 		String pathName = "target/classes/" + filename;
 		if (cacheData ) {
 			if (map.containsKey(pathName)) {
@@ -272,7 +272,7 @@ public class GnuCashPullParser {
 		}
 		//logger.debug("found " + transactionCount + " transactions");
 		//logger.debug("found " + accountCount + " accounts");
-		BookOfAccounts gnuCashData = new BookOfAccounts();
+		Ledger gnuCashData = new Ledger();
 		gnuCashData.setAccounts(accounts);
 		gnuCashData.setTransactions(transactions);
 		if (cacheData) {

@@ -8,6 +8,6 @@ public class Taxpayer {
 	
 	private TaxpayerType taxPayerType;
 	
-	private BookOfAccounts bookOfAccounts;
+	private Ledger bookOfAccounts;
 
 }
