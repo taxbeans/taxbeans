@@ -164,4 +164,22 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		split.setDescription(this.getDescription());
 	}
 
+	public Transaction addEntry(AccountEntry entry) {
+		if (entry.getAccountSide() == null) {
+			if (entry.getAccount().isDebitIncreases()) {
+				entry.setAccountSide(entry.getAmount().signum() < 0 ? AccountSide.CREDIT : AccountSide.DEBIT);
+			} else {
+				entry.setAccountSide(entry.getAmount().signum() < 0 ? AccountSide.DEBIT : AccountSide.CREDIT);
+			}
+		}
+		this.getTransactionSplits().add(entry);
+		return this;
+	}
+
+	public Transaction add(AccountEntry split1) {
+		this.addEntry(split1);
+		split1.setTransaction(this);
+		return this;
+	}
+
 }
