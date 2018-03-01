@@ -11,4 +11,8 @@ public enum AccountSide {
     AccountSide(Position position) {
       this.position = position;
     }
+    
+    public String toString() {
+    	return this == DEBIT ? "DR" : "CR";
+    }
 }

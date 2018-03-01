@@ -26,6 +26,17 @@ public class Account {
 		return new Account(text);
 	}
 
+	private Account parent;
+	
+	public Account getParent() {
+		return parent;
+	}
+
+	public void setParent(Account parent) {
+		this.parent = parent;
+		this.debitIncreases = parent.debitIncreases;
+	}
+
 	private AccountClassification accountClassification;
 
 	private AccountType accountType;
@@ -35,6 +46,16 @@ public class Account {
 	private List<AccountEntry> splits = new ArrayList<AccountEntry>();
 	
 	private String guid;
+	
+	private boolean placeholder;
+
+	public boolean isPlaceholder() {
+		return placeholder;
+	}
+
+	public void setPlaceholder(boolean placeholder) {
+		this.placeholder = placeholder;
+	}
 
 	private String accountNumber;
 	
@@ -44,6 +65,19 @@ public class Account {
 	
 	private boolean debitIncreases;
 	
+	public boolean isDebitIncreases() {
+		return debitIncreases;
+	}
+
+	public void setDebitIncreases(boolean debitIncreases) {
+		this.debitIncreases = debitIncreases;
+	}
+	
+	public Account withDebitIncreases(boolean debitIncreases) {
+		this.debitIncreases = debitIncreases;
+		return this;
+	}
+
 	// Optional field to hold commodityUnits
 	private BigDecimal commodityUnits;
 	
@@ -196,8 +230,9 @@ public class Account {
 		this.guid = guid;
 	}
 
-	public final void setName(final String argName) {
+	public final Account setName(final String argName) {
 		this.name = argName;
+		return this;
 	}
 	
 
@@ -245,6 +280,11 @@ public class Account {
 			throw new IllegalStateException("Existing splits may not be overridden");
 		}
 		this.splits = list;
+	}
+
+	public Account withParent(Account assets) {
+		setParent(assets);
+		return this;
 	}
 }
 

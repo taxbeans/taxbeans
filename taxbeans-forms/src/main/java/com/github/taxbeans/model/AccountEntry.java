@@ -123,10 +123,11 @@ public class AccountEntry implements Comparable<AccountEntry> {
 	    return accountSide;
 	}
 
-	public void setAccountSide(AccountSide side) {
+	public void setAccountSide(AccountSide accountSide) {
 	    this.accountSide = accountSide;
 	}
 
+	//+ve increases balance and -ve decreases balance so debit/credit accordingly
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
@@ -169,8 +170,8 @@ public class AccountEntry implements Comparable<AccountEntry> {
 
 	@Override
 	public String toString() {
-		return "TransactionSplit [currencyUnit=" + currency + ", amount=" + amount + ", account=" + account
-				+ ", date = " + transaction.getDate() +  ", description = " + this.getDescription() + 
+		return "AccountEntry [" + amount + " " + currency + " " + accountSide + ", account=" + account
+				+ ", date = " + (transaction == null ? null : transaction.getDate()) +  ", description = " + this.getDescription() + 
 				", commodityName = " + this.getCommodityName() + ", commodityUnits = " + this.getCommodityUnits() + "]";
 	}
 }
