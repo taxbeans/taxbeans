@@ -5,8 +5,10 @@ public enum AccountSide {
     //debits entries appear on the left, credits on the right
     DEBIT(Position.LEFT),
     CREDIT(Position.RIGHT);
+
+    private Position position;
     
-    public AccountSide(Position position) {
+    AccountSide(Position position) {
       this.position = position;
     }
 }
