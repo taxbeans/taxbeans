@@ -81,9 +81,6 @@ public class Account {
 		this.debitIncreases = debitIncreases;
 	}
 
-	// Optional field to hold commodityUnits
-	private BigDecimal commodityUnits;
-
 	// Optional field to hold commodityName
 	private String commodityName;
 
@@ -123,7 +120,6 @@ public class Account {
 		this.accountNumber = accountNumber;
 		this.name = name;
 		this.description = description;
-		this.commodityUnits = commodityUnits;
 		this.commodityName = commodityName;
 	}
 
@@ -198,6 +194,10 @@ public class Account {
 	public BigDecimal getClosingBalanceForTaxYear(int year) {
 		return getOpeningBalanceForTaxYear(year + 1);
 	}
+	
+	public BigDecimal getClosingCommodityBalanceForTaxYear(int year) {
+		return getOpeningCommodityBalanceForTaxYear(year + 1);
+	}
 
 	public List<AccountEntry> getSplits() {
 		return splits;
@@ -221,10 +221,24 @@ public class Account {
 			logger.debug("amount = " + split.getAmount());
 			balance = balance.add(split.getAmount());
 			logger.debug("balance = " + balance);
-
 		}
 		return balance;
 	}
+	
+	public BigDecimal getOpeningCommodityBalanceForTaxYear(int year) {
+		Collections.sort(splits);
+		BigDecimal balance = BigDecimal.ZERO;
+
+		for (AccountEntry split : splits) {
+			if (split.getTransaction().getDate().compareTo(LocalDate.of(year - 1, 3, 31)) > 0)
+				return balance;
+			logger.debug("amount = " + split.getCommodityUnits());
+			balance = balance.add(split.getCommodityUnits());
+			logger.debug("balance = " + balance);
+		}
+		return balance;
+	}
+
 
 	public BigDecimal getTotalForTaxYear(int year) {
 		Collections.sort(splits);
@@ -269,14 +283,6 @@ public class Account {
 		return this;
 	}
 
-	public BigDecimal getCommodityUnits() {
-		return commodityUnits;
-	}
-
-	public void setCommodityUnits(BigDecimal commodityUnits) {
-		this.commodityUnits = commodityUnits;
-	}
-
 	public String getCommodityName() {
 		return commodityName;
 	}
@@ -286,7 +292,7 @@ public class Account {
 	}
 
 	public boolean isCommodity() {
-		return commodityUnits != null || commodityName != null;
+		return commodityName != null;
 	}
 
 	@Override
@@ -295,7 +301,7 @@ public class Account {
 				+ accountType + ", name=" + name + "]";
 	}
 
-	public void assignSplit(AccountEntry transactionSplit) {
+	public void addEntry(AccountEntry transactionSplit) {
 		if (splits == null) {
 			splits = new ArrayList<AccountEntry>();
 		}
