@@ -20,6 +20,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		super();
 		this.uuid = uuid;
 		this.account = account;
+		this.account.addEntry(this);
 		this.amount = amount;
 		this.accountSide = accountSide;
 		this.transaction = transaction;
@@ -53,7 +54,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 
 	private Account account;
 
-	private BigDecimal amount;
+	private BigDecimal amount = BigDecimal.ZERO;
 
 	// Whether this entry is a debit or credit
 	private AccountSide accountSide;
@@ -65,7 +66,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 
 	private String description;
 
-	private BigDecimal commodityUnits;
+	private BigDecimal commodityUnits = BigDecimal.ZERO;
 
 	private String commodityName;
 
@@ -132,7 +133,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		}
 		this.account = account;
 		//automatically assign the split to the account to
-		this.account.assignSplit(this);
+		this.account.addEntry(this);
 	}
 
 	public AccountSide getAccountSide() {
