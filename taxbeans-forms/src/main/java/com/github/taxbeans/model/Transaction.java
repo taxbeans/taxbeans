@@ -182,4 +182,9 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return this;
 	}
 
+	public Transaction withEntry(AccountEntry entry) {
+		this.addEntry(entry);
+		return this;
+	}
+
 }

@@ -21,13 +21,13 @@ public class Account {
 	public static Account createFromGUID(UUID randomUUID) {
 		return Account.createFromGUID(randomUUID.toString());
 	}
-	
+
 	public static Account createFromGUID(String text) {
 		return new Account(text);
 	}
 
 	private Account parent;
-	
+
 	public Account getParent() {
 		return parent;
 	}
@@ -42,11 +42,11 @@ public class Account {
 	private AccountType accountType;
 
 	private List<BalanceAssertion> balanceAssertions = new ArrayList<BalanceAssertion>();
-	
+
 	private List<AccountEntry> splits = new ArrayList<AccountEntry>();
-	
+
 	private String guid;
-	
+
 	private boolean placeholder;
 
 	public boolean isPlaceholder() {
@@ -58,13 +58,21 @@ public class Account {
 	}
 
 	private String accountNumber;
-	
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
 	private String name;
-	
+
 	private String description;
-	
+
 	private boolean debitIncreases;
-	
+
 	public boolean isDebitIncreases() {
 		return debitIncreases;
 	}
@@ -72,19 +80,15 @@ public class Account {
 	public void setDebitIncreases(boolean debitIncreases) {
 		this.debitIncreases = debitIncreases;
 	}
-	
-	public Account withDebitIncreases(boolean debitIncreases) {
-		this.debitIncreases = debitIncreases;
-		return this;
-	}
 
 	// Optional field to hold commodityUnits
 	private BigDecimal commodityUnits;
-	
+
 	// Optional field to hold commodityName
 	private String commodityName;
 
-	public Account() {}
+	public Account() {
+	}
 
 	public Account(AccountType accountType) {
 		this.accountType = accountType;
@@ -94,8 +98,37 @@ public class Account {
 		this.guid = guid;
 	}
 
+	public Account(Account parent, AccountClassification accountClassification, AccountType accountType,
+			List<BalanceAssertion> balanceAssertions, List<AccountEntry> splits, String guid, boolean placeholder,
+			String accountNumber, String name, String description, boolean debitIncreases, BigDecimal commodityUnits,
+			String commodityName) {
+		super();
+		this.parent = parent;
+		this.accountClassification = accountClassification;
+		this.accountType = accountType;
+		if (this.accountType == null && parent != null) {
+			this.accountType = parent.getAccountType();
+			if (this.accountType == AccountType.asset) {
+				this.setDebitIncreases(true);
+			} else {
+				this.setDebitIncreases(parent.debitIncreases);
+			}
+		} else {
+			this.debitIncreases = debitIncreases;
+		}
+		this.balanceAssertions = balanceAssertions;
+		this.splits = splits;
+		this.guid = guid;
+		this.placeholder = placeholder;
+		this.accountNumber = accountNumber;
+		this.name = name;
+		this.description = description;
+		this.commodityUnits = commodityUnits;
+		this.commodityName = commodityName;
+	}
+
 	public void checkBalanceAssertions() {
-		Map<LocalDate, List<BalanceAssertion>> balanceAssertionMap  = new HashMap<LocalDate, List<BalanceAssertion>>();
+		Map<LocalDate, List<BalanceAssertion>> balanceAssertionMap = new HashMap<LocalDate, List<BalanceAssertion>>();
 		for (BalanceAssertion balanceAssertion : balanceAssertions) {
 			logger.debug("### adding to map: " + balanceAssertion.getDate() + "->" + balanceAssertion.getBalance());
 			List<BalanceAssertion> balanceAssertions = balanceAssertionMap.get(balanceAssertion.getDate());
@@ -110,9 +143,9 @@ public class Account {
 		int transactionNum = -1;
 		for (AccountEntry split : splits) {
 			transactionNum++;
-				logger.debug("amount = " + split.getAmount());
-				balance = balance.add(split.getAmount());
-				logger.debug("balance = " + balance);
+			logger.debug("amount = " + split.getAmount());
+			balance = balance.add(split.getAmount());
+			logger.debug("balance = " + balance);
 			LocalDate transactionDate = split.getTransaction().getDate();
 			List<BalanceAssertion> balanceAssertions = balanceAssertionMap.get(transactionDate);
 			logger.debug("Transaction date = " + transactionDate);
@@ -125,13 +158,13 @@ public class Account {
 					found = true;
 				}
 			}
-//			try {
-//				Transaction nextTransaction = transactions.get(transactionNum+1);
-//				if (nextTransaction != null && transaction.getDate().equals(nextTransaction.getDate()))
-//					continue;
-//			} catch (IndexOutOfBoundsException e) {
-//				//last transaction anyway, so continue
-//			}
+			//			try {
+			//				Transaction nextTransaction = transactions.get(transactionNum+1);
+			//				if (nextTransaction != null && transaction.getDate().equals(nextTransaction.getDate()))
+			//					continue;
+			//			} catch (IndexOutOfBoundsException e) {
+			//				//last transaction anyway, so continue
+			//			}
 			if (!found) {
 				System.out.flush();
 				try {
@@ -142,7 +175,8 @@ public class Account {
 				StringBuilder sb = new StringBuilder();
 				for (BalanceAssertion balanceAssertion : balanceAssertions)
 					sb.append(balanceAssertion.getBalance() + ", ");
-				throw new AssertionError("Balance of " + balance + " is incorrect and should be one of: " + sb.toString());
+				throw new AssertionError(
+						"Balance of " + balance + " is incorrect and should be one of: " + sb.toString());
 
 			}
 		}
@@ -162,9 +196,9 @@ public class Account {
 	}
 
 	public BigDecimal getClosingBalanceForTaxYear(int year) {
-		return getOpeningBalanceForTaxYear(year+1);
+		return getOpeningBalanceForTaxYear(year + 1);
 	}
-	
+
 	public List<AccountEntry> getSplits() {
 		return splits;
 	}
@@ -182,7 +216,7 @@ public class Account {
 		BigDecimal balance = BigDecimal.ZERO;
 
 		for (AccountEntry split : splits) {
-			if (split.getTransaction().getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0)
+			if (split.getTransaction().getDate().compareTo(LocalDate.of(year - 1, 3, 31)) > 0)
 				return balance;
 			logger.debug("amount = " + split.getAmount());
 			balance = balance.add(split.getAmount());
@@ -234,7 +268,6 @@ public class Account {
 		this.name = argName;
 		return this;
 	}
-	
 
 	public BigDecimal getCommodityUnits() {
 		return commodityUnits;
@@ -251,21 +284,15 @@ public class Account {
 	public void setCommodityName(String commodityName) {
 		this.commodityName = commodityName;
 	}
-	
+
 	public boolean isCommodity() {
 		return commodityUnits != null || commodityName != null;
 	}
 
 	@Override
 	public String toString() {
-		return "Account [accountClassification=" + accountClassification
-				+ ", guid=" + guid + ", accountType=" + accountType + ", name="
-				+ name + "]";
-	}
-
-	public Account withName(String string) {
-		this.setName(string);
-		return this;
+		return "Account [accountClassification=" + accountClassification + ", guid=" + guid + ", accountType="
+				+ accountType + ", name=" + name + "]";
 	}
 
 	public void assignSplit(AccountEntry transactionSplit) {
@@ -282,9 +309,98 @@ public class Account {
 		this.splits = list;
 	}
 
-	public Account withParent(Account assets) {
-		setParent(assets);
-		return this;
-	}
-}
+	public static class AccountBuilder {
+		private Account parent;
+		private AccountClassification accountClassification;
+		private AccountType accountType;
+		private List<BalanceAssertion> balanceAssertions;
+		private List<AccountEntry> splits;
+		private String guid;
+		private boolean placeholder;
+		private String accountNumber;
+		private String name;
+		private String description;
+		private boolean debitIncreases;
+		private BigDecimal commodityUnits;
+		private String commodityName;
 
+		public AccountBuilder withParent(Account parent) {
+			this.parent = parent;
+			if (this.accountType == null) {
+				this.accountType = parent.getAccountType();
+				this.debitIncreases = parent.debitIncreases;
+			}
+			return this;
+		}
+
+		public AccountBuilder withAccountClassification(AccountClassification accountClassification) {
+			this.accountClassification = accountClassification;
+			return this;
+		}
+
+		public AccountBuilder withAccountType(AccountType accountType) {
+			this.accountType = accountType;
+			return this;
+		}
+
+		public AccountBuilder withBalanceAssertions(List<BalanceAssertion> balanceAssertions) {
+			this.balanceAssertions = balanceAssertions;
+			return this;
+		}
+
+		public AccountBuilder withSplits(List<AccountEntry> splits) {
+			this.splits = splits;
+			return this;
+		}
+
+		public AccountBuilder withGuid(String guid) {
+			this.guid = guid;
+			return this;
+		}
+
+		public AccountBuilder withPlaceholder(boolean placeholder) {
+			this.placeholder = placeholder;
+			return this;
+		}
+
+		public AccountBuilder withAccountNumber(String accountNumber) {
+			this.accountNumber = accountNumber;
+			return this;
+		}
+
+		public AccountBuilder withName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public AccountBuilder withDescription(String description) {
+			this.description = description;
+			return this;
+		}
+
+		public AccountBuilder withDebitIncreases(boolean debitIncreases) {
+			this.debitIncreases = debitIncreases;
+			return this;
+		}
+
+		public AccountBuilder withCommodityUnits(BigDecimal commodityUnits) {
+			this.commodityUnits = commodityUnits;
+			return this;
+		}
+
+		public AccountBuilder withCommodityName(String commodityName) {
+			this.commodityName = commodityName;
+			return this;
+		}
+
+		public Account build() {
+			return new Account(parent, accountClassification, accountType, balanceAssertions, splits, guid, placeholder,
+					accountNumber, name, description, debitIncreases, commodityUnits, commodityName);
+		}
+	}
+
+	public static AccountBuilder account() {
+		return new AccountBuilder();
+	}
+
+}

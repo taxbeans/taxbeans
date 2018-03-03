@@ -1,19 +1,44 @@
 package com.github.taxbeans.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 
 public class Ledger {
 
-	private Account assetsAccount = new Account().withDebitIncreases(true);
+	private Account assetsAccount = Account.account().withAccountType(AccountType.asset).withDebitIncreases(true).build();
 	
-	private Account liabilitiesAccount = new Account();
+	private Account liabilitiesAccount =  Account.account().withAccountType(AccountType.liability).build();
 	
-	private Account equityAccount = new Account();
+	private Account equityAccount = Account.account().withAccountType(AccountType.equity).build();
 	
-	private Account incomeAccount = new Account();
+	private Account incomeAccount = Account.account().withAccountType(AccountType.income).build();
 	
-	private Account expensesAccount = new Account().withDebitIncreases(true);
+	private Account expensesAccount = Account.account().withAccountType(AccountType.expense).withDebitIncreases(true).build();
 	
+	private CurrencyUnit baseCurrency =  Monetary.getCurrency("NZD");
+	
+	//whether to auto convert transactions into the base currency
+	private boolean autoTranslate = true;
+	
+	public CurrencyUnit getBaseCurrency() {
+		return baseCurrency;
+	}
+
+	public void setBaseCurrency(CurrencyUnit baseCurrency) {
+		this.baseCurrency = baseCurrency;
+	}
+
+	public boolean isAutoTranslate() {
+		return autoTranslate;
+	}
+
+	public void setAutoTranslate(boolean autoTranslate) {
+		this.autoTranslate = autoTranslate;
+	}
+
 	public Account getAssetsAccount() {
 		return assetsAccount;
 	}
@@ -58,6 +83,8 @@ public class Ledger {
 
 	private List<Transaction> transactions;
 
+	private List<Journal> journals = new ArrayList<Journal>();
+
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}
@@ -72,6 +99,15 @@ public class Ledger {
 
 	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
+	}
+
+	public void addJournal(Journal journal) {
+		journals.add(journal);
+		journal.setLedger(this);
+	}
+
+	public boolean isAutoNegativeSwitchesAccountSide() {
+		return true;
 	}
 
 }
