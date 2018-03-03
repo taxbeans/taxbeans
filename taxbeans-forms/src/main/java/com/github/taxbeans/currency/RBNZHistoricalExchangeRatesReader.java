@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -29,7 +28,7 @@ public class RBNZHistoricalExchangeRatesReader {
 	private static volatile Map<String, ExchangeRateInfo> exchangeRateInfo = new HashMap<>();
 
 	public static void main(String[] args) throws IOException {
-		logger.info(String.format("1 NZD is %1$s USD", getForeignToNZDRate(new Date(117,1,17), "USD")));
+		logger.debug(String.format("1 NZD is %1$s USD", getForeignToNZDRate(new Date(117,1,17), "USD")));
 		//loadAllRates();
 	}
 
@@ -59,7 +58,7 @@ public class RBNZHistoricalExchangeRatesReader {
 			CellReference cellReference = new CellReference(String.format("%1$s%2$s", currencyColumn, rowNum)); 
 			Row row = sheet.getRow(cellReference.getRow());	
 			if (row == null) {
-				logger.info("NZD/USD Rate Loading Complete, number of rates loaded = " + exchangeRates.size());
+				logger.debug("NZD/USD Rate Loading Complete, number of rates loaded = " + exchangeRates.size());
 				break;
 			}
 			Cell cell = row.getCell(cellReference.getCol());
@@ -100,8 +99,8 @@ public class RBNZHistoricalExchangeRatesReader {
 	}
 
 	public static BigDecimal getNZDtoForeignRate(Date date, String foreignCurrency) {
-		logger.info("date = " + date);
-		logger.info("Day of week = " + date.getDay());
+		logger.debug("date = " + date);
+		logger.debug("Day of week = " + date.getDay());
 		ExchangeRateInfo exchangeRateInfo2 = exchangeRateInfo.get(foreignCurrency);
 		if (exchangeRateInfo2 == null) {
 			exchangeRateInfo.put(foreignCurrency, (exchangeRateInfo2 = loadAllRates(foreignCurrency)));
@@ -111,15 +110,15 @@ public class RBNZHistoricalExchangeRatesReader {
 			calendar.setTime(date);
 			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 			if (dayOfWeek == Calendar.SUNDAY) {
-				logger.warn("Date requested for Sunday, rewinding to Friday");
+				logger.debug("Date requested for Sunday, rewinding to Friday");
 				calendar.add(calendar.DAY_OF_MONTH, -2);
 			} else if (dayOfWeek == Calendar.SATURDAY) {
-				logger.warn("Date requested for Saturday, rewinding to Friday");
+				logger.debug("Date requested for Saturday, rewinding to Friday");
 				calendar.add(calendar.DAY_OF_MONTH, -1);
 			}
 			date = calendar.getTime();
 		}
-		logger.warn("Date = " + date);
+		logger.debug("Date = " + date);
 		return exchangeRateInfo2.getExchangeRates().get(date);
 	}
 
