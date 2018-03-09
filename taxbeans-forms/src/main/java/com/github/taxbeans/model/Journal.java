@@ -43,11 +43,17 @@ public class Journal {
 			throw new IllegalStateException("Ledger may not be null");
 		}
 		//assume null indicates the entry has the base currency
-		if (entry.getAmount().signum() < 0) {
-			entry.setAccountSide(entry.getAccount().isDebitIncreases() ? AccountSide.CREDIT : AccountSide.DEBIT);
-			entry.setAmount(entry.getAmount().abs());
+		if (entry.getAccountSide() == AccountSide.BALANCE_EFFECT) {
+			if (entry.getAmount().signum() < 0) {
+				entry.setAccountSide(entry.getAccount().isDebitIncreases() ? AccountSide.CREDIT : AccountSide.DEBIT);
+				entry.setAmount(entry.getAmount().abs());
+			} else {
+				entry.setAccountSide(entry.getAccount().isDebitIncreases() ? AccountSide.DEBIT : AccountSide.CREDIT);
+			}
 		} else {
-			entry.setAccountSide(entry.getAccount().isDebitIncreases() ? AccountSide.DEBIT : AccountSide.CREDIT);
+			if (entry.getAmount().signum() < 0) {
+				throw new IllegalArgumentException(entry.getAmount() + " " + entry.getAccountSide());
+			}
 		}
 	}
 
