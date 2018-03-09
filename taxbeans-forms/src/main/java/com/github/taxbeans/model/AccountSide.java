@@ -3,10 +3,12 @@ package com.github.taxbeans.model;
 public enum AccountSide {
 
     //debits entries appear on the left, credits on the right
-    DEBIT(Position.LEFT),
-    CREDIT(Position.RIGHT);
+	BALANCE_EFFECT(Position.AUTO),  //+ve amounts increase the balance and -ve amounts decrease the balance
+    DEBIT(Position.LEFT),  //-ve amounts disallowed
+    CREDIT(Position.RIGHT);  //-ve amounts disallowed
 
-    private Position position;
+    @SuppressWarnings("unused")
+	private Position position;
     
     AccountSide(Position position) {
       this.position = position;

@@ -22,7 +22,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		this.account = account;
 		this.account.addEntry(this);
 		this.amount = amount;
-		this.accountSide = accountSide;
+		this.accountSide = accountSide == null ? AccountSide.BALANCE_EFFECT : accountSide;
 		this.transaction = transaction;
 		this.description = description;
 		this.commodityUnits = commodityUnits;
@@ -57,7 +57,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 	private BigDecimal amount = BigDecimal.ZERO;
 
 	// Whether this entry is a debit or credit
-	private AccountSide accountSide;
+	private AccountSide accountSide = AccountSide.BALANCE_EFFECT;
 
 	/**
 	 * the outer transaction
@@ -221,7 +221,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		private UUID uuid;
 		private Account account;
 		private BigDecimal amount;
-		private AccountSide accountSide;
+		private AccountSide accountSide = AccountSide.BALANCE_EFFECT;
 		private Transaction transaction;
 		private String description;
 		private BigDecimal commodityUnits;

@@ -165,11 +165,13 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	}
 
 	public Transaction addEntry(AccountEntry entry) {
-		if (entry.getAccountSide() == null) {
+		if (entry.getAccountSide() == AccountSide.BALANCE_EFFECT) {
 			if (entry.getAccount().isDebitIncreases()) {
 				entry.setAccountSide(entry.getAmount().signum() < 0 ? AccountSide.CREDIT : AccountSide.DEBIT);
+				entry.setAmount(entry.getAmount().abs());
 			} else {
 				entry.setAccountSide(entry.getAmount().signum() < 0 ? AccountSide.DEBIT : AccountSide.CREDIT);
+				entry.setAmount(entry.getAmount().abs());
 			}
 		}
 		this.getTransactionSplits().add(entry);
