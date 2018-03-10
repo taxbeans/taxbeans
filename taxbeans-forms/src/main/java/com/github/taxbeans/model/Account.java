@@ -35,8 +35,13 @@ public class Account {
 	public void setParent(Account parent) {
 		this.parent = parent;
 		this.debitIncreases = parent.debitIncreases;
+		if (this.accountType == null) {
+			this.accountType = parent.getAccountType();
+			this.debitIncreases = parent.debitIncreases;
+		}
 	}
 
+	/** Expense, income, asset or liability */
 	private AccountClassification accountClassification;
 
 	private AccountType accountType;
