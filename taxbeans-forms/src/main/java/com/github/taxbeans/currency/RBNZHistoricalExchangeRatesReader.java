@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class RBNZHistoricalExchangeRatesReader {
 	private static volatile Map<String, ExchangeRateInfo> exchangeRateInfo = new HashMap<>();
 
 	public static void main(String[] args) throws IOException {
-		logger.debug(String.format("1 NZD is %1$s USD", getForeignToNZDRate(new Date(117,1,17), "USD")));
+		logger.debug(String.format("1 NZD is %1$s USD", getForeignToNZDRate(LocalDate.of(2017,1,17), "USD")));
 		//loadAllRates();
 	}
 
@@ -52,7 +54,7 @@ public class RBNZHistoricalExchangeRatesReader {
 		Sheet sheet = wb.getSheetAt(0);
 
 		ExchangeRateInfo exchangeRateInfo = new ExchangeRateInfo();
-		Map<Date, BigDecimal> exchangeRates = new HashMap<>();
+		Map<LocalDate, BigDecimal> exchangeRates = new HashMap<>();
 		// suppose your formula is in B3
 		for (int rowNum = 6;rowNum<2000;rowNum++) {
 			CellReference cellReference = new CellReference(String.format("%1$s%2$s", currencyColumn, rowNum)); 
@@ -69,7 +71,8 @@ public class RBNZHistoricalExchangeRatesReader {
 			cellReference = new CellReference(String.format("A%1$s", rowNum)); 
 			row = sheet.getRow(cellReference.getRow());	
 			cell = row.getCell(cellReference.getCol());
-			Date dateCellValue = cell.getDateCellValue();
+			//spreadsheet is in Pacific/Auckland timezone
+			LocalDate dateCellValue = ZonedDateTime.ofInstant(cell.getDateCellValue().toInstant(), ZoneId.of("Pacific/Auckland")).toLocalDate();
 			logger.trace("date = " + dateCellValue);
 			exchangeRates.put(dateCellValue, rate);
 		}
@@ -83,7 +86,7 @@ public class RBNZHistoricalExchangeRatesReader {
 		return exchangeRateInfo;
 	}
 
-	public static BigDecimal getForeignToNZDRate(Date date, String foreignCurrency) {
+	public static BigDecimal getForeignToNZDRate(LocalDate date, String foreignCurrency) {
 		
 		return BigDecimal.ONE.divide(getNZDtoForeignRate(date, foreignCurrency), 6, RoundingMode.HALF_UP);
 		//FileInputStream fis = new FileInputStream("/rbnz-historical-exchange-rates.xlsx");
@@ -98,27 +101,23 @@ public class RBNZHistoricalExchangeRatesReader {
 //		return new BigDecimal(cell.getNumericCellValue()+"");
 	}
 
-	public static BigDecimal getNZDtoForeignRate(Date date, String foreignCurrency) {
+	public static BigDecimal getNZDtoForeignRate(LocalDate date, String foreignCurrency) {
 		logger.debug("date = " + date);
-		logger.debug("Day of week = " + date.getDay());
+		logger.debug("Day of week = " + date.getDayOfWeek());
 		ExchangeRateInfo exchangeRateInfo2 = exchangeRateInfo.get(foreignCurrency);
 		if (exchangeRateInfo2 == null) {
 			exchangeRateInfo.put(foreignCurrency, (exchangeRateInfo2 = loadAllRates(foreignCurrency)));
 		}
 		if (exchangeRateInfo2.isWeekdaysOnly()) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-			if (dayOfWeek == Calendar.SUNDAY) {
+			if (date.getDayOfWeek() == DayOfWeek.SUNDAY) {
 				logger.debug("Date requested for Sunday, rewinding to Friday");
-				calendar.add(calendar.DAY_OF_MONTH, -2);
-			} else if (dayOfWeek == Calendar.SATURDAY) {
+				date = date.minusDays(2);
+			} else if (date.getDayOfWeek() == DayOfWeek.SATURDAY) {
 				logger.debug("Date requested for Saturday, rewinding to Friday");
-				calendar.add(calendar.DAY_OF_MONTH, -1);
+				date = date.minusDays(1);
 			}
-			date = calendar.getTime();
 		}
-		logger.debug("Date = " + date);
+		logger.info("Date = " + date);
 		return exchangeRateInfo2.getExchangeRates().get(date);
 	}
 

@@ -10,6 +10,8 @@ import org.javamoney.moneta.Money;
 import com.github.taxbeans.model.Transaction;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TaxReturnUtils {
@@ -18,7 +20,7 @@ public class TaxReturnUtils {
 		return amount.multiply(percentage).divide(new BigDecimal("100"), MathContext.DECIMAL128);
 	}
 
-	public static Object formatDate(LocalDate date) {
+	public static String formatDate(LocalDate date) {
 		return date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 	}
 
@@ -112,6 +114,12 @@ public class TaxReturnUtils {
 		sb.append(String.format("<MEMO>%1$s\n", transaction.getMemo()));
 		sb.append("</STMTTRN>\n");
 		return sb.toString();
+	}
+
+	private static String formatDate(ZonedDateTime date) {
+		ZoneId zone = TaxRegion.getDefault().getZone();
+		LocalDate localDate = ZonedDateTime.ofInstant(date.toInstant(), zone).toLocalDate();
+		return formatDate(localDate);
 	}
 
 	public static String formatMoneyField(Money amount) {

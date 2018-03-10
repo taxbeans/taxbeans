@@ -24,10 +24,12 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.forms.utils.TaxRegion;
 import com.github.taxbeans.model.Account;
 import com.github.taxbeans.model.AccountClassification;
 import com.github.taxbeans.model.Ledger;
@@ -43,12 +45,21 @@ public class GnuCashPullParser {
 	private String filename;
 
 	private boolean cacheData = true;
+	
+	/**
+	 * Timezone for interpreting gnucash dates, usually the system timezone
+	 */
+	private ZoneId zoneId;
 
 	private static Map<String, Ledger> map = new ConcurrentHashMap<String, Ledger>();
 
-	public GnuCashPullParser(String filename) {
+	public GnuCashPullParser(String filename, ZoneId zoneId) {
 		super();
 		this.filename = filename;
+	}
+
+	public GnuCashPullParser(String filename) {
+		this(filename, TaxRegion.getDefault().getZone());
 	}
 
 	public List<AccountEntry> parseSplits(XMLStreamReader streamReader, Transaction transaction) throws XMLStreamException, ParseException {
@@ -120,7 +131,7 @@ public class GnuCashPullParser {
 							String datePosted = streamReader.getText();
 							SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							Date parse = dateFormat.parse(datePosted);
-							transaction.setDate(parse.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+							transaction.setDate(ZonedDateTime.ofInstant(parse.toInstant(), zoneId));
 							//logger.debug("parsed date = " + parse);
 							//logger.debug("datePosted = " + datePosted);
 							break;
@@ -135,7 +146,7 @@ public class GnuCashPullParser {
 							String dateEntered = streamReader.getText();
 							SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							Date parse = dateFormat.parse(dateEntered);
-							transaction.setDateEntered(parse.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+							transaction.setDateEntered(ZonedDateTime.ofInstant(parse.toInstant(), zoneId));
 							//logger.debug("parsed date = " + parse);
 							//logger.debug("datePosted = " + datePosted);
 							break;
@@ -282,7 +293,7 @@ public class GnuCashPullParser {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new GnuCashPullParser("gnucash.xml.gnucash").parse();
+		new GnuCashPullParser("gnucash.xml.gnucash", ZoneId.systemDefault()).parse();
 	}
 
 }

@@ -1,9 +1,9 @@
 package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.forms.utils.LocalDateTimeUtils;
+import com.github.taxbeans.forms.utils.TaxRegion;
 import com.github.taxbeans.model.assertions.BalanceAssertion;
 
 public class Account {
@@ -65,14 +65,19 @@ public class Account {
 		this.placeholder = placeholder;
 	}
 
-	private String accountNumber;
+	/**
+	 * Code for this account.
+	 * 
+	 * Every account should have a code
+	 */
+	private String code;
 
-	public String getAccountNumber() {
-		return accountNumber;
+	public String getCode() {
+		return code;
 	}
 
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
+	public void setCode(String accountNumber) {
+		this.code = accountNumber;
 	}
 
 	private String name;
@@ -125,7 +130,7 @@ public class Account {
 		this.splits = splits;
 		this.guid = guid;
 		this.placeholder = placeholder;
-		this.accountNumber = accountNumber;
+		this.code = accountNumber;
 		this.name = name;
 		this.description = description;
 		this.commodityName = commodityName;
@@ -144,13 +149,13 @@ public class Account {
 		logger.debug("transaction splits size = " + splits.size());
 		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
-		int transactionNum = -1;
+		//int transactionNum = -1;
 		for (AccountEntry split : splits) {
-			transactionNum++;
+			//transactionNum++;
 			logger.debug("amount = " + split.getAmount());
 			balance = balance.add(split.getAmount());
 			logger.debug("balance = " + balance);
-			LocalDate transactionDate = split.getTransaction().getDate();
+			LocalDate transactionDate = split.getTransaction().getDate().toLocalDate();
 			List<BalanceAssertion> balanceAssertions = balanceAssertionMap.get(transactionDate);
 			logger.debug("Transaction date = " + transactionDate);
 			if (balanceAssertions == null)
@@ -185,6 +190,14 @@ public class Account {
 			}
 		}
 
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public AccountClassification getAccountClassification() {
@@ -224,7 +237,8 @@ public class Account {
 		BigDecimal balance = BigDecimal.ZERO;
 
 		for (AccountEntry split : splits) {
-			if (split.getTransaction().getDate().compareTo(LocalDate.of(year - 1, 3, 31)) > 0)
+			if (split.getTransaction().getDate().compareTo(
+					TaxRegion.getDefault().getStartOfTaxYear(year)) >= 0)
 				return balance;
 			logger.debug("amount = " + split.getAmount());
 			balance = balance.add(split.getAmount());
@@ -238,7 +252,8 @@ public class Account {
 		BigDecimal balance = BigDecimal.ZERO;
 
 		for (AccountEntry split : splits) {
-			if (split.getTransaction().getDate().compareTo(LocalDate.of(year - 1, 3, 31)) > 0)
+			if (split.getTransaction().getDate().compareTo(
+					TaxRegion.getDefault().getStartOfTaxYear(year)) >= 0)
 				return balance;
 			logger.debug("amount = " + split.getCommodityUnits());
 			balance = balance.add(split.getCommodityUnits());
@@ -256,11 +271,11 @@ public class Account {
 	 * @param time The time to find the historical cost
 	 * @return The historical cost per unit
 	 */
-	public BigDecimal getCostPerUnitAsAt(LocalDateTime time) {
-		return getBalanceAsAt(time).divide(getCommodityBalanceAsAt(time));
+	public BigDecimal getCostPerUnitAsAt(ZonedDateTime time) {
+		return getBalanceAsAt(time).divide(getCommodityBalanceAsAt(time), RoundingMode.HALF_UP);
 	}
 	
-	public BigDecimal getBalanceAsAt(LocalDateTime time) {
+	public BigDecimal getBalanceAsAt(ZonedDateTime time) {
 		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
 
@@ -268,7 +283,7 @@ public class Account {
 		//if transaction has a date but not a time then the time can be as at 5:00pm on that day
 		//but where possible the time of each transaction should be estimated
 		for (AccountEntry split : splits) {
-			if (split.getTransaction().getDate().compareTo(LocalDateTimeUtils.convertToDate(time)) > 0)
+			if (split.getTransaction().getDate().compareTo(time) > 0)
 				return balance;
 			logger.debug("amount = " + split.getAmount());
 			balance = balance.add(split.getAmount());
@@ -277,12 +292,12 @@ public class Account {
 		return balance;
 	}
 	
-	public BigDecimal getCommodityBalanceAsAt(LocalDateTime time) {
+	public BigDecimal getCommodityBalanceAsAt(ZonedDateTime time) {
 		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
 
 		for (AccountEntry split : splits) {
-			if (split.getTransaction().getDate().compareTo(LocalDateTimeUtils.convertToDate(time)) > 0)
+			if (split.getTransaction().getDate().compareTo(time) > 0)
 				return balance;
 			logger.debug("amount = " + split.getCommodityUnits());
 			balance = balance.add(split.getCommodityUnits());
@@ -296,9 +311,10 @@ public class Account {
 		Collections.sort(splits);
 		BigDecimal balance = BigDecimal.ZERO;
 		for (AccountEntry split : splits) {
-			if (split.getTransaction().getDate().compareTo(LocalDate.of(year, 3, 31)) > 0)
+			if (split.getTransaction().getDate().compareTo(
+					TaxRegion.getDefault().getStartOfTaxYear(year+1)) >= 0)
 				return balance;
-			if (!split.getTransaction().isInTaxYear(year))
+			if (!split.getTransaction().isInNewZealandTaxYear(year))
 				continue;
 			logger.debug("amount = " + split.getAmount());
 			balance = balance.add(split.getAmount());
