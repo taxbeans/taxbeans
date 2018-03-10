@@ -9,6 +9,7 @@ package com.github.taxbeans.model.builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +134,7 @@ class AccountBuilderBase<GeneratorT extends AccountBuilderBase<GeneratorT>> {
 		}
 
 		@SuppressWarnings("unchecked")
-		public GeneratorT withDate(LocalDate aValue) {
+		public GeneratorT withDate(ZonedDateTime aValue) {
 			instance.setDate(aValue);
 
 			return (GeneratorT) this;

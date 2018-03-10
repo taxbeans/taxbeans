@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 import com.github.taxbeans.model.Account;
 import com.github.taxbeans.model.AccountType;
@@ -45,7 +46,7 @@ class TransactionBuilderBase<GeneratorT extends TransactionBuilderBase<Generator
 	}
 
 	@SuppressWarnings("unchecked")
-	public GeneratorT withDate(LocalDate aValue) {
+	public GeneratorT withDate(ZonedDateTime aValue) {
 		instance.setDate(aValue);
 
 		return (GeneratorT) this;

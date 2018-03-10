@@ -1,7 +1,7 @@
 package com.github.taxbeans.currency;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,14 +17,14 @@ public class ExchangeRateInfo {
 		this.weekdaysOnly = weekdaysOnly;
 	}
 
-	public Map<Date, BigDecimal> getExchangeRates() {
+	public Map<LocalDate, BigDecimal> getExchangeRates() {
 		return exchangeRates;
 	}
 
-	public void setExchangeRates(Map<Date, BigDecimal> exchangeRates) {
-		this.exchangeRates = exchangeRates;
+	public void setExchangeRates(Map<LocalDate, BigDecimal> exchangeRates2) {
+		this.exchangeRates = exchangeRates2;
 	}
 
-	Map<Date, BigDecimal> exchangeRates = new HashMap<>();
+	Map<LocalDate, BigDecimal> exchangeRates = new HashMap<>();
 
 }

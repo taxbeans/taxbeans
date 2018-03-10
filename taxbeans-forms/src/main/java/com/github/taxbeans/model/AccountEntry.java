@@ -1,7 +1,7 @@
 package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -109,9 +109,12 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		return tx;
 	}
 
-	public int compareTo(AccountEntry split) {
-		LocalDate splitDate = split.getTransaction().getDate();
-		return this.getTransaction().getDate().compareTo(splitDate);
+	public int compareTo(AccountEntry entry) {
+		ZonedDateTime date = entry.getTransaction().getDate();
+		if (this.getTransaction().getDate() == null) {
+			System.out.println();
+		}
+		return this.getTransaction().getDate().compareTo(date);
 	}
 
 	public Account getAccount() {
@@ -178,7 +181,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		return commodityUnits != null || commodityName != null;
 	}
 
-	public void translate(LocalDate translationDate, CurrencyUnit from, CurrencyUnit to) {
+	public void translate(ZonedDateTime translationDate, CurrencyUnit from, CurrencyUnit to) {
 		CurrencyTranslation translation = new CurrencyTranslation();
 		translation.setOriginalCurrency(from);
 		translation.setTranslatedCurrency(to);

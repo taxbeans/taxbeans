@@ -1,45 +1,26 @@
 package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * In this model a transaction may have a date or time precision.
- * There will be a conversion algorithm and either one or the other may be set or both
- */
 public class Transaction implements Comparable<Transaction>, Cloneable {
 
 	final static Logger logger = LoggerFactory.getLogger(Transaction.class);
 
-	private LocalDate date;
-
-	private LocalDate dateEntered;
+	/*
+	 * The date in this system has a timezone and time
+	 * to accurately model internation transactions
+	 * in multiple jurisdictions
+	 */
+	private ZonedDateTime date;
 	
-	private LocalDateTime dateTime;
-	
-	private LocalDateTime dateTimeEntered;
-
-	public LocalDateTime getDateTime() {
-		return dateTime;
-	}
-
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
-	}
-
-	public LocalDateTime getDateTimeEntered() {
-		return dateTimeEntered;
-	}
-
-	public void setDateTimeEntered(LocalDateTime dateTimeEntered) {
-		this.dateTimeEntered = dateTimeEntered;
-	}
+	private ZonedDateTime dateEntered;
 
 	private String description;
 
@@ -85,11 +66,11 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return this.getDate().compareTo(arg0.getDate());
 	}
 
-	public final LocalDate getDate() {
+	public final ZonedDateTime getDate() {
 		return this.date;
 	}
 
-	public LocalDate getDateEntered() {
+	public ZonedDateTime getDateEntered() {
 		return dateEntered;
 	}
 
@@ -113,20 +94,23 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return transactionSplits;
 	}
 
-	public boolean isInTaxYear(int year) {
-		return (this.getDate().compareTo(LocalDate.of(year-1, 3, 31)) > 0 &&
-				this.getDate().compareTo(LocalDate.of(year, 4, 1)) < 0);
+	public boolean isInNewZealandTaxYear(int year) {
+		//TODO obtain tax years from system parameters
+		ZoneId zone = ZoneId.of("Pacific/Auckland");
+		return (this.getDate().compareTo(ZonedDateTime.of(year-1, 4, 1, 0, 0, 0, 0, zone)) >= 0 &&
+				this.getDate().compareTo(ZonedDateTime.of(year, 4, 1, 0, 0, 0, 0, zone)) < 0);
 	}
 
-	public boolean isInTaxYearOrBefore(int year) {
-		return this.getDate().compareTo(LocalDate.of(year, 4, 1)) < 0;
+	public boolean isInNewZealandTaxYearOrBefore(int year) {
+		ZoneId zone = ZoneId.of("Pacific/Auckland");
+		return this.getDate().compareTo(ZonedDateTime.of(year, 4, 1, 0, 0, 0, 0, zone)) < 0;
 	}
 
-	public final void setDate(final LocalDate argDate) {
+	public final void setDate(final ZonedDateTime argDate) {
 		this.date = argDate;
 	}
 
-	public void setDateEntered(LocalDate dateEntered) {
+	public void setDateEntered(ZonedDateTime dateEntered) {
 		this.dateEntered = dateEntered;
 	}
 
