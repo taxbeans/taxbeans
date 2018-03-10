@@ -2,12 +2,17 @@ package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * In this model a transaction may have a date or time precision.
+ * There will be a conversion algorithm and either one or the other may be set or both
+ */
 public class Transaction implements Comparable<Transaction>, Cloneable {
 
 	final static Logger logger = LoggerFactory.getLogger(Transaction.class);
@@ -15,6 +20,26 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	private LocalDate date;
 
 	private LocalDate dateEntered;
+	
+	private LocalDateTime dateTime;
+	
+	private LocalDateTime dateTimeEntered;
+
+	public LocalDateTime getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public LocalDateTime getDateTimeEntered() {
+		return dateTimeEntered;
+	}
+
+	public void setDateTimeEntered(LocalDateTime dateTimeEntered) {
+		this.dateTimeEntered = dateTimeEntered;
+	}
 
 	private String description;
 
