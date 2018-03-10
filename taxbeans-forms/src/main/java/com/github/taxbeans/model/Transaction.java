@@ -12,13 +12,9 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 
 	final static Logger logger = LoggerFactory.getLogger(Transaction.class);
 
-	private Account creditAccount;
-
 	private LocalDate date;
 
 	private LocalDate dateEntered;
-
-	private Account debitAccount;
 
 	private String description;
 
@@ -64,20 +60,12 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return this.getDate().compareTo(arg0.getDate());
 	}
 
-	public final Account getCreditAccount() {
-		return this.creditAccount;
-	}
-
 	public final LocalDate getDate() {
 		return this.date;
 	}
 
 	public LocalDate getDateEntered() {
 		return dateEntered;
-	}
-
-	public final Account getDebitAccount() {
-		return this.debitAccount;
 	}
 
 	public final String getDescription() {
@@ -130,21 +118,12 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	}
 
 	public String toString() {
-		final int sbSize = 1000;
 		final String variableSeparator = "  ";
-		final StringBuffer sb = new StringBuffer(sbSize);
-
-		sb.append("date=").append(date);
-		sb.append(variableSeparator);
-		sb.append("description=").append(description);
-		sb.append(variableSeparator);
-		sb.append("creditAccount=").append(creditAccount);
-		sb.append(variableSeparator);
-		sb.append("debitAccount=").append(debitAccount);
-		for (AccountEntry transactionSplit : transactionSplits) {
-			sb.append("\r\n");
-			sb.append("\t" + transactionSplit);
-		}
+		final StringBuffer sb = new StringBuffer(1000);
+		sb.append("date=").append(date).append(variableSeparator)
+		  .append("description=").append(description)
+		  .append(variableSeparator);
+		transactionSplits.forEach(entry -> sb.append("\r\n\t" + entry));
 		return sb.toString();
 	}
 
@@ -165,6 +144,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	}
 
 	public Transaction addEntry(AccountEntry entry) {
+		entry.setTransaction(this);
 		if (entry.getAccountSide() == AccountSide.BALANCE_EFFECT) {
 			if (entry.getAccount().isDebitIncreases()) {
 				entry.setAccountSide(entry.getAmount().signum() < 0 ? AccountSide.CREDIT : AccountSide.DEBIT);
