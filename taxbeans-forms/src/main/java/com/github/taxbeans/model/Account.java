@@ -2,6 +2,8 @@ package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.forms.utils.LocalDateTimeUtils;
 import com.github.taxbeans.model.assertions.BalanceAssertion;
 
 public class Account {
@@ -236,6 +239,50 @@ public class Account {
 
 		for (AccountEntry split : splits) {
 			if (split.getTransaction().getDate().compareTo(LocalDate.of(year - 1, 3, 31)) > 0)
+				return balance;
+			logger.debug("amount = " + split.getCommodityUnits());
+			balance = balance.add(split.getCommodityUnits());
+			logger.debug("balance = " + balance);
+		}
+		return balance;
+	}
+	
+	/**
+	 * Historical cost as at certain time.
+	 * 
+	 * This finds the historical cost at a certain time per unit commodity
+	 * by dividing the balance in base currency by the commodity balance.
+	 * 
+	 * @param time The time to find the historical cost
+	 * @return The historical cost per unit
+	 */
+	public BigDecimal getCostPerUnitAsAt(LocalDateTime time) {
+		return getBalanceAsAt(time).divide(getCommodityBalanceAsAt(time));
+	}
+	
+	public BigDecimal getBalanceAsAt(LocalDateTime time) {
+		Collections.sort(splits);
+		BigDecimal balance = BigDecimal.ZERO;
+
+		//TODO convert all transaction dates to times or have a common object
+		//if transaction has a date but not a time then the time can be as at 5:00pm on that day
+		//but where possible the time of each transaction should be estimated
+		for (AccountEntry split : splits) {
+			if (split.getTransaction().getDate().compareTo(LocalDateTimeUtils.convertToDate(time)) > 0)
+				return balance;
+			logger.debug("amount = " + split.getAmount());
+			balance = balance.add(split.getAmount());
+			logger.debug("balance = " + balance);
+		}
+		return balance;
+	}
+	
+	public BigDecimal getCommodityBalanceAsAt(LocalDateTime time) {
+		Collections.sort(splits);
+		BigDecimal balance = BigDecimal.ZERO;
+
+		for (AccountEntry split : splits) {
+			if (split.getTransaction().getDate().compareTo(LocalDateTimeUtils.convertToDate(time)) > 0)
 				return balance;
 			logger.debug("amount = " + split.getCommodityUnits());
 			balance = balance.add(split.getCommodityUnits());
