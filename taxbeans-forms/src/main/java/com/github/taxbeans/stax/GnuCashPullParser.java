@@ -56,6 +56,7 @@ public class GnuCashPullParser {
 	public GnuCashPullParser(String filename, ZoneId zoneId) {
 		super();
 		this.filename = filename;
+		this.zoneId = zoneId;
 	}
 
 	public GnuCashPullParser(String filename) {
