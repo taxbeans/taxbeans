@@ -60,11 +60,16 @@ public class Journal {
 	public void addTransaction(Transaction transaction) {
 		this.transactions.add(transaction);
 		transaction.getAccountEntries().forEach(entry -> entry.setTransaction(transaction));
+		transaction.getAccountEntries().forEach(entry -> addAccountToLedger(entry));
 		if (this.getLedger().isAutoTranslate()) {
 			transaction.getAccountEntries().forEach(entry -> translateIfRequired(entry));
 		}
 		if (this.getLedger().isAutoNegativeSwitchesAccountSide()) {
 			transaction.getAccountEntries().forEach(entry -> switchSideIfRequired(entry));
 		}
+	}
+
+	private void addAccountToLedger(AccountEntry entry) {
+		this.getLedger().addAccountIfRequired(entry.getAccount());
 	}
 }
