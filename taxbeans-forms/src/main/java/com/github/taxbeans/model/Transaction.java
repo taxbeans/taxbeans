@@ -27,7 +27,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	private String num;
 
 	//TODO add a validate method to ensure total debits = total credits and rename TransactionSplit to Entry
-	private List<AccountEntry> transactionSplits = new ArrayList<AccountEntry>();
+	private List<AccountEntry> entries = new ArrayList<AccountEntry>();
 
 //	public BigDecimal calculateIncome(List<Transaction> transactions, int year) {
 //		BigDecimal sum = BigDecimal.ZERO;
@@ -90,8 +90,8 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return num;
 	}
 
-	public List<AccountEntry> getTransactionSplits() {
-		return transactionSplits;
+	public List<AccountEntry> getAccountEntries() {
+		return entries;
 	}
 
 	public boolean isInNewZealandTaxYear(int year) {
@@ -123,7 +123,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	}
 
 	public void setTransactionSplits(List<AccountEntry> transactionSplits) {
-		this.transactionSplits = transactionSplits;
+		this.entries = transactionSplits;
 	}
 
 	public String toString() {
@@ -132,14 +132,14 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		sb.append("date=").append(date).append(variableSeparator)
 		  .append("description=").append(description)
 		  .append(variableSeparator);
-		transactionSplits.forEach(entry -> sb.append("\r\n\t" + entry));
+		entries.forEach(entry -> sb.append("\r\n\t" + entry));
 		return sb.toString();
 	}
 
 	// adds a split to this transaction, throws an error if the split
 	// already belongs to a different transaction
 	public void addSplit(AccountEntry split) {
-		this.getTransactionSplits().add(split);
+		this.getAccountEntries().add(split);
 		if (split.getTransaction() != null && split.getTransaction() != this) {
 			throw new IllegalStateException("split already belongs to another tx");
 		}
@@ -163,7 +163,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 				entry.setAmount(entry.getAmount().abs());
 			}
 		}
-		this.getTransactionSplits().add(entry);
+		this.getAccountEntries().add(entry);
 		return this;
 	}
 

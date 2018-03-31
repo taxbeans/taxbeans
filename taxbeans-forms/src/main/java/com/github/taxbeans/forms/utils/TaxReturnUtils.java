@@ -108,7 +108,7 @@ public class TaxReturnUtils {
 		sb.append("<TRNTYPE>OTHER\n");
 		sb.append(String.format("<DTPOSTED>%1$s\n", TaxReturnUtils.formatDate(transaction.getDate())));
 		sb.append(String.format("<DTUSER>%1$s\n", TaxReturnUtils.formatDate(transaction.getDate())));
-		sb.append(String.format("<TRNAMT>%1$s\n", TaxReturnUtils.formatMoney(transaction.getTransactionSplits().get(0).getAmount())));
+		sb.append(String.format("<TRNAMT>%1$s\n", TaxReturnUtils.formatMoney(transaction.getAccountEntries().get(0).getAmount())));
 		sb.append("<FITID>" + System.currentTimeMillis() + "\n"); //980310001\n");
 		sb.append(String.format("<NAME>%1$s\n", transaction.getName()));
 		sb.append(String.format("<MEMO>%1$s\n", transaction.getMemo()));
