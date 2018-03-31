@@ -477,4 +477,8 @@ public class Account {
 		return new AccountBuilder();
 	}
 
+	public void generateRandomGuid() {
+		this.guid = UUID.randomUUID().toString();
+	}
+
 }

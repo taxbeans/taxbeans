@@ -1,7 +1,9 @@
 package com.github.taxbeans.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -9,20 +11,22 @@ import javax.money.Monetary;
 public class Ledger {
 
 	private Account assetsAccount = Account.account().withAccountType(AccountType.asset).withDebitIncreases(true).build();
-	
+
 	private Account liabilitiesAccount =  Account.account().withAccountType(AccountType.liability).build();
-	
+
 	private Account equityAccount = Account.account().withAccountType(AccountType.equity).build();
-	
+
 	private Account incomeAccount = Account.account().withAccountType(AccountType.income).build();
-	
+
 	private Account expensesAccount = Account.account().withAccountType(AccountType.expense).withDebitIncreases(true).build();
-	
+
 	private CurrencyUnit baseCurrency =  Monetary.getCurrency("NZD");
-	
+
+	private Map<String, Account> accountsByName = new HashMap<String, Account>();
+
 	//whether to auto convert transactions into the base currency
 	private boolean autoTranslate = true;
-	
+
 	public CurrencyUnit getBaseCurrency() {
 		return baseCurrency;
 	}
@@ -79,7 +83,7 @@ public class Ledger {
 		this.expensesAccount = expensesAccount;
 	}
 
-	private List<Account> accounts;
+	//private List<Account> accounts;
 
 	private List<Transaction> transactions;
 
@@ -93,12 +97,9 @@ public class Ledger {
 		this.transactions = transactions;
 	}
 
-	public List<Account> getAccounts() {
-		return accounts;
-	}
-
 	public void setAccounts(List<Account> accounts) {
-		this.accounts = accounts;
+		//this.accounts = accounts;
+		accounts.forEach(account -> this.accountsByName.put(account.getName(), account));
 	}
 
 	public void addJournal(Journal journal) {
@@ -108,6 +109,20 @@ public class Ledger {
 
 	public boolean isAutoNegativeSwitchesAccountSide() {
 		return true;
+	}
+
+	public Account getAccountByName(String string) {
+		return this.accountsByName.get(string);
+	}
+
+	public void addAccountIfRequired(Account value) {
+		if (!accountsByName.containsKey(value.getName())) {
+			this.accountsByName.put(value.getName(), value);
+			//if the account doesn't have a guid yet then set it now
+			if (value.getGuid() == null) {
+				value.generateRandomGuid();
+			}
+		}
 	}
 
 }
