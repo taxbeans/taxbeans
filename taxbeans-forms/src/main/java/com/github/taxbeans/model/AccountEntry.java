@@ -14,6 +14,8 @@ import com.github.taxbeans.currency.ExhangeRateUtils;
 
 public class AccountEntry implements Comparable<AccountEntry> {
 
+	private String cryptoAddress;
+	
 	public AccountEntry(UUID uuid, Account account, BigDecimal amount, AccountSide accountSide, Transaction transaction,
 			String description, BigDecimal commodityUnits, String commodityName, CurrencyUnit currency,
 			Stack<CurrencyTranslation> currencyTranslations) {
@@ -177,6 +179,14 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		this.commodityName = commodityName;
 	}
 
+	public String getCryptoAddress() {
+		return cryptoAddress;
+	}
+
+	public void setCryptoAddress(String cryptoAddress) {
+		this.cryptoAddress = cryptoAddress;
+	}
+
 	public boolean isCommodity() {
 		return commodityUnits != null || commodityName != null;
 	}
@@ -220,11 +230,15 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		return this;
 	}
 
+	public static AccountEntryBuilder accountEntry() {
+		return new AccountEntryBuilder();
+	}
+
 	public static class AccountEntryBuilder {
 		private UUID uuid;
 		private Account account;
 		private BigDecimal amount;
-		private AccountSide accountSide = AccountSide.BALANCE_EFFECT;
+		private AccountSide accountSide;
 		private Transaction transaction;
 		private String description;
 		private BigDecimal commodityUnits;
@@ -286,10 +300,6 @@ public class AccountEntry implements Comparable<AccountEntry> {
 			return new AccountEntry(uuid, account, amount, accountSide, transaction, description, commodityUnits,
 					commodityName, currency, currencyTranslations);
 		}
-	}
-
-	public static AccountEntryBuilder accountEntry() {
-		return new AccountEntryBuilder();
 	}
 
 }
