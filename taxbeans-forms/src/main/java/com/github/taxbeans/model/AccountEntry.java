@@ -97,14 +97,14 @@ public class AccountEntry implements Comparable<AccountEntry> {
 			debitSplit.setTransaction(tx);
 			debitSplit.setAmount(this.getAmount());
 			debitSplit.setAccount(debitAccount);
-			tx.getTransactionSplits().add(debitSplit);
+			tx.getAccountEntries().add(debitSplit);
 		}
 		if (creditAccount != null) {
 			AccountEntry creditSplit = new AccountEntry();
 			creditSplit.setTransaction(tx);
 			creditSplit.setAmount(this.getAmount().negate());
 			creditSplit.setAccount(creditAccount);
-			tx.getTransactionSplits().add(creditSplit);
+			tx.getAccountEntries().add(creditSplit);
 		}
 		return tx;
 	}

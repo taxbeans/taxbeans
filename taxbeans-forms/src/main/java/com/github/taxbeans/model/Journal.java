@@ -59,12 +59,12 @@ public class Journal {
 
 	public void addTransaction(Transaction transaction) {
 		this.transactions.add(transaction);
-		transaction.getTransactionSplits().forEach(entry -> entry.setTransaction(transaction));
+		transaction.getAccountEntries().forEach(entry -> entry.setTransaction(transaction));
 		if (this.getLedger().isAutoTranslate()) {
-			transaction.getTransactionSplits().forEach(entry -> translateIfRequired(entry));
+			transaction.getAccountEntries().forEach(entry -> translateIfRequired(entry));
 		}
 		if (this.getLedger().isAutoNegativeSwitchesAccountSide()) {
-			transaction.getTransactionSplits().forEach(entry -> switchSideIfRequired(entry));
+			transaction.getAccountEntries().forEach(entry -> switchSideIfRequired(entry));
 		}
 	}
 }
