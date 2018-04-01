@@ -167,9 +167,9 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		return this;
 	}
 
-	public Transaction add(AccountEntry split1) {
-		this.addEntry(split1);
-		split1.setTransaction(this);
+	public Transaction add(AccountEntry entry) {
+		this.addEntry(entry);
+		entry.setTransaction(this);
 		return this;
 	}
 

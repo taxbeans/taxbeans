@@ -401,8 +401,8 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [accountClassification=" + accountClassification + ", guid=" + guid + ", accountType="
-				+ accountType + ", name=" + name + "]";
+		return "Account [name=" + name + ", guid=" + guid + ", accountType="
+				+ accountType + "]";
 	}
 
 	public void addEntry(AccountEntry transactionSplit) {

@@ -55,6 +55,18 @@ public class AccountEntry implements Comparable<AccountEntry> {
 	private UUID uuid;
 
 	private Account account;
+	
+	// temporary value used for extracting out the trade fee entry from trades
+	// could have used a separate Trade object
+	private BigDecimal tradeFee;
+
+	public BigDecimal getTradeFee() {
+		return tradeFee;
+	}
+
+	public void setTradeFee(BigDecimal tradeFee) {
+		this.tradeFee = tradeFee;
+	}
 
 	private BigDecimal amount = BigDecimal.ZERO;
 

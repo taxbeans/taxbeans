@@ -140,4 +140,12 @@ public class Ledger {
 		}
 		return account;
 	}
+
+	public Account getTradeFeeAccount() {
+		Account account = accountsByName.get("Trading Fees");
+		if (account == null) {
+			account = Account.account().withName("Trading Fees").withParent(this.expensesAccount).build();
+		}
+		return account;
+	}
 }
