@@ -117,7 +117,6 @@ public class RBNZHistoricalExchangeRatesReader {
 				date = date.minusDays(1);
 			}
 		}
-		logger.info("Date = " + date);
 		return exchangeRateInfo2.getExchangeRates().get(date);
 	}
 

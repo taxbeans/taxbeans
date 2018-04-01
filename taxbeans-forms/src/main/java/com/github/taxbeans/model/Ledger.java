@@ -125,4 +125,19 @@ public class Ledger {
 		}
 	}
 
+	public Account getTradingGainAccount() {
+		Account account = accountsByName.get("Trading Gain");
+		if (account == null) {
+			account = Account.account().withName("Trading Gain").withParent(incomeAccount).build();
+		}
+		return account;
+	}
+	
+	public Account getTradingLossAccount() {
+		Account account = accountsByName.get("Trading Loss");
+		if (account == null) {
+			account = Account.account().withName("Trading Loss").withParent(this.expensesAccount).build();
+		}
+		return account;
+	}
 }

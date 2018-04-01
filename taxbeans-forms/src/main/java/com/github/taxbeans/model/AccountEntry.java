@@ -114,7 +114,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 	public int compareTo(AccountEntry entry) {
 		ZonedDateTime date = entry.getTransaction().getDate();
 		if (this.getTransaction().getDate() == null) {
-			System.out.println();
+			throw new IllegalStateException("An account transaction must have a date");
 		}
 		return this.getTransaction().getDate().compareTo(date);
 	}

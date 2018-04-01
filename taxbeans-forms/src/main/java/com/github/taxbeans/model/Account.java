@@ -51,7 +51,7 @@ public class Account {
 
 	private List<BalanceAssertion> balanceAssertions = new ArrayList<BalanceAssertion>();
 
-	private List<AccountEntry> splits = new ArrayList<AccountEntry>();
+	private List<AccountEntry> accountEntries = new ArrayList<AccountEntry>();
 
 	private String guid;
 
@@ -127,7 +127,7 @@ public class Account {
 			this.debitIncreases = debitIncreases;
 		}
 		this.balanceAssertions = balanceAssertions;
-		this.splits = splits;
+		this.accountEntries = splits;
 		this.guid = guid;
 		this.placeholder = placeholder;
 		this.code = accountNumber;
@@ -146,11 +146,11 @@ public class Account {
 			balanceAssertions.add(balanceAssertion);
 			balanceAssertionMap.put(balanceAssertion.getDate(), balanceAssertions);
 		}
-		logger.debug("transaction splits size = " + splits.size());
-		Collections.sort(splits);
+		logger.debug("transaction splits size = " + accountEntries.size());
+		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 		//int transactionNum = -1;
-		for (AccountEntry split : splits) {
+		for (AccountEntry split : accountEntries) {
 			//transactionNum++;
 			logger.debug("amount = " + split.getAmount());
 			balance = balance.add(split.getAmount());
@@ -221,7 +221,7 @@ public class Account {
 	}
 
 	public List<AccountEntry> getSplits() {
-		return splits;
+		return accountEntries;
 	}
 
 	public String getGuid() {
@@ -233,10 +233,10 @@ public class Account {
 	}
 
 	public BigDecimal getOpeningBalanceForTaxYear(int year) {
-		Collections.sort(splits);
+		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
-		for (AccountEntry split : splits) {
+		for (AccountEntry split : accountEntries) {
 			if (split.getTransaction().getDate().compareTo(
 					TaxRegion.getDefault().getStartOfTaxYear(year)) >= 0)
 				return balance;
@@ -248,10 +248,10 @@ public class Account {
 	}
 	
 	public BigDecimal getOpeningCommodityBalanceForTaxYear(int year) {
-		Collections.sort(splits);
+		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
-		for (AccountEntry split : splits) {
+		for (AccountEntry split : accountEntries) {
 			if (split.getTransaction().getDate().compareTo(
 					TaxRegion.getDefault().getStartOfTaxYear(year)) >= 0)
 				return balance;
@@ -275,14 +275,19 @@ public class Account {
 		return getBalanceAsAt(time).divide(getCommodityBalanceAsAt(time), RoundingMode.HALF_UP);
 	}
 	
+
+	public BigDecimal getCostPerUnitBefore(ZonedDateTime time) {
+		return getBalanceBefore(time).divide(getCommodityBalanceBefore(time), RoundingMode.HALF_UP);
+	}
+	
 	public BigDecimal getBalanceAsAt(ZonedDateTime time) {
-		Collections.sort(splits);
+		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
 		//TODO convert all transaction dates to times or have a common object
 		//if transaction has a date but not a time then the time can be as at 5:00pm on that day
 		//but where possible the time of each transaction should be estimated
-		for (AccountEntry split : splits) {
+		for (AccountEntry split : accountEntries) {
 			if (split.getTransaction().getDate().compareTo(time) > 0)
 				return balance;
 			logger.debug("amount = " + split.getAmount());
@@ -292,12 +297,43 @@ public class Account {
 		return balance;
 	}
 	
-	public BigDecimal getCommodityBalanceAsAt(ZonedDateTime time) {
-		Collections.sort(splits);
+	public BigDecimal getBalanceBefore(ZonedDateTime time) {
+		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
-		for (AccountEntry split : splits) {
+		//TODO convert all transaction dates to times or have a common object
+		//if transaction has a date but not a time then the time can be as at 5:00pm on that day
+		//but where possible the time of each transaction should be estimated
+		for (AccountEntry split : accountEntries) {
+			if (split.getTransaction().getDate().compareTo(time) >= 0)
+				return balance;
+			logger.debug("amount = " + split.getAmount());
+			balance = balance.add(split.getAmount());
+			logger.debug("balance = " + balance);
+		}
+		return balance;
+	}
+	
+	public BigDecimal getCommodityBalanceAsAt(ZonedDateTime time) {
+		Collections.sort(accountEntries);
+		BigDecimal balance = BigDecimal.ZERO;
+
+		for (AccountEntry split : accountEntries) {
 			if (split.getTransaction().getDate().compareTo(time) > 0)
+				return balance;
+			logger.debug("amount = " + split.getCommodityUnits());
+			balance = balance.add(split.getCommodityUnits());
+			logger.debug("balance = " + balance);
+		}
+		return balance;
+	}
+	
+	public BigDecimal getCommodityBalanceBefore(ZonedDateTime time) {
+		Collections.sort(accountEntries);
+		BigDecimal balance = BigDecimal.ZERO;
+
+		for (AccountEntry split : accountEntries) {
+			if (split.getTransaction().getDate().compareTo(time) >= 0)
 				return balance;
 			logger.debug("amount = " + split.getCommodityUnits());
 			balance = balance.add(split.getCommodityUnits());
@@ -308,9 +344,9 @@ public class Account {
 
 
 	public BigDecimal getTotalForTaxYear(int year) {
-		Collections.sort(splits);
+		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
-		for (AccountEntry split : splits) {
+		for (AccountEntry split : accountEntries) {
 			if (split.getTransaction().getDate().compareTo(
 					TaxRegion.getDefault().getStartOfTaxYear(year+1)) >= 0)
 				return balance;
@@ -325,7 +361,7 @@ public class Account {
 	}
 
 	public void printTransactions() {
-		for (AccountEntry split : splits) {
+		for (AccountEntry split : accountEntries) {
 			logger.debug("tx: " + split);
 		}
 	}
@@ -370,17 +406,17 @@ public class Account {
 	}
 
 	public void addEntry(AccountEntry transactionSplit) {
-		if (splits == null) {
-			splits = new ArrayList<AccountEntry>();
+		if (accountEntries == null) {
+			accountEntries = new ArrayList<AccountEntry>();
 		}
-		this.splits.add(transactionSplit);
+		this.accountEntries.add(transactionSplit);
 	}
 
 	public void setSplits(List<AccountEntry> list) {
-		if (splits != null && splits.size() > 0) {
+		if (accountEntries != null && accountEntries.size() > 0) {
 			throw new IllegalStateException("Existing splits may not be overridden");
 		}
-		this.splits = list;
+		this.accountEntries = list;
 	}
 
 	public static class AccountBuilder {
@@ -480,5 +516,6 @@ public class Account {
 	public void generateRandomGuid() {
 		this.guid = UUID.randomUUID().toString();
 	}
+
 
 }
