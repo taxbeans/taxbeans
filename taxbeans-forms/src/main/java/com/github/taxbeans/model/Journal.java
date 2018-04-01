@@ -1,5 +1,6 @@
 package com.github.taxbeans.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,5 +72,27 @@ public class Journal {
 
 	private void addAccountToLedger(AccountEntry entry) {
 		this.getLedger().addAccountIfRequired(entry.getAccount());
+	}
+
+	/**
+	 * Translates the amount into the base currency of this journal
+	 */
+	public void translate(Transaction transaction) {
+		transaction.getAccountEntries().forEach(entry -> translateIfRequired(entry));
+	}
+	
+	public void audit(Transaction transaction) {
+		BigDecimal debits = BigDecimal.ZERO;
+		BigDecimal credits = BigDecimal.ZERO;
+		for (AccountEntry entry : transaction.getAccountEntries()) {
+			if (entry.getAccountSide() == AccountSide.DEBIT) {
+					debits.add(entry.getAmount());
+			} else {
+				credits.add(entry.getAmount());
+			}
+		}
+		if (credits.compareTo(debits) != 0) {
+			throw new IllegalStateException("audit failed, difference = " + debits.subtract(credits));
+		}
 	}
 }
