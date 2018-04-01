@@ -3,6 +3,7 @@ package com.github.taxbeans.model;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Journal {
 	
@@ -57,6 +58,12 @@ public class Journal {
 			}
 		}
 	}
+	
+	private void createGuidIfRequired(AccountEntry entry) {
+		if (entry.getAccount().getGuid() == null) {
+			entry.getAccount().setGuid(UUID.randomUUID().toString());
+		}
+	}
 
 	public void addTransaction(Transaction transaction) {
 		this.transactions.add(transaction);
@@ -68,6 +75,7 @@ public class Journal {
 		if (this.getLedger().isAutoNegativeSwitchesAccountSide()) {
 			transaction.getAccountEntries().forEach(entry -> switchSideIfRequired(entry));
 		}
+		transaction.getAccountEntries().forEach(entry -> createGuidIfRequired(entry));
 	}
 
 	private void addAccountToLedger(AccountEntry entry) {
