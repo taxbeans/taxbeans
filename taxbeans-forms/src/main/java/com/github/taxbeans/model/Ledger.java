@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -128,7 +129,7 @@ public class Ledger {
 	public Account getTradingGainAccount() {
 		Account account = accountsByName.get("Trading Gain");
 		if (account == null) {
-			account = Account.account().withName("Trading Gain").withParent(incomeAccount).build();
+			account = Account.account().withName("Trading Gain").withGuid(UUID.randomUUID().toString()).withParent(incomeAccount).build();
 		}
 		return account;
 	}
@@ -136,15 +137,18 @@ public class Ledger {
 	public Account getTradingLossAccount() {
 		Account account = accountsByName.get("Trading Loss");
 		if (account == null) {
-			account = Account.account().withName("Trading Loss").withParent(this.expensesAccount).build();
+			account = Account.account().withName("Trading Loss").withGuid(UUID.randomUUID().toString()).withParent(this.expensesAccount).build();
 		}
 		return account;
 	}
 
+	/**
+	 * This will typically account for fees on sale, since fees on purchase are integrated into the historical cost
+	 */
 	public Account getTradeFeeAccount() {
 		Account account = accountsByName.get("Trading Fees");
 		if (account == null) {
-			account = Account.account().withName("Trading Fees").withParent(this.expensesAccount).build();
+			account = Account.account().withName("Trading Fees").withGuid(UUID.randomUUID().toString()).withParent(this.expensesAccount).build();
 		}
 		return account;
 	}

@@ -280,66 +280,62 @@ public class Account {
 		return getBalanceBefore(time).divide(getCommodityBalanceBefore(time), RoundingMode.HALF_UP);
 	}
 	
-	public BigDecimal getBalanceAsAt(ZonedDateTime time) {
+	public BigDecimal getBalanceAsAtOrBefore(ZonedDateTime time, boolean asAt) {
 		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
 		//TODO convert all transaction dates to times or have a common object
 		//if transaction has a date but not a time then the time can be as at 5:00pm on that day
 		//but where possible the time of each transaction should be estimated
-		for (AccountEntry split : accountEntries) {
-			if (split.getTransaction().getDate().compareTo(time) > 0)
+		for (AccountEntry entry : accountEntries) {
+			
+			boolean condition = asAt ? entry.getTransaction().getDate().compareTo(time) > 0 : 
+				entry.getTransaction().getDate().compareTo(time) >= 0;
+				
+			if (condition)
 				return balance;
-			logger.debug("amount = " + split.getAmount());
-			balance = balance.add(split.getAmount());
+			logger.debug("amount = " + entry.getAmount());
+			boolean increase = (entry.getAccountSide() == AccountSide.DEBIT && this.isDebitIncreases()) ||
+					(entry.getAccountSide() == AccountSide.CREDIT && !this.isDebitIncreases());
+			balance = balance.add(increase ? entry.getAmount().abs() : entry.getAmount().abs().negate());
 			logger.debug("balance = " + balance);
 		}
 		return balance;
+	}
+	
+	public BigDecimal getBalanceAsAt(ZonedDateTime time) {
+		return getBalanceAsAtOrBefore(time, true);
 	}
 	
 	public BigDecimal getBalanceBefore(ZonedDateTime time) {
+		return getBalanceAsAtOrBefore(time, false);
+	}
+	
+	public BigDecimal getCommodityBalanceAsAtOrBefore(ZonedDateTime time, boolean asAt) {
 		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
-		//TODO convert all transaction dates to times or have a common object
-		//if transaction has a date but not a time then the time can be as at 5:00pm on that day
-		//but where possible the time of each transaction should be estimated
-		for (AccountEntry split : accountEntries) {
-			if (split.getTransaction().getDate().compareTo(time) >= 0)
+		for (AccountEntry entry : accountEntries) {
+			boolean condition = asAt ? entry.getTransaction().getDate().compareTo(time) > 0 : 
+				entry.getTransaction().getDate().compareTo(time) >= 0;
+			if (condition)
 				return balance;
-			logger.debug("amount = " + split.getAmount());
-			balance = balance.add(split.getAmount());
+			logger.debug("amount = " + entry.getCommodityUnits());
+			
+			boolean increase = (entry.getAccountSide() == AccountSide.DEBIT && this.isDebitIncreases()) ||
+					(entry.getAccountSide() == AccountSide.CREDIT && !this.isDebitIncreases());
+			balance = balance.add(increase ? entry.getCommodityUnits().abs() : entry.getCommodityUnits().abs().negate());
 			logger.debug("balance = " + balance);
 		}
-		return balance;
+		return balance;	
 	}
 	
 	public BigDecimal getCommodityBalanceAsAt(ZonedDateTime time) {
-		Collections.sort(accountEntries);
-		BigDecimal balance = BigDecimal.ZERO;
-
-		for (AccountEntry split : accountEntries) {
-			if (split.getTransaction().getDate().compareTo(time) > 0)
-				return balance;
-			logger.debug("amount = " + split.getCommodityUnits());
-			balance = balance.add(split.getCommodityUnits());
-			logger.debug("balance = " + balance);
-		}
-		return balance;
+		return getCommodityBalanceAsAtOrBefore(time, true);
 	}
 	
 	public BigDecimal getCommodityBalanceBefore(ZonedDateTime time) {
-		Collections.sort(accountEntries);
-		BigDecimal balance = BigDecimal.ZERO;
-
-		for (AccountEntry split : accountEntries) {
-			if (split.getTransaction().getDate().compareTo(time) >= 0)
-				return balance;
-			logger.debug("amount = " + split.getCommodityUnits());
-			balance = balance.add(split.getCommodityUnits());
-			logger.debug("balance = " + balance);
-		}
-		return balance;
+		return getCommodityBalanceAsAtOrBefore(time, false);
 	}
 
 
