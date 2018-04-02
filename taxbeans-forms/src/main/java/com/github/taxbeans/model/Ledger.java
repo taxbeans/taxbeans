@@ -1,6 +1,7 @@
 package com.github.taxbeans.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,5 +152,9 @@ public class Ledger {
 			account = Account.account().withName("Trading Fees").withGuid(UUID.randomUUID().toString()).withParent(this.expensesAccount).build();
 		}
 		return account;
+	}
+
+	public List<Account> getAccounts() {
+		return new ArrayList<Account>(this.accountsByName.values());
 	}
 }
