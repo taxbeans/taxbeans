@@ -218,7 +218,7 @@ public class AccountEntry implements Comparable<AccountEntry> {
 	public String toString() {
 		return "AccountEntry [" + amount + " " + currency + " " + accountSide + ", account=" + account + ", date = "
 				+ (transaction == null ? null : transaction.getDate()) + ", description = " + this.getDescription()
-				+ ", commodityName = " + this.getCommodityName() + ", commodityUnits = " + this.getCommodityUnits()
+				+ (commodityName == null ? "" : ", commodityName = " + this.getCommodityName() + ", commodityUnits = " + this.getCommodityUnits())
 				+ "]";
 	}
 
