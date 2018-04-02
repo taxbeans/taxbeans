@@ -1,6 +1,7 @@
 package com.github.taxbeans.model;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -272,12 +273,12 @@ public class Account {
 	 * @return The historical cost per unit
 	 */
 	public BigDecimal getCostPerUnitAsAt(ZonedDateTime time) {
-		return getBalanceAsAt(time).divide(getCommodityBalanceAsAt(time), RoundingMode.HALF_UP);
+		return getBalanceAsAt(time).divide(getCommodityBalanceAsAt(time),  MathContext.DECIMAL128);
 	}
 	
 
 	public BigDecimal getCostPerUnitBefore(ZonedDateTime time) {
-		return getBalanceBefore(time).divide(getCommodityBalanceBefore(time), RoundingMode.HALF_UP);
+		return getBalanceBefore(time).divide(getCommodityBalanceBefore(time), MathContext.DECIMAL128);
 	}
 	
 	public BigDecimal getBalanceAsAtOrBefore(ZonedDateTime time, boolean asAt) {

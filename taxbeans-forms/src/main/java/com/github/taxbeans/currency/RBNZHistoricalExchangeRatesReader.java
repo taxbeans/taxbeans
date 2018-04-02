@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -88,7 +89,7 @@ public class RBNZHistoricalExchangeRatesReader {
 
 	public static BigDecimal getForeignToNZDRate(LocalDate date, String foreignCurrency) {
 		
-		return BigDecimal.ONE.divide(getNZDtoForeignRate(date, foreignCurrency), 6, RoundingMode.HALF_UP);
+		return BigDecimal.ONE.divide(getNZDtoForeignRate(date, foreignCurrency), MathContext.DECIMAL128);
 		//FileInputStream fis = new FileInputStream("/rbnz-historical-exchange-rates.xlsx");
 //		Workbook wb = new XSSFWorkbook("./target/classes/rbnz-historical-exchange-rates.xlsx");
 //		Sheet sheet = wb.getSheetAt(0);
