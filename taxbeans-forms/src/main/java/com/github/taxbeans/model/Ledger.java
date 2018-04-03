@@ -130,6 +130,23 @@ public class Ledger {
 		return createAccount("Trading Gain", this.incomeAccount);
 	}
 	
+	public Account getMarginTradingGainAccount() {
+		return createAccount("Margin Trading Gain", this.incomeAccount);
+	}
+	
+	public Account getMarginTradingLossAccount() {
+		return createAccount("Margin Trading Loss", this.incomeAccount);
+	}
+	
+	//Foreign Exchange Gain in accounting terms
+	public Account getForexGainAccount() {
+		return createAccount("Forex Gain", this.incomeAccount);
+	}
+	
+	public Account geForexLossAccount() {
+		return createAccount("Forex Loss", this.incomeAccount);
+	}
+	
 	public Account getTradingLossAccount() {
 		return createAccount("Trading Loss", this.expensesAccount);
 	}
@@ -156,5 +173,9 @@ public class Ledger {
 
 	public List<Account> getAccounts() {
 		return new ArrayList<Account>(this.accountsByName.values());
+	}
+
+	public Account createMarginPosition(String name) {
+		return this.createAccount(name, this.assetsAccount);
 	}
 }
