@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.money.MonetaryAmount;
 
 import com.github.taxbeans.currency.ExhangeRateUtils;
 
@@ -311,6 +312,12 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		public AccountEntry build() {
 			return new AccountEntry(uuid, account, amount, accountSide, transaction, description, commodityUnits,
 					commodityName, currency, currencyTranslations);
+		}
+
+		public AccountEntryBuilder withCurrencyAmount(MonetaryAmount monetaryAmount) {
+			this.amount = (BigDecimal) monetaryAmount.getNumber().numberValue(BigDecimal.class);
+			this.currency = monetaryAmount.getCurrency();
+			return this;
 		}
 	}
 
