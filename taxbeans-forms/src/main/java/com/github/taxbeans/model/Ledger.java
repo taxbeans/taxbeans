@@ -1,7 +1,6 @@
 package com.github.taxbeans.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,28 +127,29 @@ public class Ledger {
 	}
 
 	public Account getTradingGainAccount() {
-		Account account = accountsByName.get("Trading Gain");
-		if (account == null) {
-			account = Account.account().withName("Trading Gain").withGuid(UUID.randomUUID().toString()).withParent(incomeAccount).build();
-		}
-		return account;
+		return createAccount("Trading Gain", this.incomeAccount);
 	}
 	
 	public Account getTradingLossAccount() {
-		Account account = accountsByName.get("Trading Loss");
-		if (account == null) {
-			account = Account.account().withName("Trading Loss").withGuid(UUID.randomUUID().toString()).withParent(this.expensesAccount).build();
-		}
-		return account;
+		return createAccount("Trading Loss", this.expensesAccount);
 	}
 
 	/**
 	 * This will typically account for fees on sale, since fees on purchase are integrated into the historical cost
 	 */
 	public Account getTradeFeeAccount() {
-		Account account = accountsByName.get("Trading Fees");
+		return createAccount("Trading Fees", this.expensesAccount);
+	}
+	
+	public Account getMarginFeeAccount() {
+		return createAccount("Margin Fees", this.expensesAccount);
+	}
+
+	private Account createAccount(String name, Account parent) {
+		Account account = accountsByName.get(name);
 		if (account == null) {
-			account = Account.account().withName("Trading Fees").withGuid(UUID.randomUUID().toString()).withParent(this.expensesAccount).build();
+			account = Account.account().withName(name).withGuid(UUID.randomUUID().toString()).withParent(parent).build();
+			accountsByName.put(name, account);
 		}
 		return account;
 	}

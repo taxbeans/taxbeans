@@ -282,6 +282,9 @@ public class Account {
 	}
 	
 	public BigDecimal getBalanceAsAtOrBefore(ZonedDateTime time, boolean asAt) {
+		if (accountEntries == null || accountEntries.size() == 0) {
+			return BigDecimal.ZERO;
+		}
 		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
@@ -313,6 +316,9 @@ public class Account {
 	}
 	
 	public BigDecimal getCommodityBalanceAsAtOrBefore(ZonedDateTime time, boolean asAt) {
+		if (accountEntries == null || accountEntries.size() == 0) {
+			return BigDecimal.ZERO;
+		}
 		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
