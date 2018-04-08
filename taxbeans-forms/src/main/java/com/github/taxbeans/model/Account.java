@@ -234,6 +234,9 @@ public class Account {
 	}
 
 	public BigDecimal getOpeningBalanceForTaxYear(int year) {
+		if (accountEntries == null) {
+			logger.warn("Account entries are null for account: " + this);
+		}
 		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
 
