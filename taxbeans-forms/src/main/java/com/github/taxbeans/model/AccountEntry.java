@@ -12,6 +12,7 @@ import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
 import com.github.taxbeans.currency.ExhangeRateUtils;
+import com.github.taxbeans.model.commodity.CommodityAmount;
 
 public class AccountEntry implements Comparable<AccountEntry> {
 
@@ -317,6 +318,12 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		public AccountEntryBuilder withCurrencyAmount(MonetaryAmount monetaryAmount) {
 			this.amount = (BigDecimal) monetaryAmount.getNumber().numberValue(BigDecimal.class);
 			this.currency = monetaryAmount.getCurrency();
+			return this;
+		}
+
+		public AccountEntryBuilder withCommodityAmount(CommodityAmount commodityAmount) {
+			this.commodityUnits = commodityAmount.getAmount();
+			this.commodityName = commodityAmount.getCommodity().getSymbol();
 			return this;
 		}
 	}
