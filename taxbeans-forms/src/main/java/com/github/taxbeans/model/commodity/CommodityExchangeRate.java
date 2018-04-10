@@ -5,6 +5,12 @@ import java.time.ZonedDateTime;
 
 public class CommodityExchangeRate {
 
+	@Override
+	public String toString() {
+		return String.format("CommodityExchangeRate [commodityPair=%s, dateTime=%s, rate=%s]", commodityPair, dateTime,
+				rate);
+	}
+
 	private CommodityPair commodityPair;
 
 	private ZonedDateTime dateTime;

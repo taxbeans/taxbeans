@@ -20,6 +20,11 @@ public class CommodityPair {
 		this.left = left;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("CommodityPair [left=%s, right=%s]", left, right);
+	}
+
 	public Commodity getRight() {
 		return right;
 	}
