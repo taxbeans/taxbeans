@@ -1,9 +1,9 @@
 package com.github.taxbeans.model.commodity;
 
 public class CommodityPair {
-	
+
 	private Commodity left;
-	
+
 	private Commodity right;
 
 	public CommodityPair(Commodity left, Commodity right) {
@@ -11,7 +11,7 @@ public class CommodityPair {
 		this.left = left;
 		this.right = right;
 	}
-	
+
 	public Commodity getLeft() {
 		return left;
 	}
@@ -26,6 +26,29 @@ public class CommodityPair {
 
 	public void setRight(Commodity right) {
 		this.right = right;
+	}
+
+	public static class CommodityPairBuilder {
+		private Commodity left;
+		private Commodity right;
+
+		public CommodityPairBuilder withLeft(Commodity left) {
+			this.left = left;
+			return this;
+		}
+
+		public CommodityPairBuilder withRight(Commodity right) {
+			this.right = right;
+			return this;
+		}
+
+		public CommodityPair build() {
+			return new CommodityPair(left, right);
+		}
+	}
+
+	public static CommodityPairBuilder commodityPair() {
+		return new CommodityPairBuilder();
 	}
 
 }
