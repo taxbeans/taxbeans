@@ -58,14 +58,20 @@ public class CommodityAmount {
 		this.amount = amount;
 	}
 
-	public BigDecimal convertTo(Commodity commodity, CommodityExchangeRate rate) {
+	/**
+	 * Returns a new CommodityAmount
+	 */
+	public CommodityAmount convertTo(Commodity commodity, CommodityExchangeRate rate) {
 		if (!this.getCommodity().toString().equals(rate.getCommodityPair().getLeft().toString())) {
-			throw new IllegalStateException("Left/from doesn't match");
+			throw new IllegalStateException("Left/from doesn't match: " + this.getCommodity() + ", " + rate.getCommodityPair().getLeft());
 		}
 		if (!commodity.toString().equals(rate.getCommodityPair().getRight().toString())) {
 			throw new IllegalStateException("Right/to doesn't match");
 		}
-		return this.amount.multiply(rate.getRate());
+		CommodityAmount newCommodityAmount = CommodityAmount.commodityAmount()
+				.withCommodity(commodity)
+				.withAmount(this.amount.multiply(rate.getRate())).build();
+		return newCommodityAmount;
 	}
 
 	public void add(CommodityAmount other) {
