@@ -2,7 +2,12 @@ package com.github.taxbeans.model.commodity;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CommodityAmount {
+	
+	final static Logger logger = LoggerFactory.getLogger(CommodityAmount.class);
 
 	private Commodity commodity;
 
@@ -51,5 +56,33 @@ public class CommodityAmount {
 
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public BigDecimal convertTo(Commodity commodity, CommodityExchangeRate rate) {
+		if (!this.getCommodity().toString().equals(rate.getCommodityPair().getLeft().toString())) {
+			throw new IllegalStateException("Left/from doesn't match");
+		}
+		if (!commodity.toString().equals(rate.getCommodityPair().getRight().toString())) {
+			throw new IllegalStateException("Right/to doesn't match");
+		}
+		return this.amount.multiply(rate.getRate());
+	}
+
+	public void add(CommodityAmount other) {
+		if (this.getCommodity().getSymbol() != null && !this.getCommodity().equals(other.getCommodity())) {
+			throw new IllegalStateException("Commodities don't match: " + this.getCommodity() + ", " + other.getCommodity());
+		}
+		logger.info("this amount before = {}", this.amount);
+		logger.info("other amount = {}", other.amount);
+		this.amount = this.amount.add(other.getAmount());
+		logger.info("this amount after = {}", this.amount);
+		if (this.getCommodity().getSymbol() == null) {
+			this.getCommodity().setSymbol(other.getCommodity().getSymbol());
+		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s %s", amount, commodity.getSymbol());
 	}
 }
