@@ -86,6 +86,21 @@ public class RBNZHistoricalExchangeRatesReader {
 		exchangeRateInfo.setWeekdaysOnly(true);
 		return exchangeRateInfo;
 	}
+	
+	public static BigDecimal getCrossRate(LocalDate date, String fxFrom, String fxTo) {
+		
+		return getForeignToNZDRate(date, fxFrom).multiply(getNZDtoForeignRate(date, fxTo));
+		//FileInputStream fis = new FileInputStream("/rbnz-historical-exchange-rates.xlsx");
+//		Workbook wb = new XSSFWorkbook("./target/classes/rbnz-historical-exchange-rates.xlsx");
+//		Sheet sheet = wb.getSheetAt(0);
+//		FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+//
+//		// suppose your formula is in B3
+//		CellReference cellReference = new CellReference("C6"); 
+//		Row row = sheet.getRow(cellReference.getRow());	
+//		Cell cell = row.getCell(cellReference.getCol());
+//		return new BigDecimal(cell.getNumericCellValue()+"");
+	}
 
 	public static BigDecimal getForeignToNZDRate(LocalDate date, String foreignCurrency) {
 		
