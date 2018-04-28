@@ -133,7 +133,12 @@ public class RBNZHistoricalExchangeRatesReader {
 				date = date.minusDays(1);
 			}
 		}
-		return exchangeRateInfo2.getExchangeRates().get(date);
+		BigDecimal exchangeRate = exchangeRateInfo2.getExchangeRates().get(date);
+		if (exchangeRate == null) {
+			logger.info("Assuming {} is a public holiday since no exchange rate is available", date);
+			exchangeRate = getNZDtoForeignRate(date.minusDays(1), foreignCurrency);
+		}
+		return exchangeRate;
 	}
 
 }
