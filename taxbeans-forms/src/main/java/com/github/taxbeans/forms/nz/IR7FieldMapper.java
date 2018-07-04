@@ -24,6 +24,13 @@ public class IR7FieldMapper {
 			}
 		}
 		int i = year-2009;
-		return map.get(fieldName.name())[i];
+		String[] strings = map.get(fieldName.name());
+		if (strings.length == 0) {
+			logger.error("No matching fields in IR7 {} for: {}", year, fieldName.name());
+		}
+		if (strings.length <= i) {
+			logger.error("No mapping column in IR7 mapping for year: {}", year);
+		}
+		return strings[i];
 	}
 }
