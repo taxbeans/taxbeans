@@ -1632,7 +1632,7 @@ public class IR3FormBean {
 						//PDField field = acroForm.getField(f);
 						logger.info("Field name is: " + f);
 					}
-					System.exit(0);
+					throw new AssertionError("Exiting due to issue with fields");
 				}
 				System.out.println(key + "->" + value);
 				if (key.equals("reasonForTaxReturnPartYear")) {
