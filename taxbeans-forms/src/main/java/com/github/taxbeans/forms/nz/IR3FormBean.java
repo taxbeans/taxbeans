@@ -43,6 +43,12 @@ import com.github.taxbeans.pdf.PDFUtils;
 
 public class IR3FormBean {
 
+	private static final String OTHER_INCOME_RECEIVED = "incomeOtherReceived";
+
+	private static final String EXCESS_IMPUTATION_CREDITS_BROUGHT_FORWARD_ELIGIBLE = "excessImputationCreditsBroughtForwardEligible";
+
+	private static final String INCOME_FROM_LTC_RECEIVED = "incomeFromLTCReceived";
+
 	private static final String IS_INCOME_OTHER_RECEIVED = "incomeOtherReceived";
 
 	private static final String RENTS_RECEIVED = "rentsReceived";
@@ -80,6 +86,10 @@ public class IR3FormBean {
 	@RightAlign(11)
 	private Money refundCopiedPlusOverpayment2018;
 	
+	@UseTrueFalseMappings
+	private boolean noOtherIncomeReceived = true;
+
+	@SkipIfFalse(OTHER_INCOME_RECEIVED)
 	private String otherIncomePayer;
 	
 	@Skip
@@ -121,6 +131,7 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(5)
+	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private Money taxCreditValue;
 	
 	public Money getTaxCreditValue() {
@@ -130,8 +141,20 @@ public class IR3FormBean {
 	public void setTaxCreditValue(Money taxCreditValue) {
 		this.taxCreditValue = taxCreditValue;
 	}
+	
+	public boolean isNoOtherIncomeReceived() {
+		return noOtherIncomeReceived;
+	}
+
+	public void setNoOtherIncomeReceived(boolean noOtherIncomeReceived) {
+		this.noOtherIncomeReceived = noOtherIncomeReceived;
+	}
+	
+	@Skip
+	private boolean excludedOverseasIncomeReceived;
 
 	@RightAlign(2)
+	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private String taxCreditQualifyingMonthsNumber;
 	
 	public String getTaxCreditQualifyingMonthsNumber() {
@@ -142,6 +165,7 @@ public class IR3FormBean {
 		this.taxCreditQualifyingMonthsNumber = taxCreditQualifyingMonthsNumber;
 	}
 
+	@SkipIfFalse(OTHER_INCOME_RECEIVED)
 	private String otherIncomeType;
 	
 	public String getOtherIncomeType() {
@@ -702,18 +726,23 @@ public class IR3FormBean {
 	private Money totalActivePartnershipIncome;
 
 	@RightAlign(11)
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money totalLTCTaxCredits;
 	
 	@RightAlign(11)
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money totalActiveLTCIncome;
 	
 	@RightAlign(11)
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money nonAllowableDeductionsThisYear;
 
 	@RightAlign(11)
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money priorYearsNonAllowableDeductionsClaimedThisYear;
 	
 	@RightAlign(11)
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money adjustedLTCIncome;
 	
 	@RightAlign(11)
@@ -738,6 +767,7 @@ public class IR3FormBean {
 	private Money totalOtherNetIncome;
 
 	@RightAlign(11)
+	@SkipIfFalse(IR3FormBean.OTHER_INCOME_RECEIVED)
 	private Money residentialLandWithholdingTaxCredit;
 
 	@RightAlign(11)
@@ -759,6 +789,7 @@ public class IR3FormBean {
 	private Money taxableIncome;
 
 	@RightAlign(11)
+	@SkipIfFalse(EXCESS_IMPUTATION_CREDITS_BROUGHT_FORWARD_ELIGIBLE)
 	private Money excessImputationCreditsBroughtForward;
 	
 	@RightAlign(11)
@@ -890,6 +921,7 @@ public class IR3FormBean {
 		this.minusSignForTotalActivePartnershipIncome = minusSignForTotalActivePartnershipIncome;
 	}
 
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private String minusSignForTotalActiveLTCIncome;
 	
 	public String getMinusSignForTotalActiveLTCIncome() {
@@ -900,6 +932,7 @@ public class IR3FormBean {
 		this.minusSignForTotalActiveLTCIncome = minusSignForTotalActiveLTCIncome;
 	}
 
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private String minusSignForAdjustedLTCIncome;
 	
 	public String getMinusSignForAdjustedLTCIncome() {
@@ -963,6 +996,7 @@ public class IR3FormBean {
 		this.minusSignForTotalOtherNetIncome = minusSignForTotalOtherNetIncome;
 	}
 
+	@SkipIfFalse(IR3FormBean.OTHER_INCOME_RECEIVED)
 	private String minusSignForRLWTTaxCredit;
 	
 	public String getMinusSignForRLWTTaxCredit() {
@@ -1753,7 +1787,14 @@ public class IR3FormBean {
 						} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
 							String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true")
 									: propertyToFieldMap.get(key + "_false");
-							processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
+							String fieldName = propertyToFieldMap.get(key);
+							if (fieldName == null) {
+								propertyToFieldMap.entrySet().forEach(action -> 
+									logger.error(String.format("%s -> %s", action.getKey(), action.getValue())));
+								throw new AssertionError(String.format("Boolean field: %s mapped to null, possible " + 
+									"cause is missing Enum field in IR3Fields", key));
+							}
+							processField(acroForm, fieldName, mappedValue, f);
 						} else if (f.getAnnotation(UseValueMappings.class) != null) {
 							String mappedValue = propertyToFieldMap.get(key + "_" + value);
 							processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
@@ -1797,7 +1838,9 @@ public class IR3FormBean {
 
 	public void processField(PDAcroForm acroForm, String fieldName, Object value, Field f) throws IOException {
 		PDField pdField = acroForm.getField(fieldName);
-		System.out.println(fieldName + "->" + pdField);
+		if (pdField == null) {
+			logger.error(fieldName + "->" + pdField);
+		}
 		if (f.getAnnotation(Skip.class) != null) {
 			return;
 		}
@@ -1823,6 +1866,11 @@ public class IR3FormBean {
 		if (f.getAnnotation(UseValueMappings.class) != null && pdField instanceof PDNonTerminalField) {
 			PDNonTerminalField nonTerminalField = (PDNonTerminalField) pdField;
 			nonTerminalField.getChildren().get(Integer.parseInt(String.valueOf(value))).setValue("a");
+		} else if (f.getAnnotation(UseValueMappings.class) != null) {
+			if (pdField instanceof PDCheckBox) {
+				pdField.setValue(String.valueOf(value));
+				return;
+			}
 		}
 		if (pdField == null) {
 			List<PDField> fields = acroForm.getFields();

@@ -73,6 +73,9 @@ incomeFromSelfEmploymentReceived_false,0
 incomeOtherReceived,24 Yes
 incomeOtherReceived_true,Yes
 incomeOtherReceived_false,Off
+noOtherIncomeReceived,24 no
+noOtherIncomeReceived_true,Yes
+noOtherIncomeReceived_false,Off
 expensesOtherReceived,26 no/yes
 expensesOtherReceived_true,0
 expensesOtherReceived_false,1
