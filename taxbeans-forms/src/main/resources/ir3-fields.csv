@@ -5,7 +5,7 @@ salutation_mr,0
 salutation_mrs,1
 salutation_miss,2
 salutation_ms,3
-salutation.none,Off
+salutation_none,Off
 firstname,2 first names
 surname,2 surname
 postalAddressLine1,3 street address

@@ -28,6 +28,7 @@ import com.github.taxbeans.exception.TaxBeansException;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.RightAlign;
+import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
@@ -68,6 +69,28 @@ public class IR3FormBean {
 	
 	private String otherIncomePayer;
 	
+	@Skip
+	private String destinationDirectory;
+	
+	@Skip
+	private String personalisedNaming;
+	
+	public String getPersonalisedNaming() {
+		return personalisedNaming;
+	}
+
+	public void setPersonalisedNaming(String personalisedNaming) {
+		this.personalisedNaming = personalisedNaming;
+	}
+
+	public String getDestinationDirectory() {
+		return destinationDirectory;
+	}
+
+	public void setDestinationDirectory(String destinationDirectory) {
+		this.destinationDirectory = destinationDirectory;
+	}
+
 	public Money getRefundCopiedPlusOverpayment2018() {
 		return refundCopiedPlusOverpayment2018;
 	}
@@ -1615,94 +1638,106 @@ public class IR3FormBean {
 			PDAcroForm acroForm = docCatalog.getAcroForm();
 			Map<String, Object> describe = PropertyUtils.describe(this);
 			Map<String, String> propertyToFieldMap = this.getPropertyToFieldMap();
-			for (Map.Entry<String, Object> entry : describe.entrySet()) {
-				String key = entry.getKey();
-				Object value = entry.getValue();
-				if ("describeForm".equals(value)) {
-					//acroForm.get
-					List<PDField> fieldList = acroForm.getFields();
+			String key = null;
+			try {
+				for (Map.Entry<String, Object> entry : describe.entrySet()) {
+					key = entry.getKey();
+					Object value = entry.getValue();
+					if ("describeForm".equals(value)) {
+						// acroForm.get
+						List<PDField> fieldList = acroForm.getFields();
 
-					String[] fieldArray = new String[fieldList.size()];
-					int i = 0;
-					for (PDField sField : fieldList) {
-						fieldArray[i] = sField.getFullyQualifiedName();
-						i++;
-					}
-					for (String f : fieldArray) {
-						//PDField field = acroForm.getField(f);
-						logger.info("Field name is: " + f);
-					}
-					throw new AssertionError("Exiting due to issue with fields");
-				}
-				System.out.println(key + "->" + value);
-				if (key.equals("reasonForTaxReturnPartYear")) {
-					System.out.println("incomeOtherReceived");
-				}
-				if (key.equals("class") || key.equals("year")) {
-					//todo exclude fields by annotation
-					continue;
-				}
-				Field f = this.getClass().getDeclaredField(key);
-				f.setAccessible(true);
-				Object field = f.get(this);
-				if (f.getAnnotation(UseChildFields.class) != null) {
-					Map<String, Object> describeChild = PropertyUtils.describe(field);
-					for (Map.Entry<String, Object> childEntry : describeChild.entrySet()) {
-						String childKey = childEntry.getKey();
-						if ("class".equals(childKey)) {
-							continue;
+						String[] fieldArray = new String[fieldList.size()];
+						int i = 0;
+						for (PDField sField : fieldList) {
+							fieldArray[i] = sField.getFullyQualifiedName();
+							i++;
 						}
-						Object childValue = childEntry.getValue();
-						String fieldName = propertyToFieldMap.get(childKey);
-						PDField pdField = acroForm.getField(fieldName);
-						System.out.println(fieldName + "->" + pdField);
-						pdField.setValue(String.valueOf(childValue));
-						System.out.println(fieldName + "->" + pdField);
+						for (String f : fieldArray) {
+							// PDField field = acroForm.getField(f);
+							logger.info("Field name is: " + f);
+						}
+						throw new AssertionError("Exiting due to issue with fields");
 					}
-				} else {
-					//String fieldName = propertyToFieldMap.get(key);
-					if (f.getAnnotation(UseDayMonthYear.class) != null) {
-						LocalDate localDate = (LocalDate) value;
-						int dayOfMonth = localDate.getDayOfMonth();
-						processField(acroForm, propertyToFieldMap.get(key + "_day"), 
-								dayOfMonth >= 10 ? dayOfMonth : "0" + dayOfMonth,
-								f);
-						int monthValue = localDate.getMonthValue();
-						processField(acroForm, propertyToFieldMap.get(key + "_month"),
-								monthValue >= 10 ? monthValue : "0" + monthValue,
-								f);
-						int year2 = localDate.getYear();
-						processField(acroForm, propertyToFieldMap.get(key + "_year"),
-								year2 >= 10 ? year2 : "0" + year2,
-								f);
-					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
-						String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true") : propertyToFieldMap.get(key + "_false");
-						processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
-					} else if (f.getAnnotation(UseValueMappings.class) != null) {
-						String mappedValue = propertyToFieldMap.get(key + "_" + value);
-						processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
+					System.out.println(key + "->" + value);
+					if (key.equals("reasonForTaxReturnPartYear")) {
+						System.out.println("incomeOtherReceived");
+					}
+					if (key.equals("class") || key.equals("year")) {
+						// todo exclude fields by annotation
+						continue;
+					}
+					Field f = this.getClass().getDeclaredField(key);
+					f.setAccessible(true);
+					Object field = f.get(this);
+					if (f.getAnnotation(UseChildFields.class) != null) {
+						Map<String, Object> describeChild = PropertyUtils.describe(field);
+						for (Map.Entry<String, Object> childEntry : describeChild.entrySet()) {
+							String childKey = childEntry.getKey();
+							if ("class".equals(childKey)) {
+								continue;
+							}
+							Object childValue = childEntry.getValue();
+							String fieldName = propertyToFieldMap.get(childKey);
+							PDField pdField = acroForm.getField(fieldName);
+							System.out.println(fieldName + "->" + pdField);
+							pdField.setValue(String.valueOf(childValue));
+							System.out.println(fieldName + "->" + pdField);
+						}
 					} else {
-						processField(acroForm, propertyToFieldMap.get(key), value, f);
-						//						if (fieldName == null) {
-						//							throw new IllegalStateException("No field mapping for: " + key);
-						//						}
-						//						PDField pdField = acroForm.getField(fieldName);
-						//						System.out.println(fieldName + "->" + pdField);
-						//						if (pdField == null) {
-						//							List<PDField> fields = acroForm.getFields();
-						//							for (PDField field1 : fields) {
-						//								System.out.println("Candidate field: " + field1.getFullyQualifiedName());
-						//							}
-						//						}
-						//						pdField.setValue(String.valueOf(value));
-						//						System.out.println(fieldName + "->" + pdField);
+						// String fieldName = propertyToFieldMap.get(key);
+						if (f.getAnnotation(UseDayMonthYear.class) != null) {
+							LocalDate localDate = (LocalDate) value;
+							if (value == null) {
+								//leave the field blank
+								continue;
+							}
+							int dayOfMonth = localDate.getDayOfMonth();
+							processField(acroForm, propertyToFieldMap.get(key + "_day"),
+									dayOfMonth >= 10 ? dayOfMonth : "0" + dayOfMonth, f);
+							int monthValue = localDate.getMonthValue();
+							processField(acroForm, propertyToFieldMap.get(key + "_month"),
+									monthValue >= 10 ? monthValue : "0" + monthValue, f);
+							int year2 = localDate.getYear();
+							processField(acroForm, propertyToFieldMap.get(key + "_year"),
+									year2 >= 10 ? year2 : "0" + year2, f);
+						} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
+							String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true")
+									: propertyToFieldMap.get(key + "_false");
+							processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
+						} else if (f.getAnnotation(UseValueMappings.class) != null) {
+							String mappedValue = propertyToFieldMap.get(key + "_" + value);
+							processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
+						} else {
+							processField(acroForm, propertyToFieldMap.get(key), value, f);
+							// if (fieldName == null) {
+							// throw new IllegalStateException("No field mapping for: " + key);
+							// }
+							// PDField pdField = acroForm.getField(fieldName);
+							// System.out.println(fieldName + "->" + pdField);
+							// if (pdField == null) {
+							// List<PDField> fields = acroForm.getFields();
+							// for (PDField field1 : fields) {
+							// System.out.println("Candidate field: " + field1.getFullyQualifiedName());
+							// }
+							// }
+							// pdField.setValue(String.valueOf(value));
+							// System.out.println(fieldName + "->" + pdField);
+						}
 					}
 				}
+			} catch (NullPointerException e) {
+				logger.error("Error processing: {}", key);
+				throw e;
 			}
 			System.out.println("done");
+			File parent = destinationDirectory != null ? new File(destinationDirectory) 
+					: new File(System.getProperty("user.home"), "Downloads");
+			String lowerCase = this.getFirstname().split(" ")[0].toLowerCase();
+			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
 			File ir3DraftForm = new File(
-					new File(System.getProperty("user.home"), "Downloads"),
-					String.format("ir3-%1$s-draft.pdf", year));
+					parent,
+					String.format("ir3-%1$s-%2$s-draft.pdf", year, lowerCase));
 			pdfTemplate.save(ir3DraftForm);
 			pdfTemplate.close();
 			logger.info("IR3 Form Completed Successfully");
@@ -1714,6 +1749,9 @@ public class IR3FormBean {
 	public void processField(PDAcroForm acroForm, String fieldName, Object value, Field f) throws IOException {
 		PDField pdField = acroForm.getField(fieldName);
 		System.out.println(fieldName + "->" + pdField);
+		if (f.getAnnotation(Skip.class) != null) {
+			return;
+		}
 		if (value instanceof Money) {
 			if (f.getAnnotation(OmitCents.class) != null) {
 				value = TaxReturnUtils.formatDollarsField((Money) value);
@@ -1748,163 +1786,163 @@ public class IR3FormBean {
 
 
 	//assumes the forms are in the user's Downloads folder
-	public void publishDraftV1() {
-		try {
-			File ir3Form = new File(
-					new File(System.getProperty("user.home"), "Downloads"),
-					String.format("ir3-%1$s.pdf", year));
-			PDDocument pdfTemplate = PDDocument.load(ir3Form);
-
-			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
-			PDAcroForm acroForm = docCatalog.getAcroForm();
-
-			//acroForm.get
-			List<PDField> fieldList = acroForm.getFields();
-
-			String[] fieldArray = new String[fieldList.size()];
-			int i = 0;
-			for (PDField sField : fieldList) {
-				fieldArray[i] = sField.getFullyQualifiedName();
-				i++;
-			}
-			for (String f : fieldArray) {
-				PDField field = acroForm.getField(f);
-				logger.info("Field name is: " + f);
-				if (f.contains(IR3FieldMapper.getFieldName(IR3Fields.irdNumber, year))) {
-					String irdNumber2 = this.getIrdNumber();
-					if (irdNumber2.length() == 8) {
-						irdNumber2 = String.format(" %1$s", irdNumber2);
-					}
-					field.setValue(irdNumber2);
-				} else if (f.contains(IR3FieldMapper.getFieldName(IR3Fields.salutation, year))) {
-					PDCheckBox radioButton = (PDCheckBox) field;
-					String salutationValue =
-							IR3FieldMapper.getSalutationFieldValue(this.getSalutation(), year);
-					radioButton.setValue(salutationValue);
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.firstname, year))) {
-					field.setValue(this.getFirstname());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.surname, year))) {
-					field.setValue(this.getSurname());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.postalAddressLine1, year))) {
-					field.setValue(this.getPostalAddressLine1());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.postalAddressLine2, year))) {
-					field.setValue(this.getPostalAddressLine2());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.streetAddressLine1, year))) {
-					field.setValue(this.getStreetAddressLine1());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.streetAddressLine2, year))) {
-					field.setValue(this.getStreetAddressLine2());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateOfBirth_day, year))) {
-					field.setValue(LocalDateUtils.formatDay(this.getDateOfBirth()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateOfBirth_month, year))) {
-					field.setValue(LocalDateUtils.formatMonth(this.getDateOfBirth()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateOfBirth_year, year))) {
-					field.setValue(String.valueOf(this.getDateOfBirth().getYear()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateStartExcludedOverseasIncome_day, year))) {
-					field.setValue(LocalDateUtils.formatDay(this.getDateStartExcludedOverseasIncome()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateStartExcludedOverseasIncome_month, year))) {
-					field.setValue(LocalDateUtils.formatMonth(this.getDateStartExcludedOverseasIncome()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateStartExcludedOverseasIncome_year, year))) {
-					field.setValue(String.valueOf(this.getDateStartExcludedOverseasIncome().getYear()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateEndExcludedOverseasIncome_day, year))) {
-					field.setValue(LocalDateUtils.formatDay(this.getDateEndExcludedOverseasIncome()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateEndExcludedOverseasIncome_month, year))) {
-					field.setValue(LocalDateUtils.formatMonth(this.getDateEndExcludedOverseasIncome()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateEndExcludedOverseasIncome_year, year))) {
-					field.setValue(String.valueOf(this.getDateEndExcludedOverseasIncome().getYear()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateStart2018TaxReturn_day, year))) {
-					field.setValue(LocalDateUtils.formatDay(this.getDateStart2018TaxReturn()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateStart2018TaxReturn_month, year))) {
-					field.setValue(LocalDateUtils.formatMonth(this.getDateStart2018TaxReturn()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateStart2018TaxReturn_year, year))) {
-					field.setValue(String.valueOf(this.getDateStart2018TaxReturn().getYear()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateEnd2018TaxReturn_day, year))) {
-					field.setValue(LocalDateUtils.formatDay(this.getDateEnd2018TaxReturn()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateEnd2018TaxReturn_month, year))) {
-					field.setValue(LocalDateUtils.formatMonth(this.getDateEnd2018TaxReturn()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.dateEnd2018TaxReturn_year, year))) {
-					field.setValue(String.valueOf(this.getDateEnd2018TaxReturn().getYear()));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.businessIndustryClassificationCode, year))) {
-					field.setValue(this.getBusinessIndustryClassificationCode());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.phonePrefix, year))) {
-					field.setValue(this.getPhonePrefix());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.phoneNumberExcludingPrefix, year))) {
-					field.setValue(this.getPhoneNumberExcludingPrefix());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.bankNumber, year))) {
-					field.setValue(this.getBankAccount().getBankNumber());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.branchNumber, year))) {
-					field.setValue(this.getBankAccount().getBranchNumber());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.bankAccountNumber, year))) {
-					field.setValue(this.getBankAccount().getBankAccountNumber());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.bankSuffix, year))) {
-					field.setValue(this.getBankAccount().getBankSuffix());
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.incomeAdjustmentsRequired, year))) {
-					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.incomeAdjustmentsRequired.name(), 
-							this.incomeAdjustmentsRequired, year));
-				} else if (f.contains(IR3FieldMapper.getFieldName(
-						IR3Fields.familyTaxCreditReceived, year))) {
-					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.familyTaxCreditReceived.name(), 
-							this.familyTaxCreditReceived, year));
-				} else if (f.equals(IR3FieldMapper.getFieldName(
-						IR3Fields.familyTaxCreditAmount, year))) {
-					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.familyTaxCreditAmount), PDFAlignment.RIGHT, 11);
-				} else if (f.equals(IR3FieldMapper.getFieldName(
-						IR3Fields.incomeWithTaxDeductedReceived, year))) {
-					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.incomeWithTaxDeductedReceived.name(), 
-							this.incomeWithTaxDeductedReceived, year));
-				} else if (f.equals(IR3FieldMapper.getFieldName(
-						IR3Fields.totalPAYEDeducted, year))) {
-					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalPAYEDeducted), PDFAlignment.RIGHT, 11);
-				} else if (f.equals(IR3FieldMapper.getFieldName(
-						IR3Fields.totalGrossIncome, year))) {
-					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalGrossIncome), PDFAlignment.RIGHT, 11);
-				} else if (f.equals(IR3FieldMapper.getFieldName(
-						IR3Fields.accEarnersLevy, year))) {
-					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.accEarnersLevy), PDFAlignment.RIGHT, 11);
-				} else if (f.equals(IR3FieldMapper.getFieldName(
-						IR3Fields.incomeNotLiableForAccEarnersLevy, year))) {
-					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.incomeNotLiableForAccEarnersLevy), PDFAlignment.RIGHT, 11);
-				} else if (f.equals(IR3FieldMapper.getFieldName(
-						IR3Fields.totalTaxDeducted, year))) {
-					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalTaxDeducted), PDFAlignment.RIGHT, 11);
-				} 
-			}
-			File ir3DraftForm = new File(
-					new File(System.getProperty("user.home"), "Downloads"),
-					String.format("ir3-%1$s-draft.pdf", year));
-			pdfTemplate.save(ir3DraftForm);
-			pdfTemplate.close();
-			logger.info("IR3 Form Completed Successfully");
-		} catch (Exception e) {
-			throw new TaxBeansException(e);
-		}
-	}
+//	public void publishDraftV1() {
+//		try {
+//			File ir3Form = new File(
+//					new File(System.getProperty("user.home"), "Downloads"),
+//					String.format("ir3-%1$s.pdf", year));
+//			PDDocument pdfTemplate = PDDocument.load(ir3Form);
+//
+//			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
+//			PDAcroForm acroForm = docCatalog.getAcroForm();
+//
+//			//acroForm.get
+//			List<PDField> fieldList = acroForm.getFields();
+//
+//			String[] fieldArray = new String[fieldList.size()];
+//			int i = 0;
+//			for (PDField sField : fieldList) {
+//				fieldArray[i] = sField.getFullyQualifiedName();
+//				i++;
+//			}
+//			for (String f : fieldArray) {
+//				PDField field = acroForm.getField(f);
+//				logger.info("Field name is: " + f);
+//				if (f.contains(IR3FieldMapper.getFieldName(IR3Fields.irdNumber, year))) {
+//					String irdNumber2 = this.getIrdNumber();
+//					if (irdNumber2.length() == 8) {
+//						irdNumber2 = String.format(" %1$s", irdNumber2);
+//					}
+//					field.setValue(irdNumber2);
+//				} else if (f.contains(IR3FieldMapper.getFieldName(IR3Fields.salutation, year))) {
+//					PDCheckBox radioButton = (PDCheckBox) field;
+//					String salutationValue =
+//							IR3FieldMapper.getSalutationFieldValue(this.getSalutation(), year);
+//					radioButton.setValue(salutationValue);
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.firstname, year))) {
+//					field.setValue(this.getFirstname());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.surname, year))) {
+//					field.setValue(this.getSurname());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.postalAddressLine1, year))) {
+//					field.setValue(this.getPostalAddressLine1());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.postalAddressLine2, year))) {
+//					field.setValue(this.getPostalAddressLine2());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.streetAddressLine1, year))) {
+//					field.setValue(this.getStreetAddressLine1());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.streetAddressLine2, year))) {
+//					field.setValue(this.getStreetAddressLine2());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateOfBirth_day, year))) {
+//					field.setValue(LocalDateUtils.formatDay(this.getDateOfBirth()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateOfBirth_month, year))) {
+//					field.setValue(LocalDateUtils.formatMonth(this.getDateOfBirth()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateOfBirth_year, year))) {
+//					field.setValue(String.valueOf(this.getDateOfBirth().getYear()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateStartExcludedOverseasIncome_day, year))) {
+//					field.setValue(LocalDateUtils.formatDay(this.getDateStartExcludedOverseasIncome()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateStartExcludedOverseasIncome_month, year))) {
+//					field.setValue(LocalDateUtils.formatMonth(this.getDateStartExcludedOverseasIncome()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateStartExcludedOverseasIncome_year, year))) {
+//					field.setValue(String.valueOf(this.getDateStartExcludedOverseasIncome().getYear()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateEndExcludedOverseasIncome_day, year))) {
+//					field.setValue(LocalDateUtils.formatDay(this.getDateEndExcludedOverseasIncome()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateEndExcludedOverseasIncome_month, year))) {
+//					field.setValue(LocalDateUtils.formatMonth(this.getDateEndExcludedOverseasIncome()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateEndExcludedOverseasIncome_year, year))) {
+//					field.setValue(String.valueOf(this.getDateEndExcludedOverseasIncome().getYear()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateStart2018TaxReturn_day, year))) {
+//					field.setValue(LocalDateUtils.formatDay(this.getDateStart2018TaxReturn()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateStart2018TaxReturn_month, year))) {
+//					field.setValue(LocalDateUtils.formatMonth(this.getDateStart2018TaxReturn()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateStart2018TaxReturn_year, year))) {
+//					field.setValue(String.valueOf(this.getDateStart2018TaxReturn().getYear()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateEnd2018TaxReturn_day, year))) {
+//					field.setValue(LocalDateUtils.formatDay(this.getDateEnd2018TaxReturn()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateEnd2018TaxReturn_month, year))) {
+//					field.setValue(LocalDateUtils.formatMonth(this.getDateEnd2018TaxReturn()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.dateEnd2018TaxReturn_year, year))) {
+//					field.setValue(String.valueOf(this.getDateEnd2018TaxReturn().getYear()));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.businessIndustryClassificationCode, year))) {
+//					field.setValue(this.getBusinessIndustryClassificationCode());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.phonePrefix, year))) {
+//					field.setValue(this.getPhonePrefix());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.phoneNumberExcludingPrefix, year))) {
+//					field.setValue(this.getPhoneNumberExcludingPrefix());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.bankNumber, year))) {
+//					field.setValue(this.getBankAccount().getBankNumber());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.branchNumber, year))) {
+//					field.setValue(this.getBankAccount().getBranchNumber());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.bankAccountNumber, year))) {
+//					field.setValue(this.getBankAccount().getBankAccountNumber());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.bankSuffix, year))) {
+//					field.setValue(this.getBankAccount().getBankSuffix());
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.incomeAdjustmentsRequired, year))) {
+//					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.incomeAdjustmentsRequired.name(), 
+//							this.incomeAdjustmentsRequired, year));
+//				} else if (f.contains(IR3FieldMapper.getFieldName(
+//						IR3Fields.familyTaxCreditReceived, year))) {
+//					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.familyTaxCreditReceived.name(), 
+//							this.familyTaxCreditReceived, year));
+//				} else if (f.equals(IR3FieldMapper.getFieldName(
+//						IR3Fields.familyTaxCreditAmount, year))) {
+//					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.familyTaxCreditAmount), PDFAlignment.RIGHT, 11);
+//				} else if (f.equals(IR3FieldMapper.getFieldName(
+//						IR3Fields.incomeWithTaxDeductedReceived, year))) {
+//					field.setValue(IR3FieldMapper.getBooleanFieldValue(IR3Fields.incomeWithTaxDeductedReceived.name(), 
+//							this.incomeWithTaxDeductedReceived, year));
+//				} else if (f.equals(IR3FieldMapper.getFieldName(
+//						IR3Fields.totalPAYEDeducted, year))) {
+//					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalPAYEDeducted), PDFAlignment.RIGHT, 11);
+//				} else if (f.equals(IR3FieldMapper.getFieldName(
+//						IR3Fields.totalGrossIncome, year))) {
+//					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalGrossIncome), PDFAlignment.RIGHT, 11);
+//				} else if (f.equals(IR3FieldMapper.getFieldName(
+//						IR3Fields.accEarnersLevy, year))) {
+//					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.accEarnersLevy), PDFAlignment.RIGHT, 11);
+//				} else if (f.equals(IR3FieldMapper.getFieldName(
+//						IR3Fields.incomeNotLiableForAccEarnersLevy, year))) {
+//					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.incomeNotLiableForAccEarnersLevy), PDFAlignment.RIGHT, 11);
+//				} else if (f.equals(IR3FieldMapper.getFieldName(
+//						IR3Fields.totalTaxDeducted, year))) {
+//					PDFUtils.setFieldValue(field, TaxReturnUtils.formatMoneyField(this.totalTaxDeducted), PDFAlignment.RIGHT, 11);
+//				} 
+//			}
+//			File ir3DraftForm = new File(
+//					new File(System.getProperty("user.home"), "Downloads"),
+//					String.format("ir3-%1$s-draft.pdf", year));
+//			pdfTemplate.save(ir3DraftForm);
+//			pdfTemplate.close();
+//			logger.info("IR3 Form Completed Successfully");
+//		} catch (Exception e) {
+//			throw new TaxBeansException(e);
+//		}
+//	}
 }
