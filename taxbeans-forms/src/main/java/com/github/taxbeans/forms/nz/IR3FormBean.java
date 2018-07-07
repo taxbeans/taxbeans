@@ -29,6 +29,7 @@ import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.Skip;
+import com.github.taxbeans.forms.SkipIfFalse;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
@@ -181,6 +182,7 @@ public class IR3FormBean {
 	private boolean familyTaxCreditReceived;
 
 	@RightAlign(11)
+	@SkipIfFalse("familyTaxCreditReceived")
 	private Money familyTaxCreditAmount;
 
 	@UseTrueFalseMappings
@@ -618,45 +620,59 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(11)
+	@SkipIfFalse("schedularPaymentsReceived")
 	private Money totalSchedularTaxDeducted;
 	
 	@RightAlign(11)
+	@SkipIfFalse("schedularPaymentsReceived")
 	private Money totalSchedularGrossPayments;
 	
 	@RightAlign(11)
+	@SkipIfFalse("schedularPaymentsReceived")
 	private Money schedularPaymentExpenses;
 	
 	@RightAlign(11)
+	@SkipIfFalse("schedularPaymentsReceived")
 	private Money netSchedularPayments;
 	
 	@RightAlign(11)
+	@SkipIfFalse("interestFromNZReceived")
 	private Money totalRWT;
 	
 	@RightAlign(11)
+	@SkipIfFalse("interestFromNZReceived")
 	private Money totalGrossInterest;
 	
 	@RightAlign(11)
+	@SkipIfFalse("dividendsFromNZReceived")
 	private Money totalDividendImputationCredits;
 	
 	@RightAlign(11)
+	@SkipIfFalse("dividendsFromNZReceived")
 	private Money totalDividendRWTAndPaymentsForForeignDividends;
 	
 	@RightAlign(11)
+	@SkipIfFalse("dividendsFromNZReceived")
 	private Money totalGrossDividends;
 	
 	@RightAlign(11)
+	@SkipIfFalse("taxableDistributionsFromMaoriAuthorityReceived")
 	private Money totalMaoriAuthorityCredits;
 
 	@RightAlign(11)
+	@SkipIfFalse("taxableDistributionsFromMaoriAuthorityReceived")
 	private Money totalMaoriAuthorityDistributions;
 
 	@RightAlign(11)
+	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
 	private Money totalTaxPaidByTrustees;
 
 	@RightAlign(11)
+	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
 	private Money totalEstateOrTrustIncome;
 
 	@RightAlign(11)
+	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
 	private Money totalTaxableDistributionsFromNonComplyingTrusts;
 	
 	@RightAlign(11)
@@ -780,6 +796,7 @@ public class IR3FormBean {
 	@UseDayMonthYear
 	private LocalDate dateEndExcludedOverseasIncome;
 	
+	@SkipIfFalse("schedularPaymentsReceived")
 	private String minusSignForSchedularPaymentsExpenses;
 	
 	public String getMinusSignForSchedularPaymentsExpenses() {
@@ -790,6 +807,7 @@ public class IR3FormBean {
 		this.minusSignForSchedularPaymentsExpenses = minusSignForSchedularPaymentsExpenses;
 	}
 
+	@SkipIfFalse("schedularPaymentsReceived")
 	private String minusSignForSchedularNetPayments;
 	
 	public String getMinusSignForSchedularNetPayments() {
@@ -800,6 +818,7 @@ public class IR3FormBean {
 		this.minusSignForSchedularNetPayments = minusSignForSchedularNetPayments;
 	}
 
+	@SkipIfFalse("interestFromNZReceived")
 	private String minusSignForTotalGrossInterestReceivedFromEligibleEntities;
 	
 	public String getMinusSignForTotalGrossInterestReceivedFromEligibleEntities() {
@@ -811,6 +830,7 @@ public class IR3FormBean {
 		this.minusSignForTotalGrossInterestReceivedFromEligibleEntities = minusSignForTotalGrossInterestReceivedFromEligibleEntities;
 	}
 
+	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
 	private String minusSignForNZTotalEstateOrCompliantTrustIncome;
 	
 	public String getMinusSignForNZTotalEstateOrCompliantTrustIncome() {
@@ -821,6 +841,7 @@ public class IR3FormBean {
 		this.minusSignForNZTotalEstateOrCompliantTrustIncome = minusSignForNZTotalEstateOrCompliantTrustIncome;
 	}
 
+	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
 	private String minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
 	
 	public String getMinusSignForNZTotalTaxableDistrbutionsNonCompliantTrust() {
@@ -1670,6 +1691,14 @@ public class IR3FormBean {
 					Field f = this.getClass().getDeclaredField(key);
 					f.setAccessible(true);
 					Object field = f.get(this);
+					SkipIfFalse annotation = f.getAnnotation(SkipIfFalse.class);
+					if (annotation != null) {
+						Field declaredField = this.getClass().getDeclaredField(annotation.value());
+						declaredField.setAccessible(true);
+						if (!(boolean) declaredField.get(this)) {
+							continue;
+						}
+					}
 					if (f.getAnnotation(UseChildFields.class) != null) {
 						Map<String, Object> describeChild = PropertyUtils.describe(field);
 						for (Map.Entry<String, Object> childEntry : describeChild.entrySet()) {
