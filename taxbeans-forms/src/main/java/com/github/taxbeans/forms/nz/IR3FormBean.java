@@ -43,6 +43,18 @@ import com.github.taxbeans.pdf.PDFUtils;
 
 public class IR3FormBean {
 
+	private static final String IS_INCOME_OTHER_RECEIVED = "incomeOtherReceived";
+
+	private static final String RENTS_RECEIVED = "rentsReceived";
+
+	private static final String IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED = "incomeFromSelfEmploymentReceived";
+
+	private static final String TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED = "trustOrEstateIncomeFromNZReceived";
+
+	private static final String INTEREST_FROM_NZ_RECEIVED = "interestFromNZReceived";
+
+	private static final String SCHEDULAR_PAYMENTS_RECEIVED = "schedularPaymentsReceived";
+
 	final Logger logger = LoggerFactory.getLogger(IR3FormBean.class);
 
 	private int year = 2017;
@@ -620,27 +632,27 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(11)
-	@SkipIfFalse("schedularPaymentsReceived")
+	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money totalSchedularTaxDeducted;
 	
 	@RightAlign(11)
-	@SkipIfFalse("schedularPaymentsReceived")
+	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money totalSchedularGrossPayments;
 	
 	@RightAlign(11)
-	@SkipIfFalse("schedularPaymentsReceived")
+	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money schedularPaymentExpenses;
 	
 	@RightAlign(11)
-	@SkipIfFalse("schedularPaymentsReceived")
+	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money netSchedularPayments;
 	
 	@RightAlign(11)
-	@SkipIfFalse("interestFromNZReceived")
+	@SkipIfFalse(INTEREST_FROM_NZ_RECEIVED)
 	private Money totalRWT;
 	
 	@RightAlign(11)
-	@SkipIfFalse("interestFromNZReceived")
+	@SkipIfFalse(INTEREST_FROM_NZ_RECEIVED)
 	private Money totalGrossInterest;
 	
 	@RightAlign(11)
@@ -664,21 +676,23 @@ public class IR3FormBean {
 	private Money totalMaoriAuthorityDistributions;
 
 	@RightAlign(11)
-	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
+	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private Money totalTaxPaidByTrustees;
 
 	@RightAlign(11)
-	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
+	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private Money totalEstateOrTrustIncome;
 
 	@RightAlign(11)
-	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
+	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private Money totalTaxableDistributionsFromNonComplyingTrusts;
 	
 	@RightAlign(11)
+	@SkipIfFalse("overseasIncomeReceived")
 	private Money totalOverseasTaxPaid;
 	
 	@RightAlign(11)
+	@SkipIfFalse("overseasIncomeReceived")
 	private Money totalOverseasIncome;
 	
 	@RightAlign(11)
@@ -712,12 +726,15 @@ public class IR3FormBean {
 	private Money totalShareholderEmployeeSalary;
 	
 	@RightAlign(11)
+	@SkipIfFalse(RENTS_RECEIVED)
 	private Money netRents;
 	
 	@RightAlign(11)
+	@SkipIfFalse(IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED)
 	private Money selfEmployedNetIncome;
 	
 	@RightAlign(11)
+	@SkipIfFalse(IS_INCOME_OTHER_RECEIVED)
 	private Money totalOtherNetIncome;
 
 	@RightAlign(11)
@@ -796,7 +813,7 @@ public class IR3FormBean {
 	@UseDayMonthYear
 	private LocalDate dateEndExcludedOverseasIncome;
 	
-	@SkipIfFalse("schedularPaymentsReceived")
+	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private String minusSignForSchedularPaymentsExpenses;
 	
 	public String getMinusSignForSchedularPaymentsExpenses() {
@@ -807,7 +824,7 @@ public class IR3FormBean {
 		this.minusSignForSchedularPaymentsExpenses = minusSignForSchedularPaymentsExpenses;
 	}
 
-	@SkipIfFalse("schedularPaymentsReceived")
+	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private String minusSignForSchedularNetPayments;
 	
 	public String getMinusSignForSchedularNetPayments() {
@@ -818,7 +835,7 @@ public class IR3FormBean {
 		this.minusSignForSchedularNetPayments = minusSignForSchedularNetPayments;
 	}
 
-	@SkipIfFalse("interestFromNZReceived")
+	@SkipIfFalse(INTEREST_FROM_NZ_RECEIVED)
 	private String minusSignForTotalGrossInterestReceivedFromEligibleEntities;
 	
 	public String getMinusSignForTotalGrossInterestReceivedFromEligibleEntities() {
@@ -830,7 +847,7 @@ public class IR3FormBean {
 		this.minusSignForTotalGrossInterestReceivedFromEligibleEntities = minusSignForTotalGrossInterestReceivedFromEligibleEntities;
 	}
 
-	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
+	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private String minusSignForNZTotalEstateOrCompliantTrustIncome;
 	
 	public String getMinusSignForNZTotalEstateOrCompliantTrustIncome() {
@@ -841,7 +858,7 @@ public class IR3FormBean {
 		this.minusSignForNZTotalEstateOrCompliantTrustIncome = minusSignForNZTotalEstateOrCompliantTrustIncome;
 	}
 
-	@SkipIfFalse("trustOrEstateIncomeFromNZReceived")
+	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private String minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
 	
 	public String getMinusSignForNZTotalTaxableDistrbutionsNonCompliantTrust() {
@@ -913,6 +930,7 @@ public class IR3FormBean {
 		this.minusSignForTotalShareholderEmployeeSalary = minusSignForTotalShareholderEmployeeSalary;
 	}
 
+	@SkipIfFalse(IR3FormBean.RENTS_RECEIVED)
 	private String minusSignForNetRents;
 	
 	public String getMinusSignForNetRents() {
@@ -923,6 +941,7 @@ public class IR3FormBean {
 		this.minusSignForNetRents = minusSignForNetRents;
 	}
 
+	@SkipIfFalse(IR3FormBean.IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED)
 	private String minusSignForSelfEmployedNetIncome;
 	
 	public String getMinusSignForSelfEmployedNetIncome() {
@@ -933,6 +952,7 @@ public class IR3FormBean {
 		this.minusSignForSelfEmployedNetIncome = minusSignForSelfEmployedNetIncome;
 	}
 
+	@SkipIfFalse(IS_INCOME_OTHER_RECEIVED)
 	private String minusSignForTotalOtherNetIncome;
 	
 	public String getMinusSignForTotalOtherNetIncome() {
