@@ -43,6 +43,8 @@ import com.github.taxbeans.pdf.PDFUtils;
 
 public class IR3FormBean {
 
+	private static final String EXPENSES_OTHER_RECEIVED = "expensesOtherReceived";
+
 	private static final String OTHER_INCOME_RECEIVED = "incomeOtherReceived";
 
 	private static final String EXCESS_IMPUTATION_CREDITS_BROUGHT_FORWARD_ELIGIBLE = "excessImputationCreditsBroughtForwardEligible";
@@ -176,7 +178,7 @@ public class IR3FormBean {
 		this.otherIncomeType = otherIncomeType;
 	}
 
-
+	@SkipIfFalse(EXPENSES_OTHER_RECEIVED)
 	private String alternativePersonFirstNamesCompletedReturn;
 	
 	public String getAlternativePersonFirstNamesCompletedReturn() {
@@ -187,7 +189,7 @@ public class IR3FormBean {
 		this.alternativePersonFirstNamesCompletedReturn = alternativePersonFirstNamesCompletedReturn;
 	}
 
-
+	@SkipIfFalse(EXPENSES_OTHER_RECEIVED)
 	private String alternativePersonSurnameCompletedReturn;
 
 	public String getAlternativePersonSurnameCompletedReturn() {
@@ -774,6 +776,7 @@ public class IR3FormBean {
 	private Money totalIncome;
 
 	@RightAlign(11)
+	@SkipIfFalse(EXPENSES_OTHER_RECEIVED)
 	private Money totalOtherExpensesClaimed;
 
 	@RightAlign(11)
