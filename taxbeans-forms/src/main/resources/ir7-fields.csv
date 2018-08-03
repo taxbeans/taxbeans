@@ -1,4 +1,4 @@
-,2010,2011,2012,2013,2014,2015,2016,2017
+"",2010,2011,2012,2013,2014,2015,2016,2017
 irdNumber,ird 1,ird 1,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird
 partnershipNameLine1,4,4,2.1,2.1,2.1,2.1,2.1,2.1
 partnershipNameLine2,4.1,4.1,2.2,2.2,2.2,2.2,2.2,2.2
@@ -9,7 +9,7 @@ postalAddressLine2,9,9,4.2,4.2,4.2,4.2,4.2,4.2
 postalAddressLine3,10,10,0,0,0,0,0,0
 physicalAddressLine1,4.4.1,4.4.1,5.1,5.1,5.1,5.1,5.1,5.1
 physicalAddressLine2,4.4.2,4.4.2,5.2,5.2,5.2,5.2,5.2,5.2
-bicCode,14,14,6,6,6,6,6.0_0_0,6.0_0_0
+bicCode,14,14,6,6,6,6,6.0,6.0_0_0
 daytimePhoneNumberPrefix,15,15,7.1,7.1,7.1,7.1,7.1,7.1
 daytimePhoneNumberSuffix,16,16,7.2,7.2,7.2,7.2,7.2,7.2
 firstReturnRadio,20,20,8,8,8,8,8,8
