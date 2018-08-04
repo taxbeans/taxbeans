@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.money.Monetary;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +99,8 @@ public class Account {
 
 	// Optional field to hold commodityName
 	private String commodityName;
+
+	private String lastCurrencyCode;
 
 	public Account() {
 	}
@@ -294,8 +298,21 @@ public class Account {
 		//TODO convert all transaction dates to times or have a common object
 		//if transaction has a date but not a time then the time can be as at 5:00pm on that day
 		//but where possible the time of each transaction should be estimated
+		String firstCurrencyCode = null;
 		for (AccountEntry entry : accountEntries) {
 			
+			if (entry.getCurrency() == null) {
+				//temporary workaround until currency handling is fixed:
+				entry.setCurrency(Monetary.getCurrency("NZD"));
+			}
+			if (firstCurrencyCode == null) {
+				firstCurrencyCode = entry.getCurrency().getCurrencyCode();
+			}
+			String currency = entry.getCurrency().getCurrencyCode();
+			if (!currency.equals(firstCurrencyCode)) {
+				throw new AssertionError(String.format("Currency: %s inconsistent with first currency: %s", currency, firstCurrencyCode));
+			}
+			lastCurrencyCode = currency;
 			boolean condition = asAt ? entry.getTransaction().getDate().compareTo(time) > 0 : 
 				entry.getTransaction().getDate().compareTo(time) >= 0;
 				
@@ -310,6 +327,10 @@ public class Account {
 		return balance;
 	}
 	
+	public String getLastCurrencyCode() {
+		return lastCurrencyCode;
+	}
+
 	public BigDecimal getBalanceAsAt(ZonedDateTime time) {
 		return getBalanceAsAtOrBefore(time, true);
 	}

@@ -94,9 +94,9 @@ public class Journal {
 		BigDecimal credits = BigDecimal.ZERO;
 		for (AccountEntry entry : transaction.getAccountEntries()) {
 			if (entry.getAccountSide() == AccountSide.DEBIT) {
-					debits.add(entry.getAmount());
+				debits = debits.add(entry.getAmount());
 			} else {
-				credits.add(entry.getAmount());
+				credits = credits.add(entry.getAmount());
 			}
 		}
 		if (credits.compareTo(debits) != 0) {
