@@ -1294,6 +1294,7 @@ public class IR3FormBean {
 
 	public void setTotalShareholderEmployeeSalary(Money totalShareholderEmployeeSalary) {
 		this.totalShareholderEmployeeSalary = totalShareholderEmployeeSalary;
+		this.minusSignForTotalShareholderEmployeeSalary = totalShareholderEmployeeSalary.signum() < 0 ? "-" : "";
 	}
 
 	public Money getincomeSubtotal() {
@@ -1302,6 +1303,7 @@ public class IR3FormBean {
 
 	public void setIncomeSubtotal(Money incomeSubtotal) {
 		this.incomeSubtotal = incomeSubtotal;
+		this.minusSignForIncomeSubtotal = incomeSubtotal.signum() < 0 ? "-" : "";
 	}
 
 	public Money getTaxCreditSubtotal() {
@@ -1358,6 +1360,8 @@ public class IR3FormBean {
 
 	public void setTotalActivePartnershipIncome(Money totalActivePartnershipIncome) {
 		this.totalActivePartnershipIncome = totalActivePartnershipIncome;
+		this.setMinusSignForTotalActivePartnershipIncome(
+				totalActivePartnershipIncome.signum() < 0 ? "-" : "");
 	}
 
 	public Money getTotalPartnershipTaxCredits() {
