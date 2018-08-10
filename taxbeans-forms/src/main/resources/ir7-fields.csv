@@ -9,7 +9,7 @@ postalAddressLine2,9,9,4.2,4.2,4.2,4.2,4.2,4.2
 postalAddressLine3,10,10,0,0,0,0,0,0
 physicalAddressLine1,4.4.1,4.4.1,5.1,5.1,5.1,5.1,5.1,5.1
 physicalAddressLine2,4.4.2,4.4.2,5.2,5.2,5.2,5.2,5.2,5.2
-bicCode,14,14,6,6,6,6,6.0,6.0_0_0
+bicCode,14,14,6,6,6,6,6.0,6.0
 daytimePhoneNumberPrefix,15,15,7.1,7.1,7.1,7.1,7.1,7.1
 daytimePhoneNumberSuffix,16,16,7.2,7.2,7.2,7.2,7.2,7.2
 firstReturnRadio,20,20,8,8,8,8,8,8
