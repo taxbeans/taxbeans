@@ -433,7 +433,7 @@ public class IR3FormBean {
 	@RightAlign(11)
 	@OmitCents
 	@IncludeFormatSpacing
-	@SkipIfFalse("refundDue")
+	@SkipIfFalse("residualIncomeTaxDebitHigherThan2500Dollars")
 	private Money taxPayment2018;
 
 
