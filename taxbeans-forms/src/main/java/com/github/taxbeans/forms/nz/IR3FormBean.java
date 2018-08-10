@@ -333,11 +333,11 @@ public class IR3FormBean {
 	private Money refundTotal;
 
 	@RightAlign(11)
-	@SkipIfFalse("refundDue")
+	@SkipIfFalse("refundIsTransferredTo2018")
 	private Money refundTransferTo2018;
 
 	@RightAlign(11)
-	@SkipIfFalse("refundDue")
+	@SkipIfFalse("refundIsTransferredToStudentLoan")
 	private Money refundTransferToStudentLoan;
 
 	@UseTrueFalseMappings
@@ -1685,6 +1685,10 @@ public class IR3FormBean {
 
 	public void setResidualIncomeTax(Money residualIncomeTax) {
 		this.residualIncomeTax = residualIncomeTax;
+		if (this.residualIncomeTax.signum() < 0) {
+			this.setResidualIncomeTaxIsCredit(true);
+			this.residualIncomeTax = this.residualIncomeTax.abs();
+		}
 	}
 
 	public void setResidualIncomeTaxDebitHigherThan2500Dollars(boolean residualIncomeTaxDebitHigherThan2500Dollars) {
@@ -1750,6 +1754,10 @@ public class IR3FormBean {
 
 	public void setTaxCalculationResult(Money taxCalculationResult) {
 		this.taxCalculationResult = taxCalculationResult;
+		if (this.taxCalculationResult.signum() < 0) {
+			this.setTaxOnTaxableIncomeIsCredit(true);
+			this.taxCalculationResult = this.taxCalculationResult.abs();
+		}
 	}
 
 	public void setTaxCreditQualifyingMonthsNumber(String taxCreditQualifyingMonthsNumber) {

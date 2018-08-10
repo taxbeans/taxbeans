@@ -165,8 +165,8 @@ refundIsTransferredToSomeoneElsesStudentLoan,34 check c
 refundIsTransferredToSomeoneElsesStudentLoan_true,4
 refundIsTransferredToSomeoneElsesStudentLoan_false,Off
 refundIsTransferredToOther,34 other
-refundIsTransferredToOther_true,Off
-refundIsTransferredToOther_false,4
+refundIsTransferredToOther_true,4
+refundIsTransferredToOther_false,Off
 refundOtherTaxAccountReceiverName,34 name of taxpayer 1
 refundOtherTaxAccountReceiverIRD,box 34F
 refundOtherTaxAccountReceiverAmount,box 34G
