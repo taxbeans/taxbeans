@@ -6,14 +6,9 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.pdfbox.cos.COSArray;
-import org.apache.pdfbox.cos.COSBase;
-import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.cos.COSObject;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -34,12 +29,9 @@ import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.UseValueMappings;
-import com.github.taxbeans.forms.utils.LocalDateUtils;
 import com.github.taxbeans.forms.utils.TaxReturnUtils;
 import com.github.taxbeans.model.nz.NZBankAccount;
 import com.github.taxbeans.model.nz.Salutation;
-import com.github.taxbeans.pdf.PDFAlignment;
-import com.github.taxbeans.pdf.PDFUtils;
 
 public class IR3FormBean {
 
@@ -84,6 +76,9 @@ public class IR3FormBean {
 	private String streetAddressLine1;
 
 	private String streetAddressLine2;
+	
+	@Skip
+	private boolean refundDue;
 	
 	@RightAlign(11)
 	private Money refundCopiedPlusOverpayment2018;
@@ -582,6 +577,8 @@ public class IR3FormBean {
 	public void setRefundIsTransferredToOther(boolean refundIsTransferredToOther) {
 		this.refundIsTransferredToOther = refundIsTransferredToOther;
 	}
+	
+	@SkipIfFalse("refundIsTransferredToSomeoneElsesTaxAccount")
 	private String refundOtherTaxAccountReceiverName;
 	
 	public String getRefundOtherTaxAccountReceiverName() {
@@ -593,6 +590,7 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(9)
+	@SkipIfFalse("refundIsTransferredToSomeoneElsesTaxAccount")
 	private String refundOtherTaxAccountReceiverIRD;
 	
 	public String getRefundOtherTaxAccountReceiverIRD() {
@@ -604,6 +602,7 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(11)
+	@SkipIfFalse("refundIsTransferredToSomeoneElsesTaxAccount")
 	private Money refundOtherTaxAccountReceiverAmount;
 	
 	public Money getRefundOtherTaxAccountReceiverAmount() {
@@ -625,6 +624,7 @@ public class IR3FormBean {
 		this.refundOtherTaxAccountReceiverYearEnded31March = refundOtherTaxAccountReceiverYearEnded31March;
 	}
 
+	@SkipIfFalse("refundIsTransferredToSomeoneElsesStudentLoan")
 	private String refundOtherStudentLoanReceiverName;
 	
 	public String getRefundOtherStudentLoanReceiverName() {
@@ -636,6 +636,7 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(9)
+	@SkipIfFalse("refundIsTransferredToSomeoneElsesStudentLoan")
 	private String refundOtherStudentLoanReceiverIRD;
 	
 	public String getRefundOtherStudentLoanReceiverIRD() {
@@ -647,6 +648,7 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(11)
+	@SkipIfFalse("refundIsTransferredToSomeoneElsesStudentLoan")
 	private Money refundOtherStudentLoanReceiverAmount;
 
 	public Money getRefundOtherStudentLoanReceiverAmount() {
@@ -783,9 +785,11 @@ public class IR3FormBean {
 	private Money incomeAfterExpenses;
 	
 	@RightAlign(11)
+	@SkipIfFalse("netLossesBroughtForwardClaimed")
 	private Money amountBroughtForward;
 	
 	@RightAlign(11)
+	@SkipIfFalse("netLossesBroughtForwardClaimed")
 	private Money amountClaimedThisYear;
 	
 	@RightAlign(11)
@@ -805,9 +809,11 @@ public class IR3FormBean {
 	private Money taxCalculationResult;
 	
 	@RightAlign(11)
+	@SkipIfFalse("refundDue")
 	private Money refundCopied;
 	
 	@RightAlign(11)
+	@SkipIfFalse("refundDue")
 	private Money refundOverpayment2018;
 	
 	@RightAlign(1)
@@ -822,17 +828,21 @@ public class IR3FormBean {
 	}
 
 	@RightAlign(11)
+	@SkipIfFalse("refundDue")
 	private Money refundTransferTo2018;
 	
 	@RightAlign(11)
+	@SkipIfFalse("refundDue")
 	private Money refundTransferToStudentLoan;
 	
 	@RightAlign(11)
+	@SkipIfFalse("refundDue")
 	private Money refundTotal;
 	
 	@RightAlign(11)
 	@OmitCents
 	@IncludeFormatSpacing
+	@SkipIfFalse("refundDue")
 	private Money taxPayment2018;
 	
 	@UseDayMonthYear
@@ -1219,9 +1229,14 @@ public class IR3FormBean {
 	public Money getTotalIncome() {
 		return totalIncome;
 	}
+	
+	private String calculateMinusSign(Money value) {
+		return value.signum() < 0 ? "-" : "";
+	}
 
 	public void setTotalIncome(Money totalIncome) {
 		this.totalIncome = totalIncome;
+		this.setMinusSignForTotalIncome(calculateMinusSign(totalIncome));
 	}
 
 	public Money getTotalOtherExpensesClaimed() {
@@ -1238,6 +1253,7 @@ public class IR3FormBean {
 
 	public void setIncomeAfterExpenses(Money incomeAfterExpenses) {
 		this.incomeAfterExpenses = incomeAfterExpenses;
+		this.setMinusSignForIncomeAfterExpenses(calculateMinusSign(incomeAfterExpenses));;
 	}
 
 	public Money getAmountBroughtForward() {
@@ -1262,6 +1278,7 @@ public class IR3FormBean {
 
 	public void setTaxableIncome(Money taxableIncome) {
 		this.taxableIncome = taxableIncome;
+		this.setMinusSignForTaxableIncome(this.calculateMinusSign(taxableIncome));
 	}
 
 	public Money getExcessImputationCreditsBroughtForward() {
@@ -1886,6 +1903,14 @@ public class IR3FormBean {
 			}
 		}
 		pdField.setValue(String.valueOf(value));
+	}
+
+	public boolean isRefundDue() {
+		return refundDue;
+	}
+
+	public void setRefundDue(boolean refundDue) {
+		this.refundDue = refundDue;
 	}
 
 
