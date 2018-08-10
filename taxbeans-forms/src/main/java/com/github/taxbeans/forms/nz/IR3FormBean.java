@@ -265,6 +265,7 @@ public class IR3FormBean {
 	private Money priorYearsNonAllowableDeductionsClaimedThisYear;
 
 	@UseValueMappings
+	@SkipIfFalse("returnForPartYear")
 	private int reasonForTaxReturnPartYear;
 
 	@RightAlign(11)
@@ -272,12 +273,11 @@ public class IR3FormBean {
 	private Money refundCopied;
 
 	@RightAlign(11)
+	@SkipIfFalse("refundDue")
 	private Money refundCopiedPlusOverpayment2018;
-
 
 	@Skip
 	private boolean refundDue;
-	
 	
 	@UseTrueFalseMappings
 	private boolean refundIsTransferredTo2018;
@@ -319,6 +319,7 @@ public class IR3FormBean {
 	private String refundOtherTaxAccountReceiverName;
 
 	@RightAlign(4)
+	@SkipIfFalse("refundIsTransferredToSomeoneElsesTaxAccount")
 	private String refundOtherTaxAccountReceiverYearEnded31March;
 
 
