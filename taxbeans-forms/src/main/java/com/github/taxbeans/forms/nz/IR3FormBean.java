@@ -283,6 +283,7 @@ public class IR3FormBean {
 	private boolean refundIsTransferredTo2018;
 
 	@UseTrueFalseMappings
+	@SkipIfFalse("refundDue")
 	private boolean refundIsTransferredToOther;
 
 
@@ -540,9 +541,11 @@ public class IR3FormBean {
 	private Money totalTaxPaidByTrustees;
 
 	@UseTrueFalseMappings
+	@SkipIfFalse("refundDue")
 	private boolean transferRefundToSomeoneElsesIncomeTaxAccountAssociated;
 	
 	@UseTrueFalseMappings
+	@SkipIfFalse("refundDue")
 	private boolean transferRefundToSomeoneElsesStudentLoanAssociated;
 	
 	@UseTrueFalseMappings
