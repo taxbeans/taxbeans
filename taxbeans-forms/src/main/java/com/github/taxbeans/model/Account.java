@@ -133,6 +133,9 @@ public class Account {
 		}
 		this.balanceAssertions = balanceAssertions;
 		this.accountEntries = splits;
+		if (this.accountEntries == null) {
+			this.accountEntries = new ArrayList<>();
+		}
 		this.guid = guid;
 		this.placeholder = placeholder;
 		this.code = accountNumber;
@@ -240,6 +243,7 @@ public class Account {
 	public BigDecimal getOpeningBalanceForTaxYear(int year) {
 		if (accountEntries == null) {
 			logger.warn("Account entries are null for account: " + this);
+			return BigDecimal.ZERO;
 		}
 		Collections.sort(accountEntries);
 		BigDecimal balance = BigDecimal.ZERO;
