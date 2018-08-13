@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 
-public class ExhangeRateUtils {
+public class ExchangeRateUtils {
 
 	public static BigDecimal exchange(ZonedDateTime translationDate, CurrencyUnit from, CurrencyUnit to,
 			BigDecimal amount) {

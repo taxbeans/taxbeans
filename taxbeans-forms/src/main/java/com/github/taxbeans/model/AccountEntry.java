@@ -11,13 +11,141 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
-import com.github.taxbeans.currency.ExhangeRateUtils;
+import com.github.taxbeans.currency.ExchangeRateUtils;
 import com.github.taxbeans.model.commodity.CommodityAmount;
 
 public class AccountEntry implements Comparable<AccountEntry> {
 
-	private String cryptoAddress;
+	public static class AccountEntryBuilder {
+		private Account account;
+		private AccountSide accountSide;
+		private BigDecimal amount;
+		private String commodityName;
+		private BigDecimal commodityUnits;
+		private CurrencyUnit currency;
+		private Stack<CurrencyTranslation> currencyTranslations;
+		private String description;
+		private Transaction transaction;
+		private UUID uuid;
+
+		public AccountEntry build() {
+			return new AccountEntry(uuid, account, amount, accountSide, transaction, description, commodityUnits,
+					commodityName, currency, currencyTranslations);
+		}
+
+		public AccountEntryBuilder withAccount(Account account) {
+			this.account = account;
+			return this;
+		}
+
+		public AccountEntryBuilder withAccountSide(AccountSide accountSide) {
+			this.accountSide = accountSide;
+			return this;
+		}
+
+		public AccountEntryBuilder withAmount(BigDecimal amount) {
+			this.amount = amount;
+			return this;
+		}
+
+		public AccountEntryBuilder withCommodityAmount(CommodityAmount commodityAmount) {
+			this.commodityUnits = commodityAmount.getAmount();
+			this.commodityName = commodityAmount.getCommodity().getSymbol();
+			return this;
+		}
+
+		public AccountEntryBuilder withCommodityName(String commodityName) {
+			this.commodityName = commodityName;
+			return this;
+		}
+
+		public AccountEntryBuilder withCommodityUnits(BigDecimal commodityUnits) {
+			this.commodityUnits = commodityUnits;
+			return this;
+		}
+
+		public AccountEntryBuilder withCurrency(CurrencyUnit currency) {
+			this.currency = currency;
+			return this;
+		}
+
+		public AccountEntryBuilder withCurrencyAmount(MonetaryAmount monetaryAmount) {
+			this.amount = (BigDecimal) monetaryAmount.getNumber().numberValue(BigDecimal.class);
+			this.currency = monetaryAmount.getCurrency();
+			return this;
+		}
+
+		public AccountEntryBuilder withCurrencyTranslations(Stack<CurrencyTranslation> currencyTranslations) {
+			this.currencyTranslations = currencyTranslations;
+			return this;
+		}
+
+		public AccountEntryBuilder withDescription(String description) {
+			this.description = description;
+			return this;
+		}
+
+		public AccountEntryBuilder withTransaction(Transaction transaction) {
+			this.transaction = transaction;
+			return this;
+		}
+
+		public AccountEntryBuilder withUuid(UUID uuid) {
+			this.uuid = uuid;
+			return this;
+		}
+	}
 	
+	public static AccountEntryBuilder accountEntry() {
+		return new AccountEntryBuilder();
+	}
+	
+	public static List<Transaction> adaptToMergedTransactionList(List<AccountEntry> transactionSplits,
+			Account debitAccount, Account creditAccount) {
+		List<Transaction> transactionList = new ArrayList<Transaction>();
+		for (AccountEntry transactionSplit : transactionSplits) {
+			transactionList.add(transactionSplit.adaptToMergedTransaction(debitAccount, creditAccount));
+		}
+		return transactionList;
+	}
+
+	private Account account;
+
+	// Whether this entry is a debit or credit
+	private AccountSide accountSide = AccountSide.BALANCE_EFFECT;
+
+	private BigDecimal amount = BigDecimal.ZERO;
+
+	private String commodityName;
+
+	private BigDecimal commodityUnits = BigDecimal.ZERO;
+
+	private String cryptoAddress;
+
+	private CurrencyUnit currency = Monetary.getCurrency("NZD");
+	
+	private Stack<CurrencyTranslation> currencyTranslations = new Stack<CurrencyTranslation>();
+
+	private String description;
+
+	private DigitalCurrency digitalCurrency;
+
+	// temporary value used for extracting out the trade fee entry from trades
+	// could have used a separate Trade object
+	private BigDecimal tradeFee;
+
+	/**
+	 * the outer transaction
+	 */
+	private Transaction transaction;
+
+	private UUID uuid;
+
+	public AccountEntry() {
+		super();
+		uuid = UUID.randomUUID();
+	}
+
 	public AccountEntry(UUID uuid, Account account, BigDecimal amount, AccountSide accountSide, Transaction transaction,
 			String description, BigDecimal commodityUnits, String commodityName, CurrencyUnit currency,
 			Stack<CurrencyTranslation> currencyTranslations) {
@@ -34,76 +162,6 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		this.currency = currency;
 		//no need to build the stack, do not include in builder when generated next
 		//this.currencyTranslations = currencyTranslations;
-	}
-
-	public AccountEntry() {
-		super();
-		uuid = UUID.randomUUID();
-	}
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public static List<Transaction> adaptToMergedTransactionList(List<AccountEntry> transactionSplits,
-			Account debitAccount, Account creditAccount) {
-		List<Transaction> transactionList = new ArrayList<Transaction>();
-		for (AccountEntry transactionSplit : transactionSplits) {
-			transactionList.add(transactionSplit.adaptToMergedTransaction(debitAccount, creditAccount));
-		}
-		return transactionList;
-	}
-
-	private UUID uuid;
-
-	private Account account;
-	
-	// temporary value used for extracting out the trade fee entry from trades
-	// could have used a separate Trade object
-	private BigDecimal tradeFee;
-
-	public BigDecimal getTradeFee() {
-		return tradeFee;
-	}
-
-	public void setTradeFee(BigDecimal tradeFee) {
-		this.tradeFee = tradeFee;
-	}
-
-	private BigDecimal amount = BigDecimal.ZERO;
-
-	// Whether this entry is a debit or credit
-	private AccountSide accountSide = AccountSide.BALANCE_EFFECT;
-
-	/**
-	 * the outer transaction
-	 */
-	private Transaction transaction;
-
-	private String description;
-
-	private BigDecimal commodityUnits = BigDecimal.ZERO;
-
-	private String commodityName;
-
-	private CurrencyUnit currency = Monetary.getCurrency("NZD");
-
-	public CurrencyUnit getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(CurrencyUnit currency) {
-		this.currency = currency;
-	}
-
-	private Stack<CurrencyTranslation> currencyTranslations = new Stack<CurrencyTranslation>();
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	private Transaction adaptToMergedTransaction(Account debitAccount, Account creditAccount) {
@@ -137,12 +195,52 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		return account;
 	}
 
+	public AccountSide getAccountSide() {
+		return accountSide;
+	}
+
 	public BigDecimal getAmount() {
 		return amount;
 	}
 
+	public String getCommodityName() {
+		return commodityName;
+	}
+
+	public BigDecimal getCommodityUnits() {
+		return commodityUnits;
+	}
+
+	public String getCryptoAddress() {
+		return cryptoAddress;
+	}
+
+	public CurrencyUnit getCurrency() {
+		return currency;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public DigitalCurrency getDigitalCurrency() {
+		return digitalCurrency;
+	}
+
+	public BigDecimal getTradeFee() {
+		return tradeFee;
+	}
+
 	public final Transaction getTransaction() {
 		return this.transaction;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public boolean isCommodity() {
+		return commodityUnits != null || commodityName != null;
 	}
 
 	//automatically assigns the split to the account object as well
@@ -155,10 +253,6 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		this.account.addEntry(this);
 	}
 
-	public AccountSide getAccountSide() {
-		return accountSide;
-	}
-
 	public void setAccountSide(AccountSide accountSide) {
 		this.accountSide = accountSide;
 	}
@@ -168,52 +262,36 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		this.amount = amount;
 	}
 
-	public AccountEntry withAmount(BigDecimal amount) {
-		this.amount = amount;
-		return this;
-	}
-
-	public final void setTransaction(final Transaction argTransaction) {
-		this.transaction = argTransaction;
-	}
-
-	public BigDecimal getCommodityUnits() {
-		return commodityUnits;
+	public void setCommodityName(String commodityName) {
+		this.commodityName = commodityName;
 	}
 
 	public void setCommodityUnits(BigDecimal commodityUnits) {
 		this.commodityUnits = commodityUnits;
 	}
 
-	public String getCommodityName() {
-		return commodityName;
-	}
-
-	public void setCommodityName(String commodityName) {
-		this.commodityName = commodityName;
-	}
-
-	public String getCryptoAddress() {
-		return cryptoAddress;
-	}
-
 	public void setCryptoAddress(String cryptoAddress) {
 		this.cryptoAddress = cryptoAddress;
 	}
 
-	public boolean isCommodity() {
-		return commodityUnits != null || commodityName != null;
+	public void setCurrency(CurrencyUnit currency) {
+		this.currency = currency;
 	}
 
-	public void translate(ZonedDateTime translationDate, CurrencyUnit from, CurrencyUnit to) {
-		CurrencyTranslation translation = new CurrencyTranslation();
-		translation.setOriginalCurrency(from);
-		translation.setTranslatedCurrency(to);
-		translation.setOriginalAmount(amount);
-		amount = ExhangeRateUtils.exchange(translationDate, from, to, amount);
-		currency = to;
-		translation.setTranslatedAmount(amount);
-		currencyTranslations.push(translation);
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDigitalCurrency(DigitalCurrency digitalCurrency) {
+		this.digitalCurrency = digitalCurrency;
+	}
+
+	public void setTradeFee(BigDecimal tradeFee) {
+		this.tradeFee = tradeFee;
+	}
+
+	public final void setTransaction(final Transaction argTransaction) {
+		this.transaction = argTransaction;
 	}
 
 	@Override
@@ -224,8 +302,24 @@ public class AccountEntry implements Comparable<AccountEntry> {
 				+ "]";
 	}
 
-	public AccountEntry withCommodityUnits(BigDecimal amount2) {
-		this.setCommodityUnits(amount2);
+	public void translate(ZonedDateTime translationDate, CurrencyUnit from, CurrencyUnit to) {
+		CurrencyTranslation translation = new CurrencyTranslation();
+		translation.setOriginalCurrency(from);
+		translation.setTranslatedCurrency(to);
+		translation.setOriginalAmount(amount);
+		amount = ExchangeRateUtils.exchange(translationDate, from, to, amount);
+		currency = to;
+		translation.setTranslatedAmount(amount);
+		currencyTranslations.push(translation);
+	}
+
+	public AccountEntry withAccount(Account buyOrderAccount) {
+		this.setAccount(buyOrderAccount);
+		return this;
+	}
+
+	public AccountEntry withAmount(BigDecimal amount) {
+		this.amount = amount;
 		return this;
 	}
 
@@ -234,98 +328,14 @@ public class AccountEntry implements Comparable<AccountEntry> {
 		return this;
 	}
 
+	public AccountEntry withCommodityUnits(BigDecimal amount2) {
+		this.setCommodityUnits(amount2);
+		return this;
+	}
+
 	public AccountEntry withDescription(String string) {
 		this.setDescription(string);
 		return this;
-	}
-
-	public AccountEntry withAccount(Account buyOrderAccount) {
-		this.setAccount(buyOrderAccount);
-		return this;
-	}
-
-	public static AccountEntryBuilder accountEntry() {
-		return new AccountEntryBuilder();
-	}
-
-	public static class AccountEntryBuilder {
-		private UUID uuid;
-		private Account account;
-		private BigDecimal amount;
-		private AccountSide accountSide;
-		private Transaction transaction;
-		private String description;
-		private BigDecimal commodityUnits;
-		private String commodityName;
-		private CurrencyUnit currency;
-		private Stack<CurrencyTranslation> currencyTranslations;
-
-		public AccountEntryBuilder withUuid(UUID uuid) {
-			this.uuid = uuid;
-			return this;
-		}
-
-		public AccountEntryBuilder withAccount(Account account) {
-			this.account = account;
-			return this;
-		}
-
-		public AccountEntryBuilder withAmount(BigDecimal amount) {
-			this.amount = amount;
-			return this;
-		}
-
-		public AccountEntryBuilder withAccountSide(AccountSide accountSide) {
-			this.accountSide = accountSide;
-			return this;
-		}
-
-		public AccountEntryBuilder withTransaction(Transaction transaction) {
-			this.transaction = transaction;
-			return this;
-		}
-
-		public AccountEntryBuilder withDescription(String description) {
-			this.description = description;
-			return this;
-		}
-
-		public AccountEntryBuilder withCommodityUnits(BigDecimal commodityUnits) {
-			this.commodityUnits = commodityUnits;
-			return this;
-		}
-
-		public AccountEntryBuilder withCommodityName(String commodityName) {
-			this.commodityName = commodityName;
-			return this;
-		}
-
-		public AccountEntryBuilder withCurrency(CurrencyUnit currency) {
-			this.currency = currency;
-			return this;
-		}
-
-		public AccountEntryBuilder withCurrencyTranslations(Stack<CurrencyTranslation> currencyTranslations) {
-			this.currencyTranslations = currencyTranslations;
-			return this;
-		}
-
-		public AccountEntry build() {
-			return new AccountEntry(uuid, account, amount, accountSide, transaction, description, commodityUnits,
-					commodityName, currency, currencyTranslations);
-		}
-
-		public AccountEntryBuilder withCurrencyAmount(MonetaryAmount monetaryAmount) {
-			this.amount = (BigDecimal) monetaryAmount.getNumber().numberValue(BigDecimal.class);
-			this.currency = monetaryAmount.getCurrency();
-			return this;
-		}
-
-		public AccountEntryBuilder withCommodityAmount(CommodityAmount commodityAmount) {
-			this.commodityUnits = commodityAmount.getAmount();
-			this.commodityName = commodityAmount.getCommodity().getSymbol();
-			return this;
-		}
 	}
 
 }
