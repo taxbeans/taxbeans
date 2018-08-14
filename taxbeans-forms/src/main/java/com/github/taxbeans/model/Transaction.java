@@ -124,6 +124,14 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 
 	public void setTransactionSplits(List<AccountEntry> transactionSplits) {
 		this.entries = transactionSplits;
+		//temp commodity name check:
+		int n=0;
+		for (AccountEntry split : transactionSplits) {
+			if (split.getCommodityName() == null || "".equals(split.getCommodityName().trim())) {
+				throw new AssertionError("Disallowing blank commodity name at this time, for n = " + n);
+			}
+			n++;
+		}
 	}
 
 	public String toString() {

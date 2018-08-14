@@ -9,8 +9,17 @@ public class DigitalCurrency {
 	private BigDecimal amount;
 
 	private DigitalCurrencyCode code;
-	
+
 	private List<Inventory> inventory = new ArrayList<>();
+	
+	public DigitalCurrency(BigDecimal amount, DigitalCurrencyCode code) {
+		super();
+		this.amount = amount;
+		this.code = code;
+	}
+
+	public DigitalCurrency() {
+	}
 
 	public void add(Inventory inventoryItem) {
 		inventory.add(inventoryItem);
