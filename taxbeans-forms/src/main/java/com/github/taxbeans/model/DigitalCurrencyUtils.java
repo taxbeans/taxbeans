@@ -15,7 +15,12 @@ public class DigitalCurrencyUtils {
 		List<Inventory> inventory = new ArrayList<>();
 		for (AccountEntry entry : entries) {
 			try {
-				inventory.addAll(entry.getDigitalCurrency().getInventory());
+				//Credits mean less inventory, so add proper handling:
+				if (entry.getAccountSide() == AccountSide.DEBIT) {
+					inventory.addAll(entry.getDigitalCurrency().getInventory());
+				} else {
+					//subtract from inventory using FIFO rules
+				}
 			} catch (Exception e) {
 				logger.error("Problematic entry = " + entry);
 				throw e;
