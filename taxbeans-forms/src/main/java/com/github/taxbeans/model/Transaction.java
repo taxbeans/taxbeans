@@ -127,9 +127,9 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 		//temp commodity name check:
 		int n=0;
 		for (AccountEntry split : transactionSplits) {
-			if (split.getCommodityName() == null || "".equals(split.getCommodityName().trim())) {
-				throw new AssertionError("Disallowing blank commodity name at this time, for n = " + n);
-			}
+//			if (split.getCommodityName() == null || "".equals(split.getCommodityName().trim())) {
+//				throw new AssertionError("Disallowing blank commodity name at this time, for n = " + n);
+//			}
 			n++;
 		}
 	}
