@@ -206,8 +206,11 @@ public class GnuCashPullParser {
 					//logger.debug("found account type");
 					streamReader.next();
 					account.setAccountClassification(AccountClassification.fromString(streamReader.getText()));
+				} else if ("code".equals(streamReader.getLocalName())) {
+					streamReader.next();
+					account.setCode(streamReader.getText());
 				} else {
-					//logger.debug("tx localname = " + streamReader.getLocalName());
+					//logger.warn("account localname = " + streamReader.getLocalName());
 				}
 			}
 
