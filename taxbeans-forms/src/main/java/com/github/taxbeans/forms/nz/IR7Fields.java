@@ -10,6 +10,7 @@ public enum IR7Fields {
 	postalAddressLine1,
 	postalAddressLine2,
 	postalAddressLine3,
+	postalAddressPostalCode,
 	physicalAddressLine1,
 	physicalAddressLine2,
 	bicCode,

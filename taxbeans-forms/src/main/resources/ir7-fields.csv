@@ -7,6 +7,7 @@ partnershipTradingNameLine2,4.3,4.3,3.2,3.2,3.2,3.2,3.2,3.2
 postalAddressLine1,4.4.0,4.4.0,4.1,4.1,4.1,4.1,4.1,4.1
 postalAddressLine2,9,9,4.2,4.2,4.2,4.2,4.2,4.2
 postalAddressLine3,10,10,0,0,0,0,0,0
+postalAddressPostalCode,0,0,0,0,0,0,4.3,4.3
 physicalAddressLine1,4.4.1,4.4.1,5.1,5.1,5.1,5.1,5.1,5.1
 physicalAddressLine2,4.4.2,4.4.2,5.2,5.2,5.2,5.2,5.2,5.2
 bicCode,14,14,6,6,6,6,6.0,6.0
