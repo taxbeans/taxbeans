@@ -1299,7 +1299,6 @@ public class IR3FormBean {
 				logger.error("Error processing: {}", key);
 				throw e;
 			}
-			System.out.println("done");
 			File parent = destinationDirectory != null ? new File(destinationDirectory) 
 					: new File(System.getProperty("user.home"), "Downloads");
 			String lowerCase = this.getFirstname().split(" ")[0].toLowerCase();
@@ -1307,6 +1306,7 @@ public class IR3FormBean {
 			File ir3DraftForm = new File(
 					parent,
 					String.format("ir3-%1$s-%2$s-draft.pdf", year, lowerCase));
+			acroForm.flatten();
 			pdfTemplate.save(ir3DraftForm);
 			pdfTemplate.close();
 			logger.info("IR3 Form Completed Successfully");
