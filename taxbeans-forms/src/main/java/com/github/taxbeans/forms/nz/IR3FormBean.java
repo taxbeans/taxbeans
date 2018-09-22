@@ -1329,6 +1329,8 @@ public class IR3FormBean {
 //			acroForm.setDefaultResources(dr);
 //			
 //			acroForm.flatten();
+			acroForm.setXFA(null);
+			acroForm.setNeedAppearances(true);
 			pdfTemplate.save(ir3DraftForm);
 			pdfTemplate.close();
 			logger.info("IR3 Form Completed Successfully");
