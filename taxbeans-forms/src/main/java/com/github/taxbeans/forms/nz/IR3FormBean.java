@@ -9,8 +9,13 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -1306,7 +1311,23 @@ public class IR3FormBean {
 			File ir3DraftForm = new File(
 					parent,
 					String.format("ir3-%1$s-%2$s-draft.pdf", year, lowerCase));
-			acroForm.flatten();
+			//flattening causes fields to disappear
+//			acroForm.setNeedAppearances(false);
+//			
+//			for (PDPage page : pdfTemplate.getPages()) {
+//				for (PDAnnotation annot : page.getAnnotations()) {
+//					annot.setPage(page);
+//				}
+//			}
+//			
+//			// Add the missing resources to the form
+//			PDResources dr = new PDResources();		
+//			dr.put(COSName.getPDFName("Courier"), PDType1Font.COURIER);
+//			dr.put(COSName.getPDFName("Helvetica"), PDType1Font.HELVETICA);
+//			
+//			acroForm.setDefaultResources(dr);
+//			
+//			acroForm.flatten();
 			pdfTemplate.save(ir3DraftForm);
 			pdfTemplate.close();
 			logger.info("IR3 Form Completed Successfully");
