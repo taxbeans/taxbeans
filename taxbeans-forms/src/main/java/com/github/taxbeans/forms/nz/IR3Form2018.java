@@ -1194,7 +1194,7 @@ public class IR3Form2018 {
 	public void publishDraft() {
 		try {
 			File ir3Form = new File(
-					new File(System.getProperty("user.home"), "Downloads"),
+					new File("target/classes"), //new File(System.getProperty("user.home"), "Downloads"),
 					String.format("ir3-%1$s.pdf", year));
 			PDDocument pdfTemplate = PDDocument.load(ir3Form);
 
@@ -1297,7 +1297,7 @@ public class IR3Form2018 {
 				throw e;
 			}
 			File parent = destinationDirectory != null ? new File(destinationDirectory) 
-					: new File(System.getProperty("user.home"), "Downloads");
+					: new File("target/classes"); //new File(System.getProperty("user.home"), "Downloads");
 			String lowerCase = this.getFirstname().split(" ")[0].toLowerCase();
 			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
 			File ir3DraftForm = new File(
