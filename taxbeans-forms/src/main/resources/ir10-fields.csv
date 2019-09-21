@@ -3,6 +3,8 @@ yearEnded,year ended,year ended,year ended,year,year,Year ended 31 March,Year en
 irdNumber,IRD 1,IRD 1,IRD 1,IRD number,IRD number,Text28,Text28,Text28,Text28
 fullName,your full name,your full name,your full name,Full Name,Full Name,Full name,Full name,Full name,Full name
 multipleActivityRadio,1 yes/no,1 yes/no,1 yes/no,Yes/No 1,Yes/No 1,Group29,Group29,Group29,Group29
+multipleActivityRadio_true,Choice1,Choice1,Choice1,Choice1,Choice1,Choice1,Choice1,Choice1,Choice1
+multipleActivityRadio_false,Choice2,Choice2,Choice2,Choice2,Choice2,Choice2,Choice2,Choice2,Choice2
 grossIncome,2,2,2,sales/services,sales/services,Text30.0,Text30.0,Text30.0,Text30.0
 openingStock,2.1,2.1,2.1,opening stock,opening stock,Text30.1,Text30.1,Text30.1,Text30.1
 purchases,2.2,2.2,2.2,purchases,purchases,Text30.2,Text30.2,Text30.2,Text30.2

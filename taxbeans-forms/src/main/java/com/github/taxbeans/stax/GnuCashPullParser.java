@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -236,8 +237,14 @@ public class GnuCashPullParser {
 		logger.info("Removing prolog from : " + fileName2.getCanonicalPath());
 		boolean removeFirstLine = true;
 		if (removeFirstLine) {
-			List<String> lines = Files.readAllLines(Paths.get(fileName2.getPath()), 
-					Charset.forName("UTF-8"));
+			List<String> lines = null;
+			try {
+				lines = Files.readAllLines(Paths.get(fileName2.getPath()), 
+						Charset.forName("UTF-8"));
+			} catch (MalformedInputException e) {
+				lines = Files.readAllLines(Paths.get(fileName2.getPath()), 
+						Charset.forName("ISO-8859-1"));
+			}
 			File fout = File.createTempFile("tmp", "guncash");
 			FileOutputStream fos = new FileOutputStream(fout);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));

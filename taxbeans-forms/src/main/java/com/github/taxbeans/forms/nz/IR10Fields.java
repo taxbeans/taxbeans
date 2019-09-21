@@ -5,6 +5,8 @@ public enum IR10Fields {
 	irdNumber,
 	fullName,
 	multipleActivityRadio,
+	multipleActivityRadio_true,
+	multipleActivityRadio_false,
 	grossIncome,
 	openingStock,
 	purchases,
