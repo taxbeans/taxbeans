@@ -34,38 +34,201 @@ import com.github.taxbeans.forms.utils.TaxReturnUtils;
 public class IR10Form2018 {
 
 	private String fullName;
-	
+
 	@Skip
 	private String destinationDirectory;
 
 	@RightAlign(9)
 	private String irdNumber;
-	
+
 	@UseTrueFalseMappings
 	private boolean multipleActivityRadio;
+
+	@OmitCents
+	private Money grossIncome;
 	
-	public boolean isMultipleActivityRadio() {
-		return multipleActivityRadio;
-	}
+	@OmitCents
+	private Money openingStock;
+	
+	@OmitCents
+	private Money purchases;
+	
+	@OmitCents
+	private Money closingStock;
+	
+	@OmitCents
+	private Money grossProfit;
+	
+	@OmitCents
+	private Money interestReceived;
+	
+	@OmitCents
+	private Money dividends;
+	
+	@OmitCents
+	private Money leasePayments;
+	
+	@OmitCents
+	private Money otherIncome;
+	
+	@OmitCents
+	private Money totalIncome;
+	
+	@OmitCents
+	private Money badDebts;
+	
+	@OmitCents
+	private Money depreciation;
+	
+	@OmitCents
+	private Money insurance;
+	
+	@OmitCents
+	private Money interestExpenses;
+	
+	@OmitCents
+	private Money consultingFees;
+	
+	@OmitCents
+	private Money rates;
 
-	public void setMultipleActivityRadio(boolean multipleActivityRadio) {
-		this.multipleActivityRadio = multipleActivityRadio;
-	}
+	@OmitCents
+	private Money leasePaymentExpenses;
+	
+	@OmitCents
+	private Money repairs;
+	
+	@OmitCents
+	private Money researchAndDevelopment;
+	
+	@OmitCents
+	private Money relatedPartyRenumeration;
+	
+	@OmitCents
+	private Money salaryAndWages;
+	
+	@OmitCents
+	private Money subcontractorPayments;
+	
+	@OmitCents
+	private Money otherExpenses;
+	
+	@OmitCents
+	private Money totalExpenses;
+	
+	@OmitCents
+	private Money exceptionalItems;
+	
+	@OmitCents
+	private Money netProfitBeforeTax;
+	
+	@OmitCents
+	private Money taxAdjustments;
+	
+	@OmitCents
+	private Money taxableProfit;
+	
+	@OmitCents
+	private Money accountsReceivable;
+	
+	@OmitCents
+	private Money cashAndDeposits;
+	
+	@OmitCents
+	private Money otherCurrentAssets;
+	
+	@OmitCents
+	private Money vehicleAssets;
+	
+	@OmitCents
+	private Money plantAssets;
+	
+	@OmitCents
+	private Money furnitureAssets;
+	
+	@OmitCents
+	private Money land;
+	
+	@OmitCents
+	private Money buildings;
+	
+	@OmitCents
+	private Money otherFixedAssets;
+	
+	@OmitCents
+	private Money intangibles;
+	
+	@OmitCents
+	private Money sharesAndDebentures;
+	
+	@OmitCents
+	private Money termDeposits;
+	
+	@OmitCents
+	private Money otherNonCurrentAssets;
+	
+	@OmitCents
+	private Money totalAssets;
+	
+	@OmitCents
+	private Money provisions;
+	
+	@OmitCents
+	private Money accountsPayable;
+	
+	@OmitCents
+	private Money currentLoans;
+	
+	@OmitCents
+	private Money otherCurrentLiabilities;
+	
+	@OmitCents
+	private Money totalCurrentLiabilities;
+	
+	@OmitCents
+	private Money nonCurrentLiabilities;
+	
+	@OmitCents
+	private Money totalLiabilities;
+	
+	@OmitCents
+	private Money ownersEquity;
+	
+	@OmitCents
+	private Money taxDepreciation;
+	
+	@OmitCents
+	private Money untaxedRealisedGains;
+	
+	@OmitCents
+	private Money additionsToFixedAssets;
+	
+	@OmitCents
+	private Money disposalsOfFixedAssets;
+	
+	@OmitCents
+	private Money dividendsPaid;
+	
+	@OmitCents
+	private Money drawings;
+	
+	@OmitCents
+	private Money currentAccountClosingBalance;
 
-	final Logger logger = LoggerFactory.getLogger(IR10Form2018.class);
+	@OmitCents
+	private Money deductibleLossOnDisposal;
+
+
+	final static Logger logger = LoggerFactory.getLogger(IR10Form2018.class);
 
 	private int year = 2018;
-	
+
 	@Skip
 	private String personalisedNaming;
-	
-	private String calculateMinusSign(Money value) {
-		return value.signum() < 0 ? "-" : "";
-	}
-		
-	public String getIrdNumber() {
-		return irdNumber;
-	}
+
+//	private String calculateMinusSign(Money value) {
+//		return value.signum() < 0 ? "-" : "";
+//	}
 
 	private Map<String, String> getPropertyToFieldMap() {
 		return IR10FieldMapper.getPropertyToFieldMap(year);
@@ -87,10 +250,10 @@ public class IR10Form2018 {
 			if (f.getAnnotation(OmitCents.class) != null) {
 				value = TaxReturnUtils.formatDollarsField((Money) value);
 				if (f.getAnnotation(IncludeFormatSpacing.class) != null) {
-					String valueText = (String)value;
+					String valueText = (String) value;
 					if (valueText.length() >= 4) {
-						valueText = valueText.substring(0, valueText.length()-3) + " " + 
-								valueText.substring(valueText.length()-3);
+						valueText = valueText.substring(0, valueText.length() - 3) + " "
+								+ valueText.substring(valueText.length() - 3);
 						value = valueText;
 					}
 				}
@@ -121,11 +284,11 @@ public class IR10Form2018 {
 		pdField.setValue(String.valueOf(value));
 	}
 
-	//assumes the forms are in the user's Downloads folder
+	// assumes the forms are in the user's Downloads folder
 	public void publishDraft() {
 		try {
-			File ir10Form = new File(
-					new File("target/classes"), //new File(System.getProperty("user.home"), "Downloads"),
+			File ir10Form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
+																	// "Downloads"),
 					String.format("ir10-%1$s.pdf", year));
 			PDDocument pdfTemplate = PDDocument.load(ir10Form);
 
@@ -192,7 +355,7 @@ public class IR10Form2018 {
 						if (f.getAnnotation(UseDayMonthYear.class) != null) {
 							LocalDate localDate = (LocalDate) value;
 							if (value == null) {
-								//leave the field blank
+								// leave the field blank
 								continue;
 							}
 							int dayOfMonth = localDate.getDayOfMonth();
@@ -209,10 +372,10 @@ public class IR10Form2018 {
 									: propertyToFieldMap.get(key + "_false");
 							String fieldName = propertyToFieldMap.get(key);
 							if (fieldName == null || mappedValue == null) {
-								propertyToFieldMap.entrySet().forEach(action -> 
-									logger.error(String.format("%s -> %s", action.getKey(), action.getValue())));
-								throw new AssertionError(String.format("Boolean field: %s mapped to null, possible " + 
-									"cause is missing Enum field in IR10Fields", key));
+								propertyToFieldMap.entrySet().forEach(action -> logger
+										.error(String.format("%s -> %s", action.getKey(), action.getValue())));
+								throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
+										+ "cause is missing Enum field in IR10Fields", key));
 							}
 							processField(acroForm, fieldName, mappedValue, f);
 						} else if (f.getAnnotation(UseValueMappings.class) != null) {
@@ -227,14 +390,13 @@ public class IR10Form2018 {
 				logger.error("Error processing: {}", key);
 				throw e;
 			}
-			File parent = destinationDirectory != null ? new File(destinationDirectory) 
-					: new File("target"); //new File(System.getProperty("user.home"), "Downloads");
+			File parent = destinationDirectory != null ? new File(destinationDirectory) : new File("target"); // new
+																												// File(System.getProperty("user.home"),
+																												// "Downloads");
 			String lowerCase = this.getFullName().split(" ")[0].toLowerCase();
 			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
-			File ir10DraftForm = new File(
-					parent,
-					String.format("ir10-%1$s-%2$s-draft.pdf", year, lowerCase));
-			//flattening causes fields to disappear
+			File ir10DraftForm = new File(parent, String.format("ir10-%1$s-%2$s-draft.pdf", year, lowerCase));
+			// flattening causes fields to disappear
 //			acroForm.setNeedAppearances(false);
 //			
 //			for (PDPage page : pdfTemplate.getPages()) {
@@ -257,10 +419,9 @@ public class IR10Form2018 {
 			pdfTemplate.close();
 			logger.info("IR10 Form Completed Successfully: " + ir10DraftForm);
 		} catch (Exception e) {
-			throw new TaxBeansException(e);
+			throw new TaxBeansException(e, "Is field in the enum?");
 		}
 	}
-
 
 	public String getFullName() {
 		return fullName;
@@ -277,5 +438,501 @@ public class IR10Form2018 {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public boolean isMultipleActivityRadio() {
+		return multipleActivityRadio;
+	}
+
+	public void setMultipleActivityRadio(boolean multipleActivityRadio) {
+		this.multipleActivityRadio = multipleActivityRadio;
+	}
+
+	public String getIrdNumber() {
+		return irdNumber;
+	}
+
+	public Money getGrossIncome() {
+		return grossIncome;
+	}
+
+	public void setGrossIncome(Money grossIncome) {
+		this.grossIncome = grossIncome;
+	}
+
+	public Money getOpeningStock() {
+		return openingStock;
+	}
+
+	public void setOpeningStock(Money openingStock) {
+		this.openingStock = openingStock;
+	}
+
+	public Money getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(Money purchases) {
+		this.purchases = purchases;
+	}
+
+	public Money getClosingStock() {
+		return closingStock;
+	}
+
+	public void setClosingStock(Money closingStock) {
+		this.closingStock = closingStock;
+	}
+
+	public Money getGrossProfit() {
+		return grossProfit;
+	}
+
+	public void setGrossProfit(Money grossProfit) {
+		this.grossProfit = grossProfit;
+	}
+
+	public String getDestinationDirectory() {
+		return destinationDirectory;
+	}
+
+	public void setDestinationDirectory(String destinationDirectory) {
+		this.destinationDirectory = destinationDirectory;
+	}
+
+	public Money getInterestReceived() {
+		return interestReceived;
+	}
+
+	public void setInterestReceived(Money interestReceived) {
+		this.interestReceived = interestReceived;
+	}
+
+	public Money getDividends() {
+		return dividends;
+	}
+
+	public void setDividends(Money dividends) {
+		this.dividends = dividends;
+	}
+
+	public Money getLeasePayments() {
+		return leasePayments;
+	}
+
+	public void setLeasePayments(Money leasePayments) {
+		this.leasePayments = leasePayments;
+	}
+
+	public Money getOtherIncome() {
+		return otherIncome;
+	}
+
+	public void setOtherIncome(Money otherIncome) {
+		this.otherIncome = otherIncome;
+	}
+
+	public Money getTotalIncome() {
+		return totalIncome;
+	}
+
+	public void setTotalIncome(Money totalIncome) {
+		this.totalIncome = totalIncome;
+	}
+
+	public Money getBadDebts() {
+		return badDebts;
+	}
+
+	public void setBadDebts(Money badDebts) {
+		this.badDebts = badDebts;
+	}
+
+	public Money getDepreciation() {
+		return depreciation;
+	}
+
+	public void setDepreciation(Money depreciation) {
+		this.depreciation = depreciation;
+	}
+
+	public String getPersonalisedNaming() {
+		return personalisedNaming;
+	}
+
+	public void setPersonalisedNaming(String personalisedNaming) {
+		this.personalisedNaming = personalisedNaming;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public Money getInsurance() {
+		return insurance;
+	}
+
+	public void setInsurance(Money insurance) {
+		this.insurance = insurance;
+	}
+
+	public Money getInterestExpenses() {
+		return interestExpenses;
+	}
+
+	public void setInterestExpenses(Money interestExpenses) {
+		this.interestExpenses = interestExpenses;
+	}
+
+	public Money getConsultingFees() {
+		return consultingFees;
+	}
+
+	public void setConsultingFees(Money consultingFees) {
+		this.consultingFees = consultingFees;
+	}
+
+	public Money getRates() {
+		return rates;
+	}
+
+	public void setRates(Money rates) {
+		this.rates = rates;
+	}
+
+	public Money getLeasePaymentExpenses() {
+		return leasePaymentExpenses;
+	}
+
+	public void setLeasePaymentExpenses(Money leasePaymentExpenses) {
+		this.leasePaymentExpenses = leasePaymentExpenses;
+	}
+
+	public Money getRepairs() {
+		return repairs;
+	}
+
+	public void setRepairs(Money repairs) {
+		this.repairs = repairs;
+	}
+
+	public Money getResearchAndDevelopment() {
+		return researchAndDevelopment;
+	}
+
+	public void setResearchAndDevelopment(Money researchAndDevelopment) {
+		this.researchAndDevelopment = researchAndDevelopment;
+	}
+
+	public Money getRelatedPartyRenumeration() {
+		return relatedPartyRenumeration;
+	}
+
+	public void setRelatedPartyRenumeration(Money relatedPartyRenumeration) {
+		this.relatedPartyRenumeration = relatedPartyRenumeration;
+	}
+
+	public Money getSalaryAndWages() {
+		return salaryAndWages;
+	}
+
+	public void setSalaryAndWages(Money salaryAndWages) {
+		this.salaryAndWages = salaryAndWages;
+	}
+
+	public Money getSubcontractorPayments() {
+		return subcontractorPayments;
+	}
+
+	public void setSubcontractorPayments(Money subcontractorPayments) {
+		this.subcontractorPayments = subcontractorPayments;
+	}
+
+	public Money getOtherExpenses() {
+		return otherExpenses;
+	}
+
+	public void setOtherExpenses(Money otherExpenses) {
+		this.otherExpenses = otherExpenses;
+	}
+
+	public Money getTotalExpenses() {
+		return totalExpenses;
+	}
+
+	public void setTotalExpenses(Money totalExpenses) {
+		this.totalExpenses = totalExpenses;
+	}
+
+	public Money getExceptionalItems() {
+		return exceptionalItems;
+	}
+
+	public void setExceptionalItems(Money exceptionalItems) {
+		this.exceptionalItems = exceptionalItems;
+	}
+
+	public Money getNetProfitBeforeTax() {
+		return netProfitBeforeTax;
+	}
+
+	public void setNetProfitBeforeTax(Money netProfitBeforeTax) {
+		this.netProfitBeforeTax = netProfitBeforeTax;
+	}
+
+	public Money getTaxAdjustments() {
+		return taxAdjustments;
+	}
+
+	public void setTaxAdjustments(Money taxAdjustments) {
+		this.taxAdjustments = taxAdjustments;
+	}
+
+	public Money getTaxableProfit() {
+		return taxableProfit;
+	}
+
+	public void setTaxableProfit(Money taxableProfit) {
+		this.taxableProfit = taxableProfit;
+	}
+
+	public Money getAccountsReceivable() {
+		return accountsReceivable;
+	}
+
+	public void setAccountsReceivable(Money accountsReceivable) {
+		this.accountsReceivable = accountsReceivable;
+	}
+
+	public Money getOtherCurrentAssets() {
+		return otherCurrentAssets;
+	}
+
+	public void setOtherCurrentAssets(Money otherCurrentAssets) {
+		this.otherCurrentAssets = otherCurrentAssets;
+	}
+
+	public Money getVehicleAssets() {
+		return vehicleAssets;
+	}
+
+	public void setVehicleAssets(Money vehicleAssets) {
+		this.vehicleAssets = vehicleAssets;
+	}
+
+	public Money getPlantAssets() {
+		return plantAssets;
+	}
+
+	public void setPlantAssets(Money plantAssets) {
+		this.plantAssets = plantAssets;
+	}
+
+	public Money getFurnitureAssets() {
+		return furnitureAssets;
+	}
+
+	public void setFurnitureAssets(Money furnitureAssets) {
+		this.furnitureAssets = furnitureAssets;
+	}
+
+	public Money getCashAndDeposits() {
+		return cashAndDeposits;
+	}
+
+	public void setCashAndDeposits(Money cashAndDeposits) {
+		this.cashAndDeposits = cashAndDeposits;
+	}
+
+	public Money getLand() {
+		return land;
+	}
+
+	public void setLand(Money land) {
+		this.land = land;
+	}
+
+	public Money getBuildings() {
+		return buildings;
+	}
+
+	public void setBuildings(Money buildings) {
+		this.buildings = buildings;
+	}
+
+	public Money getOtherFixedAssets() {
+		return otherFixedAssets;
+	}
+
+	public void setOtherFixedAssets(Money otherFixedAssets) {
+		this.otherFixedAssets = otherFixedAssets;
+	}
+
+	public Money getIntangibles() {
+		return intangibles;
+	}
+
+	public void setIntangibles(Money intangibles) {
+		this.intangibles = intangibles;
+	}
+
+	public Money getSharesAndDebentures() {
+		return sharesAndDebentures;
+	}
+
+	public void setSharesAndDebentures(Money sharesAndDebentures) {
+		this.sharesAndDebentures = sharesAndDebentures;
+	}
+
+	public Money getTermDeposits() {
+		return termDeposits;
+	}
+
+	public void setTermDeposits(Money termDeposits) {
+		this.termDeposits = termDeposits;
+	}
+
+	public Money getOtherNonCurrentAssets() {
+		return otherNonCurrentAssets;
+	}
+
+	public void setOtherNonCurrentAssets(Money otherNonCurrentAssets) {
+		this.otherNonCurrentAssets = otherNonCurrentAssets;
+	}
+
+	public Money getTotalAssets() {
+		return totalAssets;
+	}
+
+	public void setTotalAssets(Money totalAssets) {
+		this.totalAssets = totalAssets;
+	}
+
+	public Money getProvisions() {
+		return provisions;
+	}
+
+	public void setProvisions(Money provisions) {
+		this.provisions = provisions;
+	}
+
+	public Money getAccountsPayable() {
+		return accountsPayable;
+	}
+
+	public void setAccountsPayable(Money accountsPayable) {
+		this.accountsPayable = accountsPayable;
+	}
+
+	public Money getCurrentLoans() {
+		return currentLoans;
+	}
+
+	public void setCurrentLoans(Money currentLoans) {
+		this.currentLoans = currentLoans;
+	}
+
+	public Money getOtherCurrentLiabilities() {
+		return otherCurrentLiabilities;
+	}
+
+	public void setOtherCurrentLiabilities(Money otherCurrentLiabilities) {
+		this.otherCurrentLiabilities = otherCurrentLiabilities;
+	}
+
+	public Money getTotalCurrentLiabilities() {
+		return totalCurrentLiabilities;
+	}
+
+	public void setTotalCurrentLiabilities(Money totalCurrentLiabilities) {
+		this.totalCurrentLiabilities = totalCurrentLiabilities;
+	}
+
+	public Money getNonCurrentLiabilities() {
+		return nonCurrentLiabilities;
+	}
+
+	public void setNonCurrentLiabilities(Money nonCurrentLiabilities) {
+		this.nonCurrentLiabilities = nonCurrentLiabilities;
+	}
+
+	public Money getTotalLiabilities() {
+		return totalLiabilities;
+	}
+
+	public void setTotalLiabilities(Money totalLiabilities) {
+		this.totalLiabilities = totalLiabilities;
+	}
+
+	public Money getOwnersEquity() {
+		return ownersEquity;
+	}
+
+	public void setOwnersEquity(Money ownersEquity) {
+		this.ownersEquity = ownersEquity;
+	}
+
+	public Money getTaxDepreciation() {
+		return taxDepreciation;
+	}
+
+	public void setTaxDepreciation(Money taxDepreciation) {
+		this.taxDepreciation = taxDepreciation;
+	}
+
+	public Money getUntaxedRealisedGains() {
+		return untaxedRealisedGains;
+	}
+
+	public void setUntaxedRealisedGains(Money untaxedRealisedGains) {
+		this.untaxedRealisedGains = untaxedRealisedGains;
+	}
+
+	public Money getAdditionsToFixedAssets() {
+		return additionsToFixedAssets;
+	}
+
+	public void setAdditionsToFixedAssets(Money additionsToFixedAssets) {
+		this.additionsToFixedAssets = additionsToFixedAssets;
+	}
+
+	public Money getDisposalsOfFixedAssets() {
+		return disposalsOfFixedAssets;
+	}
+
+	public void setDisposalsOfFixedAssets(Money disposalsOfFixedAssets) {
+		this.disposalsOfFixedAssets = disposalsOfFixedAssets;
+	}
+
+	public Money getDividendsPaid() {
+		return dividendsPaid;
+	}
+
+	public void setDividendsPaid(Money dividendsPaid) {
+		this.dividendsPaid = dividendsPaid;
+	}
+
+	public Money getDrawings() {
+		return drawings;
+	}
+
+	public void setDrawings(Money drawings) {
+		this.drawings = drawings;
+	}
+
+	public Money getCurrentAccountClosingBalance() {
+		return currentAccountClosingBalance;
+	}
+
+	public void setCurrentAccountClosingBalance(Money currentAccountClosingBalance) {
+		this.currentAccountClosingBalance = currentAccountClosingBalance;
+	}
+
+	public Money getDeductibleLossOnDisposal() {
+		return deductibleLossOnDisposal;
+	}
+
+	public void setDeductibleLossOnDisposal(Money deductibleLossOnDisposal) {
+		this.deductibleLossOnDisposal = deductibleLossOnDisposal;
 	}
 }
