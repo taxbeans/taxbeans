@@ -22,8 +22,7 @@ public class IR10Form2018Test {
 		bean.setInterestReceived(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setDividends(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setLeasePayments(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setOtherIncome(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setTotalIncome(Money.of(new BigDecimal("888.88"), "NZD"));
+		bean.setOtherIncome(Money.of(new BigDecimal("888.88"), "NZD"));		
 		bean.setBadDebts(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setDepreciation(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setInsurance(Money.of(new BigDecimal("888.88"), "NZD"));
@@ -37,11 +36,8 @@ public class IR10Form2018Test {
 		bean.setSalaryAndWages(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setSubcontractorPayments(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setOtherExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setTotalExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setExceptionalItems(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setNetProfitBeforeTax(Money.of(new BigDecimal("888.88"), "NZD"));
+		bean.setExceptionalItems(Money.of(new BigDecimal("888.88"), "NZD"));		
 		bean.setTaxAdjustments(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setTaxableProfit(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setAccountsReceivable(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setCashAndDeposits(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setOtherCurrentAssets(Money.of(new BigDecimal("888.88"), "NZD"));

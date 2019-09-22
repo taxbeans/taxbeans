@@ -8,4 +8,8 @@ public class TaxBeansException extends RuntimeException {
 		super(e);
 	}
 
+	public TaxBeansException(String message, Exception e) {
+		super(message, e);
+	}
+
 }

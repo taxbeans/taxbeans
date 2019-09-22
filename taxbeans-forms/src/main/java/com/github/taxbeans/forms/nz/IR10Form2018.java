@@ -3,6 +3,7 @@ package com.github.taxbeans.forms.nz;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.SkipIfFalse;
+import com.github.taxbeans.forms.Sum;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
@@ -72,6 +74,8 @@ public class IR10Form2018 {
 	private Money otherIncome;
 	
 	@OmitCents
+	@Sum({"grossProfit", "interestReceived", "dividends", "leasePayments",
+			"otherIncome"})
 	private Money totalIncome;
 	
 	@OmitCents
@@ -114,18 +118,24 @@ public class IR10Form2018 {
 	private Money otherExpenses;
 	
 	@OmitCents
+	@Sum({"badDebts", "depreciation", "insurance", "interestExpenses",
+			"consultingFees", "rates", "leasePaymentExpenses", "repairs",
+			"researchAndDevelopment", "relatedPartyRenumeration", "salaryAndWages", "subcontractorPayments", 
+			"otherExpenses"})			
 	private Money totalExpenses;
 	
 	@OmitCents
 	private Money exceptionalItems;
 	
 	@OmitCents
+	@Sum(value={"totalIncome", "exceptionalItems"}, negate="totalExpenses")
 	private Money netProfitBeforeTax;
 	
 	@OmitCents
 	private Money taxAdjustments;
 	
 	@OmitCents
+	@Sum(value="netProfitBeforeTax", negate="taxAdjustments")
 	private Money taxableProfit;
 	
 	@OmitCents
@@ -302,7 +312,6 @@ public class IR10Form2018 {
 					key = entry.getKey();
 					Object value = entry.getValue();
 					if ("describeForm".equals(value)) {
-						// acroForm.get
 						List<PDField> fieldList = acroForm.getFields();
 
 						String[] fieldArray = new String[fieldList.size()];
@@ -312,7 +321,6 @@ public class IR10Form2018 {
 							i++;
 						}
 						for (String f : fieldArray) {
-							// PDField field = acroForm.getField(f);
 							logger.info("Field name is: " + f);
 						}
 						throw new AssertionError("Exiting due to issue with fields");
@@ -350,9 +358,9 @@ public class IR10Form2018 {
 							pdField.setValue(String.valueOf(childValue));
 							System.out.println(fieldName + "->" + pdField);
 						}
-					} else {
-						// String fieldName = propertyToFieldMap.get(key);
-						if (f.getAnnotation(UseDayMonthYear.class) != null) {
+					} else if (f.getAnnotation(Sum.class) != null) {
+						logger.trace("Defer to second pass");				
+					} else if (f.getAnnotation(UseDayMonthYear.class) != null) {
 							LocalDate localDate = (LocalDate) value;
 							if (value == null) {
 								// leave the field blank
@@ -367,7 +375,7 @@ public class IR10Form2018 {
 							int year2 = localDate.getYear();
 							processField(acroForm, propertyToFieldMap.get(key + "_year"),
 									year2 >= 10 ? year2 : "0" + year2, f);
-						} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
+					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
 							String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true")
 									: propertyToFieldMap.get(key + "_false");
 							String fieldName = propertyToFieldMap.get(key);
@@ -378,14 +386,70 @@ public class IR10Form2018 {
 										+ "cause is missing Enum field in IR10Fields", key));
 							}
 							processField(acroForm, fieldName, mappedValue, f);
-						} else if (f.getAnnotation(UseValueMappings.class) != null) {
+					} else if (f.getAnnotation(UseValueMappings.class) != null) {
 							String mappedValue = propertyToFieldMap.get(key + "_" + value);
 							processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
-						} else {
-							processField(acroForm, propertyToFieldMap.get(key), value, f);
-						}
+					} else {
+							processField(acroForm, propertyToFieldMap.get(key), value, f);					
 					}
 				}
+				// Second pass:		
+				int maxPasses = 10;
+				for (int i=0;i<maxPasses;i++ ) {
+					loopThroughFields:
+					for (Map.Entry<String, Object> entry : describe.entrySet()) {
+						key = entry.getKey();
+						Object value = entry.getValue();
+						if (key.equals("class") || key.equals("year")) {
+							// todo exclude fields by annotation
+							continue;
+						}
+						System.err.println("key = " + key);
+						Field f = this.getClass().getDeclaredField(key);
+						f.setAccessible(true);
+						Object field = f.get(this);
+						if (f.getAnnotation(Sum.class) != null) {
+							String[] fields = f.getAnnotation(Sum.class).value();
+							String[] negate = f.getAnnotation(Sum.class).negate();
+							Money sumMoney = Money.of(BigDecimal.ZERO, "NZD");
+							for (String formField : fields) {
+								Field f2 = this.getClass().getDeclaredField(formField);
+								f2.setAccessible(true);
+								Money money = (Money)f2.get(this);
+								try {
+									sumMoney = sumMoney.add(money);
+								} catch (NullPointerException e) {
+									if (i <= (maxPasses-1)) {
+										//3 passes required for derived field of derived field
+										continue loopThroughFields;
+									}
+									logger.error("Form field = " + formField);
+									logger.error("Form field value= " + money);
+									throw e;
+								}
+							}
+							for (String formField : negate) {
+								Money money = null;
+								Field f2 = this.getClass().getDeclaredField(formField);
+								f2.setAccessible(true);
+								money = (Money)f2.get(this);
+								try {
+									sumMoney = sumMoney.subtract(money);
+								} catch (NullPointerException e) {
+									if (i <= (maxPasses-1)) {
+										//3 passes required for derived field of derived field
+										continue loopThroughFields;
+									}
+									logger.error("Form field = " + formField);
+									logger.error("Form field value= " + money);
+									throw e;
+								}
+							}
+							f.set(this, sumMoney);
+							processField(acroForm, propertyToFieldMap.get(key), sumMoney, f);
+						}
+					}
+					}
 			} catch (NullPointerException e) {
 				logger.error("Error processing: {}", key);
 				throw e;
@@ -419,8 +483,20 @@ public class IR10Form2018 {
 			pdfTemplate.close();
 			logger.info("IR10 Form Completed Successfully: " + ir10DraftForm);
 		} catch (Exception e) {
-			throw new TaxBeansException(e, "Is field in the enum?");
+			throw new TaxBeansException("Is field in the enum?", e);
 		}
+	}
+
+	public Money getTotalExpenses() {
+		return totalExpenses;
+	}
+
+	@SuppressWarnings("unused")
+	public void setTotalExpenses(Money totalExpenses) {
+		if (true) {
+			throw new IllegalArgumentException("this is a derived property");
+		}
+		this.totalExpenses = totalExpenses;
 	}
 
 	public String getFullName() {
@@ -536,7 +612,11 @@ public class IR10Form2018 {
 		return totalIncome;
 	}
 
+	@SuppressWarnings("unused")
 	public void setTotalIncome(Money totalIncome) {
+		if (true) {
+			throw new IllegalArgumentException("this is a derived property");
+		}
 		this.totalIncome = totalIncome;
 	}
 
@@ -656,14 +736,6 @@ public class IR10Form2018 {
 		this.otherExpenses = otherExpenses;
 	}
 
-	public Money getTotalExpenses() {
-		return totalExpenses;
-	}
-
-	public void setTotalExpenses(Money totalExpenses) {
-		this.totalExpenses = totalExpenses;
-	}
-
 	public Money getExceptionalItems() {
 		return exceptionalItems;
 	}
@@ -676,7 +748,11 @@ public class IR10Form2018 {
 		return netProfitBeforeTax;
 	}
 
+	@SuppressWarnings("unused")
 	public void setNetProfitBeforeTax(Money netProfitBeforeTax) {
+		if (true) {
+			throw new IllegalArgumentException("this is a derived property");
+		}
 		this.netProfitBeforeTax = netProfitBeforeTax;
 	}
 
@@ -692,7 +768,11 @@ public class IR10Form2018 {
 		return taxableProfit;
 	}
 
+	@SuppressWarnings("unused")
 	public void setTaxableProfit(Money taxableProfit) {
+		if (true) {
+			throw new IllegalArgumentException("this is a derived property");
+		}
 		this.taxableProfit = taxableProfit;
 	}
 
