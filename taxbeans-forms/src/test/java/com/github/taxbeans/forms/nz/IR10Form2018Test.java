@@ -11,6 +11,7 @@ public class IR10Form2018Test {
 	public static void main(String[] args) {
 		// MJHL IR10
 		IR10Form2018 bean = new IR10Form2018();
+		bean.setYearEnded(2018);
 		bean.setIrdNumber("888-888-888");
 		bean.setFullname("Example Partnership");
 		bean.setMultipleActivityRadio(false);
@@ -50,16 +51,12 @@ public class IR10Form2018Test {
 		bean.setIntangibles(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setSharesAndDebentures(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setTermDeposits(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setOtherNonCurrentAssets(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setTotalAssets(Money.of(new BigDecimal("888.88"), "NZD"));
+		bean.setOtherNonCurrentAssets(Money.of(new BigDecimal("888.88"), "NZD"));		
 		bean.setProvisions(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setAccountsPayable(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setCurrentLoans(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setOtherCurrentLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setTotalCurrentLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setNonCurrentLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setTotalLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setOwnersEquity(Money.of(new BigDecimal("888.88"), "NZD"));
+		bean.setNonCurrentLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));				
 		bean.setTaxDepreciation(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setUntaxedRealisedGains(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setTaxDepreciation(Money.of(new BigDecimal("888.88"), "NZD"));
