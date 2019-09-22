@@ -34,6 +34,8 @@ import com.github.taxbeans.forms.UseValueMappings;
 import com.github.taxbeans.forms.utils.TaxReturnUtils;
 
 public class IR10Form2018 {
+	
+	private int yearEnded;
 
 	private String fullName;
 
@@ -178,6 +180,10 @@ public class IR10Form2018 {
 	private Money otherNonCurrentAssets;
 	
 	@OmitCents
+	@Sum({"accountsReceivable", "cashAndDeposits", "otherCurrentAssets", "vehicleAssets",
+			"plantAssets", "furnitureAssets", "land", "buildings",
+			"otherFixedAssets", "intangibles", "sharesAndDebentures", "termDeposits",
+			"otherNonCurrentAssets"})
 	private Money totalAssets;
 	
 	@OmitCents
@@ -193,15 +199,18 @@ public class IR10Form2018 {
 	private Money otherCurrentLiabilities;
 	
 	@OmitCents
+	@Sum({"provisions", "accountsPayable", "currentLoans", "otherCurrentLiabilities"})
 	private Money totalCurrentLiabilities;
 	
 	@OmitCents
 	private Money nonCurrentLiabilities;
 	
 	@OmitCents
+	@Sum({"totalCurrentLiabilities", "nonCurrentLiabilities"})
 	private Money totalLiabilities;
 	
 	@OmitCents
+	@Sum(value="totalAssets", negate="totalLiabilities")
 	private Money ownersEquity;
 	
 	@OmitCents
@@ -485,6 +494,14 @@ public class IR10Form2018 {
 		} catch (Exception e) {
 			throw new TaxBeansException("Is field in the enum?", e);
 		}
+	}
+
+	public int getYearEnded() {
+		return yearEnded;
+	}
+
+	public void setYearEnded(int yearEnded) {
+		this.yearEnded = yearEnded;
 	}
 
 	public Money getTotalExpenses() {
@@ -924,7 +941,11 @@ public class IR10Form2018 {
 		return totalCurrentLiabilities;
 	}
 
+	@SuppressWarnings("unused")
 	public void setTotalCurrentLiabilities(Money totalCurrentLiabilities) {
+		if (true) {
+			throw new IllegalArgumentException("this is a derived property");
+		}
 		this.totalCurrentLiabilities = totalCurrentLiabilities;
 	}
 
@@ -940,7 +961,11 @@ public class IR10Form2018 {
 		return totalLiabilities;
 	}
 
+	@SuppressWarnings("unused")
 	public void setTotalLiabilities(Money totalLiabilities) {
+		if (true) {
+			throw new IllegalArgumentException("this is a derived property");
+		}
 		this.totalLiabilities = totalLiabilities;
 	}
 
@@ -948,7 +973,11 @@ public class IR10Form2018 {
 		return ownersEquity;
 	}
 
+	@SuppressWarnings("unused")
 	public void setOwnersEquity(Money ownersEquity) {
+		if (true) {
+			throw new IllegalArgumentException("this is a derived property");
+		}
 		this.ownersEquity = ownersEquity;
 	}
 
