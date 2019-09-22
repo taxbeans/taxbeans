@@ -17,8 +17,8 @@ otherIncome,2.4.4.0.0,2.4.4.0.0,2.4.4.0.0,other income,other income,Text30.8,Tex
 totalIncome,2.4.4.0.1,2.4.4.0.1,2.4.4.0.1,Total Income/Loss,Total Income/Loss,Text30.9,Text30.9,Text30.9,Text30.9
 badDebts,2.4.4.1,2.4.4.1,2.4.4.1,bad debts,bad debts,Text30.10,Text30.10,Text30.10,Text30.10
 depreciation,2.4.4.2,2.4.4.2,2.4.4.2,accounting,accounting,Text30.11,Text30.11,Text30.11,Text30.11
-entertainment,2.4.4.3,2.4.4.3,2.4.4.3,0,0,0,0,0,0
-fringeBenefitTax,2.4.4.4,2.4.4.4,2.4.4.4,0,0,0,0,0,0
+entertainment,2.4.4.3,2.4.4.3,2.4.4.3,N/A,N/A,N/A,N/A,N/A,N/A
+fringeBenefitTax,2.4.4.4,2.4.4.4,2.4.4.4,N/A,N/A,N/A,N/A,N/A,N/A
 insurance,2.4.4.5,2.4.4.5,2.4.4.5,insurance,insurance,Text30.12,Text30.12,Text30.12,Text30.12
 consultingFees,0,0,0,consulting,consulting,Text30.14,Text30.14,Text30.14,Text30.14
 interestExpenses,2.4.4.6,2.4.4.6,2.4.4.6,interest loss,interest loss,Text30.13,Text30.13,Text30.13,Text30.13
@@ -40,6 +40,7 @@ taxAdjustments,0,0,0,Tax Adjustments/Loss,Tax Adjustments/Loss,Text30.26.0,Text3
 netProfitBeforeTax,0,0,0,Net Profit/Loss,Net Profit/Loss,Text30.25,Text30.25,Text30.25,Text30.25
 accountsReceivable,2.4.4.18.1.0.0,2.4.4.18.1.0.0,2.4.4.18.1.0.0,accounts receivable,accounts receivable,pg2.0,pg2.0,pg2.0,pg2.0
 bankAccountAssets,2.4.4.18.1.0.1,2.4.4.18.1.0.1,2.4.4.18.1.0.1,cash deposits,cash deposits,pg2.1,pg2.1,pg2.1,pg2.1
+cashAndDeposits,2.4.4.18.1.0.1,2.4.4.18.1.0.1,2.4.4.18.1.0.1,cash deposits,cash deposits,pg2.1,pg2.1,pg2.1,pg2.1
 otherCurrentAssets,2.4.4.18.1.0.2,2.4.4.18.1.0.2,2.4.4.18.1.0.2,other assets,other assets,pg2.2,pg2.2,pg2.2,pg2.2
 totalCurrentAssets,2.4.4.18.1.0.3,2.4.4.18.1.0.3,2.4.4.18.1.0.3,0,0,0,0,0,0
 vehicleAssets,2.4.4.18.1.1,2.4.4.18.1.1,2.4.4.18.1.1,vehicles,vehicles,pg2.3,pg2.3,pg2.3,pg2.3
