@@ -265,6 +265,10 @@ public class IR10Form2018 {
 		if (f.getAnnotation(Skip.class) != null) {
 			return;
 		}
+		if (value == null) {
+			logger.warn("Null value - may indicate either blank field or issue");
+			return;
+		}
 		if (value instanceof Money) {
 			if (f.getAnnotation(OmitCents.class) != null) {
 				value = TaxReturnUtils.formatDollarsField((Money) value);
