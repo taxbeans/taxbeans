@@ -430,7 +430,7 @@ public class IR10Form2018 {
 								f2.setAccessible(true);
 								Money money = (Money)f2.get(this);
 								try {
-									sumMoney = sumMoney.add(money);
+									sumMoney = sumMoney.add(money == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
 								} catch (NullPointerException e) {
 									if (i <= (maxPasses-1)) {
 										//3 passes required for derived field of derived field
@@ -447,7 +447,7 @@ public class IR10Form2018 {
 								f2.setAccessible(true);
 								money = (Money)f2.get(this);
 								try {
-									sumMoney = sumMoney.subtract(money);
+									sumMoney = sumMoney.subtract(money == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
 								} catch (NullPointerException e) {
 									if (i <= (maxPasses-1)) {
 										//3 passes required for derived field of derived field
