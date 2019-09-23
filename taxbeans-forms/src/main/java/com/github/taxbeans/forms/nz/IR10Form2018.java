@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.github.taxbeans.exception.TaxBeansException;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.OmitCents;
+import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.SkipIfFalse;
@@ -61,6 +62,8 @@ public class IR10Form2018 {
 	private Money closingStock;
 	
 	@OmitCents
+	@Required
+	@Sum("grossIncome")
 	private Money grossProfit;
 	
 	@OmitCents
@@ -76,6 +79,7 @@ public class IR10Form2018 {
 	private Money otherIncome;
 	
 	@OmitCents
+	@Required
 	@Sum({"grossProfit", "interestReceived", "dividends", "leasePayments",
 			"otherIncome"})
 	private Money totalIncome;
@@ -120,6 +124,7 @@ public class IR10Form2018 {
 	private Money otherExpenses;
 	
 	@OmitCents
+	@Required
 	@Sum({"badDebts", "depreciation", "insurance", "interestExpenses",
 			"consultingFees", "rates", "leasePaymentExpenses", "repairs",
 			"researchAndDevelopment", "relatedPartyRenumeration", "salaryAndWages", "subcontractorPayments", 
@@ -130,6 +135,7 @@ public class IR10Form2018 {
 	private Money exceptionalItems;
 	
 	@OmitCents
+	@Required
 	@Sum(value={"totalIncome", "exceptionalItems"}, negate="totalExpenses")
 	private Money netProfitBeforeTax;
 	
@@ -137,6 +143,7 @@ public class IR10Form2018 {
 	private Money taxAdjustments;
 	
 	@OmitCents
+	@Required
 	@Sum(value="netProfitBeforeTax", negate="taxAdjustments")
 	private Money taxableProfit;
 	
@@ -180,6 +187,7 @@ public class IR10Form2018 {
 	private Money otherNonCurrentAssets;
 	
 	@OmitCents
+	@Required
 	@Sum({"accountsReceivable", "cashAndDeposits", "otherCurrentAssets", "vehicleAssets",
 			"plantAssets", "furnitureAssets", "land", "buildings",
 			"otherFixedAssets", "intangibles", "sharesAndDebentures", "termDeposits",
@@ -199,6 +207,7 @@ public class IR10Form2018 {
 	private Money otherCurrentLiabilities;
 	
 	@OmitCents
+	@Required
 	@Sum({"provisions", "accountsPayable", "currentLoans", "otherCurrentLiabilities"})
 	private Money totalCurrentLiabilities;
 	
@@ -206,10 +215,12 @@ public class IR10Form2018 {
 	private Money nonCurrentLiabilities;
 	
 	@OmitCents
+	@Required
 	@Sum({"totalCurrentLiabilities", "nonCurrentLiabilities"})
 	private Money totalLiabilities;
 	
 	@OmitCents
+	@Required
 	@Sum(value="totalAssets", negate="totalLiabilities")
 	private Money ownersEquity;
 	
@@ -430,7 +441,7 @@ public class IR10Form2018 {
 								f2.setAccessible(true);
 								Money money = (Money)f2.get(this);
 								try {
-									sumMoney = sumMoney.add(money == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
+									sumMoney = sumMoney.add(money == null && f2.getAnnotation(Required.class) == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
 								} catch (NullPointerException e) {
 									if (i <= (maxPasses-1)) {
 										//3 passes required for derived field of derived field
@@ -447,7 +458,7 @@ public class IR10Form2018 {
 								f2.setAccessible(true);
 								money = (Money)f2.get(this);
 								try {
-									sumMoney = sumMoney.subtract(money == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
+									sumMoney = sumMoney.subtract(money == null && f2.getAnnotation(Required.class) == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
 								} catch (NullPointerException e) {
 									if (i <= (maxPasses-1)) {
 										//3 passes required for derived field of derived field
