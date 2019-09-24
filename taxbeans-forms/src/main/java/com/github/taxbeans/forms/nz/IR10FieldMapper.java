@@ -25,8 +25,7 @@ public class IR10FieldMapper {
 			}
 		}
 		return map.get(fieldName.name())[year-2009];
-	}
-	
+	}	
 
 	public static Map<String, String> getPropertyToFieldMap(int year) {
 		Map<String, String> map = new HashMap<String, String>();

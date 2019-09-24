@@ -1,6 +1,7 @@
 package com.github.taxbeans.forms.nz;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -32,5 +33,21 @@ public class IR7FieldMapper {
 			logger.error("No mapping column in IR7 mapping for year: {}", year);
 		}
 		return strings[i];
+	}
+	
+	public static Map<String, String> getPropertyToFieldMap(int year) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (IR7Fields field : IR7Fields.values()) {
+			map.put(field.name(), getFieldName(field, year));
+		}
+		return map;
+	}
+
+	public static Map<String, String> getFieldToPropertyMap(int year) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (IR7Fields field : IR7Fields.values()) {
+			map.put(getFieldName(field, year), field.name());
+		}
+		return map;
 	}
 }

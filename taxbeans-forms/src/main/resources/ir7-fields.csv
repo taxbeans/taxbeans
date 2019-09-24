@@ -14,11 +14,17 @@ bicCode,14,14,6,6,6,6,6,6,6
 daytimePhoneNumberPrefix,15,15,7.1,7.1,7.1,7.1,7.1,7.1,7.1
 daytimePhoneNumberSuffix,16,16,7.2,7.2,7.2,7.2,7.2,7.2,7.2
 firstReturnRadio,20,20,8,8,8,8,8,8,8
+firstReturnRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+firstReturnRadio_false,No,No,No,No,No,No,No,No,No
 dayOfFirstReturn,17,17,8 day,8 day,8 day,8 day,8 day,8 day,8 day
 monthOfFirstReturn,18,18,8 month,8 month,8 month,8 month,8 month,8 month,8 month
 yearOfFirstReturn,19,19,8 year,8 year,8 year,8 year,8 year,8 year,8 year
 partnershipCeasedRadio,21,21,9,9,9,9,9,9,9
+partnershipCeasedRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+partnershipCeasedRadio_false,No,No,No,No,No,No,No,No,No
 schedularPaymentsRadio,22,22,10,10,10,10,10,10,10
+schedularPaymentsRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+schedularPaymentsRadio_false,No,No,No,No,No,No,No,No,No
 nzInterestRadio,25,25,11,11,11,11,11,11,11
 totalRWT,23.0.0.0.4.0,23.0.0.0.4.0,11A,11A,11A,11A,11A,11A,11A
 totalGrossInterest,23.0.0.0.4.1,23.0.0.0.4.1,11B,11B,11B,11B,11B,11B,11B
