@@ -19,10 +19,10 @@ public class IR7Form2018Test {
 		bean.setBicCode("Bic101");
 		bean.setDaytimePhoneNumberPrefix("021");
 		bean.setDaytimePhoneNumberSuffix("8888888");
-		bean.publishDraft();
 		bean.setFirstReturnRadio(false);
 		bean.setSchedularPaymentsRadio(false);
-		bean.setPartnershipCeasedRadio(false);
+		bean.setPartnershipCeasedRadio(false);		
+		bean.publishDraft();
 	}
 
 }

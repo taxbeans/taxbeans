@@ -88,6 +88,12 @@ public class IR7Form2018 {
 	@UseTrueFalseMappings
 	private boolean schedularPaymentsRadio;
 
+	@UseTrueFalseMappings
+	private boolean nzInterestRadio;
+	
+	@UseTrueFalseMappings
+	private boolean dividendsRadio;
+
 //	private String calculateMinusSign(Money value) {
 //		return value.signum() < 0 ? "-" : "";
 //	}
@@ -309,7 +315,7 @@ public class IR7Form2018 {
 						}
 					}
 					}
-			} catch (NullPointerException e) {
+			} catch (NullPointerException | IllegalArgumentException e) {
 				logger.error("Error processing: {}", key);
 				throw e;
 			}
@@ -505,5 +511,21 @@ public class IR7Form2018 {
 
 	public void setSchedularPaymentsRadio(boolean schedularPaymentsRadio) {
 		this.schedularPaymentsRadio = schedularPaymentsRadio;
+	}
+
+	public boolean isNzInterestRadio() {
+		return nzInterestRadio;
+	}
+
+	public void setNzInterestRadio(boolean nzInterestRadio) {
+		this.nzInterestRadio = nzInterestRadio;
+	}
+
+	public boolean isDividendsRadio() {
+		return dividendsRadio;
+	}
+
+	public void setDividendsRadio(boolean dividendsRadio) {
+		this.dividendsRadio = dividendsRadio;
 	}
 }

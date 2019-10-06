@@ -26,7 +26,7 @@ public class IR7FieldMapper {
 		}
 		int i = year-2009;
 		String[] strings = map.get(fieldName.name());
-		if (strings.length == 0) {
+		if (strings == null || strings.length == 0) {
 			logger.error("No matching fields in IR7 {} for: {}", year, fieldName.name());
 		}
 		if (strings.length <= i) {
