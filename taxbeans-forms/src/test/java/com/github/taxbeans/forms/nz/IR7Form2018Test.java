@@ -30,6 +30,11 @@ public class IR7Form2018Test {
 		bean.setOverseasIncome(false);
 		bean.setBusinessIncome(true);
 	    bean.setRentalIncomeRadio(false);
+	    bean.setExpenseClaimRadio(false);
+	    //bean.setLaqcRadio(false);
+	    bean.setPartnershipOrLTCRadio(true);
+	    bean.setPartnershipCFCRadio(false);
+	    bean.setLaqcTransitionRadio(false);
 		//bean.setOtherIncomeRadio(false);
 		
 		bean.publishDraft();

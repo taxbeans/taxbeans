@@ -114,6 +114,19 @@ public class IR7Form2018 {
 	
 	@UseTrueFalseMappings
 	private boolean otherIncomeRadio;
+	
+	@UseTrueFalseMappings
+	private boolean expenseClaimRadio;
+
+	
+	@UseTrueFalseMappings
+	private boolean partnershipOrLTCRadio;
+	
+	@UseTrueFalseMappings
+	private boolean partnershipCFCRadio;
+	
+	@UseTrueFalseMappings
+	private boolean laqcTransitionRadio;
 
 //	private String calculateMinusSign(Money value) {
 //		return value.signum() < 0 ? "-" : "";
@@ -605,4 +618,40 @@ public class IR7Form2018 {
 	public void setOtherIncomeRadio(boolean otherIncomeRadio) {
 		this.otherIncomeRadio = otherIncomeRadio;
 	}
+
+	public boolean isExpenseClaimRadio() {
+		return expenseClaimRadio;
+	}
+
+	public void setExpenseClaimRadio(boolean expenseClaimRadio) {
+		this.expenseClaimRadio = expenseClaimRadio;
+	}
+
+	public boolean isPartnershipOrLTCRadio() {
+		return partnershipOrLTCRadio;
+	}
+
+	/**
+	 * true means it's a partnership
+	 */
+	public void setPartnershipOrLTCRadio(boolean partnershipOrLTCRadio) {
+		this.partnershipOrLTCRadio = partnershipOrLTCRadio;
+	}
+
+	public boolean isPartnershipCFCRadio() {
+		return partnershipCFCRadio;
+	}
+
+	public void setPartnershipCFCRadio(boolean partnershipCFCRadio) {
+		this.partnershipCFCRadio = partnershipCFCRadio;
+	}
+
+	public boolean isLaqcTransitionRadio() {
+		return laqcTransitionRadio;
+	}
+
+	public void setLaqcTransitionRadio(boolean laqcTransitionRadio) {
+		this.laqcTransitionRadio = laqcTransitionRadio;
+	}
+
 }
