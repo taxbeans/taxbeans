@@ -66,6 +66,8 @@ public enum IR7Fields {
 	rentalIncomeRadio_true,
 	netRentalIncome,
 	otherIncomeRadio,
+	otherIncomeRadio_false,
+	otherIncomeRadio_true,
 	totalOtherIncome,
 	laqcRadio,
 	laqcLoss,

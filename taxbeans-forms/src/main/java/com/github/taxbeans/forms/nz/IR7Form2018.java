@@ -93,6 +93,27 @@ public class IR7Form2018 {
 	
 	@UseTrueFalseMappings
 	private boolean dividendsRadio;
+	
+	@UseTrueFalseMappings
+	private boolean maoriTaxableDistributions;
+	
+	@UseTrueFalseMappings
+	private boolean incomeFromAnotherPartnership;
+	
+	@UseTrueFalseMappings
+	private boolean incomeFromAnotherLTC;
+	
+	@UseTrueFalseMappings
+	private boolean overseasIncome;
+	
+	@UseTrueFalseMappings
+	private boolean businessIncome;
+	
+	@UseTrueFalseMappings
+	private boolean rentalIncomeRadio;
+	
+	@UseTrueFalseMappings
+	private boolean otherIncomeRadio;
 
 //	private String calculateMinusSign(Money value) {
 //		return value.signum() < 0 ? "-" : "";
@@ -248,7 +269,7 @@ public class IR7Form2018 {
 								propertyToFieldMap.entrySet().forEach(action -> logger
 										.error(String.format("%s -> %s", action.getKey(), action.getValue())));
 								throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
-										+ "cause is missing Enum field in IR7Fields", key));
+										+ "cause is missing Enum field (or enum true and false suffixes) in IR7Fields", key));
 							}
 							processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseValueMappings.class) != null) {
@@ -527,5 +548,61 @@ public class IR7Form2018 {
 
 	public void setDividendsRadio(boolean dividendsRadio) {
 		this.dividendsRadio = dividendsRadio;
+	}
+
+	public boolean isMaoriTaxableDistributions() {
+		return maoriTaxableDistributions;
+	}
+
+	public void setMaoriTaxableDistributions(boolean maoriTaxableDistributions) {
+		this.maoriTaxableDistributions = maoriTaxableDistributions;
+	}
+
+	public boolean isIncomeFromAnotherPartnership() {
+		return incomeFromAnotherPartnership;
+	}
+
+	public void setIncomeFromAnotherPartnership(boolean incomeFromAnotherPartnership) {
+		this.incomeFromAnotherPartnership = incomeFromAnotherPartnership;
+	}
+
+	public boolean isIncomeFromAnotherLTC() {
+		return incomeFromAnotherLTC;
+	}
+
+	public void setIncomeFromAnotherLTC(boolean incomeFromAnotherLTC) {
+		this.incomeFromAnotherLTC = incomeFromAnotherLTC;
+	}
+
+	public boolean isBusinessIncome() {
+		return businessIncome;
+	}
+
+	public void setBusinessIncome(boolean businessIncome) {
+		this.businessIncome = businessIncome;
+	}
+
+	public boolean isOverseasIncome() {
+		return overseasIncome;
+	}
+
+	public void setOverseasIncome(boolean overseasIncome) {
+		this.overseasIncome = overseasIncome;
+	}
+
+	public boolean isRentalIncomeRadio() {
+		return rentalIncomeRadio;
+	}
+
+	public void setRentalIncomeRadio(boolean rentalIncomeRadio) {
+		this.rentalIncomeRadio = rentalIncomeRadio;
+	}
+
+	public boolean isOtherIncomeRadio() {
+		return otherIncomeRadio;
+	}
+
+	public void setOtherIncomeRadio(boolean otherIncomeRadio) {
+		this.otherIncomeRadio = otherIncomeRadio;
 	}
 }
