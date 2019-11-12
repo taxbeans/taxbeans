@@ -71,15 +71,25 @@ laqcLoss,23.0.0.0.11.1,23.0.0.0.11.1,20B,20B,20B,20B,20B,20B,20B
 totalIncome,23.0.0.0.12.1,23.0.0.0.12.1,21,21,21,21,21,21,21
 totalIncomeCopied,23.0.0.1.0,23.0.0.1.0,0,0,0,0,0,0,0
 expenseClaimRadio,51,51,22,22,22,22,22,22,22
+expenseClaimRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+expenseClaimRadio_false,No,No,No,No,No,No,No,No,No
 totalExpenses,23.0.0.1.1,23.0.0.1.1,22aa,22aa,22aa,22aa,22aa,22aa,22aa
 totalIncomeAfterExpenses,23.0.0.1.2,23.0.0.1.2,23,23,23,23,23,23,23
 laqcTransitionRadio,0,0,24,24,24,24,24,24,24
+laqcTransitionRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+laqcTransitionRadio_false,No,No,No,No,No,No,No,No,No
 partnershipRadio,0,0,25,25,25,25,25,25,25
 partnershipCFCRadio,0,0,26,26,26,26,26,26,26
+partnershipCFCRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+partnershipCFCRadio_false,No,No,No,No,No,No,No,No,No
 laqcExtinguishedLosses,0,0,24aa,24aa,24aa,24aa,24aa,24aa,24aa
+laqcExtinguishedLosses_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+laqcExtinguishedLosses_false,No,No,No,No,No,No,No,No,No
 laqcPriorYearsDeductions,0,0,24A,24A,24A,24A,24A,24A,24A
 laqcDeductionsClaimedThisYear,0,0,24B,24B,24B,24B,24B,24B,24B
-partnershipOrLTCRadio,0,0,26,26,26,26,26,26,26
+partnershipOrLTCRadio,0,0,25,25,25,25,25,25,25
+partnershipOrLTCRadio_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+partnershipOrLTCRadio_true,No,No,No,No,No,No,No,No,No
 partnersName1,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0
 partnersAddress1,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0
 partnersIRDNumber1,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0
