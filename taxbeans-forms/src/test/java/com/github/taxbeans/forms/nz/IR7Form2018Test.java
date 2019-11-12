@@ -20,8 +20,18 @@ public class IR7Form2018Test {
 		bean.setDaytimePhoneNumberPrefix("021");
 		bean.setDaytimePhoneNumberSuffix("8888888");
 		bean.setFirstReturnRadio(false);
+		bean.setPartnershipCeasedRadio(false);
 		bean.setSchedularPaymentsRadio(false);
-		bean.setPartnershipCeasedRadio(false);		
+		bean.setNzInterestRadio(false);
+		bean.setDividendsRadio(false);
+		bean.setMaoriTaxableDistributions(false);
+		bean.setIncomeFromAnotherPartnership(false);
+		bean.setIncomeFromAnotherLTC(false);
+		bean.setOverseasIncome(false);
+		bean.setBusinessIncome(true);
+	    bean.setRentalIncomeRadio(false);
+		//bean.setOtherIncomeRadio(false);
+		
 		bean.publishDraft();
 	}
 

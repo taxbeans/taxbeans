@@ -1,4 +1,4 @@
-,2010,2011,2012,2013,2014,2015,2016,2017,2018
+"",2010,2011,2012,2013,2014,2015,2016,2017,2018
 irdNumber,ird 1,ird 1,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird
 partnershipNameLine1,4,4,2.1,2.1,2.1,2.1,2.1,2.1,2.1
 partnershipNameLine2,4.1,4.1,2.2,2.2,2.2,2.2,2.2,2.2,2.2
@@ -58,11 +58,13 @@ businessIncome,41,41,17,17,17,17,17,17,17
 businessIncome_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 businessIncome_false,No,No,No,No,No,No,No,No,No
 netProfitOrLoss,23.0.0.0.9.1,23.0.0.0.9.1,17B,18B,18B,18B,18B,18B,18B
-rentalIncomeRadio,0,0,18,18,18,18,18,18,18
+rentalIncomeRadio,0,0,18,18,18,18,18,18,19
 rentalIncomeRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 rentalIncomeRadio_false,No,No,No,No,No,No,No,No,No
 netRentalIncome,0,0,18B,18B,18B,18B,18B,18B,18B
-otherIncomeRadio,43,43,19,19,19,19,19,19,19
+otherIncomeRadio,43,43,19,19,19,19,19,19,20
+otherIncomeRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+otherIncomeRadio_false,No,No,No,No,No,No,No,No,No
 totalOtherIncome,23.0.0.0.10.1,23.0.0.0.10.1,19B,19B,19B,19B,19B,19B,19B
 laqcRadio,47,47,20,20,20,20,20,20,20
 laqcLoss,23.0.0.0.11.1,23.0.0.0.11.1,20B,20B,20B,20B,20B,20B,20B
