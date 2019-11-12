@@ -1,5 +1,9 @@
 package com.github.taxbeans.forms.nz;
 
+import java.math.BigDecimal;
+
+import org.javamoney.moneta.Money;
+
 public class IR7Form2018Test {
 
 	public static void main(String[] args) {
@@ -35,6 +39,8 @@ public class IR7Form2018Test {
 	    bean.setPartnershipOrLTCRadio(true);
 	    bean.setPartnershipCFCRadio(false);
 	    bean.setLaqcTransitionRadio(false);
+	    bean.setTotalIncome(Money.of(new BigDecimal("888.88"), "NZD"));
+	    bean.setTotalIncomeAfterExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
 		//bean.setOtherIncomeRadio(false);
 		
 		bean.publishDraft();
