@@ -127,6 +127,12 @@ public class IR7Form2018 {
 	
 	@UseTrueFalseMappings
 	private boolean laqcTransitionRadio;
+	
+	@RightAlign(11)
+	private Money totalIncome;
+	
+	@RightAlign(11)
+	private Money totalIncomeAfterExpenses;
 
 //	private String calculateMinusSign(Money value) {
 //		return value.signum() < 0 ? "-" : "";
@@ -652,6 +658,22 @@ public class IR7Form2018 {
 
 	public void setLaqcTransitionRadio(boolean laqcTransitionRadio) {
 		this.laqcTransitionRadio = laqcTransitionRadio;
+	}
+
+	public Money getTotalIncome() {
+		return totalIncome;
+	}
+
+	public void setTotalIncome(Money totalIncome) {
+		this.totalIncome = totalIncome;
+	}
+
+	public Money getTotalIncomeAfterExpenses() {
+		return totalIncomeAfterExpenses;
+	}
+
+	public void setTotalIncomeAfterExpenses(Money totalIncomeAfterExpenses) {
+		this.totalIncomeAfterExpenses = totalIncomeAfterExpenses;
 	}
 
 }
