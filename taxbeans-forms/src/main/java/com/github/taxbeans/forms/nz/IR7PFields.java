@@ -1,6 +1,6 @@
 package com.github.taxbeans.forms.nz;
 
-public enum PartnershipDistributionFormFieldEnum {
+public enum IR7PFields {
 	partnershipName,
 	irdNumber,
 	partnersName1,
