@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import org.javamoney.moneta.Money;
 
+import com.github.taxbeans.forms.common.FormProcessor;
+
 public class IR7Form2018Test {
 
 	public static void main(String[] args) {
@@ -43,7 +45,8 @@ public class IR7Form2018Test {
 	    bean.setTotalIncomeAfterExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
 		//bean.setOtherIncomeRadio(false);
 		
-		bean.publishDraft();
+		FormProcessor.publishDraft(bean, 2018, "ir7-%1$s.pdf", IR7FieldMapper.getPropertyToFieldMap(2018), 
+				"Example Partnership", "ir7-%1$s-%2$s-draft.pdf");
 	}
 
 }

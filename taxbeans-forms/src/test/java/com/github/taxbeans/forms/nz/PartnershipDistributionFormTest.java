@@ -8,10 +8,10 @@ public class PartnershipDistributionFormTest {
 	@Test
 	public void test() {
 		Assert.assertEquals("0",
-				PartnershipDistributionFormFieldMapper.getFieldName(
-						PartnershipDistributionFormFieldEnum.irdNumber, 2010));
+				IR7PFieldMapper.getFieldName(
+						IR7PFields.irdNumber, 2010));
 		Assert.assertEquals("2",
-				PartnershipDistributionFormFieldMapper.getFieldName(
-						PartnershipDistributionFormFieldEnum.irdNumber, 2013));
+				IR7PFieldMapper.getFieldName(
+						IR7PFields.irdNumber, 2013));
 	}
 }
