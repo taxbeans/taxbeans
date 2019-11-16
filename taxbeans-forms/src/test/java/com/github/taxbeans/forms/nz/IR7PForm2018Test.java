@@ -24,6 +24,15 @@ public class IR7PForm2018Test {
 		bean.setPartnersOA1(Money.of(new BigDecimal("88.88"), "NZD"));
 		bean.setPartnersRentalIncome1(Money.of(new BigDecimal("88.88"), "NZD"));
 		bean.setPartnersPassiveIncome1(Money.of(new BigDecimal("88.88"), "NZD"));
+		bean.setPartnersName2("Jay Johnson");
+		bean.setPartnersIRDNumber2("888-888-882");
+		bean.setPartnersProportion2(new BigDecimal("1"));
+		bean.setPartnersInterest2(Money.of(new BigDecimal("80.88"), "NZD"));
+		bean.setPartnersDividends2(Money.of(new BigDecimal("8.88"), "NZD"));
+		bean.setPartnersMA2(Money.of(new BigDecimal("80.88"), "NZD"));
+		bean.setPartnersOA2(Money.of(new BigDecimal("8.88"), "NZD"));
+		bean.setPartnersRentalIncome2(Money.of(new BigDecimal("8.88"), "NZD"));
+		bean.setPartnersPassiveIncome2(Money.of(new BigDecimal("8.88"), "NZD"));
 		
 		FormProcessor.publishDraft(bean, 2018, "ir7p/ir7p-%1$s.pdf", IR7PFieldMapper.getPropertyToFieldMap(2018), 
 				"Example Partnership", "ir7p-%1$s-%2$s-draft.pdf");
