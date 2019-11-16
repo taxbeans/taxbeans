@@ -6,11 +6,9 @@ import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.forms.LeftAlign;
 import com.github.taxbeans.forms.Percent2DecimalPlaces;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.Skip;
-import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 
 public class IR7PForm2018 implements FormDestination {
@@ -68,6 +66,39 @@ public class IR7PForm2018 implements FormDestination {
 	private Money partnersImputationCredits1;
 	
 	private Money partnersOtherTaxCredits1;
+	
+	private String partnersName2, 
+
+	partnersIRDNumber2;
+
+	private Money partnersInterest2,
+	
+	partnersDividends2,
+	
+	partnersMA2,
+	
+	partnersOA2,
+	
+	partnersRentalIncome2,
+	
+	partnersPassiveIncome2,
+	
+	partnersOtherIncome2,
+	
+	partnersLAQCLoss2,
+	
+	partnersTotalIncome2,
+	
+	partnersExtinguishedLosses2,
+	
+	partnersOverseasTaxPaid2,
+	
+	partnersImputationCredits2,
+	
+	partnersOtherTaxCredits2;
+	
+	@Percent2DecimalPlaces
+	private BigDecimal partnersProportion2;
 
 	public int getYear() {
 		return year;
@@ -139,12 +170,11 @@ public class IR7PForm2018 implements FormDestination {
 	}
 
 	public String getPartnersIRDNumber1() {
-		partnersIRDNumber1 = partnersIRDNumber1.replace("-", "");
 		return partnersIRDNumber1;
 	}
 
 	public void setPartnersIRDNumber1(String partnersIRDNumber1) {
-		this.partnersIRDNumber1 = partnersIRDNumber1;
+		this.partnersIRDNumber1 = partnersIRDNumber1.replace("-", "");
 	}
 
 	public BigDecimal getPartnersProportion1() {
@@ -257,5 +287,133 @@ public class IR7PForm2018 implements FormDestination {
 
 	public void setPartnersOtherTaxCredits1(Money partnersOtherTaxCredits1) {
 		this.partnersOtherTaxCredits1 = partnersOtherTaxCredits1;
+	}
+
+	public String getPartnersName2() {
+		return partnersName2;
+	}
+
+	public void setPartnersName2(String partnersName2) {
+		this.partnersName2 = partnersName2;
+	}
+
+	public String getPartnersIRDNumber2() {
+		return partnersIRDNumber2;
+	}
+
+	public void setPartnersIRDNumber2(String partnersIRDNumber2) {
+		this.partnersIRDNumber2 = partnersIRDNumber2.replace("-", "");
+	}
+
+	public Money getPartnersInterest2() {
+		return partnersInterest2;
+	}
+
+	public void setPartnersInterest2(Money partnersInterest2) {
+		this.partnersInterest2 = partnersInterest2;
+	}
+
+	public Money getPartnersDividends2() {
+		return partnersDividends2;
+	}
+
+	public void setPartnersDividends2(Money partnersDividends2) {
+		this.partnersDividends2 = partnersDividends2;
+	}
+
+	public Money getPartnersMA2() {
+		return partnersMA2;
+	}
+
+	public void setPartnersMA2(Money partnersMA2) {
+		this.partnersMA2 = partnersMA2;
+	}
+
+	public Money getPartnersOA2() {
+		return partnersOA2;
+	}
+
+	public void setPartnersOA2(Money partnersOA2) {
+		this.partnersOA2 = partnersOA2;
+	}
+
+	public Money getPartnersRentalIncome2() {
+		return partnersRentalIncome2;
+	}
+
+	public void setPartnersRentalIncome2(Money partnersRentalIncome2) {
+		this.partnersRentalIncome2 = partnersRentalIncome2;
+	}
+
+	public Money getPartnersPassiveIncome2() {
+		return partnersPassiveIncome2;
+	}
+
+	public void setPartnersPassiveIncome2(Money partnersPassiveIncome2) {
+		this.partnersPassiveIncome2 = partnersPassiveIncome2;
+	}
+
+	public Money getPartnersOtherIncome2() {
+		return partnersOtherIncome2;
+	}
+
+	public void setPartnersOtherIncome2(Money partnersOtherIncome2) {
+		this.partnersOtherIncome2 = partnersOtherIncome2;
+	}
+
+	public Money getPartnersLAQCLoss2() {
+		return partnersLAQCLoss2;
+	}
+
+	public void setPartnersLAQCLoss2(Money partnersLAQCLoss2) {
+		this.partnersLAQCLoss2 = partnersLAQCLoss2;
+	}
+
+	public Money getPartnersTotalIncome2() {
+		return partnersTotalIncome2;
+	}
+
+	public void setPartnersTotalIncome2(Money partnersTotalIncome2) {
+		this.partnersTotalIncome2 = partnersTotalIncome2;
+	}
+
+	public Money getPartnersExtinguishedLosses2() {
+		return partnersExtinguishedLosses2;
+	}
+
+	public void setPartnersExtinguishedLosses2(Money partnersExtinguishedLosses2) {
+		this.partnersExtinguishedLosses2 = partnersExtinguishedLosses2;
+	}
+
+	public Money getPartnersOverseasTaxPaid2() {
+		return partnersOverseasTaxPaid2;
+	}
+
+	public void setPartnersOverseasTaxPaid2(Money partnersOverseasTaxPaid2) {
+		this.partnersOverseasTaxPaid2 = partnersOverseasTaxPaid2;
+	}
+
+	public Money getPartnersImputationCredits2() {
+		return partnersImputationCredits2;
+	}
+
+	public void setPartnersImputationCredits2(Money partnersImputationCredits2) {
+		this.partnersImputationCredits2 = partnersImputationCredits2;
+	}
+
+	public Money getPartnersOtherTaxCredits2() {
+		return partnersOtherTaxCredits2;
+	}
+
+	public void setPartnersOtherTaxCredits2(Money partnersOtherTaxCredits2) {
+		this.partnersOtherTaxCredits2 = partnersOtherTaxCredits2;
+	}
+
+	public BigDecimal getPartnersProportion2() {
+		return partnersProportion2;
+	}
+
+	public void setPartnersProportion2(BigDecimal partnersProportion2) {
+		this.partnersProportion2 = partnersProportion2;
 	}
 }
