@@ -4,12 +4,9 @@ import java.math.BigDecimal;
 
 import org.javamoney.moneta.Money;
 
-import com.github.taxbeans.forms.OmitCents;
-
 public class IR10Form2018Test {
 
 	public static void main(String[] args) {
-		// MJHL IR10
 		IR10Form2018 bean = new IR10Form2018();
 		bean.setYearEnded(2018);
 		bean.setIrdNumber("888-888-888");
