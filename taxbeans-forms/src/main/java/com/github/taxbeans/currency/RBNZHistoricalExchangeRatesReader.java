@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.money.CurrencyUnit;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -42,7 +43,7 @@ public class RBNZHistoricalExchangeRatesReader {
 		} else if (currency.equals("EUR")) {
 			currencyColumn = "G";
 		} else {
- 			throw new IllegalStateException("Unsupported currency: " + currency);
+ 			throw new AssertionError("Unsupported currency: " + currency);
 		}
 		Workbook wb;
 		try {
@@ -102,6 +103,7 @@ public class RBNZHistoricalExchangeRatesReader {
 //		return new BigDecimal(cell.getNumericCellValue()+"");
 	}
 
+	@Deprecated
 	public static BigDecimal getForeignToNZDRate(LocalDate date, String foreignCurrency) {
 		
 		return BigDecimal.ONE.divide(getNZDtoForeignRate(date, foreignCurrency), MathContext.DECIMAL128);
@@ -117,6 +119,7 @@ public class RBNZHistoricalExchangeRatesReader {
 //		return new BigDecimal(cell.getNumericCellValue()+"");
 	}
 
+	@Deprecated
 	public static BigDecimal getNZDtoForeignRate(LocalDate date, String foreignCurrency) {
 		logger.debug("date = " + date);
 		logger.debug("Day of week = " + date.getDayOfWeek());
@@ -135,10 +138,16 @@ public class RBNZHistoricalExchangeRatesReader {
 		}
 		BigDecimal exchangeRate = exchangeRateInfo2.getExchangeRates().get(date);
 		if (exchangeRate == null) {
-			logger.info("Assuming {} is a public holiday since no exchange rate is available", date);
+			logger.trace("Assuming {} is a public holiday since no exchange rate is available", date);
 			exchangeRate = getNZDtoForeignRate(date.minusDays(1), foreignCurrency);
 		}
 		return exchangeRate;
+	}
+
+	public static BigDecimal getForeignToNZDRate(ZonedDateTime zonedDateTime, CurrencyUnit currency) {
+		LocalDate localDate = zonedDateTime.toLocalDate();
+		return getForeignToNZDRate(localDate, currency.getCurrencyCode());
+		
 	}
 
 }
