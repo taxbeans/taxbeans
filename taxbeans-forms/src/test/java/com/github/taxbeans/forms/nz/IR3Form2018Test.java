@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
 
+import com.github.taxbeans.forms.common.FormProcessor;
 import com.github.taxbeans.model.nz.NZBankAccount;
 import com.github.taxbeans.model.nz.Salutation;
 
@@ -161,7 +162,8 @@ public class IR3Form2018Test {
 		bean.setMinusSignForTotalIncome("-");
 		bean.setMinusSignForIncomeAfterExpenses("-");
 		bean.setMinusSignForTaxableIncome("-");
-		bean.publishDraft();
+		FormProcessor.publishDraft(bean, 2018, "ir3-%1$s.pdf", IR3FieldMapper.getPropertyToFieldMap(2018), 
+	    		"Test", "ir3-%1$s-%2$s-draft.pdf");
 	}
 
 }
