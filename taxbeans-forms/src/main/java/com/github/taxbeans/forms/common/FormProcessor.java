@@ -99,6 +99,7 @@ public class FormProcessor {
 				System.out.println("Candidate field: " + field1.getFullyQualifiedName());
 			}
 			System.out.println("An issue occurred searching for field: " + fieldName);
+			System.out.println("Perhaps field name not in enum");
 		}
 		pdField.setValue(String.valueOf(value));
 	}

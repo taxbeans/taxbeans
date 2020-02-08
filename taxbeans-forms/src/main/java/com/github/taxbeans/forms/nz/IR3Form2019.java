@@ -20,7 +20,7 @@ import com.github.taxbeans.forms.common.FormDestination;
 import com.github.taxbeans.model.nz.NZBankAccount;
 import com.github.taxbeans.model.nz.Salutation;
 
-public class IR3Form2018 implements FormDestination {
+public class IR3Form2019 implements FormDestination {
 
 	private static final String EXCESS_IMPUTATION_CREDITS_BROUGHT_FORWARD_ELIGIBLE = "excessImputationCreditsBroughtForwardEligible";
 
@@ -69,7 +69,7 @@ public class IR3Form2018 implements FormDestination {
 	private String businessIndustryClassificationCode;
 
 	@UseDayMonthYear
-	private LocalDate dateEnd2018TaxReturn;
+	private LocalDate dateEndCurrentYearTaxReturn;
 
 	@UseDayMonthYear
 	private LocalDate dateEndExcludedOverseasIncome;
@@ -78,7 +78,7 @@ public class IR3Form2018 implements FormDestination {
 	private LocalDate dateOfBirth;
 	
 	@UseDayMonthYear
-	private LocalDate dateStart2018TaxReturn;
+	private LocalDate dateStartCurrentYearTaxReturn;
 	
 	@UseDayMonthYear
 	private LocalDate dateStartExcludedOverseasIncome;
@@ -156,7 +156,7 @@ public class IR3Form2018 implements FormDestination {
 	@RightAlign(9)
 	private String irdNumber;
 	
-	final Logger logger = LoggerFactory.getLogger(IR3Form2018.class);
+	final Logger logger = LoggerFactory.getLogger(IR3Form2019.class);
 
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private String minusSignForAdjustedLTCIncome;
@@ -165,7 +165,7 @@ public class IR3Form2018 implements FormDestination {
 
 	private String minusSignForIncomeSubtotal;
 
-	@SkipIfFalse(IR3Form2018.RENTS_RECEIVED)
+	@SkipIfFalse(IR3Form2019.RENTS_RECEIVED)
 	private String minusSignForNetRents;
 
 
@@ -175,7 +175,7 @@ public class IR3Form2018 implements FormDestination {
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private String minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
 
-	@SkipIfFalse(IR3Form2018.OTHER_INCOME_RECEIVED)
+	@SkipIfFalse(IR3Form2019.OTHER_INCOME_RECEIVED)
 	private String minusSignForRLWTTaxCredit;
 
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
@@ -184,7 +184,7 @@ public class IR3Form2018 implements FormDestination {
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private String minusSignForSchedularPaymentsExpenses;
 
-	@SkipIfFalse(IR3Form2018.IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED)
+	@SkipIfFalse(IR3Form2019.IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED)
 	private String minusSignForSelfEmployedNetIncome;
 
 	private String minusSignForTaxableIncome;
@@ -261,13 +261,13 @@ public class IR3Form2018 implements FormDestination {
 
 	@RightAlign(11)
 	@SkipIfFalse("refundDue")
-	private Money refundCopiedPlusOverpayment2018;
+	private Money refundCopiedPlusOverpaymentCurrentYear;
 
 	@Skip
 	private boolean refundDue;
 	
 	@UseTrueFalseMappings
-	private boolean refundIsTransferredTo2018;
+	private boolean refundIsTransferredToCurrentYear;
 
 	@UseTrueFalseMappings
 	@SkipIfFalse("refundDue")
@@ -313,15 +313,15 @@ public class IR3Form2018 implements FormDestination {
 
 	@RightAlign(11)
 	@SkipIfFalse("refundDue")
-	private Money refundOverpayment2018;
+	private Money refundOverpaymentCurrentYear;
 
 	@RightAlign(11)
 	@SkipIfFalse("refundDue")
 	private Money refundTotal;
 
 	@RightAlign(11)
-	@SkipIfFalse("refundIsTransferredTo2018")
-	private Money refundTransferTo2018;
+	@SkipIfFalse("refundIsTransferredToCurrentYear")
+	private Money refundTransferToCurrentYear;
 
 	@RightAlign(11)
 	@SkipIfFalse("refundIsTransferredToStudentLoan")
@@ -332,7 +332,7 @@ public class IR3Form2018 implements FormDestination {
 
 
 	@RightAlign(11)
-	@SkipIfFalse(IR3Form2018.OTHER_INCOME_RECEIVED)
+	@SkipIfFalse(IR3Form2019.OTHER_INCOME_RECEIVED)
 	private Money residentialLandWithholdingTaxCredit;
 
 
@@ -422,12 +422,12 @@ public class IR3Form2018 implements FormDestination {
 	@OmitCents
 	@IncludeFormatSpacing
 	@SkipIfFalse("residualIncomeTaxDebitHigherThan2500Dollars")
-	private Money taxPayment2018;
+	private Money taxPaymentCurrentYear;
 
 
 	@RightAlign(1)
 	@SkipIfFalse("residualIncomeTaxDebitHigherThan2500Dollars")
-	private String taxPaymentSEROption2018;
+	private String taxPaymentSEROptionCurrentYear;
 
 
 	@RightAlign(11)
@@ -543,7 +543,7 @@ public class IR3Form2018 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean unpaidMajorWorkingShareholderWfFTCELigible;
 
-	private int year = 2018;
+	private int year = 2019;
 	
 	private String calculateMinusSign(Money value) {
 		return value.signum() < 0 ? "-" : "";
@@ -581,8 +581,8 @@ public class IR3Form2018 implements FormDestination {
 		return businessIndustryClassificationCode;
 	}
 	
-	public LocalDate getDateEnd2018TaxReturn() {
-		return dateEnd2018TaxReturn;
+	public LocalDate getDateEndCurrentYearTaxReturn() {
+		return dateEndCurrentYearTaxReturn;
 	}
 
 	public LocalDate getDateEndExcludedOverseasIncome() {
@@ -593,8 +593,8 @@ public class IR3Form2018 implements FormDestination {
 		return dateOfBirth;
 	}
 	
-	public LocalDate getDateStart2018TaxReturn() {
-		return dateStart2018TaxReturn;
+	public LocalDate getDateStartCurrentYearTaxReturn() {
+		return dateStartCurrentYearTaxReturn;
 	}
 
 	public LocalDate getDateStartExcludedOverseasIncome() {
@@ -757,8 +757,8 @@ public class IR3Form2018 implements FormDestination {
 		return refundCopied;
 	}
 	
-	public Money getRefundCopiedPlusOverpayment2018() {
-		return refundCopiedPlusOverpayment2018;
+	public Money getRefundCopiedPlusOverpaymentCurrentYear() {
+		return refundCopiedPlusOverpaymentCurrentYear;
 	}
 	
 	public Money getRefundOtherStudentLoanReceiverAmount() {
@@ -789,16 +789,16 @@ public class IR3Form2018 implements FormDestination {
 		return refundOtherTaxAccountReceiverYearEnded31March;
 	}
 	
-	public Money getRefundOverpayment2018() {
-		return refundOverpayment2018;
+	public Money getRefundOverpaymentCurrentYear() {
+		return refundOverpaymentCurrentYear;
 	}
 	
 	public Money getRefundTotal() {
 		return refundTotal;
 	}
 	
-	public Money getRefundTransferTo2018() {
-		return refundTransferTo2018;
+	public Money getRefundTransferToCurrentYear() {
+		return refundTransferToCurrentYear;
 	}
 	
 	public Money getRefundTransferToStudentLoan() {
@@ -861,12 +861,12 @@ public class IR3Form2018 implements FormDestination {
 		return taxOnTaxableIncome;
 	}
 
-	public Money getTaxPayment2018() {
-		return taxPayment2018;
+	public Money getTaxPaymentCurrentYear() {
+		return taxPaymentCurrentYear;
 	}
 
-	public String getTaxPaymentSEROption2018() {
-		return taxPaymentSEROption2018;
+	public String getTaxPaymentSEROptionCurrentYear() {
+		return taxPaymentSEROptionCurrentYear;
 	}
 	
 	public Money getTotalActiveLTCIncome() {
@@ -1053,8 +1053,8 @@ public class IR3Form2018 implements FormDestination {
 		return refundDue;
 	}
 
-	public boolean isRefundIsTransferredTo2018() {
-		return refundIsTransferredTo2018;
+	public boolean isRefundIsTransferredToCurrentYear() {
+		return refundIsTransferredToCurrentYear;
 	}
 
 	public boolean isRefundIsTransferredToOther() {
@@ -1161,8 +1161,8 @@ public class IR3Form2018 implements FormDestination {
 		this.businessIndustryClassificationCode = businessIndustryClassificationCode;
 	}
 
-	public void setDateEnd2018TaxReturn(LocalDate dateEnd2018TaxReturn) {
-		this.dateEnd2018TaxReturn = dateEnd2018TaxReturn;
+	public void setDateEndCurrentYearTaxReturn(LocalDate dateEndCurrentYearTaxReturn) {
+		this.dateEndCurrentYearTaxReturn = dateEndCurrentYearTaxReturn;
 	}
 
 	public void setDateEndExcludedOverseasIncome(LocalDate dateEndExcludedOverseasIncome) {
@@ -1173,8 +1173,8 @@ public class IR3Form2018 implements FormDestination {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public void setDateStart2018TaxReturn(LocalDate dateStart2018TaxReturn) {
-		this.dateStart2018TaxReturn = dateStart2018TaxReturn;
+	public void setDateStartCurrentYearTaxReturn(LocalDate dateStartCurrentYearTaxReturn) {
+		this.dateStartCurrentYearTaxReturn = dateStartCurrentYearTaxReturn;
 	}
 
 	public void setDateStartExcludedOverseasIncome(LocalDate dateStartExcludedOverseasIncome) {
@@ -1417,16 +1417,16 @@ public class IR3Form2018 implements FormDestination {
 		this.refundCopied = refundCopied;
 	}
 
-	public void setRefundCopiedPlusOverpayment2018(Money refundCopiedPlusOverpayment2018) {
-		this.refundCopiedPlusOverpayment2018 = refundCopiedPlusOverpayment2018;
+	public void setRefundCopiedPlusOverpaymentCurrentYear(Money refundCopiedPlusOverpaymentCurrentYear) {
+		this.refundCopiedPlusOverpaymentCurrentYear = refundCopiedPlusOverpaymentCurrentYear;
 	}
 
 	public void setRefundDue(boolean refundDue) {
 		this.refundDue = refundDue;
 	}
 
-	public void setRefundIsTransferredTo2018(boolean refundIsTransferredTo2018) {
-		this.refundIsTransferredTo2018 = refundIsTransferredTo2018;
+	public void setRefundIsTransferredToCurrentYear(boolean refundIsTransferredToCurrentYear) {
+		this.refundIsTransferredToCurrentYear = refundIsTransferredToCurrentYear;
 	}
 
 	public void setRefundIsTransferredToOther(boolean refundIsTransferredToOther) {
@@ -1473,16 +1473,16 @@ public class IR3Form2018 implements FormDestination {
 		this.refundOtherTaxAccountReceiverYearEnded31March = refundOtherTaxAccountReceiverYearEnded31March;
 	}
 
-	public void setRefundOverpayment2018(Money refundOverpayment2018) {
-		this.refundOverpayment2018 = refundOverpayment2018;
+	public void setRefundOverpaymentCurrentYear(Money refundOverpaymentCurrentYear) {
+		this.refundOverpaymentCurrentYear = refundOverpaymentCurrentYear;
 	}
 
 	public void setRefundTotal(Money refundTotal) {
 		this.refundTotal = refundTotal;
 	}
 
-	public void setRefundTransferTo2018(Money refundTransferTo2018) {
-		this.refundTransferTo2018 = refundTransferTo2018;
+	public void setRefundTransferToCurrentYear(Money refundTransferToCurrentYear) {
+		this.refundTransferToCurrentYear = refundTransferToCurrentYear;
 	}
 
 	public void setRefundTransferToStudentLoan(Money refundTransferToStudentLoan) {
@@ -1594,12 +1594,12 @@ public class IR3Form2018 implements FormDestination {
 		this.taxOnTaxableIncomeIsCredit = taxOnTaxableIncomeIsCredit;
 	}
 
-	public void setTaxPayment2018(Money taxPayment2018) {
-		this.taxPayment2018 = taxPayment2018;
+	public void setTaxPaymentCurrentYear(Money taxPaymentCurrentYear) {
+		this.taxPaymentCurrentYear = taxPaymentCurrentYear;
 	}
 
-	public void setTaxPaymentSEROption2018(String taxPaymentSEROption2018) {
-		this.taxPaymentSEROption2018 = taxPaymentSEROption2018;
+	public void setTaxPaymentSEROptionCurrentYear(String taxPaymentSEROptionCurrentYear) {
+		this.taxPaymentSEROptionCurrentYear = taxPaymentSEROptionCurrentYear;
 	}
 
 	public void setTotalActiveLTCIncome(Money totalActiveLTCIncome) {
