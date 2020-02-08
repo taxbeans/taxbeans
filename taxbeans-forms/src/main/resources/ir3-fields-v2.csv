@@ -152,9 +152,9 @@ excessImputationCreditsBroughtForward,box 31,box 31,box 31
 taxOnTaxableIncome,box 32,box 32,box 32
 residualIncomeTax,box 32A,box 32A,box 32A
 taxCalculationResult,box 32B,box 32B,box 32B
-refundIsTransferredTo2018,34 check,34 check,34 check
-refundIsTransferredTo2018_true,1,1,1
-refundIsTransferredTo2018_false,Off,Off,Off
+refundIsTransferredToCurrentYear,34 check,34 check,34 check
+refundIsTransferredToCurrentYear_true,1,1,1
+refundIsTransferredToCurrentYear_false,Off,Off,Off
 refundIsTransferredToStudentLoan,34 check a,34 check a,34 check a
 refundIsTransferredToStudentLoan_true,2,2,2
 refundIsTransferredToStudentLoan_false,Off,Off,Off
@@ -175,19 +175,19 @@ refundOtherStudentLoanReceiverName,34 name of taxpayer 2,34 name of taxpayer 2,3
 refundOtherStudentLoanReceiverIRD,box 34I,box 34I,box 34I
 refundOtherStudentLoanReceiverAmount,box 34J,box 34J,box 34J
 refundCopied,box 34,box 34,box 34
-refundOverpayment2018,box 34A,box 34A,box 34A
-refundCopiedPlusOverpayment2018,box 34B,box 34B,box 34B
-refundTransferTo2018,box 34C,box 34C,box 34C
+refundOverpaymentCurrentYear,box 34A,box 34A,box 34A
+refundCopiedPlusOverpaymentCurrentYear,box 34B,box 34B,box 34B
+refundTransferToCurrentYear,box 34C,box 34C,box 34C
 refundTransferToStudentLoan,box 34D,box 34D,box 34D
 refundTotal,box 34K,box 34K,box 34K
-taxPaymentSEROption2018,35A,35A,35A
-taxPayment2018,box 35B,box 35B,box 35B
-dateStart2018TaxReturn_day,37B from day,37B from day,37B from day
-dateStart2018TaxReturn_month,37B from month,37B from month,37B from month
-dateStart2018TaxReturn_year,37B from year,37B from year,37B from year
-dateEnd2018TaxReturn_day,37C to day,37C to day,37C to day
-dateEnd2018TaxReturn_month,37C to month,37C to month,37C to month
-dateEnd2018TaxReturn_year,37C to year,37C to year,37C to year
+taxPaymentSEROptionCurrentYear,35A,35A,35A
+taxPaymentCurrentYear,box 35B,box 35B,box 35B
+dateStartCurrentYearTaxReturn_day,37B from day,37B from day,37B from day
+dateStartCurrentYearTaxReturn_month,37B from month,37B from month,37B from month
+dateStartCurrentYearTaxReturn_year,37B from year,37B from year,37B from year
+dateEndCurrentYearTaxReturn_day,37C to day,37C to day,37C to day
+dateEndCurrentYearTaxReturn_month,37C to month,37C to month,37C to month
+dateEndCurrentYearTaxReturn_year,37C to year,37C to year,37C to year
 dateEndExcludedOverseasIncome_day,30B end day,30B end day,30B end day
 dateEndExcludedOverseasIncome_month,30B end month,30B end month,30B end month
 dateEndExcludedOverseasIncome_year,30B end year,30B end year,30B end year

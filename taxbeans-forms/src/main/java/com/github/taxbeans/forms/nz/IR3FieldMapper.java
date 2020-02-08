@@ -3,6 +3,7 @@ package com.github.taxbeans.forms.nz;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class IR3FieldMapper {
 				if (map == null) {
 					InputStream resource = 
 							IR3FieldMapper.class.getClassLoader()
-							.getResourceAsStream("ir3-fields.csv");
+							.getResourceAsStream(year == 2019 ? "ir3-fields-v2.csv" : "ir3-fields.csv");
 					map = IRFieldMapperUtils.populateMap(resource, year);
 				}
 			}
@@ -34,6 +35,9 @@ public class IR3FieldMapper {
 		String[] strings = map.get(fieldName);
 		if (strings == null) {
 			System.out.println(fieldName + " resulted in null Strings");
+			for (Entry<String, String[]> entry : map.entrySet()) {
+				System.out.println(entry.getKey() + " -> " + entry.getValue());
+			}
 			throw new IllegalStateException();
 		}
 		return strings[i];
@@ -52,6 +56,10 @@ public class IR3FieldMapper {
 	public static Map<String, String> getPropertyToFieldMap(int year) {
 		Map<String, String> map = new HashMap<String, String>();
 		for (IR3Fields field : IR3Fields.values()) {
+			if (year > 2018 && field.name().contains("2018")) {
+				//workaround for field naming issue
+				continue;
+			}
 			map.put(field.name(), getFieldName(field, year));
 		}
 		return map;
@@ -60,6 +68,10 @@ public class IR3FieldMapper {
 	public static Map<String, String> getFieldToPropertyMap(int year) {
 		Map<String, String> map = new HashMap<String, String>();
 		for (IR3Fields field : IR3Fields.values()) {
+			if (year > 2018 && field.name().contains("2018")) {
+				//workaround for field naming issue
+				continue;
+			}
 			map.put(getFieldName(field, year), field.name());
 		}
 		return map;
