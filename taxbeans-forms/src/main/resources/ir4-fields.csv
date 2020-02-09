@@ -1,2 +1,41 @@
 fieldName,2017,2018,2019
 irdNumber,1 IRD 1,1 IRD 1,1 IRD 1
+companyTradingNameLine1,3.1,3.1,3.1
+postalAddressLine1,4.1,4.1,4.1
+postalAddressLine2,4.2,4.2,4.2
+streetAddressLine1,5.1,5.1,5.1
+streetAddressLine2,5.2,5.2,5.2
+bicCode,6,6,6
+phonePrefix,7 prefix,7 prefix,7 prefix
+phoneNumber,7 ph number,7 ph number,7 ph number
+bankNumber,8 bank,8 bank,8 bank
+branchNumber,8 branch,8 branch,8 branch
+bankAccountNumber,8 account no,8 account no,8 account no
+bankSuffix,8 suffix,8 suffix,8 suffix
+nonResident,9,9,9
+nonResident_true,No,No,No
+nonResident_false,Yes,Yes,Yes
+imputationReturnIncluded,10,10,10
+imputationReturnIncluded_true,No,No,No
+imputationReturnIncluded_false,Yes,Yes,Yes
+imputationMonetaryEntries,10A,10A,10A
+imputationMonetaryEntries_true,No,No,No
+imputationMonetaryEntries_false,Yes,Yes,Yes
+companyCeased,11,11,11
+companyCeased_true,No,No,No
+companyCeased_false,Yes,Yes,Yes
+schedularPayments,12,12,12
+schedularPayments_true,Yes,Yes,Yes
+schedularPayments_false,No,No,No
+nzInterest,13,13,13
+nzInterest_true,No,No,No
+nzInterest_false,Yes,Yes,Yes
+nzDividends,14 yes/no,14 yes/no,14 yes/no
+nzDividends_true,No,No,No
+nzDividends_false,Yes,Yes,Yes
+maoriDistributions,15,15,15
+maoriDistributions_false,Yes,Yes,Yes
+maoriDistributions_true,No,No,No
+partnershipIncome,16,16,16
+partnershipIncome_false,Yes,Yes,Yes
+partnershipIncome_true,No,No,No
