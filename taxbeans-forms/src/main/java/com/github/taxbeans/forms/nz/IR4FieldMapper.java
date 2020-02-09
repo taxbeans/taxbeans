@@ -1,6 +1,7 @@
 package com.github.taxbeans.forms.nz;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,9 +35,9 @@ public class IR4FieldMapper {
 		int i = year-2016;
 		String[] strings = map.get(fieldName);
 		if (strings == null) {
-			System.out.println(fieldName + " resulted in null Strings");
+			System.err.println(fieldName + " resulted in null Strings");
 			for (Entry<String, String[]> entry : map.entrySet()) {
-				System.out.println(entry.getKey() + " -> " + entry.getValue());
+				System.err.println(entry.getKey() + " -> " + Arrays.asList(entry.getValue()));
 			}
 			throw new IllegalStateException();
 		}
