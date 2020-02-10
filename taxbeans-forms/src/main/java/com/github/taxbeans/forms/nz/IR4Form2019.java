@@ -1,11 +1,11 @@
 package com.github.taxbeans.forms.nz;
 
-import java.math.BigDecimal;
-
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.forms.IncludeFormatSpacing;
+import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.UseChildFields;
@@ -84,6 +84,62 @@ public class IR4Form2019 implements FormDestination {
 	
 	@RightAlign(11)
 	private Money businessNetProfit;
+	
+	@RightAlign(11)
+	private Money netProfitBeforeDonations;
+	
+	@UseTrueFalseMappings
+	private boolean donations;
+	
+	@RightAlign(11)
+	private Money netProfitAfterDonations;
+	
+	@UseTrueFalseMappings
+	private boolean netLossesBroughtForward;
+	
+	@RightAlign(11)
+	private Money netProfitAfterLossesBroughtForward;
+	
+	@UseTrueFalseMappings
+	private boolean netLossesFromOtherCompanies;
+	
+	@RightAlign(11)
+	private Money taxableIncome;
+	
+	@RightAlign(9)
+	@OmitCents
+	@IncludeFormatSpacing
+	private Money copyOfTaxableIncome;
+	
+	@RightAlign(11)
+	private Money totalTaxPayable;
+	
+	@RightAlign(11)
+	private Money overseasTaxPaid;
+	
+	@RightAlign(11)
+	private Money box29D;
+	
+	@RightAlign(11)
+	private Money foreignInvestorTaxCredit;
+	
+	@RightAlign(11)
+	private Money box29F;
+
+	@RightAlign(11)
+	private Money copyOfTotalImputationCredits;
+	
+	@RightAlign(11)
+	private Money box29H;
+	
+	@RightAlign(11)
+	private Money copyOfTotalTaxCredits;
+	
+	@RightAlign(11)
+	private Money copyOfRLWTCredit;
+	
+	@RightAlign(11)
+	private Money residualIncomeTax;
 	
 	final Logger logger = LoggerFactory.getLogger(IR4Form2019.class);
 
@@ -318,5 +374,149 @@ public class IR4Form2019 implements FormDestination {
 
 	public void setBusinessNetProfit(Money businessNetProfit) {
 		this.businessNetProfit = businessNetProfit;
+	}
+
+	public Money getNetProfitBeforeDonations() {
+		return netProfitBeforeDonations;
+	}
+
+	public void setNetProfitBeforeDonations(Money netProfitBeforeDonations) {
+		this.netProfitBeforeDonations = netProfitBeforeDonations;
+	}
+
+	public boolean isDonations() {
+		return donations;
+	}
+
+	public void setDonations(boolean donations) {
+		this.donations = donations;
+	}
+
+	public Money getNetProfitAfterDonations() {
+		return netProfitAfterDonations;
+	}
+
+	public void setNetProfitAfterDonations(Money netProfitAfterDonations) {
+		this.netProfitAfterDonations = netProfitAfterDonations;
+	}
+
+	public boolean isNetLossesBroughtForward() {
+		return netLossesBroughtForward;
+	}
+
+	public void setNetLossesBroughtForward(boolean netLossesBroughtForward) {
+		this.netLossesBroughtForward = netLossesBroughtForward;
+	}
+
+	public Money getNetProfitAfterLossesBroughtForward() {
+		return netProfitAfterLossesBroughtForward;
+	}
+
+	public void setNetProfitAfterLossesBroughtForward(Money netProfitAfterLossesBroughtForward) {
+		this.netProfitAfterLossesBroughtForward = netProfitAfterLossesBroughtForward;
+	}
+
+	public boolean isNetLossesFromOtherCompanies() {
+		return netLossesFromOtherCompanies;
+	}
+
+	public void setNetLossesFromOtherCompanies(boolean netLossesFromOtherCompanies) {
+		this.netLossesFromOtherCompanies = netLossesFromOtherCompanies;
+	}
+
+	public Money getTaxableIncome() {
+		return taxableIncome;
+	}
+
+	public void setTaxableIncome(Money taxableIncome) {
+		this.taxableIncome = taxableIncome;
+	}
+
+	public Money getCopyOfTaxableIncome() {
+		return copyOfTaxableIncome;
+	}
+
+	public void setCopyOfTaxableIncome(Money copyOfTaxableIncome) {
+		this.copyOfTaxableIncome = copyOfTaxableIncome;
+	}
+
+	public Money getTotalTaxPayable() {
+		return totalTaxPayable;
+	}
+
+	public void setTotalTaxPayable(Money totalTaxPayable) {
+		this.totalTaxPayable = totalTaxPayable;
+	}
+
+	public Money getOverseasTaxPaid() {
+		return overseasTaxPaid;
+	}
+
+	public void setOverseasTaxPaid(Money overseasTaxPaid) {
+		this.overseasTaxPaid = overseasTaxPaid;
+	}
+
+	public Money getBox29D() {
+		return box29D;
+	}
+
+	public void setBox29D(Money box29d) {
+		box29D = box29d;
+	}
+
+	public Money getForeignInvestorTaxCredit() {
+		return foreignInvestorTaxCredit;
+	}
+
+	public void setForeignInvestorTaxCredit(Money foreignInvestorTaxCredit) {
+		this.foreignInvestorTaxCredit = foreignInvestorTaxCredit;
+	}
+
+	public Money getBox29F() {
+		return box29F;
+	}
+
+	public void setBox29F(Money box29f) {
+		box29F = box29f;
+	}
+
+	public Money getCopyOfTotalImputationCredits() {
+		return copyOfTotalImputationCredits;
+	}
+
+	public void setCopyOfTotalImputationCredits(Money copyOfTotalImputationCredits) {
+		this.copyOfTotalImputationCredits = copyOfTotalImputationCredits;
+	}
+
+	public Money getBox29H() {
+		return box29H;
+	}
+
+	public void setBox29H(Money box29h) {
+		box29H = box29h;
+	}
+
+	public Money getCopyOfTotalTaxCredits() {
+		return copyOfTotalTaxCredits;
+	}
+
+	public void setCopyOfTotalTaxCredits(Money copyOfTotalTaxCredits) {
+		this.copyOfTotalTaxCredits = copyOfTotalTaxCredits;
+	}
+
+	public Money getCopyOfRLWTCredit() {
+		return copyOfRLWTCredit;
+	}
+
+	public void setCopyOfRLWTCredit(Money copyOfRLWTCredit) {
+		this.copyOfRLWTCredit = copyOfRLWTCredit;
+	}
+
+	public Money getResidualIncomeTax() {
+		return residualIncomeTax;
+	}
+
+	public void setResidualIncomeTax(Money residualIncomeTax) {
+		this.residualIncomeTax = residualIncomeTax;
 	}
 }

@@ -1,6 +1,7 @@
 package com.github.taxbeans.forms.nz;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.javamoney.moneta.Money;
 import org.junit.Test;
@@ -39,7 +40,29 @@ public class IR4Form2019Test {
 		bean.setTotalTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setBusinessIncome(true);
 		bean.setBusinessNetProfit(Money.of(new BigDecimal("555.55"), "NZD"));
-
+		bean.setNetProfitBeforeDonations(bean.getBusinessNetProfit());
+		bean.setDonations(false);
+		bean.setNetProfitAfterDonations(bean.getBusinessNetProfit());
+		bean.setNetProfitAfterLossesBroughtForward(bean.getBusinessNetProfit());
+		bean.setTaxableIncome(bean.getBusinessNetProfit());
+		BigDecimal businessNetProfitOmitCents = bean.getBusinessNetProfit().getNumberStripped().setScale(0, RoundingMode.FLOOR);
+		Money copyOfTaxableIncome = Money.of(businessNetProfitOmitCents, "NZD");
+		bean.setCopyOfTaxableIncome(
+				copyOfTaxableIncome);
+		bean.setTotalTaxPayable(copyOfTaxableIncome.multiply(new BigDecimal("0.28")));
+		
+		BigDecimal overseasTaxPaid = BigDecimal.ZERO;
+		bean.setOverseasTaxPaid(Money.of(overseasTaxPaid, "NZD"));
+		bean.setBox29D(bean.getTotalTaxPayable().subtract(bean.getOverseasTaxPaid()));
+		bean.setForeignInvestorTaxCredit(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setBox29F(bean.getBox29D().subtract(bean.getForeignInvestorTaxCredit()));
+		bean.setCopyOfTotalImputationCredits(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setBox29H(bean.getBox29F().subtract(bean.getCopyOfTotalImputationCredits()));
+		bean.setCopyOfTotalTaxCredits(bean.getTotalTaxCredits());
+		bean.setCopyOfRLWTCredit(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setResidualIncomeTax(bean.getBox29H().subtract(bean.getCopyOfTotalTaxCredits()
+				.subtract(bean.getCopyOfRLWTCredit())));
+		
 		FormProcessor.publishDraft(bean, 2019, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2019), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");
 	}
