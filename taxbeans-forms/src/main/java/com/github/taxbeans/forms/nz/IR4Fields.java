@@ -79,5 +79,13 @@ public enum IR4Fields {
 	box29H,
 	copyOfTotalTaxCredits,
 	copyOfRLWTCredit,
-	residualIncomeTax
+	residualIncomeTax,
+	creditOrDebit,
+	creditOrDebit_false,
+	creditOrDebit_true,
+	provisionalTaxPaid,
+	taxAmountOwed,
+	refundOrTaxToPay,
+	refundOrTaxToPay_false,
+	refundOrTaxToPay_true
 }

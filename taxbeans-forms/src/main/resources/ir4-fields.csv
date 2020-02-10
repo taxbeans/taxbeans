@@ -78,3 +78,10 @@ copyOfTotalTaxCredits,12A.11.23,12A.11.23,12A.11.23
 copyOfRLWTCredit,12A.11.24,12A.11.24,12A.11.24
 residualIncomeTax,12A.11.25,12A.11.25,12A.11.25
 creditOrDebit,28J credit/debit,28J credit/debit,28J credit/debit
+creditOrDebit_false,Yes,Yes,Yes
+creditOrDebit_true,No,No,No
+provisionalTaxPaid,12A.11.26,12A.11.26,12A.11.26
+taxAmountOwed,12A.11.27,12A.11.27,12A.11.27
+refundOrTaxToPay,28L refund/tax to pay,28L refund/tax to pay,28L refund/tax to pay
+refundOrTaxToPay_false,Yes,Yes,Yes
+refundOrTaxToPay_true,No,No,No
