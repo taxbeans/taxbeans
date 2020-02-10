@@ -62,6 +62,10 @@ public class IR4Form2019Test {
 		bean.setCopyOfRLWTCredit(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setResidualIncomeTax(bean.getBox29H().subtract(bean.getCopyOfTotalTaxCredits()
 				.subtract(bean.getCopyOfRLWTCredit())));
+		bean.setCreditOrDebit(true);
+		bean.setProvisionalTaxPaid(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setTaxAmountOwed(bean.getResidualIncomeTax().subtract(bean.getProvisionalTaxPaid()));
+		bean.setRefundOrTaxToPay(true);
 		
 		FormProcessor.publishDraft(bean, 2019, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2019), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");

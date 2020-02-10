@@ -141,6 +141,18 @@ public class IR4Form2019 implements FormDestination {
 	@RightAlign(11)
 	private Money residualIncomeTax;
 	
+	@UseTrueFalseMappings
+	private boolean creditOrDebit;
+	
+	@RightAlign(11)
+	private Money provisionalTaxPaid;
+	
+	@RightAlign(11)
+	private Money taxAmountOwed;
+	
+	@UseTrueFalseMappings
+	private boolean refundOrTaxToPay;
+	
 	final Logger logger = LoggerFactory.getLogger(IR4Form2019.class);
 
 	@Skip
@@ -518,5 +530,37 @@ public class IR4Form2019 implements FormDestination {
 
 	public void setResidualIncomeTax(Money residualIncomeTax) {
 		this.residualIncomeTax = residualIncomeTax;
+	}
+
+	public boolean isCreditOrDebit() {
+		return creditOrDebit;
+	}
+
+	public void setCreditOrDebit(boolean creditOrDebit) {
+		this.creditOrDebit = creditOrDebit;
+	}
+
+	public Money getProvisionalTaxPaid() {
+		return provisionalTaxPaid;
+	}
+
+	public void setProvisionalTaxPaid(Money provisionalTaxPaid) {
+		this.provisionalTaxPaid = provisionalTaxPaid;
+	}
+
+	public Money getTaxAmountOwed() {
+		return taxAmountOwed;
+	}
+
+	public void setTaxAmountOwed(Money taxAmountOwed) {
+		this.taxAmountOwed = taxAmountOwed;
+	}
+
+	public boolean isRefundOrTaxToPay() {
+		return refundOrTaxToPay;
+	}
+
+	public void setRefundOrTaxToPay(boolean refundOrTaxToPay) {
+		this.refundOrTaxToPay = refundOrTaxToPay;
 	}
 }
