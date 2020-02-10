@@ -53,3 +53,28 @@ overseasPremiums_true,No,No,No
 otherIncome,20 yes/no,20 yes/no,20 yes/no
 otherIncome_false,Yes,Yes,Yes
 otherIncome_true,No,No,No
+netProfitBeforeDonations,12A.11.0,12A.11.0,12A.11.0
+donations,22,22,22
+donations_false,Yes,Yes,Yes
+donations_true,No,No,No
+netProfitAfterDonations,12A.11.4,12A.11.4,12A.11.4
+netLossesBroughtForward,24,24,24
+netLossesBroughtForward_false,Yes,Yes,Yes
+netLossesBroughtForward_true,No,No,No
+netProfitAfterLossesBroughtForward,12A.11.9,12A.11.9,12A.11.9
+netLossesFromOtherCompanies,26 yes/no,26 yes/no,26 yes/no
+netLossesFromOtherCompanies_false,Yes,Yes,Yes
+netLossesFromOtherCompanies_true,No,No,No
+taxableIncome,12A.11.12,12A.11.12,12A.11.12
+copyOfTaxableIncome,12A.11.13,12A.11.13,12A.11.13
+totalTaxPayable,12A.11.14,12A.11.14,12A.11.14
+overseasTaxPaid,12A.11.15,12A.11.15,12A.11.15
+box29D,12A.11.17,12A.11.17,12A.11.17
+foreignInvestorTaxCredit,12A.11.18,12A.11.18,12A.11.18
+box29F,12A.11.20,12A.11.20,12A.11.20
+copyOfTotalImputationCredits,12A.11.21,12A.11.21,12A.11.21
+box29H,12A.11.22,12A.11.22,12A.11.22
+copyOfTotalTaxCredits,12A.11.23,12A.11.23,12A.11.23
+copyOfRLWTCredit,12A.11.24,12A.11.24,12A.11.24
+residualIncomeTax,12A.11.25,12A.11.25,12A.11.25
+creditOrDebit,28J credit/debit,28J credit/debit,28J credit/debit
