@@ -39,3 +39,17 @@ maoriDistributions_true,No,No,No
 partnershipIncome,16,16,16
 partnershipIncome_false,Yes,Yes,Yes
 partnershipIncome_true,No,No,No
+totalTaxCredits,12A.8,12A.8,12A.8
+overseasIncome,17,17,17
+overseasIncome_false,Yes,Yes,Yes
+overseasIncome_true,No,No,No
+businessIncome,18,18,18
+businessIncome_false,Yes,Yes,Yes
+businessIncome_true,No,No,No
+businessNetProfit,12A.15,12A.15,12A.15
+overseasPremiums,19 yes/no,19 yes/no,19 yes/no
+overseasPremiums_false,Yes,Yes,Yes
+overseasPremiums_true,No,No,No
+otherIncome,20 yes/no,20 yes/no,20 yes/no
+otherIncome_false,Yes,Yes,Yes
+otherIncome_true,No,No,No

@@ -1,5 +1,8 @@
 package com.github.taxbeans.forms.nz;
 
+import java.math.BigDecimal;
+
+import org.javamoney.moneta.Money;
 import org.junit.Test;
 
 import com.github.taxbeans.forms.common.FormProcessor;
@@ -33,6 +36,9 @@ public class IR4Form2019Test {
 		bean.setSchedularPayments(false);
 		bean.setNzInterest(false);
 		bean.setNzDividends(false);
+		bean.setTotalTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setBusinessIncome(true);
+		bean.setBusinessNetProfit(Money.of(new BigDecimal("555.55"), "NZD"));
 
 		FormProcessor.publishDraft(bean, 2019, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2019), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");

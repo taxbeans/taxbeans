@@ -41,6 +41,20 @@ public enum IR4Fields {
 	maoriDistributions_true,
 	partnershipIncome,
 	partnershipIncome_false,
-	partnershipIncome_true
+	partnershipIncome_true,
+	totalTaxCredits,
+	overseasIncome,
+	overseasIncome_false,
+	overseasIncome_true,
+	businessIncome,
+	businessIncome_false,
+	businessIncome_true,
+	overseasPremiums,	
+	overseasPremiums_false,
+	overseasPremiums_true,
+	otherIncome,
+	otherIncome_false,
+	otherIncome_true,
+	businessNetProfit
 	
 }
