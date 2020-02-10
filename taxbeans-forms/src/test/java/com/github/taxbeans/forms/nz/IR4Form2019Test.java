@@ -66,6 +66,9 @@ public class IR4Form2019Test {
 		bean.setProvisionalTaxPaid(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setTaxAmountOwed(bean.getResidualIncomeTax().subtract(bean.getProvisionalTaxPaid()));
 		bean.setRefundOrTaxToPay(true);
+		bean.setProvisionalTaxOption("S");
+		bean.setProvisionalTaxDue(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setLowestEconomicInterests("10000");
 		
 		FormProcessor.publishDraft(bean, 2019, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2019), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");
