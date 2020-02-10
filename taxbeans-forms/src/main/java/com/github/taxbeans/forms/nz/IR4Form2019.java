@@ -153,6 +153,31 @@ public class IR4Form2019 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean refundOrTaxToPay;
 	
+	@UseTrueFalseMappings
+	private boolean initialProvisionalTaxLiability;
+	
+	private String provisionalTaxOption;
+	
+	@RightAlign(11)
+	private Money provisionalTaxDue;
+	
+	@UseTrueFalseMappings
+	private boolean nonResidentPayments;
+	
+	@UseTrueFalseMappings
+	private boolean cfcOrFifIncome;
+	
+	@UseTrueFalseMappings
+	private boolean sharesRepurchased;
+	
+	@UseTrueFalseMappings
+	private boolean foreignSourcedDividends;
+	
+	@UseTrueFalseMappings
+	private boolean controlledByNonResidents;
+	
+	private String lowestEconomicInterests;
+	
 	final Logger logger = LoggerFactory.getLogger(IR4Form2019.class);
 
 	@Skip
@@ -562,5 +587,77 @@ public class IR4Form2019 implements FormDestination {
 
 	public void setRefundOrTaxToPay(boolean refundOrTaxToPay) {
 		this.refundOrTaxToPay = refundOrTaxToPay;
+	}
+
+	public boolean isInitialProvisionalTaxLiability() {
+		return initialProvisionalTaxLiability;
+	}
+
+	public void setInitialProvisionalTaxLiability(boolean initialProvisionalTaxLiability) {
+		this.initialProvisionalTaxLiability = initialProvisionalTaxLiability;
+	}
+
+	public String getProvisionalTaxOption() {
+		return provisionalTaxOption;
+	}
+
+	public void setProvisionalTaxOption(String provisionalTaxOption) {
+		this.provisionalTaxOption = provisionalTaxOption;
+	}
+
+	public Money getProvisionalTaxDue() {
+		return provisionalTaxDue;
+	}
+
+	public void setProvisionalTaxDue(Money provisionalTaxDue) {
+		this.provisionalTaxDue = provisionalTaxDue;
+	}
+
+	public boolean isNonResidentPayments() {
+		return nonResidentPayments;
+	}
+
+	public void setNonResidentPayments(boolean nonResidentPayments) {
+		this.nonResidentPayments = nonResidentPayments;
+	}
+
+	public boolean isCfcOrFifIncome() {
+		return cfcOrFifIncome;
+	}
+
+	public void setCfcOrFifIncome(boolean cfcOrFifIncome) {
+		this.cfcOrFifIncome = cfcOrFifIncome;
+	}
+
+	public boolean isSharesRepurchased() {
+		return sharesRepurchased;
+	}
+
+	public void setSharesRepurchased(boolean sharesRepurchased) {
+		this.sharesRepurchased = sharesRepurchased;
+	}
+
+	public boolean isForeignSourcedDividends() {
+		return foreignSourcedDividends;
+	}
+
+	public void setForeignSourcedDividends(boolean foreignSourcedDividends) {
+		this.foreignSourcedDividends = foreignSourcedDividends;
+	}
+
+	public boolean isControlledByNonResidents() {
+		return controlledByNonResidents;
+	}
+
+	public void setControlledByNonResidents(boolean controlledByNonResidents) {
+		this.controlledByNonResidents = controlledByNonResidents;
+	}
+
+	public String getLowestEconomicInterests() {
+		return lowestEconomicInterests;
+	}
+
+	public void setLowestEconomicInterests(String lowestEconomicInterests) {
+		this.lowestEconomicInterests = lowestEconomicInterests;
 	}
 }

@@ -85,3 +85,36 @@ taxAmountOwed,12A.11.27,12A.11.27,12A.11.27
 refundOrTaxToPay,28L refund/tax to pay,28L refund/tax to pay,28L refund/tax to pay
 refundOrTaxToPay_false,Yes,Yes,Yes
 refundOrTaxToPay_true,No,No,No
+initialProvisionalTaxLiability,30 yes/no,30 yes/no,30 yes/no
+initialProvisionalTaxLiability_false,Yes,Yes,Yes
+initialProvisionalTaxLiability_true,No,No,No
+provisionalTaxOption,31A,31A,31A
+provisionalTaxDue,12A.11.7.4,12A.11.7.4,12A.11.7.4
+nonResidentPayments,32 yes/no,32 yes/no,32 yes/no
+nonResidentPayments_false,Yes,Yes,Yes
+nonResidentPayments_true,No,No,No
+cfcOrFifIncome,33,33,33
+cfcOrFifIncome_false,Yes,Yes,Yes
+cfcOrFifIncome_true,No,No,No
+sharesRepurchased,34,34,34
+sharesRepurchased_false,Yes,Yes,Yes
+sharesRepurchased_true,No,No,No
+foreignSourcedDividends,35,35,35
+foreignSourcedDividends_false,Yes,Yes,Yes
+foreignSourcedDividends_true,No,No,No
+controlledByNonResidents,36,36,36
+controlledByNonResidents_false,Yes,Yes,Yes
+controlledByNonResidents_true,No,No,No
+lowestEconomicInterests,37,37,37
+shareholder1IrdNumber,39a.0,39a.0,39a.0
+shareholder1Remuneration,39b.0.0,39b.0.0,39b.0.0
+shareholder1ValueOfLoans,39b.0.1,39b.0.1,39b.0.1
+shareholder1CurrentAccountBalance,39b.1.0,39b.1.0,39b.1.0
+shareholder1LossOffsets,39b.1.1.0,39b.1.1.0,39b.1.1.0
+shareholder1SubventionPayments,39b.1.1.1,39b.1.1.1,39b.1.1.1
+shareholder2IrdNumber,39a.1,39a.1,39a.1
+shareholder2Remuneration,39b.2.0,39b.2.0,39b.2.0
+shareholder2ValueOfLoans,39b.2.1.0,39b.2.1.0,39b.2.1.0
+shareholder2CurrentAccountBalance,39b.1.0,39b.1.0,39b.1.0
+shareholder2LossOffsets,39b.3.1.0,39b.3.1.0,39b.3.1.0
+shareholder2SubventionPayments,39b.3.1.1,39b.3.1.1,39b.3.1.1
