@@ -1,5 +1,7 @@
 package com.github.taxbeans.forms.nz;
 
+import java.math.BigDecimal;
+
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +66,24 @@ public class IR4Form2019 implements FormDestination {
 	
 	@UseTrueFalseMappings
 	private boolean partnershipIncome;
+	
+	@RightAlign(11)
+	private Money totalTaxCredits;
+	
+	@UseTrueFalseMappings
+	private boolean overseasIncome;
+
+	@UseTrueFalseMappings
+	private boolean businessIncome;
+
+	@UseTrueFalseMappings
+	private boolean overseasPremiums;
+
+	@UseTrueFalseMappings
+	private boolean otherIncome;
+	
+	@RightAlign(11)
+	private Money businessNetProfit;
 	
 	final Logger logger = LoggerFactory.getLogger(IR4Form2019.class);
 
@@ -250,5 +270,53 @@ public class IR4Form2019 implements FormDestination {
 
 	public void setPartnershipIncome(boolean partnershipIncome) {
 		this.partnershipIncome = partnershipIncome;
+	}
+
+	public Money getTotalTaxCredits() {
+		return totalTaxCredits;
+	}
+
+	public void setTotalTaxCredits(Money totalTaxCredits) {
+		this.totalTaxCredits = totalTaxCredits;
+	}
+
+	public boolean isOverseasIncome() {
+		return overseasIncome;
+	}
+
+	public void setOverseasIncome(boolean overseasIncome) {
+		this.overseasIncome = overseasIncome;
+	}
+
+	public boolean isBusinessIncome() {
+		return businessIncome;
+	}
+
+	public void setBusinessIncome(boolean businessIncome) {
+		this.businessIncome = businessIncome;
+	}
+
+	public boolean isOverseasPremiums() {
+		return overseasPremiums;
+	}
+
+	public void setOverseasPremiums(boolean overseasPremiums) {
+		this.overseasPremiums = overseasPremiums;
+	}
+
+	public boolean isOtherIncome() {
+		return otherIncome;
+	}
+
+	public void setOtherIncome(boolean otherIncome) {
+		this.otherIncome = otherIncome;
+	}
+
+	public Money getBusinessNetProfit() {
+		return businessNetProfit;
+	}
+
+	public void setBusinessNetProfit(Money businessNetProfit) {
+		this.businessNetProfit = businessNetProfit;
 	}
 }
