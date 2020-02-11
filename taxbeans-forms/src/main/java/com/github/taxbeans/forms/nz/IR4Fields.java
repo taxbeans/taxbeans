@@ -108,5 +108,17 @@ public enum IR4Fields {
 	controlledByNonResidents,
 	controlledByNonResidents_false,
 	controlledByNonResidents_true,
-	lowestEconomicInterests;
+	lowestEconomicInterests,
+	shareholder1IrdNumber,
+	shareholder1Remuneration,
+	shareholder1ValueOfLoans,
+	shareholder1CurrentAccountBalance,
+	shareholder1LossOffsets,
+	shareholder1SubventionPayments,
+	shareholder2IrdNumber,
+	shareholder2Remuneration,
+	shareholder2ValueOfLoans,
+	shareholder2CurrentAccountBalance,
+	shareholder2LossOffsets,
+	shareholder2SubventionPayments;
 }

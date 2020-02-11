@@ -178,6 +178,40 @@ public class IR4Form2019 implements FormDestination {
 	
 	private String lowestEconomicInterests;
 	
+	private String shareholder1IrdNumber;
+	
+	@RightAlign(11)
+	private Money shareholder1Remuneration;
+	
+	@RightAlign(11)
+	private Money shareholder1ValueOfLoans;
+
+	@RightAlign(11)
+	private Money shareholder1CurrentAccountBalance;
+	
+	@RightAlign(11)
+	private Money shareholder1LossOffsets;
+	
+	@RightAlign(11)
+	private Money shareholder1SubventionPayments;
+	
+	private String shareholder2IrdNumber;
+	
+	@RightAlign(11)
+	private Money shareholder2Remuneration;
+	
+	@RightAlign(11)
+	private Money shareholder2ValueOfLoans;
+	
+	@RightAlign(11)
+	private Money shareholder2CurrentAccountBalance;
+	
+	@RightAlign(11)
+	private Money shareholder2LossOffsets;
+	
+	@RightAlign(11)
+	private Money shareholder2SubventionPayments;
+	
 	final Logger logger = LoggerFactory.getLogger(IR4Form2019.class);
 
 	@Skip
@@ -659,5 +693,101 @@ public class IR4Form2019 implements FormDestination {
 
 	public void setLowestEconomicInterests(String lowestEconomicInterests) {
 		this.lowestEconomicInterests = lowestEconomicInterests;
+	}
+
+	public String getShareholder1IrdNumber() {
+		return shareholder1IrdNumber;
+	}
+
+	public void setShareholder1IrdNumber(String shareholder1IrdNumber) {
+		this.shareholder1IrdNumber = shareholder1IrdNumber;
+	}
+
+	public Money getShareholder1Remuneration() {
+		return shareholder1Remuneration;
+	}
+
+	public void setShareholder1Remuneration(Money shareholder1Remuneration) {
+		this.shareholder1Remuneration = shareholder1Remuneration;
+	}
+
+	public Money getShareholder1ValueOfLoans() {
+		return shareholder1ValueOfLoans;
+	}
+
+	public void setShareholder1ValueOfLoans(Money shareholder1ValueOfLoans) {
+		this.shareholder1ValueOfLoans = shareholder1ValueOfLoans;
+	}
+
+	public Money getShareholder1CurrentAccountBalance() {
+		return shareholder1CurrentAccountBalance;
+	}
+
+	public void setShareholder1CurrentAccountBalance(Money shareholder1CurrentAccountBalance) {
+		this.shareholder1CurrentAccountBalance = shareholder1CurrentAccountBalance;
+	}
+
+	public Money getShareholder1LossOffsets() {
+		return shareholder1LossOffsets;
+	}
+
+	public void setShareholder1LossOffsets(Money shareholder1LossOffsets) {
+		this.shareholder1LossOffsets = shareholder1LossOffsets;
+	}
+
+	public Money getShareholder1SubventionPayments() {
+		return shareholder1SubventionPayments;
+	}
+
+	public void setShareholder1SubventionPayments(Money shareholder1SubventionPayments) {
+		this.shareholder1SubventionPayments = shareholder1SubventionPayments;
+	}
+
+	public String getShareholder2IrdNumber() {
+		return shareholder2IrdNumber;
+	}
+
+	public void setShareholder2IrdNumber(String shareholder2IrdNumber) {
+		this.shareholder2IrdNumber = shareholder2IrdNumber;
+	}
+
+	public Money getShareholder2Remuneration() {
+		return shareholder2Remuneration;
+	}
+
+	public void setShareholder2Remuneration(Money shareholder2Remuneration) {
+		this.shareholder2Remuneration = shareholder2Remuneration;
+	}
+
+	public Money getShareholder2ValueOfLoans() {
+		return shareholder2ValueOfLoans;
+	}
+
+	public void setShareholder2ValueOfLoans(Money shareholder2ValueOfLoans) {
+		this.shareholder2ValueOfLoans = shareholder2ValueOfLoans;
+	}
+
+	public Money getShareholder2CurrentAccountBalance() {
+		return shareholder2CurrentAccountBalance;
+	}
+
+	public void setShareholder2CurrentAccountBalance(Money shareholder2CurrentAccountBalance) {
+		this.shareholder2CurrentAccountBalance = shareholder2CurrentAccountBalance;
+	}
+
+	public Money getShareholder2LossOffsets() {
+		return shareholder2LossOffsets;
+	}
+
+	public void setShareholder2LossOffsets(Money shareholder2LossOffsets) {
+		this.shareholder2LossOffsets = shareholder2LossOffsets;
+	}
+
+	public Money getShareholder2SubventionPayments() {
+		return shareholder2SubventionPayments;
+	}
+
+	public void setShareholder2SubventionPayments(Money shareholder2SubventionPayments) {
+		this.shareholder2SubventionPayments = shareholder2SubventionPayments;
 	}
 }
