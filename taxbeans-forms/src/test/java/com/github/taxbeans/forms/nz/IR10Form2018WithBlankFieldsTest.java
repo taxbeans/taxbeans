@@ -10,7 +10,7 @@ public class IR10Form2018WithBlankFieldsTest {
 
 	public static void main(String[] args) {
 		// MJHL IR10
-		IR10Form2018 bean = new IR10Form2018();
+		IR10FormPublishedMarch2019 bean = new IR10FormPublishedMarch2019();
 		bean.setYearEnded(2018);
 		bean.setIrdNumber("888-888-888");
 		bean.setFullname("Example Partnership");

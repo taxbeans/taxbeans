@@ -249,7 +249,7 @@ public class IR10Form2018 {
 	private Money deductibleLossOnDisposal;
 
 
-	final static Logger logger = LoggerFactory.getLogger(IR10Form2018.class);
+	final static Logger logger = LoggerFactory.getLogger(IR10FormPublishedMarch2019.class);
 
 	private int year = 2018;
 
