@@ -69,6 +69,18 @@ public class IR4Form2019Test {
 		bean.setProvisionalTaxOption("S");
 		bean.setProvisionalTaxDue(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setLowestEconomicInterests("10000");
+		bean.setShareholder1IrdNumber("555555555");
+		bean.setShareholder1Remuneration(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder1ValueOfLoans(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder1CurrentAccountBalance(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder1LossOffsets(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder1SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder2IrdNumber("555555555");
+		bean.setShareholder2Remuneration(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder2ValueOfLoans(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder2CurrentAccountBalance(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder2LossOffsets(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder2SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));				
 		
 		FormProcessor.publishDraft(bean, 2019, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2019), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");
