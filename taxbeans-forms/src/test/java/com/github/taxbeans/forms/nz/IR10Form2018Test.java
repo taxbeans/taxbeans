@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import org.javamoney.moneta.Money;
 
+import com.github.taxbeans.forms.common.FormProcessor;
+
 public class IR10Form2018Test {
 
 	public static void main(String[] args) {
@@ -64,7 +66,8 @@ public class IR10Form2018Test {
 		bean.setDrawings(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setCurrentAccountClosingBalance(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setDeductibleLossOnDisposal(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.publishDraft();
+		FormProcessor.publishDraft(bean, 2018, "ir10-%1$s.pdf", IR10FieldMapper.getPropertyToFieldMap(2019), 
+	    		"Sample", "ir10-%1$s-%2$s-draft.pdf");
 	}
 
 }
