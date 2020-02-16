@@ -12,4 +12,8 @@ public class TaxBeansException extends RuntimeException {
 		super(message, e);
 	}
 
+	public TaxBeansException(String message) {
+		super(message);
+	}
+
 }
