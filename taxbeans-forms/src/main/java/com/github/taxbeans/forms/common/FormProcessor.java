@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.exception.TaxBeansException;
+import com.github.taxbeans.forms.RoundedSum;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.LeftAlign;
 import com.github.taxbeans.forms.OmitCents;
@@ -100,6 +101,7 @@ public class FormProcessor {
 			}
 			System.out.println("An issue occurred searching for field: " + fieldName);
 			System.out.println("Perhaps field name not in enum");
+			throw new TaxBeansException("PD Field was null");
 		}
 		pdField.setValue(String.valueOf(value));
 	}
@@ -218,16 +220,35 @@ public class FormProcessor {
 						Field f = pojo.getClass().getDeclaredField(key);
 						f.setAccessible(true);
 						Object field = f.get(pojo);
-						if (f.getAnnotation(Sum.class) != null) {
-							String[] fields = f.getAnnotation(Sum.class).value();
-							String[] negate = f.getAnnotation(Sum.class).negate();
+						String[] fields = null;
+						String[] negate = null;
+						if (f.getAnnotation(Sum.class) != null || f.getAnnotation(RoundedSum.class) != null) {
+							boolean round = false;
+							Sum sumAnnotation = f.getAnnotation(Sum.class);
+							if (sumAnnotation == null) {
+								round = true;
+								RoundedSum roundSumAnnotation = f.getAnnotation(RoundedSum.class);
+								fields = roundSumAnnotation.value();
+								negate = roundSumAnnotation.negate();
+							} else {
+								fields = sumAnnotation.value();
+								negate = sumAnnotation.negate();
+							}
 							Money sumMoney = Money.of(BigDecimal.ZERO, "NZD");
 							for (String formField : fields) {
 								Field f2 = pojo.getClass().getDeclaredField(formField);
 								f2.setAccessible(true);
 								Money money = (Money)f2.get(pojo);
 								try {
-									sumMoney = sumMoney.add(money == null && f2.getAnnotation(Required.class) == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
+									if (money == null && f2.getAnnotation(Required.class) == null) {
+										money = Money.of(BigDecimal.ZERO, "NZD");
+									} else {
+										if (round) {
+											BigDecimal roundBigDecimal = money.getNumberStripped().setScale(0, RoundingMode.HALF_UP);
+											money = Money.of(roundBigDecimal, money.getCurrency().getCurrencyCode());
+										}
+									}
+									sumMoney = sumMoney.add(money);
 								} catch (NullPointerException e) {
 									if (i <= (maxPasses-1)) {
 										//3 passes required for derived field of derived field
@@ -244,7 +265,15 @@ public class FormProcessor {
 								f2.setAccessible(true);
 								money = (Money)f2.get(pojo);
 								try {
-									sumMoney = sumMoney.subtract(money == null && f2.getAnnotation(Required.class) == null ? Money.of(BigDecimal.ZERO, "NZD") : money);
+									if (money == null && f2.getAnnotation(Required.class) == null) {
+										money = Money.of(BigDecimal.ZERO, "NZD");
+									} else {
+		
+										money = round ? Money.of(money.getNumberStripped().setScale(0, RoundingMode.FLOOR), 
+												money.getCurrency().getCurrencyCode()) : 
+													money;
+									}
+									sumMoney = sumMoney.subtract(money);
 								} catch (NullPointerException e) {
 									if (i <= (maxPasses-1)) {
 										//3 passes required for derived field of derived field
