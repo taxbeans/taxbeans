@@ -104,6 +104,9 @@ public class IR7Form2018 implements FormDestination {
 	private boolean laqcTransitionRadio;
 	
 	@RightAlign(11)
+	private Money netProfitOrLoss;
+	
+	@RightAlign(11)
 	private Money totalIncome;
 	
 	@RightAlign(11)
@@ -399,6 +402,14 @@ public class IR7Form2018 implements FormDestination {
 
 	public void setTotalIncomeAfterExpenses(Money totalIncomeAfterExpenses) {
 		this.totalIncomeAfterExpenses = totalIncomeAfterExpenses;
+	}
+
+	public Money getNetProfitOrLoss() {
+		return netProfitOrLoss;
+	}
+
+	public void setNetProfitOrLoss(Money netProfitOrLoss) {
+		this.netProfitOrLoss = netProfitOrLoss;
 	}
 
 }
