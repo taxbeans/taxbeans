@@ -1,40 +1,19 @@
 package com.github.taxbeans.forms.nz;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.exception.TaxBeansException;
-import com.github.taxbeans.forms.RoundedSum;
-import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
+import com.github.taxbeans.forms.RoundedSum;
 import com.github.taxbeans.forms.Skip;
-import com.github.taxbeans.forms.SkipIfFalse;
 import com.github.taxbeans.forms.Sum;
-import com.github.taxbeans.forms.UseChildFields;
-import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
-import com.github.taxbeans.forms.UseValueMappings;
 import com.github.taxbeans.forms.common.FormDestination;
-import com.github.taxbeans.forms.utils.TaxReturnUtils;
 
 public class IR10FormPublishedMarch2019 implements FormDestination {
 	
