@@ -1,17 +1,14 @@
 package com.github.taxbeans.forms.nz;
 
-import java.util.Map;
-
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
+import com.github.taxbeans.forms.RoundToDollars;
 import com.github.taxbeans.forms.RoundedSum;
 import com.github.taxbeans.forms.Skip;
-import com.github.taxbeans.forms.Sum;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 
@@ -30,203 +27,203 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean multipleActivityRadio;
 
-	@OmitCents
+	@RoundToDollars
 	private Money grossIncome;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money openingStock;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money purchases;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money closingStock;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum("grossIncome")
+	@RoundedSum("grossIncome")
 	private Money grossProfit;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money interestReceived;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money dividends;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money leasePayments;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money otherIncome;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum({"grossProfit", "interestReceived", "dividends", "leasePayments",
+	@RoundedSum({"grossProfit", "interestReceived", "dividends", "leasePayments",
 			"otherIncome"})
 	private Money totalIncome;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money badDebts;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money depreciation;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money insurance;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money interestExpenses;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money consultingFees;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money rates;
 
-	@OmitCents
+	@RoundToDollars
 	private Money leasePaymentExpenses;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money repairs;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money researchAndDevelopment;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money relatedPartyRenumeration;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money salaryAndWages;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money subcontractorPayments;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money otherExpenses;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum({"badDebts", "depreciation", "insurance", "interestExpenses",
+	@RoundedSum({"badDebts", "depreciation", "insurance", "interestExpenses",
 			"consultingFees", "rates", "leasePaymentExpenses", "repairs",
 			"researchAndDevelopment", "relatedPartyRenumeration", "salaryAndWages", "subcontractorPayments", 
 			"otherExpenses"})			
 	private Money totalExpenses;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money exceptionalItems;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
 	@RoundedSum(value={"totalIncome", "exceptionalItems"}, negate="totalExpenses")
 	private Money netProfitBeforeTax;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money taxAdjustments;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum(value="netProfitBeforeTax", negate="taxAdjustments")
+	@RoundedSum(value="netProfitBeforeTax", negate="taxAdjustments")
 	private Money taxableProfit;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money accountsReceivable;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money cashAndDeposits;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money otherCurrentAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money vehicleAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money plantAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money furnitureAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money land;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money buildings;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money otherFixedAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money intangibles;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money sharesAndDebentures;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money termDeposits;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money otherNonCurrentAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum({"accountsReceivable", "cashAndDeposits", "otherCurrentAssets", "vehicleAssets",
+	@RoundedSum({"accountsReceivable", "cashAndDeposits", "otherCurrentAssets", "vehicleAssets",
 			"plantAssets", "furnitureAssets", "land", "buildings",
 			"otherFixedAssets", "intangibles", "sharesAndDebentures", "termDeposits",
 			"otherNonCurrentAssets"})
 	private Money totalAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money provisions;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money accountsPayable;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money currentLoans;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money otherCurrentLiabilities;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum({"provisions", "accountsPayable", "currentLoans", "otherCurrentLiabilities"})
+	@RoundedSum({"provisions", "accountsPayable", "currentLoans", "otherCurrentLiabilities"})
 	private Money totalCurrentLiabilities;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money nonCurrentLiabilities;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum({"totalCurrentLiabilities", "nonCurrentLiabilities"})
+	@RoundedSum({"totalCurrentLiabilities", "nonCurrentLiabilities"})
 	private Money totalLiabilities;
 	
-	@OmitCents
+	@RoundToDollars
 	@Required
-	@Sum(value="totalAssets", negate="totalLiabilities")
+	@RoundedSum(value="totalAssets", negate="totalLiabilities")
 	private Money ownersEquity;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money taxDepreciation;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money untaxedRealisedGains;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money additionsToFixedAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money disposalsOfFixedAssets;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money dividendsPaid;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money drawings;
 	
-	@OmitCents
+	@RoundToDollars
 	private Money currentAccountClosingBalance;
 
-	@OmitCents
+	@RoundToDollars
 	private Money deductibleLossOnDisposal;
 
 
@@ -240,10 +237,6 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 //	private String calculateMinusSign(Money value) {
 //		return value.signum() < 0 ? "-" : "";
 //	}
-
-	private Map<String, String> getPropertyToFieldMap() {
-		return IR10FieldMapper.getPropertyToFieldMap(year);
-	}
 
 	public int getYear() {
 		return year;
