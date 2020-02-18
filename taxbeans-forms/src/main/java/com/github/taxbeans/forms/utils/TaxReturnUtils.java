@@ -129,4 +129,8 @@ public class TaxReturnUtils {
 	public static String formatDollarsField(Money amount) {
 		return TaxReturnUtils.formatDollarsField(amount.getNumberStripped());
 	}
+	
+	public static String formatDollarsFieldRounded(Money amount) {
+		return TaxReturnUtils.formatDollarsField(amount.getNumberStripped().setScale(0, RoundingMode.HALF_UP));
+	}
 }

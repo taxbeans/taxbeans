@@ -30,6 +30,7 @@ import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.Percent2DecimalPlaces;
 import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
+import com.github.taxbeans.forms.RoundToDollars;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.SkipIfFalse;
 import com.github.taxbeans.forms.Sum;
@@ -58,6 +59,16 @@ public class FormProcessor {
 		if (value instanceof Money) {
 			if (f.getAnnotation(OmitCents.class) != null) {
 				value = TaxReturnUtils.formatDollarsField((Money) value);
+				if (f.getAnnotation(IncludeFormatSpacing.class) != null) {
+					String valueText = (String) value;
+					if (valueText.length() >= 4) {
+						valueText = valueText.substring(0, valueText.length() - 3) + " "
+								+ valueText.substring(valueText.length() - 3);
+						value = valueText;
+					}
+				}
+			} else if (f.getAnnotation(RoundToDollars.class) != null) {
+				value = TaxReturnUtils.formatDollarsFieldRounded((Money) value);
 				if (f.getAnnotation(IncludeFormatSpacing.class) != null) {
 					String valueText = (String) value;
 					if (valueText.length() >= 4) {
