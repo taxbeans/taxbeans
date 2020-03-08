@@ -35,8 +35,18 @@ public class RBNZHistoricalExchangeRatesReader {
 		logger.debug(String.format("1 NZD is %1$s USD", getForeignToNZDRate(LocalDate.of(2017,1,17), "USD")));
 		//loadAllRates();
 	}
-
+	
 	private static ExchangeRateInfo loadAllRates(String currency) {
+		ExchangeRateInfo exchangeRateInfo = new ExchangeRateInfo();
+		Map<LocalDate, BigDecimal> exchangeRates = new HashMap<>();
+		loadAllRates(currency, exchangeRates, "/rbnz-historical-exchange-rates.xlsx");
+		loadAllRates(currency, exchangeRates, "/rbnz-historical-exchange-rates-2018-and-newer.xlsx");
+		exchangeRateInfo.setExchangeRates(exchangeRates);
+		exchangeRateInfo.setWeekdaysOnly(true);
+		return exchangeRateInfo;
+	}
+
+	private static void loadAllRates(String currency, Map<LocalDate, BigDecimal> exchangeRates, String filename) {
 		String currencyColumn;
 		if (currency.equals("USD")) {
 			currencyColumn = "C";
@@ -48,15 +58,14 @@ public class RBNZHistoricalExchangeRatesReader {
 		Workbook wb;
 		try {
 			InputStream resourceAsStream = RBNZHistoricalExchangeRatesReader.class
-				.getResourceAsStream("/rbnz-historical-exchange-rates.xlsx");
+				.getResourceAsStream(filename);
 			wb = new XSSFWorkbook(new BufferedInputStream(resourceAsStream));
 		} catch (IOException e) {
 			throw new IllegalStateException("could not load RBNZ rates XLS");
 		}
 		Sheet sheet = wb.getSheetAt(0);
 
-		ExchangeRateInfo exchangeRateInfo = new ExchangeRateInfo();
-		Map<LocalDate, BigDecimal> exchangeRates = new HashMap<>();
+
 		// suppose your formula is in B3
 		for (int rowNum = 6;rowNum<2000;rowNum++) {
 			CellReference cellReference = new CellReference(String.format("%1$s%2$s", currencyColumn, rowNum)); 
@@ -79,13 +88,10 @@ public class RBNZHistoricalExchangeRatesReader {
 			exchangeRates.put(dateCellValue, rate);
 		}
 		try {
-		wb.close();
+			wb.close();
 		} catch (IOException e) {
 			throw new IllegalStateException("could not load RBNZ rates XLS");
 		}
-		exchangeRateInfo.setExchangeRates(exchangeRates);
-		exchangeRateInfo.setWeekdaysOnly(true);
-		return exchangeRateInfo;
 	}
 	
 	public static BigDecimal getCrossRate(LocalDate date, String fxFrom, String fxTo) {
