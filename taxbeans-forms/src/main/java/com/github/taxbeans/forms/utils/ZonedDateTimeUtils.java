@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class ZonedDateTimeUtils {
@@ -23,6 +24,11 @@ public class ZonedDateTimeUtils {
 
 	public static LocalDate convertToDate(LocalDateTime time) {
 		return time.toLocalDate();
+	}
+
+	public static String format(ZonedDateTime zonedDateTime) {
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return zonedDateTime.format(formatter2);
 	}
 
 }
