@@ -61,7 +61,7 @@ public class RBNZHistoricalExchangeRatesReader {
 				.getResourceAsStream(filename);
 			wb = new XSSFWorkbook(new BufferedInputStream(resourceAsStream));
 		} catch (IOException e) {
-			throw new IllegalStateException("could not load RBNZ rates XLS");
+			throw new IllegalStateException("could not load RBNZ rates XLS: " + filename, e);
 		}
 		Sheet sheet = wb.getSheetAt(0);
 
