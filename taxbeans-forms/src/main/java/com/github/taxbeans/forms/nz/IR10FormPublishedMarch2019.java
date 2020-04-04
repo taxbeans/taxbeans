@@ -4,11 +4,13 @@ import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.forms.Unbounded;
 import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.RoundToDollars;
 import com.github.taxbeans.forms.RoundedSum;
 import com.github.taxbeans.forms.Skip;
+import com.github.taxbeans.forms.Sum;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 
@@ -116,6 +118,10 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 	@Required
 	@RoundedSum(value={"totalIncome", "exceptionalItems"}, negate="totalExpenses")
 	private Money netProfitBeforeTax;
+
+	@Unbounded
+	@Sum(value={"totalIncome", "exceptionalItems"}, negate="totalExpenses")
+	private Money netProfitBeforeTaxUnrounded;
 	
 	@RoundToDollars
 	private Money taxAdjustments;
@@ -789,5 +795,9 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 
 	public void setDeductibleLossOnDisposal(Money deductibleLossOnDisposal) {
 		this.deductibleLossOnDisposal = deductibleLossOnDisposal;
+	}
+
+	public Money getNetProfitBeforeTaxUnrounded() {
+		return netProfitBeforeTaxUnrounded;
 	}
 }

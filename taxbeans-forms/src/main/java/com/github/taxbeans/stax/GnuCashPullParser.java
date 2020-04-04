@@ -39,7 +39,7 @@ import com.github.taxbeans.model.AccountEntry;
 
 public class GnuCashPullParser {
 
-	final Logger logger = LoggerFactory.getLogger(GnuCashPullParser.class);
+	static final Logger logger = LoggerFactory.getLogger(GnuCashPullParser.class);
 
 	private Map<String, String> guidToAccountNameMap = new HashMap<String, String>();
 

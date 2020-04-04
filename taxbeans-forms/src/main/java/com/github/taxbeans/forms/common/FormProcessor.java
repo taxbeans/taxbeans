@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.exception.TaxBeansException;
 import com.github.taxbeans.forms.RoundedSum;
+import com.github.taxbeans.forms.Unbounded;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.LeftAlign;
 import com.github.taxbeans.forms.OmitCents;
@@ -108,13 +109,17 @@ public class FormProcessor {
 		if (pdField == null) {
 			List<PDField> fields = acroForm.getFields();
 			for (PDField field1 : fields) {
-				System.out.println("Candidate field: " + field1.getFullyQualifiedName());
+				logger.warn("Candidate field: " + field1.getFullyQualifiedName());
 			}
-			System.out.println("An issue occurred searching for field: " + fieldName);
-			System.out.println("Perhaps field name not in enum");
-			throw new TaxBeansException("PD Field was null");
+			logger.warn("An issue occurred searching for field: " + fieldName);
+			logger.warn("Perhaps field name not in enum");
+			if (f.getAnnotation(Unbounded.class) == null) {
+				throw new TaxBeansException("PD Field was null");
+			}
 		}
-		pdField.setValue(String.valueOf(value));
+		if (f.getAnnotation(Unbounded.class) == null) {
+			pdField.setValue(String.valueOf(value));
+		}
 	}
 	
 	public static void publishDraft(Object pojo, int year, String fileNameTemplate, Map<String, String> propertyToFieldMap,
@@ -222,7 +227,7 @@ public class FormProcessor {
 					loopThroughFields:
 					for (Map.Entry<String, Object> entry : describe.entrySet()) {
 						key = entry.getKey();
-						Object value = entry.getValue();
+						//Object value = entry.getValue();
 						if (key.equals("class") || key.equals("year")) {
 							// todo exclude fields by annotation
 							continue;
@@ -230,7 +235,7 @@ public class FormProcessor {
 						System.err.println("key = " + key);
 						Field f = pojo.getClass().getDeclaredField(key);
 						f.setAccessible(true);
-						Object field = f.get(pojo);
+						//Object field = f.get(pojo);
 						String[] fields = null;
 						String[] negate = null;
 						if (f.getAnnotation(Sum.class) != null || f.getAnnotation(RoundedSum.class) != null) {
