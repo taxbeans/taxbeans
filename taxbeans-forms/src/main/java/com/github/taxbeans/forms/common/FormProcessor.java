@@ -43,18 +43,24 @@ import com.github.taxbeans.forms.utils.TaxReturnUtils;
 
 public class FormProcessor {
 	
-	final static Logger logger = LoggerFactory.getLogger(FormProcessor.class);
+	final static Logger LOG = LoggerFactory.getLogger(FormProcessor.class);
+	
+	private static String fileName;
+	
+	private static String csvMappingFileName;
+
+	private static String key;
 	
 	public static void processField(PDAcroForm acroForm, String fieldName, Object value, Field f) throws IOException {
 		PDField pdField = acroForm.getField(fieldName);
 		if (pdField == null) {
-			logger.error(fieldName + "->" + pdField);
+			LOG.error(fieldName + "->" + pdField);
 		}
 		if (f.getAnnotation(Skip.class) != null) {
 			return;
 		}
 		if (value == null) {
-			logger.warn("Null value - may indicate either blank field or issue");
+			LOG.warn("Null value - may indicate either blank field or issue");
 			return;
 		}
 		if (value instanceof Money) {
@@ -109,12 +115,15 @@ public class FormProcessor {
 		if (pdField == null) {
 			List<PDField> fields = acroForm.getFields();
 			for (PDField field1 : fields) {
-				logger.warn("Candidate field: " + field1.getFullyQualifiedName());
+				LOG.warn("Candidate field: " + field1.getFullyQualifiedName());
 			}
-			logger.warn("An issue occurred searching for field: " + fieldName);
-			logger.warn("Perhaps field name not in enum");
+			String issue = String.format("An issue occurred searching for %s (%s) in the PDF (acroForm) named: %s", 
+					fieldName, key, fileName);
+			LOG.warn(issue);
+			LOG.warn("Perhaps field name not in enum");
+			LOG.warn("Perhaps field in bean but not in mapping CSV: {}", csvMappingFileName);
 			if (f.getAnnotation(Unbounded.class) == null) {
-				throw new TaxBeansException("PD Field was null");
+				throw new TaxBeansException(issue);
 			}
 		}
 		if (f.getAnnotation(Unbounded.class) == null) {
@@ -125,16 +134,17 @@ public class FormProcessor {
 	public static void publishDraft(Object pojo, int year, String fileNameTemplate, Map<String, String> propertyToFieldMap,
 			String fullName, String outputFormat) {
 		try {
+			fileName = String.format(fileNameTemplate, year);
 			File ir7Form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
 																	// "Downloads"),
-					String.format(fileNameTemplate, year));  //"ir7-%1$s.pdf", year));
+					fileName);  //"ir7-%1$s.pdf", year));
 			PDDocument pdfTemplate = PDDocument.load(ir7Form);
 
 			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
 			PDAcroForm acroForm = docCatalog.getAcroForm();
 			Map<String, Object> describe = PropertyUtils.describe(pojo);
 			//Map<String, String> propertyToFieldMap = pojo.getPropertyToFieldMap();
-			String key = null;
+			key = null;
 			try {
 				for (Map.Entry<String, Object> entry : describe.entrySet()) {
 					key = entry.getKey();
@@ -149,7 +159,7 @@ public class FormProcessor {
 							i++;
 						}
 						for (String f : fieldArray) {
-							logger.info("Field name is: " + f);
+							LOG.info("Field name is: " + f);
 						}
 						throw new AssertionError("Exiting due to issue with fields");
 					}
@@ -187,7 +197,7 @@ public class FormProcessor {
 							System.out.println(fieldName + "->" + pdField);
 						}
 					} else if (f.getAnnotation(Sum.class) != null) {
-						logger.trace("Defer to second pass");				
+						LOG.trace("Defer to second pass");				
 					} else if (f.getAnnotation(UseDayMonthYear.class) != null) {
 							LocalDate localDate = (LocalDate) value;
 							if (value == null) {
@@ -208,7 +218,7 @@ public class FormProcessor {
 									: propertyToFieldMap.get(key + "_false");
 							String fieldName = propertyToFieldMap.get(key);
 							if (fieldName == null || mappedValue == null) {
-								propertyToFieldMap.entrySet().forEach(action -> logger
+								propertyToFieldMap.entrySet().forEach(action -> LOG
 										.error(String.format("%s -> %s", action.getKey(), action.getValue())));
 								throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
 										+ "cause is missing Enum field (or enum true and false suffixes) in IR7Fields", key));
@@ -270,8 +280,8 @@ public class FormProcessor {
 										//3 passes required for derived field of derived field
 										continue loopThroughFields;
 									}
-									logger.error("Form field = " + formField);
-									logger.error("Form field value= " + money);
+									LOG.error("Form field = " + formField);
+									LOG.error("Form field value= " + money);
 									throw e;
 								}
 							}
@@ -295,8 +305,8 @@ public class FormProcessor {
 										//3 passes required for derived field of derived field
 										continue loopThroughFields;
 									}
-									logger.error("Form field = " + formField);
-									logger.error("Form field value= " + money);
+									LOG.error("Form field = " + formField);
+									LOG.error("Form field value= " + money);
 									throw e;
 								}
 							}
@@ -306,13 +316,11 @@ public class FormProcessor {
 					}
 					}
 			} catch (NullPointerException | IllegalArgumentException e) {
-				logger.error("Error processing: {}", key);
+				LOG.error("Error processing: {}", key);
 				throw e;
 			}
 			String destinationDirectory = ((FormDestination) pojo).getDestinationDirectory();
-			File parent = destinationDirectory != null ? new File(destinationDirectory) : new File("target"); // new
-																												// File(System.getProperty("user.home"),
-																												// "Downloads");
+			File parent = destinationDirectory != null ? new File(destinationDirectory) : new File("target"); // new																							// "Downloads");
 			String lowerCase = fullName.split(" ")[0].toLowerCase();  //pojo.getFullName().split(" ")[0].toLowerCase();
 			
 			String personalisedNaming = ((FormDestination) pojo).getDestinationDirectory();
@@ -335,10 +343,14 @@ public class FormProcessor {
 			acroForm.setNeedAppearances(true);
 			pdfTemplate.save(ir7DraftForm);
 			pdfTemplate.close();
-			logger.info("IR7 Form Completed Successfully: " + ir7DraftForm);
+			LOG.info("Form Completed Successfully: " + ir7DraftForm);
 		} catch (Exception e) {
 			throw new TaxBeansException("Is field in the enum?", e);
 		}
+	}
+
+	public static void setCsvMappingFileName(String csvMappingFileName) {
+		FormProcessor.csvMappingFileName = csvMappingFileName;
 	}
 
 }
