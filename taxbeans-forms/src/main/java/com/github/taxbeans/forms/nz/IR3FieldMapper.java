@@ -12,9 +12,13 @@ import com.github.taxbeans.model.nz.Salutation;
 
 public class IR3FieldMapper {
 
-	final static Logger logger = LoggerFactory.getLogger(IR3FieldMapper.class);
+	private static final int START_YEAR_OFFSET_FOR_CSV = 2015;
+
+	final static Logger LOG = LoggerFactory.getLogger(IR3FieldMapper.class);
 
 	private static volatile Map<String, String[]> map = null;
+
+	private static String csvMappingFileName;
 
 	public static String getFieldName(IR3Fields fieldName, int year) {
 		return getFieldNameViaString(fieldName.name(), year);
@@ -24,21 +28,23 @@ public class IR3FieldMapper {
 		if (map == null) {
 			synchronized (IR3FieldMapper.class) {
 				if (map == null) {
+					csvMappingFileName = (year == 2019 || year == 2017 || year == 2016)
+							? "ir3-fields-v2.csv" : "ir3-fields.csv";
 					InputStream resource = 
 							IR3FieldMapper.class.getClassLoader()
-							.getResourceAsStream(year == 2019 ? "ir3-fields-v2.csv" : "ir3-fields.csv");
+							.getResourceAsStream(csvMappingFileName);
 					map = IRFieldMapperUtils.populateMap(resource, year);
 				}
 			}
 		}
-		int i = year-2016;
+		int i = year-START_YEAR_OFFSET_FOR_CSV;
 		String[] strings = map.get(fieldName);
 		if (strings == null) {
-			System.out.println(fieldName + " resulted in null Strings");
 			for (Entry<String, String[]> entry : map.entrySet()) {
-				System.out.println(entry.getKey() + " -> " + entry.getValue());
+				LOG.warn(entry.getKey() + " -> " + entry.getValue());
 			}
-			throw new IllegalStateException();
+			LOG.warn(fieldName + " resulted in null Strings, mapping to null");
+			return null;
 		}
 		return strings[i];
 	}
@@ -75,5 +81,9 @@ public class IR3FieldMapper {
 			map.put(getFieldName(field, year), field.name());
 		}
 		return map;
+	}
+
+	public static String getCsvMappingFileName() {
+		return csvMappingFileName;
 	}
 }

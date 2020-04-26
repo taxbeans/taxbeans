@@ -255,5 +255,5 @@ public enum IR3Fields {
 	minusSignForRLWTTaxCredit,
 	minusSignForTotalIncome,
 	minusSignForIncomeAfterExpenses,
-	minusSignForTaxableIncome,
+	minusSignForTaxableIncome
 }
