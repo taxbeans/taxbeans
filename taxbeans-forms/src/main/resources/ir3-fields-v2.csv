@@ -88,7 +88,7 @@ independentEarnerTaxCreditEligible_false,1,1,1,1
 excessImputationCreditsBroughtForwardEligible,33 yes/no,31 yes/no,31 yes/no,31 yes/no
 excessImputationCreditsBroughtForwardEligible_true,0,0,0,0
 excessImputationCreditsBroughtForwardEligible_false,1,1,1,1
-earlyPaymentDiscountEntitled,33 yes/no,33 yes/no,33 yes/no,33 yes/no
+earlyPaymentDiscountEntitled,33 credit/debit,33 yes/no,33 yes/no,33 yes/no
 earlyPaymentDiscountEntitled_true,0,0,0,0
 earlyPaymentDiscountEntitled_false,1,1,1,1
 transferRefundToSomeoneElsesIncomeTaxAccountAssociated,34E yes/no,34E yes/no,34E yes/no,34E yes/no
