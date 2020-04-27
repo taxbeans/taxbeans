@@ -163,7 +163,7 @@ public class FormProcessor {
 						}
 						throw new AssertionError("Exiting due to issue with fields");
 					}
-					System.out.println(key + "->" + value);
+					LOG.debug(key + "->" + value);
 					if (key.equals("reasonForTaxReturnPartYear")) {
 						System.out.println("incomeOtherReceived");
 					}

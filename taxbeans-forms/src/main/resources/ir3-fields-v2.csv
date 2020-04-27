@@ -32,11 +32,11 @@ familyTaxCreditAmount,box 11,box 11,box 11,box 11
 incomeWithTaxDeductedReceived,11a yes/no,11a yes/no,11a yes/no,11a yes/no
 incomeWithTaxDeductedReceived_true,1,1,1,1
 incomeWithTaxDeductedReceived_false,0,0,0,0
-totalPAYEDeducted,box 11A,box 11A,box 11A,box 11A
-totalGrossIncome,box 11B,box 11B,box 11B,box 11B
-accEarnersLevy,box 11D,box 11D,box 11D,box 11D
-incomeNotLiableForAccEarnersLevy,box 11C,box 11C,box 11C,box 11C
-totalTaxDeducted,box 11E,box 11E,box 11E,box 11E
+totalPAYEDeducted,11.5,box 11A,box 11A,box 11A
+totalGrossIncome,11.1,box 11B,box 11B,box 11B
+accEarnersLevy,11.4,box 11D,box 11D,box 11D
+incomeNotLiableForAccEarnersLevy,11.2.0,box 11C,box 11C,box 11C
+totalTaxDeducted,11.3,box 11E,box 11E,box 11E
 schedularPaymentsReceived,12,12 no/yes,12 no/yes,12 no/yes
 schedularPaymentsReceived_true,1,1,1,1
 schedularPaymentsReceived_false,0,0,0,0
@@ -129,7 +129,7 @@ totalTaxableDistributionsFromNonComplyingTrusts,box 16C,box 16C,box 16C,box 16C
 totalOverseasTaxPaid,box17A,box17A,box17A,box17A
 totalOverseasIncome,box17B,box17B,box17B,box17B
 totalPartnershipTaxCredits,11.2.1.1.0,box 18A,box 18A,box 18A
-totalActivePartnershipIncome,11.2.1.1.1,box 18B,box 18B,box 18B
+totalActivePartnershipIncome,11.2.1.1.1.0,box 18B,box 18B,box 18B
 totalLTCTaxCredits,11.2.1.1.1.4,box 19A,box 19A,box 19A
 totalActiveLTCIncome,11.2.1.1.1.5,box 19B,box 19B,box 19B
 nonAllowableDeductionsThisYear,11.2.1.0.0.1,box 19C,box 19C,box 19C
