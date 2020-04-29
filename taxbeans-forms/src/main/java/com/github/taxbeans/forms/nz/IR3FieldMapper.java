@@ -12,7 +12,7 @@ import com.github.taxbeans.model.nz.Salutation;
 
 public class IR3FieldMapper {
 
-	private static final int START_YEAR_OFFSET_FOR_CSV = 2014;
+	private static final int START_YEAR_OFFSET_FOR_CSV = 2011;
 
 	final static Logger LOG = LoggerFactory.getLogger(IR3FieldMapper.class);
 
@@ -28,7 +28,8 @@ public class IR3FieldMapper {
 		if (map == null) {
 			synchronized (IR3FieldMapper.class) {
 				if (map == null) {
-					csvMappingFileName = (year == 2019 || year == 2017 || year == 2016 || year == 2015)
+					csvMappingFileName = (year == 2019 || year == 2017 || year == 2016 || year == 2015
+							|| year == 2014 || year == 2013 || year == 2012)
 							? "ir3-fields-v2.csv" : "ir3-fields.csv";
 					InputStream resource = 
 							IR3FieldMapper.class.getClassLoader()
