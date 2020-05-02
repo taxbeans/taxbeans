@@ -42,15 +42,15 @@ import com.github.taxbeans.forms.UseValueMappings;
 import com.github.taxbeans.forms.utils.TaxReturnUtils;
 
 public class FormProcessor {
-	
+
 	final static Logger LOG = LoggerFactory.getLogger(FormProcessor.class);
-	
+
 	private static String fileName;
-	
+
 	private static String csvMappingFileName;
 
 	private static String key;
-	
+
 	public static void processField(PDAcroForm acroForm, String fieldName, Object value, Field f) throws IOException {
 		PDField pdField = acroForm.getField(fieldName);
 		if (pdField == null) {
@@ -94,8 +94,8 @@ public class FormProcessor {
 		} else if (f.getAnnotation(LeftAlign.class) != null) {
 			int size = f.getAnnotation(LeftAlign.class).value();
 			value = StringUtils.rightPad(String.valueOf(value), size);
-		} else if (f.getAnnotation(Percent2DecimalPlaces.class) != null) {		
-			BigDecimal bigDecimal = (BigDecimal) value;			
+		} else if (f.getAnnotation(Percent2DecimalPlaces.class) != null) {
+			BigDecimal bigDecimal = (BigDecimal) value;
 			bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
 			DecimalFormat df = new DecimalFormat();
 			df.setMaximumFractionDigits(2);
@@ -117,7 +117,7 @@ public class FormProcessor {
 			for (PDField field1 : fields) {
 				LOG.warn("Candidate field: " + field1.getFullyQualifiedName());
 			}
-			String issue = String.format("An issue occurred searching for %s (%s) in the PDF (acroForm) named: %s", 
+			String issue = String.format("An issue occurred searching for %s (%s) in the PDF (acroForm) named: %s",
 					fieldName, key, fileName);
 			LOG.warn(issue);
 			LOG.warn("Perhaps field name not in enum");
@@ -130,20 +130,20 @@ public class FormProcessor {
 			pdField.setValue(String.valueOf(value));
 		}
 	}
-	
-	public static void publishDraft(Object pojo, int year, String fileNameTemplate, Map<String, String> propertyToFieldMap,
-			String fullName, String outputFormat) {
+
+	public static void publishDraft(Object pojo, int year, String fileNameTemplate,
+			Map<String, String> propertyToFieldMap, String fullName, String outputFormat) {
 		try {
 			fileName = String.format(fileNameTemplate, year);
 			File ir7Form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
-																	// "Downloads"),
-					fileName);  //"ir7-%1$s.pdf", year));
+																// "Downloads"),
+					fileName); // "ir7-%1$s.pdf", year));
 			PDDocument pdfTemplate = PDDocument.load(ir7Form);
 
 			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
 			PDAcroForm acroForm = docCatalog.getAcroForm();
 			Map<String, Object> describe = PropertyUtils.describe(pojo);
-			//Map<String, String> propertyToFieldMap = pojo.getPropertyToFieldMap();
+			// Map<String, String> propertyToFieldMap = pojo.getPropertyToFieldMap();
 			key = null;
 			try {
 				for (Map.Entry<String, Object> entry : describe.entrySet()) {
@@ -197,47 +197,47 @@ public class FormProcessor {
 							System.out.println(fieldName + "->" + pdField);
 						}
 					} else if (f.getAnnotation(Sum.class) != null) {
-						LOG.trace("Defer to second pass");				
+						LOG.trace("Defer to second pass");
 					} else if (f.getAnnotation(UseDayMonthYear.class) != null) {
-							LocalDate localDate = (LocalDate) value;
-							if (value == null) {
-								// leave the field blank
-								continue;
-							}
-							int dayOfMonth = localDate.getDayOfMonth();
-							processField(acroForm, propertyToFieldMap.get(key + "_day"),
-									dayOfMonth >= 10 ? dayOfMonth : "0" + dayOfMonth, f);
-							int monthValue = localDate.getMonthValue();
-							processField(acroForm, propertyToFieldMap.get(key + "_month"),
-									monthValue >= 10 ? monthValue : "0" + monthValue, f);
-							int year2 = localDate.getYear();
-							processField(acroForm, propertyToFieldMap.get(key + "_year"),
-									year2 >= 10 ? year2 : "0" + year2, f);
+						LocalDate localDate = (LocalDate) value;
+						if (value == null) {
+							// leave the field blank
+							continue;
+						}
+						int dayOfMonth = localDate.getDayOfMonth();
+						processField(acroForm, propertyToFieldMap.get(key + "_day"),
+								dayOfMonth >= 10 ? dayOfMonth : "0" + dayOfMonth, f);
+						int monthValue = localDate.getMonthValue();
+						processField(acroForm, propertyToFieldMap.get(key + "_month"),
+								monthValue >= 10 ? monthValue : "0" + monthValue, f);
+						int year2 = localDate.getYear();
+						processField(acroForm, propertyToFieldMap.get(key + "_year"), year2 >= 10 ? year2 : "0" + year2,
+								f);
 					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
-							String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true")
-									: propertyToFieldMap.get(key + "_false");
-							String fieldName = propertyToFieldMap.get(key);
-							if (fieldName == null || mappedValue == null) {
-								propertyToFieldMap.entrySet().forEach(action -> LOG
-										.error(String.format("%s -> %s", action.getKey(), action.getValue())));
-								throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
-										+ "cause is missing Enum field (or enum true and false suffixes) in IR7Fields", key));
-							}
-							processField(acroForm, fieldName, mappedValue, f);
+						String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true")
+								: propertyToFieldMap.get(key + "_false");
+						String fieldName = propertyToFieldMap.get(key);
+						if (fieldName == null || mappedValue == null) {
+							propertyToFieldMap.entrySet().forEach(
+									action -> LOG.error(String.format("%s -> %s", action.getKey(), action.getValue())));
+							throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
+									+ "cause is missing Enum field (or enum true and false suffixes) in IR7Fields",
+									key));
+						}
+						processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseValueMappings.class) != null) {
-							String mappedValue = propertyToFieldMap.get(key + "_" + value);
-							processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
+						String mappedValue = propertyToFieldMap.get(key + "_" + value);
+						processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
 					} else {
-							processField(acroForm, propertyToFieldMap.get(key), value, f);					
+						processField(acroForm, propertyToFieldMap.get(key), value, f);
 					}
 				}
-				// Second pass:		
+				// Second pass:
 				int maxPasses = 10;
-				for (int i=0;i<maxPasses;i++ ) {
-					loopThroughFields:
-					for (Map.Entry<String, Object> entry : describe.entrySet()) {
+				for (int i = 0; i < maxPasses; i++) {
+					loopThroughFields: for (Map.Entry<String, Object> entry : describe.entrySet()) {
 						key = entry.getKey();
-						//Object value = entry.getValue();
+						// Object value = entry.getValue();
 						if (key.equals("class") || key.equals("year")) {
 							// todo exclude fields by annotation
 							continue;
@@ -245,7 +245,7 @@ public class FormProcessor {
 						System.err.println("key = " + key);
 						Field f = pojo.getClass().getDeclaredField(key);
 						f.setAccessible(true);
-						//Object field = f.get(pojo);
+						// Object field = f.get(pojo);
 						String[] fields = null;
 						String[] negate = null;
 						if (f.getAnnotation(Sum.class) != null || f.getAnnotation(RoundedSum.class) != null) {
@@ -264,20 +264,21 @@ public class FormProcessor {
 							for (String formField : fields) {
 								Field f2 = pojo.getClass().getDeclaredField(formField);
 								f2.setAccessible(true);
-								Money money = (Money)f2.get(pojo);
+								Money money = (Money) f2.get(pojo);
 								try {
 									if (money == null && f2.getAnnotation(Required.class) == null) {
 										money = Money.of(BigDecimal.ZERO, "NZD");
 									} else {
 										if (round) {
-											BigDecimal roundBigDecimal = money.getNumberStripped().setScale(0, RoundingMode.HALF_UP);
+											BigDecimal roundBigDecimal = money.getNumberStripped().setScale(0,
+													RoundingMode.HALF_UP);
 											money = Money.of(roundBigDecimal, money.getCurrency().getCurrencyCode());
 										}
 									}
 									sumMoney = sumMoney.add(money);
 								} catch (NullPointerException e) {
-									if (i <= (maxPasses-1)) {
-										//3 passes required for derived field of derived field
+									if (i <= (maxPasses - 1)) {
+										// 3 passes required for derived field of derived field
 										continue loopThroughFields;
 									}
 									LOG.error("Form field = " + formField);
@@ -289,20 +290,21 @@ public class FormProcessor {
 								Money money = null;
 								Field f2 = pojo.getClass().getDeclaredField(formField);
 								f2.setAccessible(true);
-								money = (Money)f2.get(pojo);
+								money = (Money) f2.get(pojo);
 								try {
 									if (money == null && f2.getAnnotation(Required.class) == null) {
 										money = Money.of(BigDecimal.ZERO, "NZD");
 									} else {
-		
-										money = round ? Money.of(money.getNumberStripped().setScale(0, RoundingMode.FLOOR), 
-												money.getCurrency().getCurrencyCode()) : 
-													money;
+
+										money = round
+												? Money.of(money.getNumberStripped().setScale(0, RoundingMode.FLOOR),
+														money.getCurrency().getCurrencyCode())
+												: money;
 									}
 									sumMoney = sumMoney.subtract(money);
 								} catch (NullPointerException e) {
-									if (i <= (maxPasses-1)) {
-										//3 passes required for derived field of derived field
+									if (i <= (maxPasses - 1)) {
+										// 3 passes required for derived field of derived field
 										continue loopThroughFields;
 									}
 									LOG.error("Form field = " + formField);
@@ -314,31 +316,18 @@ public class FormProcessor {
 							processField(acroForm, propertyToFieldMap.get(key), sumMoney, f);
 						}
 					}
-					}
+				}
 			} catch (NullPointerException | IllegalArgumentException e) {
 				LOG.error("Error processing: {}", key);
 				throw e;
 			}
 			String destinationDirectory = ((FormDestination) pojo).getDestinationDirectory();
-			File parent = destinationDirectory != null ? new File(destinationDirectory) : new File("target"); // new																							// "Downloads");
-			String lowerCase = fullName.split(" ")[0].toLowerCase();  //pojo.getFullName().split(" ")[0].toLowerCase();
-			
+			File parent = destinationDirectory != null ? new File(destinationDirectory) : new File("target");
+			String lowerCase = fullName.split(" ")[0].toLowerCase();
+
 			String personalisedNaming = ((FormDestination) pojo).getDestinationDirectory();
 			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
 			File ir7DraftForm = new File(parent, String.format(outputFormat, year, lowerCase));
-			// flattening causes fields to disappear
-//			acroForm.setNeedAppearances(false);		
-//			for (PDPage page : pdfTemplate.getPages()) {
-//				for (PDAnnotation annot : page.getAnnotations()) {
-//					annot.setPage(page);
-//				}
-//			}			
-//			// Add the missing resources to the form
-//			PDResources dr = new PDResources();		
-//			dr.put(COSName.getPDFName("Courier"), PDType1Font.COURIER);
-//			dr.put(COSName.getPDFName("Helvetica"), PDType1Font.HELVETICA);
-//			acroForm.setDefaultResources(dr);
-//			acroForm.flatten();
 			acroForm.setXFA(null);
 			acroForm.setNeedAppearances(true);
 			pdfTemplate.save(ir7DraftForm);

@@ -14,6 +14,8 @@ public class IR3FieldMapper {
 
 	private static final int START_YEAR_OFFSET_FOR_CSV = 2011;
 
+	private static final int START_YEAR_OFFSET_FOR_CSV_LEGACY = 2016;
+
 	final static Logger LOG = LoggerFactory.getLogger(IR3FieldMapper.class);
 
 	private static volatile Map<String, String[]> map = null;
@@ -25,20 +27,25 @@ public class IR3FieldMapper {
 	}
 
 	private static String getFieldNameViaString(String fieldName, int year) {
+		boolean newerVersion = year == 2019 || year == 2017 || year == 2016 || year == 2015 || year == 2014
+				|| year == 2013 || year == 2012;
+		int startYearOffset = newerVersion ? START_YEAR_OFFSET_FOR_CSV : START_YEAR_OFFSET_FOR_CSV_LEGACY;
 		if (map == null) {
 			synchronized (IR3FieldMapper.class) {
 				if (map == null) {
-					csvMappingFileName = (year == 2019 || year == 2017 || year == 2016 || year == 2015
-							|| year == 2014 || year == 2013 || year == 2012)
-							? "ir3-fields-v2.csv" : "ir3-fields.csv";
-					InputStream resource = 
-							IR3FieldMapper.class.getClassLoader()
+
+					if (newerVersion) {
+						csvMappingFileName = "ir3-fields-v2.csv";
+					} else {
+						csvMappingFileName = "ir3-fields.csv";
+					}
+					InputStream resource = IR3FieldMapper.class.getClassLoader()
 							.getResourceAsStream(csvMappingFileName);
 					map = IRFieldMapperUtils.populateMap(resource, year);
 				}
 			}
 		}
-		int i = year-START_YEAR_OFFSET_FOR_CSV;
+		int i = year - startYearOffset;
 		String[] strings = map.get(fieldName);
 		if (strings == null) {
 			for (Entry<String, String[]> entry : map.entrySet()) {
@@ -64,7 +71,7 @@ public class IR3FieldMapper {
 		Map<String, String> map = new HashMap<String, String>();
 		for (IR3Fields field : IR3Fields.values()) {
 			if (year > 2018 && field.name().contains("2018")) {
-				//workaround for field naming issue
+				// workaround for field naming issue
 				continue;
 			}
 			map.put(field.name(), getFieldName(field, year));
@@ -76,7 +83,7 @@ public class IR3FieldMapper {
 		Map<String, String> map = new HashMap<String, String>();
 		for (IR3Fields field : IR3Fields.values()) {
 			if (year > 2018 && field.name().contains("2018")) {
-				//workaround for field naming issue
+				// workaround for field naming issue
 				continue;
 			}
 			map.put(getFieldName(field, year), field.name());

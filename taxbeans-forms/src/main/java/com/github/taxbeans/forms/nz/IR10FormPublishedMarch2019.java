@@ -231,7 +231,9 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 
 	@RoundToDollars
 	private Money deductibleLossOnDisposal;
-
+	
+	@Required
+	private String currentAccountMinusSign;
 
 	final static Logger logger = LoggerFactory.getLogger(IR10FormPublishedMarch2019.class);
 
@@ -787,6 +789,9 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 
 	public void setCurrentAccountClosingBalance(Money currentAccountClosingBalance) {
 		this.currentAccountClosingBalance = currentAccountClosingBalance;
+		if (this.currentAccountClosingBalance.signum() < 0) {
+			this.setCurrentAccountMinusSign("-");
+		}
 	}
 
 	public Money getDeductibleLossOnDisposal() {
@@ -799,5 +804,13 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 
 	public Money getNetProfitBeforeTaxUnrounded() {
 		return netProfitBeforeTaxUnrounded;
+	}
+
+	String getCurrentAccountMinusSign() {
+		return currentAccountMinusSign;
+	}
+
+	void setCurrentAccountMinusSign(String currentAccountMinusSign) {
+		this.currentAccountMinusSign = currentAccountMinusSign;
 	}
 }
