@@ -75,6 +75,7 @@ public enum IR10Fields {
 	additionsToFixedAssets,
 	disposalsOfFixedAssets,
 	drawings,
+	currentAccountMinusSign,
 	currentAccountClosingBalance,
 	totalShareholderFunds,
 	deductibleLossOnDisposal,
