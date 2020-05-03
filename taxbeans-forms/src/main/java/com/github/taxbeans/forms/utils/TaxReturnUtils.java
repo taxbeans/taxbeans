@@ -60,8 +60,11 @@ public class TaxReturnUtils {
 		if (BigDecimal.ZERO.compareTo(amount) == 0)
 			return "000";
 		String prefix = "";
-		if (BigDecimal.ONE.compareTo(amount) > 0 && amount.signum() > 0)
+		if (new BigDecimal("0.1").compareTo(amount) > 0 && amount.signum() > 0) {
+			prefix =  "00";
+		} else if (BigDecimal.ONE.compareTo(amount) > 0 && amount.signum() > 0) {
 			prefix =  "0";
+		}
 		return prefix + String.valueOf(amount.multiply(new BigDecimal("100")).setScale(0, RoundingMode.HALF_UP));
 	}
 

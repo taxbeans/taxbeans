@@ -135,10 +135,10 @@ public class FormProcessor {
 			Map<String, String> propertyToFieldMap, String fullName, String outputFormat) {
 		try {
 			fileName = String.format(fileNameTemplate, year);
-			File ir7Form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
+			File form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
 																// "Downloads"),
 					fileName); // "ir7-%1$s.pdf", year));
-			PDDocument pdfTemplate = PDDocument.load(ir7Form);
+			PDDocument pdfTemplate = PDDocument.load(form);
 
 			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
 			PDAcroForm acroForm = docCatalog.getAcroForm();
@@ -148,6 +148,9 @@ public class FormProcessor {
 			try {
 				for (Map.Entry<String, Object> entry : describe.entrySet()) {
 					key = entry.getKey();
+					if ("currentAccountMinusSign".equals(key)) {
+						LOG.info("currentAccountMinusSign entry");
+					}
 					Object value = entry.getValue();
 					if ("describeForm".equals(value)) {
 						List<PDField> fieldList = acroForm.getFields();
