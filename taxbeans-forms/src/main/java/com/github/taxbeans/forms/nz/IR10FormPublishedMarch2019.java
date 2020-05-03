@@ -806,11 +806,11 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 		return netProfitBeforeTaxUnrounded;
 	}
 
-	String getCurrentAccountMinusSign() {
+	public String getCurrentAccountMinusSign() {
 		return currentAccountMinusSign;
 	}
 
-	void setCurrentAccountMinusSign(String currentAccountMinusSign) {
+	public void setCurrentAccountMinusSign(String currentAccountMinusSign) {
 		this.currentAccountMinusSign = currentAccountMinusSign;
 	}
 }

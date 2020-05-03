@@ -224,7 +224,9 @@ public class IR10Form2018 {
 
 	@RoundToDollars
 	private Money deductibleLossOnDisposal;
-
+	
+	@Required
+	private String currentAccountMinusSign;
 
 	final static Logger logger = LoggerFactory.getLogger(IR10FormPublishedMarch2019.class);
 
@@ -784,5 +786,13 @@ public class IR10Form2018 {
 
 	public void setDeductibleLossOnDisposal(Money deductibleLossOnDisposal) {
 		this.deductibleLossOnDisposal = deductibleLossOnDisposal;
+	}
+
+	String getCurrentAccountMinusSign() {
+		return currentAccountMinusSign;
+	}
+
+	void setCurrentAccountMinusSign(String currentAccountMinusSign) {
+		this.currentAccountMinusSign = currentAccountMinusSign;
 	}
 }
