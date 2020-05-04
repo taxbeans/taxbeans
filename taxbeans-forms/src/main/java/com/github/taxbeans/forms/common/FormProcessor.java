@@ -12,12 +12,14 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +53,12 @@ public class FormProcessor {
 
 	private static String key;
 
-	public static void processField(PDAcroForm acroForm, String fieldName, Object value, Field f) throws IOException {
-		PDField pdField = acroForm.getField(fieldName);
-		if (pdField == null) {
-			LOG.error(fieldName + "->" + pdField);
+	public static void processField(PDAcroForm acroForm, String fieldName, Object value, Field field) throws IOException {
+		PDField pdfField = acroForm.getField(fieldName);
+		if (pdfField == null) {
+			LOG.error(fieldName + "->" + pdfField);
 		}
-		if (f.getAnnotation(Skip.class) != null) {
+		if (field.getAnnotation(Skip.class) != null) {
 			return;
 		}
 		if (value == null) {
@@ -64,19 +66,30 @@ public class FormProcessor {
 			return;
 		}
 		if (value instanceof Money) {
-			if (f.getAnnotation(OmitCents.class) != null) {
+			if (field.getAnnotation(OmitCents.class) != null) {
 				value = TaxReturnUtils.formatDollarsField((Money) value);
-				if (f.getAnnotation(IncludeFormatSpacing.class) != null) {
+				if (field.getAnnotation(IncludeFormatSpacing.class) != null) {
 					String valueText = (String) value;
 					if (valueText.length() >= 4) {
 						valueText = valueText.substring(0, valueText.length() - 3) + " "
 								+ valueText.substring(valueText.length() - 3);
 						value = valueText;
+						//PDTextField pdfTextField = (PDTextField) pdfField;
+						//Also, I found this:Cour -> Courier CoBo -> Courier-Bold CoOb -> Courier-Oblique CoBO ->
+						//Courier-BoldOblique Helv -> Helvetica HeBo -> Helvetica-Bold HeOb -> Helvetica-Oblique HeBO -> 
+						//Helvetica-BoldOblique Symb -> Symbol TiRo -> Times-Roman TiBo -> Times-Bold TiIt -> Times-Italic TiBI -> 
+						//Times-BoldItalic ZaDb -> ZapfDingbats. I used HeBo and it worked fine to bold the font 
+						//(instead of /Helv I used /HeBo – user972391 May 16 '15 at 4:45 
+						//pdfTextField.setDefaultAppearance("/HeBo 14 Tf 0 g");
+						//COSDictionary cosObject = pdfTextField.getCOSObject();
+						//cosObject.
+						//pdfTextField.setDefaultStyleString(defaultStyleString);
 					}
+					
 				}
-			} else if (f.getAnnotation(RoundToDollars.class) != null) {
+			} else if (field.getAnnotation(RoundToDollars.class) != null) {
 				value = TaxReturnUtils.formatDollarsFieldRounded((Money) value);
-				if (f.getAnnotation(IncludeFormatSpacing.class) != null) {
+				if (field.getAnnotation(IncludeFormatSpacing.class) != null) {
 					String valueText = (String) value;
 					if (valueText.length() >= 4) {
 						valueText = valueText.substring(0, valueText.length() - 3) + " "
@@ -88,13 +101,13 @@ public class FormProcessor {
 				value = TaxReturnUtils.formatMoneyField((Money) value);
 			}
 		}
-		if (f.getAnnotation(RightAlign.class) != null) {
-			int size = f.getAnnotation(RightAlign.class).value();
+		if (field.getAnnotation(RightAlign.class) != null) {
+			int size = field.getAnnotation(RightAlign.class).value();
 			value = StringUtils.leftPad(String.valueOf(value), size);
-		} else if (f.getAnnotation(LeftAlign.class) != null) {
-			int size = f.getAnnotation(LeftAlign.class).value();
+		} else if (field.getAnnotation(LeftAlign.class) != null) {
+			int size = field.getAnnotation(LeftAlign.class).value();
 			value = StringUtils.rightPad(String.valueOf(value), size);
-		} else if (f.getAnnotation(Percent2DecimalPlaces.class) != null) {
+		} else if (field.getAnnotation(Percent2DecimalPlaces.class) != null) {
 			BigDecimal bigDecimal = (BigDecimal) value;
 			bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
 			DecimalFormat df = new DecimalFormat();
@@ -103,16 +116,16 @@ public class FormProcessor {
 			df.setGroupingUsed(false);
 			value = df.format(bigDecimal).replace(".", "");
 		}
-		if (f.getAnnotation(UseValueMappings.class) != null && pdField instanceof PDNonTerminalField) {
-			PDNonTerminalField nonTerminalField = (PDNonTerminalField) pdField;
+		if (field.getAnnotation(UseValueMappings.class) != null && pdfField instanceof PDNonTerminalField) {
+			PDNonTerminalField nonTerminalField = (PDNonTerminalField) pdfField;
 			nonTerminalField.getChildren().get(Integer.parseInt(String.valueOf(value))).setValue("a");
-		} else if (f.getAnnotation(UseValueMappings.class) != null) {
-			if (pdField instanceof PDCheckBox) {
-				pdField.setValue(String.valueOf(value));
+		} else if (field.getAnnotation(UseValueMappings.class) != null) {
+			if (pdfField instanceof PDCheckBox) {
+				pdfField.setValue(String.valueOf(value));
 				return;
 			}
 		}
-		if (pdField == null) {
+		if (pdfField == null) {
 			List<PDField> fields = acroForm.getFields();
 			for (PDField field1 : fields) {
 				LOG.warn("Candidate field: " + field1.getFullyQualifiedName());
@@ -122,12 +135,12 @@ public class FormProcessor {
 			LOG.warn(issue);
 			LOG.warn("Perhaps field name not in enum");
 			LOG.warn("Perhaps field in bean but not in mapping CSV: {}", csvMappingFileName);
-			if (f.getAnnotation(Unbounded.class) == null) {
+			if (field.getAnnotation(Unbounded.class) == null) {
 				throw new TaxBeansException(issue);
 			}
 		}
-		if (f.getAnnotation(Unbounded.class) == null) {
-			pdField.setValue(String.valueOf(value));
+		if (field.getAnnotation(Unbounded.class) == null) {
+			pdfField.setValue(String.valueOf(value));
 		}
 	}
 
