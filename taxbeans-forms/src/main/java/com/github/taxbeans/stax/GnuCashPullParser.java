@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,18 +26,15 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.forms.utils.TaxRegion;
 import com.github.taxbeans.model.Account;
 import com.github.taxbeans.model.AccountClassification;
+import com.github.taxbeans.model.AccountEntry;
 import com.github.taxbeans.model.Ledger;
 import com.github.taxbeans.model.Transaction;
-import com.github.taxbeans.model.AccountEntry;
 
 public class GnuCashPullParser {
 
