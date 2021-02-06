@@ -1,5 +1,7 @@
 package com.github.taxbeans.forms.nz;
 
+import org.javamoney.moneta.Money;
+
 public enum IR7PFields {
 	partnershipName,
 	irdNumber,
@@ -34,5 +36,9 @@ public enum IR7PFields {
 	partnersExtinguishedLosses2,
 	partnersOverseasTaxPaid2,
 	partnersImputationCredits2,
-	partnersOtherTaxCredits2 
+	partnersOtherTaxCredits2,
+	partnersTotalResidentialIncome1,
+	partnersTotalResidentialIncome2,
+	residentialRentalDeductions1,
+	residentialRentalDeductions2;
 }

@@ -5,11 +5,35 @@
 
 	<groupId>com.github.taxbeans</groupId>
 	<artifactId>taxbeans-forms</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>taxbeans-forms</name>
-	<url>http://maven.apache.org</url>
+	<name>com.github.taxbeans:taxbeans-forms</name>
+	<description>Utilities for automatically filling in PDF forms based on annotated POJOs.  Additional utilities
+	are available for filling in New Zealand tax forms, such as IR3s, IR4s and IR7s.</description>
+	<url>https://github.com/taxbeans/taxbeans</url>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Michael Rogers</name>
+			<email>mrogers@surfnz.com</email>
+			<organization>Michael Rogers &amp; Co.</organization>
+			<organizationUrl>https://github.com/michaelrogerscode</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/taxbeans/taxbeans.git</connection>
+		<developerConnection>scm:git:ssh://github.com:taxbeans/taxbeans.git</developerConnection>
+		<url>https://github.com/taxbeans/taxbeans/tree/master</url>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
