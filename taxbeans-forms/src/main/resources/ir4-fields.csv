@@ -39,7 +39,7 @@ maoriDistributions_true,No,No,No,No
 partnershipIncome,16,16,16,16
 partnershipIncome_false,Yes,Yes,Yes,Yes
 partnershipIncome_true,No,No,No,No
-totalTaxCredits,12A.8,12A.8,12A.8,12A1
+totalTaxCredits,12A.8,12A.8,12A.8,17A
 overseasIncome,17,17,17,18
 overseasIncome_false,Yes,Yes,Yes,Yes
 overseasIncome_true,No,No,No,No
@@ -50,15 +50,15 @@ businessNetProfit,12A.15,12A.15,12A.15,20
 overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no
 overseasPremiums_false,Yes,Yes,Yes,Yes
 overseasPremiums_true,No,No,No,No
-otherIncome,20 yes/no,20 yes/no,20 yes/no,23B
+otherIncome,20 yes/no,20 yes/no,20 yes/no,23 yes/no
 otherIncome_false,Yes,Yes,Yes,Yes
 otherIncome_true,No,No,No,No
 netProfitBeforeDonations,12A.11.0,12A.11.0,12A.11.0,24
-donations,22,22,22,25B
+donations,22,22,22,25 yes/no
 donations_false,Yes,Yes,Yes,Yes
 donations_true,No,No,No,No
 netProfitAfterDonations,12A.11.4,12A.11.4,12A.11.4,26
-netLossesBroughtForward,24,24,24,27A
+netLossesBroughtForward,24,24,24,27 yes/no
 netLossesBroughtForward_false,Yes,Yes,Yes,Yes
 netLossesBroughtForward_true,No,No,No,No
 netProfitAfterLossesBroughtForward,12A.11.9,12A.11.9,12A.11.9,28

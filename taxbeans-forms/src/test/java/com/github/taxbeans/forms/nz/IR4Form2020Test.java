@@ -37,9 +37,10 @@ public class IR4Form2020Test {
 		bean.setSchedularPayments(false);
 		bean.setNzInterest(false);
 		bean.setNzDividends(false);
-		bean.setTotalTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setTotalTaxCredits(Money.of(new BigDecimal("5.55"), "NZD"));
 		bean.setBusinessIncome(true);
 		bean.setBusinessNetProfit(Money.of(new BigDecimal("555.55"), "NZD"));
+		bean.setOtherIncome(false);
 		bean.setNetProfitBeforeDonations(bean.getBusinessNetProfit());
 		bean.setDonations(false);
 		bean.setNetProfitAfterDonations(bean.getBusinessNetProfit());
