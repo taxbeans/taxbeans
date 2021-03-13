@@ -44,8 +44,8 @@ overseasIncome,17,17,17,18
 overseasIncome_false,Yes,Yes,Yes,Yes
 overseasIncome_true,No,No,No,No
 businessIncome,18,18,18,20 tick
-businessIncome_false,Yes,Yes,Yes,Yes
-businessIncome_true,No,No,No,No
+businessIncome_false,Yes,Yes,Yes,No
+businessIncome_true,No,No,No,Yes
 businessNetProfit,12A.15,12A.15,12A.15,20
 overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no
 overseasPremiums_false,Yes,Yes,Yes,Yes
@@ -86,25 +86,25 @@ refundOrTaxToPay,28L refund/tax to pay,28L refund/tax to pay,28L refund/tax to p
 refundOrTaxToPay_false,Yes,Yes,Yes,Yes
 refundOrTaxToPay_true,No,No,No,No
 initialProvisionalTaxLiability,30 yes/no,30 yes/no,30 yes/no,33 yes/no
-initialProvisionalTaxLiability_false,Yes,Yes,Yes,Yes
-initialProvisionalTaxLiability_true,No,No,No,No
+initialProvisionalTaxLiability_false,Yes,Yes,Yes,No
+initialProvisionalTaxLiability_true,No,No,No,Yes
 provisionalTaxOption,31A,31A,31A,34A
 provisionalTaxDue,12A.11.7.4,12A.11.7.4,12A.11.7.4,34B
 nonResidentPayments,32 yes/no,32 yes/no,32 yes/no,35
-nonResidentPayments_false,Yes,Yes,Yes,Yes
-nonResidentPayments_true,No,No,No,No
+nonResidentPayments_false,Yes,Yes,Yes,No
+nonResidentPayments_true,No,No,No,Yes
 cfcOrFifIncome,33,33,33,36
-cfcOrFifIncome_false,Yes,Yes,Yes,Yes
-cfcOrFifIncome_true,No,No,No,No
+cfcOrFifIncome_false,Yes,Yes,Yes,No
+cfcOrFifIncome_true,No,No,No,Yes
 sharesRepurchased,34,34,34,37
-sharesRepurchased_false,Yes,Yes,Yes,Yes
-sharesRepurchased_true,No,No,No,No
+sharesRepurchased_false,Yes,Yes,Yes,No
+sharesRepurchased_true,No,No,No,Yes
 foreignSourcedDividends,35,35,35,38
-foreignSourcedDividends_false,Yes,Yes,Yes,Yes
-foreignSourcedDividends_true,No,No,No,No
+foreignSourcedDividends_false,Yes,Yes,Yes,No
+foreignSourcedDividends_true,No,No,No,Yes
 controlledByNonResidents,36,36,36,39
-controlledByNonResidents_false,Yes,Yes,Yes,Yes
-controlledByNonResidents_true,No,No,No,No
+controlledByNonResidents_false,Yes,Yes,Yes,No
+controlledByNonResidents_true,No,No,No,Yes
 lowestEconomicInterests,37,37,37,40
 shareholder1IrdNumber,39a.0,39a.0,39a.0,41A
 shareholder1Remuneration,39b.0.0,39b.0.0,39b.0.0,41B
