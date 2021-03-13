@@ -47,12 +47,18 @@ businessIncome,18,18,18,20 tick
 businessIncome_false,Yes,Yes,Yes,No
 businessIncome_true,No,No,No,Yes
 businessNetProfit,12A.15,12A.15,12A.15,20
+propertySalesIncome,N/A,N/A,N/A,21
+propertySalesIncome_false,N/A,N/A,N/A,Yes
+propertySalesIncome_true,N/A,N/A,N/A,No
 overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no
 overseasPremiums_false,Yes,Yes,Yes,Yes
 overseasPremiums_true,No,No,No,No
 otherIncome,20 yes/no,20 yes/no,20 yes/no,23 yes/no
 otherIncome_false,Yes,Yes,Yes,Yes
 otherIncome_true,No,No,No,No
+residentialPropertyIncome,N/A,N/A,N/A,19 yes/no
+residentialPropertyIncome_false,N/A,N/A,N/A,0
+residentialPropertyIncome_true,N/A,N/A,N/A,1
 netProfitBeforeDonations,12A.11.0,12A.11.0,12A.11.0,24
 donations,22,22,22,25 yes/no
 donations_false,Yes,Yes,Yes,Yes

@@ -74,10 +74,16 @@ public class IR4Form2020 implements FormDestination {
 	private boolean overseasIncome;
 
 	@UseTrueFalseMappings
+	private boolean	residentialPropertyIncome;
+
+	@UseTrueFalseMappings
 	private boolean businessIncome;
 
 	@UseTrueFalseMappings
 	private boolean overseasPremiums;
+	
+	@UseTrueFalseMappings
+	private boolean propertySalesIncome;
 
 	@UseTrueFalseMappings
 	private boolean otherIncome;
@@ -789,5 +795,21 @@ public class IR4Form2020 implements FormDestination {
 
 	public void setShareholder2SubventionPayments(Money shareholder2SubventionPayments) {
 		this.shareholder2SubventionPayments = shareholder2SubventionPayments;
+	}
+
+	public boolean isResidentialPropertyIncome() {
+		return residentialPropertyIncome;
+	}
+
+	public void setResidentialPropertyIncome(boolean residentialPropertyIncome) {
+		this.residentialPropertyIncome = residentialPropertyIncome;
+	}
+
+	public boolean isPropertySalesIncome() {
+		return propertySalesIncome;
+	}
+
+	public void setPropertySalesIncome(boolean propertySalesIncome) {
+		this.propertySalesIncome = propertySalesIncome;
 	}
 }
