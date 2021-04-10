@@ -7,3 +7,7 @@ Currently includes:
 * Import data from Gnucash
 * Fill out any PDF form from Java POJOs
 * Parsing of GnuCash files to the Model using STAX
+
+Are you looking for a full crypto API with tax profit/loss calculation support?
+
+If yes, then look no further than com.github.taxbeans.crypto.CryptoAmount and related classes.
