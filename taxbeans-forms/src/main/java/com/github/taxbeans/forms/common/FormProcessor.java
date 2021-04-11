@@ -151,6 +151,7 @@ public class FormProcessor {
 			File form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
 																// "Downloads"),
 					fileName); // "ir7-%1$s.pdf", year));
+			LOG.info("Loading: " + form.getAbsolutePath());
 			PDDocument pdfTemplate = PDDocument.load(form);
 
 			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
