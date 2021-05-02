@@ -16,6 +16,7 @@ import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDButton;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
@@ -140,7 +141,32 @@ public class FormProcessor {
 			}
 		}
 		if (field.getAnnotation(Unbounded.class) == null) {
-			pdfField.setValue(String.valueOf(value));
+			try {
+				pdfField.setValue(String.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				//auto detect the checkbox if possible:
+				boolean handled = false;
+				String replacementValue = "";
+				if (pdfField instanceof PDButton) {
+					PDButton button = (PDButton) pdfField;
+					if ("Yes".equals(value)) {
+						for (String s : button.getOnValues()) {
+							button.setValue(s);
+							replacementValue = s;
+						}
+						handled = true;
+					} else if ("No".equals(value)) {
+						replacementValue =  "Off";
+						button.setValue(replacementValue);
+						handled = true;
+					}
+				}
+				if (!handled) {
+					throw e;
+				} else {
+					LOG.warn("Auto-converted invalid value: {} to: {} for field: {}", value, replacementValue, pdfField.getFullyQualifiedName());
+				}
+			}
 		}
 	}
 

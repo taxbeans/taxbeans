@@ -27,7 +27,7 @@ public class IR3FieldMapper {
 	}
 
 	private static String getFieldNameViaString(String fieldName, int year) {
-		boolean newerVersion = year == 2019 || year == 2017 || year == 2016 || year == 2015 || year == 2014
+		boolean newerVersion = year >= 2019 || year == 2017 || year == 2016 || year == 2015 || year == 2014
 				|| year == 2013 || year == 2012;
 		int startYearOffset = newerVersion ? START_YEAR_OFFSET_FOR_CSV : START_YEAR_OFFSET_FOR_CSV_LEGACY;
 		if (map == null) {
