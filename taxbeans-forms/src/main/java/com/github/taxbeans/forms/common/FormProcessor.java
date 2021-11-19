@@ -172,6 +172,7 @@ public class FormProcessor {
 
 	public static void publishDraft(Object pojo, int year, String fileNameTemplate,
 			Map<String, String> propertyToFieldMap, String fullName, String outputFormat) {
+		Map.Entry<String, Object> currentEntry = null;
 		try {
 			fileName = String.format(fileNameTemplate, year);
 			File form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
@@ -187,6 +188,7 @@ public class FormProcessor {
 			key = null;
 			try {
 				for (Map.Entry<String, Object> entry : describe.entrySet()) {
+					currentEntry = entry;
 					key = entry.getKey();
 					if ("currentAccountMinusSign".equals(key)) {
 						LOG.info("currentAccountMinusSign entry");
@@ -377,7 +379,7 @@ public class FormProcessor {
 			pdfTemplate.close();
 			LOG.info("Form Completed Successfully: " + ir7DraftForm);
 		} catch (Exception e) {
-			throw new TaxBeansException("Is field in the enum?", e);
+			throw new TaxBeansException("Is field in the enum? Entry: " + currentEntry, e);
 		}
 	}
 
