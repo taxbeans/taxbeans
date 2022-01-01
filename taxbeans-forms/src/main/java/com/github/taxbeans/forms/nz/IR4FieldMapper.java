@@ -9,19 +9,20 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.model.nz.Salutation;
-
 public class IR4FieldMapper {
 
 	final static Logger logger = LoggerFactory.getLogger(IR4FieldMapper.class);
 
 	private static volatile Map<String, String[]> map = null;
 
+	private static boolean alreadyWarned = false;
+
 	public static String getFieldName(IR4Fields fieldName, int year) {
 		return getFieldNameViaString(fieldName.name(), year);
 	}
 
 	private static String getFieldNameViaString(String fieldName, int year) {
+		logger.info("Processing field: {}:{}", year, fieldName);
 		if (map == null) {
 			synchronized (IR4FieldMapper.class) {
 				if (map == null) {
@@ -33,13 +34,23 @@ public class IR4FieldMapper {
 			}
 		}
 		int i = year-2016;
-		String[] strings = map.get(fieldName);
+		String[] strings = map.get(fieldName);		
+		
 		if (strings == null) {
-			System.err.println(fieldName + " resulted in null Strings");
+			logger.trace(fieldName + " resulted in null Strings");
 			for (Entry<String, String[]> entry : map.entrySet()) {
-				System.err.println(entry.getKey() + " -> " + Arrays.asList(entry.getValue()));
+				if (alreadyWarned) {
+					logger.trace(entry.getKey() + " -> " + Arrays.asList(entry.getValue()));	
+				} else {
+					logger.warn(entry.getKey() + " -> " + Arrays.asList(entry.getValue()));
+				}
 			}
-			throw new IllegalStateException();
+			alreadyWarned = true;
+			logger.trace(fieldName + " resulted in null Strings, mapping to null");
+			return null;
+		}
+		if (i >= strings.length) {
+			throw new AssertionError("Column for year " + year + " is missing in CSV template.");
 		}
 		return strings[i];
 	}

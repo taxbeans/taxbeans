@@ -259,15 +259,16 @@ public class FormProcessor {
 						processField(acroForm, propertyToFieldMap.get(key + "_year"), year2 >= 10 ? year2 : "0" + year2,
 								f);
 					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
-						String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true")
-								: propertyToFieldMap.get(key + "_false");
+						String mappedKey = (Boolean) value ? (key + "_true")
+								: (key + "_false");
+						String mappedValue = propertyToFieldMap.get(mappedKey);
 						String fieldName = propertyToFieldMap.get(key);
 						if (fieldName == null || mappedValue == null) {
 							propertyToFieldMap.entrySet().forEach(
 									action -> LOG.error(String.format("%s -> %s", action.getKey(), action.getValue())));
 							throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
-									+ "cause is missing Enum field (or enum true and false suffixes) in IR7Fields",
-									key));
+									+ "cause is missing Enum field (or enum true and false suffixes) in the IRFields enum",
+									mappedKey));
 						}
 						processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseValueMappings.class) != null) {
