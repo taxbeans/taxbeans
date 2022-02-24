@@ -76,12 +76,14 @@ public class IR4Form2021Test {
 		bean.setShareholder1CurrentAccountBalance(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder1LossOffsets(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder1SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder1AimTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2IrdNumber("555555555");
 		bean.setShareholder2Remuneration(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2ValueOfLoans(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2CurrentAccountBalance(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2LossOffsets(Money.of(BigDecimal.ZERO, "NZD"));
-		bean.setShareholder2SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));				
+		bean.setShareholder2SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));	
+		bean.setShareholder2AimTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
 		
 		FormProcessor.publishDraft(bean, 2021, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2021), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");

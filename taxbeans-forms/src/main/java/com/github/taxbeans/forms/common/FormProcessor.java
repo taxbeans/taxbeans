@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -20,14 +19,11 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDButton;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.exception.TaxBeansException;
-import com.github.taxbeans.forms.RoundedSum;
-import com.github.taxbeans.forms.Unbounded;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.LeftAlign;
 import com.github.taxbeans.forms.OmitCents;
@@ -35,9 +31,11 @@ import com.github.taxbeans.forms.Percent2DecimalPlaces;
 import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.RoundToDollars;
+import com.github.taxbeans.forms.RoundedSum;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.SkipIfFalse;
 import com.github.taxbeans.forms.Sum;
+import com.github.taxbeans.forms.Unbounded;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
@@ -288,7 +286,7 @@ public class FormProcessor {
 							// todo exclude fields by annotation
 							continue;
 						}
-						System.err.println("key = " + key);
+						LOG.info("key = " + key);
 						Field f = pojo.getClass().getDeclaredField(key);
 						f.setAccessible(true);
 						// Object field = f.get(pojo);

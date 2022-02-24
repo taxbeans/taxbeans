@@ -120,11 +120,13 @@ public enum IR4Fields {
 	shareholder1ValueOfLoans,
 	shareholder1CurrentAccountBalance,
 	shareholder1LossOffsets,
+	shareholder1AimTaxCredits,
 	shareholder1SubventionPayments,
 	shareholder2IrdNumber,
 	shareholder2Remuneration,
 	shareholder2ValueOfLoans,
 	shareholder2CurrentAccountBalance,
 	shareholder2LossOffsets,
+	shareholder2AimTaxCredits,
 	shareholder2SubventionPayments;
 }

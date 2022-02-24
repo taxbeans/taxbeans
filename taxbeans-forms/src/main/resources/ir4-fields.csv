@@ -124,3 +124,5 @@ shareholder2ValueOfLoans,39b.2.1.0,39b.2.1.0,39b.2.1.0,41Da,42Da
 shareholder2CurrentAccountBalance,39b.3.0,39b.3.0,39b.3.0,41Ea,42Ea
 shareholder2LossOffsets,39b.3.1.0,39b.3.1.0,39b.3.1.0,41Fa,42Fa
 shareholder2SubventionPayments,39b.3.1.1,39b.3.1.1,39b.3.1.1,41Ga,42Ga
+shareholder1AimTaxCredits,0,0,0,41C,42C
+shareholder2AimTaxCredits,0,0,0,41Ca,42Ca

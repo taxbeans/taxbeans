@@ -218,6 +218,12 @@ public class IR4Form2021 implements FormDestination {
 	@RightAlign(11)
 	private Money shareholder2SubventionPayments;
 	
+	@RightAlign(11)
+	private Money shareholder1AimTaxCredits;
+	
+	@RightAlign(11)
+	private Money shareholder2AimTaxCredits;
+	
 	final Logger logger = LoggerFactory.getLogger(IR4Form2021.class);
 
 	@Skip
@@ -811,5 +817,21 @@ public class IR4Form2021 implements FormDestination {
 
 	public void setPropertySalesIncome(boolean propertySalesIncome) {
 		this.propertySalesIncome = propertySalesIncome;
+	}
+
+	public Money getShareholder1AimTaxCredits() {
+		return shareholder1AimTaxCredits;
+	}
+
+	public void setShareholder1AimTaxCredits(Money shareholder1AimTaxCredits) {
+		this.shareholder1AimTaxCredits = shareholder1AimTaxCredits;
+	}
+
+	public Money getShareholder2AimTaxCredits() {
+		return shareholder2AimTaxCredits;
+	}
+
+	public void setShareholder2AimTaxCredits(Money shareholder2AimTaxCredits) {
+		this.shareholder2AimTaxCredits = shareholder2AimTaxCredits;
 	}
 }
