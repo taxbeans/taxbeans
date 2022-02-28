@@ -5,7 +5,7 @@ postalAddressLine1,4.1,4.1,4.1,4.1,4.1
 postalAddressLine2,4.2,4.2,4.2,4.2,4.2
 streetAddressLine1,5.1,5.1,5.1,5.1,5.1
 streetAddressLine2,5.2,5.2,5.2,5.2,5.2
-bicCode,6,6,6,6,6
+bicCode,6,6,6,6,6.2
 phonePrefix,7 prefix,7 prefix,7 prefix,7 prefix,7 prefix
 phoneNumber,7 ph number,7 ph number,7 ph number,7 ph number,7 ph number
 bankNumber,8 bank,8 bank,8 bank,8 bank,8 bank

@@ -9,9 +9,12 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.cos.COSBase;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -178,11 +181,9 @@ public class FormProcessor {
 					fileName); // "ir7-%1$s.pdf", year));
 			LOG.info("Loading: " + form.getAbsolutePath());
 			PDDocument pdfTemplate = PDDocument.load(form);
-
 			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
 			PDAcroForm acroForm = docCatalog.getAcroForm();
 			Map<String, Object> describe = PropertyUtils.describe(pojo);
-			// Map<String, String> propertyToFieldMap = pojo.getPropertyToFieldMap();
 			key = null;
 			try {
 				for (Map.Entry<String, Object> entry : describe.entrySet()) {
@@ -192,9 +193,21 @@ public class FormProcessor {
 						LOG.info("currentAccountMinusSign entry");
 					}
 					Object value = entry.getValue();
+					if ("describeForm".equals(System.getProperty("nzsd.descibeFormInDetail"))) {
+						List<PDField> fieldList = acroForm.getFields();
+						String[] fieldArray = new String[fieldList.size()];
+						int i = 0;
+						for (PDField sField : fieldList) {
+							LOG.info(sField.getFullyQualifiedName());
+							for (Entry<COSName, COSBase> f : sField.getCOSObject().entrySet()) {
+								LOG.info(f.getKey() + " -> " + f.getValue());
+							}
+							i++;
+						}
+						throw new AssertionError("Exiting due to issue with fields");
+					}
 					if ("describeForm".equals(value)) {
 						List<PDField> fieldList = acroForm.getFields();
-
 						String[] fieldArray = new String[fieldList.size()];
 						int i = 0;
 						for (PDField sField : fieldList) {
