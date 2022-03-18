@@ -22,7 +22,6 @@ public class IR4FieldMapper {
 	}
 
 	private static String getFieldNameViaString(String fieldName, int year) {
-		logger.info("Processing field: {}:{}", year, fieldName);
 		if (map == null) {
 			synchronized (IR4FieldMapper.class) {
 				if (map == null) {
@@ -46,12 +45,15 @@ public class IR4FieldMapper {
 				}
 			}
 			alreadyWarned = true;
+			logger.info("Processing field: {}:{}", year, fieldName);
 			logger.trace(fieldName + " resulted in null Strings, mapping to null");
 			return null;
 		}
 		if (i >= strings.length) {
+			logger.info("Processing field: {}:{}", year, fieldName);
 			throw new AssertionError("Column for year " + year + " is missing in CSV template.");
 		}
+		logger.info("Processing field: {}:{} -> {}", year, fieldName, strings[i]);
 		return strings[i];
 	}
 

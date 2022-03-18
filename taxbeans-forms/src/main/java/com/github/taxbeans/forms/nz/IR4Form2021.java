@@ -101,12 +101,15 @@ public class IR4Form2021 implements FormDestination {
 	private Money netProfitAfterDonations;
 	
 	@UseTrueFalseMappings
+	//@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private boolean netLossesBroughtForward;
 	
 	@RightAlign(11)
+	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private Money netProfitAfterLossesBroughtForward;
 	
 	@UseTrueFalseMappings
+	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private boolean netLossesFromOtherCompanies;
 	
 	@RightAlign(11)
