@@ -4,6 +4,7 @@ public enum IR4Fields {
 
 	irdNumber,
 	companyTradingNameLine1,
+	companyTradingNameLine2,
 	postalAddressLine1,
 	postalAddressLine2,
 	streetAddressLine1,

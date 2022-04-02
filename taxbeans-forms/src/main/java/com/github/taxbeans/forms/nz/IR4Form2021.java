@@ -23,6 +23,8 @@ public class IR4Form2021 implements FormDestination {
 	
 	private String companyTradingNameLine1;
 	
+	private String companyTradingNameLine2;
+	
 	private String postalAddressLine1;
 	
 	private String postalAddressLine2;
@@ -836,5 +838,13 @@ public class IR4Form2021 implements FormDestination {
 
 	public void setShareholder2AimTaxCredits(Money shareholder2AimTaxCredits) {
 		this.shareholder2AimTaxCredits = shareholder2AimTaxCredits;
+	}
+
+	public String getCompanyTradingNameLine2() {
+		return companyTradingNameLine2;
+	}
+
+	public void setCompanyTradingNameLine2(String companyTradingNameLine2) {
+		this.companyTradingNameLine2 = companyTradingNameLine2;
 	}
 }

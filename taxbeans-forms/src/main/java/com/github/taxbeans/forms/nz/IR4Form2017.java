@@ -13,7 +13,7 @@ import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 import com.github.taxbeans.model.nz.NZBankAccount;
 
-public class IR4Form2020 implements FormDestination {
+public class IR4Form2017 implements FormDestination {
 
 	@Skip
 	private String destinationDirectory;
@@ -76,16 +76,10 @@ public class IR4Form2020 implements FormDestination {
 	private boolean overseasIncome;
 
 	@UseTrueFalseMappings
-	private boolean	residentialPropertyIncome;
-
-	@UseTrueFalseMappings
 	private boolean businessIncome;
 
 	@UseTrueFalseMappings
 	private boolean overseasPremiums;
-	
-	@UseTrueFalseMappings
-	private boolean propertySalesIncome;
 
 	@UseTrueFalseMappings
 	private boolean otherIncome;
@@ -203,9 +197,6 @@ public class IR4Form2020 implements FormDestination {
 	@RightAlign(11)
 	private Money shareholder1SubventionPayments;
 	
-	@RightAlign(11)
-	private Money shareholder1AimTaxCredits;
-	
 	private String shareholder2IrdNumber;
 	
 	@RightAlign(11)
@@ -223,10 +214,7 @@ public class IR4Form2020 implements FormDestination {
 	@RightAlign(11)
 	private Money shareholder2SubventionPayments;
 	
-	@RightAlign(11)
-	private Money shareholder2AimTaxCredits;
-	
-	final Logger logger = LoggerFactory.getLogger(IR4Form2020.class);
+	final Logger logger = LoggerFactory.getLogger(IR4Form2017.class);
 
 	@Skip
 	private String personalisedNaming;
@@ -803,38 +791,6 @@ public class IR4Form2020 implements FormDestination {
 
 	public void setShareholder2SubventionPayments(Money shareholder2SubventionPayments) {
 		this.shareholder2SubventionPayments = shareholder2SubventionPayments;
-	}
-
-	public boolean isResidentialPropertyIncome() {
-		return residentialPropertyIncome;
-	}
-
-	public void setResidentialPropertyIncome(boolean residentialPropertyIncome) {
-		this.residentialPropertyIncome = residentialPropertyIncome;
-	}
-
-	public boolean isPropertySalesIncome() {
-		return propertySalesIncome;
-	}
-
-	public void setPropertySalesIncome(boolean propertySalesIncome) {
-		this.propertySalesIncome = propertySalesIncome;
-	}
-
-	public Money getShareholder1AimTaxCredits() {
-		return shareholder1AimTaxCredits;
-	}
-
-	public void setShareholder1AimTaxCredits(Money shareholder1AimTaxCredits) {
-		this.shareholder1AimTaxCredits = shareholder1AimTaxCredits;
-	}
-
-	public Money getShareholder2AimTaxCredits() {
-		return shareholder2AimTaxCredits;
-	}
-
-	public void setShareholder2AimTaxCredits(Money shareholder2AimTaxCredits) {
-		this.shareholder2AimTaxCredits = shareholder2AimTaxCredits;
 	}
 
 	public String getCompanyTradingNameLine2() {
