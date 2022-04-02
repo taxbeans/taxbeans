@@ -19,7 +19,7 @@ public class IR10FieldMapper {
 				if (map == null) {
 					InputStream resource = 
 							IR10FieldMapper.class.getClassLoader()
-							.getResourceAsStream("ir10-fields.csv");
+							.getResourceAsStream("ir10-fields-v2.csv");
 					map = IRFieldMapperUtils.populateMap(resource, year);
 				}
 			}
