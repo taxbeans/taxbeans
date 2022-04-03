@@ -270,6 +270,10 @@ public class FormProcessor {
 						processField(acroForm, propertyToFieldMap.get(key + "_year"), year2 >= 10 ? year2 : "0" + year2,
 								f);
 					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
+						if (value == null) {
+							//field is not applicable, so continue;
+							continue;
+						}
 						String mappedKey = (Boolean) value ? (key + "_true")
 								: (key + "_false");
 						String mappedValue = propertyToFieldMap.get(mappedKey);

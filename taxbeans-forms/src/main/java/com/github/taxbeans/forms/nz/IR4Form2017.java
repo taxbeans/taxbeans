@@ -144,7 +144,7 @@ public class IR4Form2017 implements FormDestination {
 	private Money residualIncomeTax;
 	
 	@UseTrueFalseMappings
-	private boolean creditOrDebit;
+	private Boolean creditOrDebit;
 	
 	@RightAlign(11)
 	private Money provisionalTaxPaid;
@@ -153,7 +153,7 @@ public class IR4Form2017 implements FormDestination {
 	private Money taxAmountOwed;
 	
 	@UseTrueFalseMappings
-	private boolean refundOrTaxToPay;
+	private Boolean refundOrTaxToPay;
 	
 	@UseTrueFalseMappings
 	private boolean initialProvisionalTaxLiability;
@@ -593,14 +593,6 @@ public class IR4Form2017 implements FormDestination {
 		this.residualIncomeTax = residualIncomeTax;
 	}
 
-	public boolean isCreditOrDebit() {
-		return creditOrDebit;
-	}
-
-	public void setCreditOrDebit(boolean creditOrDebit) {
-		this.creditOrDebit = creditOrDebit;
-	}
-
 	public Money getProvisionalTaxPaid() {
 		return provisionalTaxPaid;
 	}
@@ -615,14 +607,6 @@ public class IR4Form2017 implements FormDestination {
 
 	public void setTaxAmountOwed(Money taxAmountOwed) {
 		this.taxAmountOwed = taxAmountOwed;
-	}
-
-	public boolean isRefundOrTaxToPay() {
-		return refundOrTaxToPay;
-	}
-
-	public void setRefundOrTaxToPay(boolean refundOrTaxToPay) {
-		this.refundOrTaxToPay = refundOrTaxToPay;
 	}
 
 	public boolean isInitialProvisionalTaxLiability() {
@@ -799,5 +783,21 @@ public class IR4Form2017 implements FormDestination {
 
 	public void setCompanyTradingNameLine2(String companyTradingNameLine2) {
 		this.companyTradingNameLine2 = companyTradingNameLine2;
+	}
+
+	public Boolean getCreditOrDebit() {
+		return creditOrDebit;
+	}
+
+	public void setCreditOrDebit(Boolean creditOrDebit) {
+		this.creditOrDebit = creditOrDebit;
+	}
+
+	public Boolean getRefundOrTaxToPay() {
+		return refundOrTaxToPay;
+	}
+
+	public void setRefundOrTaxToPay(Boolean refundOrTaxToPay) {
+		this.refundOrTaxToPay = refundOrTaxToPay;
 	}
 }
