@@ -171,7 +171,7 @@ public class FormProcessor {
 		}
 	}
 
-	public static void publishDraft(Object pojo, int year, String fileNameTemplate,
+	public static File publishDraft(Object pojo, int year, String fileNameTemplate,
 			Map<String, String> propertyToFieldMap, String fullName, String outputFormat) {
 		Map.Entry<String, Object> currentEntry = null;
 		try {
@@ -179,6 +179,12 @@ public class FormProcessor {
 			File form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
 																// "Downloads"),
 					fileName); // "ir7-%1$s.pdf", year));
+			if (!form.exists()) {
+				File homeDir = new File(System.getProperty("user.home"));
+				File cacheDir = new File(homeDir, ".cache");
+				File taxBeansCache = new File(cacheDir, "taxbeans");
+				form = new File(taxBeansCache, fileName);
+			}
 			LOG.info("Loading: " + form.getAbsolutePath());
 			PDDocument pdfTemplate = PDDocument.load(form);
 			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
@@ -195,14 +201,11 @@ public class FormProcessor {
 					Object value = entry.getValue();
 					if ("describeForm".equals(System.getProperty("nzsd.descibeFormInDetail"))) {
 						List<PDField> fieldList = acroForm.getFields();
-						String[] fieldArray = new String[fieldList.size()];
-						int i = 0;
 						for (PDField sField : fieldList) {
 							LOG.info(sField.getFullyQualifiedName());
 							for (Entry<COSName, COSBase> f : sField.getCOSObject().entrySet()) {
 								LOG.info(f.getKey() + " -> " + f.getValue());
 							}
-							i++;
 						}
 						throw new AssertionError("Exiting due to issue with fields");
 					}
@@ -388,12 +391,13 @@ public class FormProcessor {
 
 			String personalisedNaming = ((FormDestination) pojo).getDestinationDirectory();
 			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
-			File ir7DraftForm = new File(parent, String.format(outputFormat, year, lowerCase));
+			File result = new File(parent, String.format(outputFormat, year, lowerCase));
 			acroForm.setXFA(null);
 			acroForm.setNeedAppearances(true);
-			pdfTemplate.save(ir7DraftForm);
+			pdfTemplate.save(result);
 			pdfTemplate.close();
-			LOG.info("Form Completed Successfully: " + ir7DraftForm);
+			LOG.info("Form Completed Successfully: " + result);
+			return result;
 		} catch (Exception e) {
 			throw new TaxBeansException("Is field in the enum? Entry: " + currentEntry, e);
 		}
