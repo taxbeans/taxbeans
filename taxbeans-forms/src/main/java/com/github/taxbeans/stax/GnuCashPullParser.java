@@ -29,6 +29,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.cache.FileCache;
 import com.github.taxbeans.forms.utils.TaxRegion;
 import com.github.taxbeans.model.Account;
 import com.github.taxbeans.model.AccountClassification;
@@ -229,6 +230,14 @@ public class GnuCashPullParser {
 			}
 		}
 		File fileName2 = new File(pathName);
+		if (!fileName2.exists()) {
+			File fileCache = FileCache.getCacheLocation();
+			fileName2 = new File(fileCache, filename);
+			if (!fileName2.exists()) {
+				throw new RuntimeException(String.format(
+						"Neither %s, nor %s exists", pathName, fileName2.toString()));
+			}
+		}
 		/*
 		 * For some reason the prolog is causing a parsing error, could try removing
 		 * BOMs using: xml = xml.trim().replaceFirst("^([\\W]+)<","<");
