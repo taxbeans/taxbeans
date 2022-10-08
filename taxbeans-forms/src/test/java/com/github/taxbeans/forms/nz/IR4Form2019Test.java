@@ -82,8 +82,7 @@ public class IR4Form2019Test {
 		bean.setShareholder2LossOffsets(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));				
 		
-		FormProcessor.publishDraft(bean, 2019, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2019), 
+		FormProcessor.publishDraft(bean, 2019, "ir4-%1$s.pdf", IR4FieldMapper.instance(), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");
 	}
-
 }

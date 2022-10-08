@@ -4,13 +4,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.model.nz.Salutation;
 
-public class IR3FieldMapper {
+public class IR3FieldMapper implements IRFieldMapper {
 
 	private static final int START_YEAR_OFFSET_FOR_CSV = 2011;
 
@@ -18,7 +19,9 @@ public class IR3FieldMapper {
 
 	final static Logger LOG = LoggerFactory.getLogger(IR3FieldMapper.class);
 
-	private static volatile Map<String, String[]> map = null;
+	//private static volatile Map<String, String[]> map = null;
+	
+	private static volatile Map<Integer, Map<IRFieldMapKey, String[]>> yearMap = new ConcurrentHashMap<Integer, Map<IRFieldMapKey, String[]>>();
 
 	private static String csvMappingFileName;
 
@@ -30,10 +33,11 @@ public class IR3FieldMapper {
 		boolean newerVersion = year >= 2019 || year == 2017 || year == 2016 || year == 2015 || year == 2014
 				|| year == 2013 || year == 2012;
 		int startYearOffset = newerVersion ? START_YEAR_OFFSET_FOR_CSV : START_YEAR_OFFSET_FOR_CSV_LEGACY;
+		Map<IRFieldMapKey, String[]> map = yearMap.get(year);
 		if (map == null) {
 			synchronized (IR3FieldMapper.class) {
+				map = yearMap.get(year);
 				if (map == null) {
-
 					if (newerVersion) {
 						csvMappingFileName = "ir3-fields-v2.csv";
 					} else {
@@ -41,14 +45,15 @@ public class IR3FieldMapper {
 					}
 					InputStream resource = IR3FieldMapper.class.getClassLoader()
 							.getResourceAsStream(csvMappingFileName);
-					map = IRFieldMapperUtils.populateMap(resource, year);
+					map =  IRFieldMapUtils.populateMap(resource, year);
+					yearMap.put(year, map);
 				}
 			}
 		}
 		int i = year - startYearOffset;
-		String[] strings = map.get(fieldName);
+		String[] strings = map.get(IRFieldMapUtils.getMapKey(fieldName, year));
 		if (strings == null) {
-			for (Entry<String, String[]> entry : map.entrySet()) {
+			for (Entry<IRFieldMapKey, String[]> entry : map.entrySet()) {
 				LOG.warn(entry.getKey() + " -> " + entry.getValue());
 			}
 			LOG.warn(fieldName + " resulted in null Strings, mapping to null");
@@ -67,31 +72,35 @@ public class IR3FieldMapper {
 		return getFieldNameViaString(fieldName, year);
 	}
 
-	public static Map<String, String> getPropertyToFieldMap(int year) {
-		Map<String, String> map = new HashMap<String, String>();
+	public Map<IRFieldMapKey, String> getPropertyToFieldMap(int year) {
+		Map<IRFieldMapKey, String> map = new HashMap<IRFieldMapKey, String>();
 		for (IR3Fields field : IR3Fields.values()) {
 			if (year > 2018 && field.name().contains("2018")) {
 				// workaround for field naming issue
 				continue;
 			}
-			map.put(field.name(), getFieldName(field, year));
+			map.put(IRFieldMapUtils.getMapKey(field.name(), year), getFieldName(field, year));
 		}
 		return map;
 	}
 
-	public static Map<String, String> getFieldToPropertyMap(int year) {
-		Map<String, String> map = new HashMap<String, String>();
-		for (IR3Fields field : IR3Fields.values()) {
-			if (year > 2018 && field.name().contains("2018")) {
-				// workaround for field naming issue
-				continue;
-			}
-			map.put(getFieldName(field, year), field.name());
-		}
-		return map;
-	}
+//	public static Map<String, String> getFieldToPropertyMap(int year) {
+//		Map<String, String> map = new HashMap<String, String>();
+//		for (IR3Fields field : IR3Fields.values()) {
+//			if (year > 2018 && field.name().contains("2018")) {
+//				// workaround for field naming issue
+//				continue;
+//			}
+//			map.put(IRFieldMapperUtils.getMapKey(field, year), field.name());
+//		}
+//		return map;
+//	}
 
 	public static String getCsvMappingFileName() {
 		return csvMappingFileName;
+	}
+
+	public static IRFieldMapper instance() {
+		return new IR3FieldMapper();
 	}
 }

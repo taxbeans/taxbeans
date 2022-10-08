@@ -3,13 +3,14 @@ package com.github.taxbeans.forms.nz;
 import java.math.BigDecimal;
 
 import org.javamoney.moneta.Money;
+import org.junit.Test;
 
-import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.common.FormProcessor;
 
 public class IR10Form2018WithBlankFieldsTest {
 
-	public static void main(String[] args) {
+	@Test
+	public void test() {
 		// MJHL IR10
 		IR10FormPublishedMarch2019 bean = new IR10FormPublishedMarch2019();
 		bean.setYearEnded(2018);
@@ -64,7 +65,7 @@ public class IR10Form2018WithBlankFieldsTest {
 		bean.setDrawings(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setCurrentAccountClosingBalance(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setDeductibleLossOnDisposal(Money.of(new BigDecimal("888.88"), "NZD"));
-		FormProcessor.publishDraft(bean, 2018, "ir10-%1$s.pdf", IR10FieldMapper.getPropertyToFieldMap(2019), 
+		FormProcessor.publishDraft(bean, 2018, "ir10-%1$s.pdf", IR10FieldMapper.instance(), 
 	    		"Sample", "ir10-%1$s-%2$s-draft.pdf");
 	}
 

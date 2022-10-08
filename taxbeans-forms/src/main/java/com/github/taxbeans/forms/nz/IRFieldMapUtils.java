@@ -12,10 +12,15 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
-public class IRFieldMapperUtils {
+public class IRFieldMapUtils {
+	
+	public static IRFieldMapKey getMapKey(String field, int year) {
+		String string = field + "_" + year;
+		return new IRFieldMapKey(field, year);
+	}
 
-	public static Map<String, String[]> populateMap(InputStream csv, int year) {
-		Map<String, String[]> map = new HashMap<>();
+	public static Map<IRFieldMapKey, String[]> populateMap(InputStream csv, int year) {
+		Map<IRFieldMapKey, String[]> map = new HashMap<>();
 		Reader in;
 		try {
 			in = new BufferedReader(new InputStreamReader(csv));
@@ -26,7 +31,7 @@ public class IRFieldMapperUtils {
 					values.add(column);
 				}
 				String[] line = values.toArray(new String[values.size()]);
-				map.put(line[0], line);
+				map.put(getMapKey(line[0], year), line);
 			}
 		} catch (Exception e) {
 			throw new IllegalStateException(e);

@@ -162,7 +162,7 @@ public class IR3Form2018Test {
 		bean.setMinusSignForTotalIncome("-");
 		bean.setMinusSignForIncomeAfterExpenses("-");
 		bean.setMinusSignForTaxableIncome("-");
-		FormProcessor.publishDraft(bean, 2018, "ir3-%1$s.pdf", IR3FieldMapper.getPropertyToFieldMap(2018), 
+		FormProcessor.publishDraft(bean, 2018, "ir3-%1$s.pdf", IR3FieldMapper.instance(), 
 	    		"Test", "ir3-%1$s-%2$s-draft.pdf");
 	}
 

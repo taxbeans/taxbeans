@@ -45,7 +45,7 @@ public class IR7PForm2018Test {
 		bean.setPartnersImputationCredits2(Money.of(new BigDecimal("88.88"), "NZD"));
 		bean.setPartnersOtherTaxCredits2(Money.of(new BigDecimal("88.88"), "NZD"));
 		
-		FormProcessor.publishDraft(bean, 2018, "ir7p/ir7p-%1$s.pdf", IR7PFieldMapper.getPropertyToFieldMap(2018), 
+		FormProcessor.publishDraft(bean, 2018, "ir7p/ir7p-%1$s.pdf", new IR7PFieldMapper(), 
 				"Example Partnership", "ir7p-%1$s-%2$s-draft.pdf");
 	}
 

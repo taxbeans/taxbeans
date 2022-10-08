@@ -85,7 +85,7 @@ public class IR4Form2021Test {
 		bean.setShareholder2SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));	
 		bean.setShareholder2AimTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
 		
-		FormProcessor.publishDraft(bean, 2021, "ir4-%1$s.pdf", IR4FieldMapper.getPropertyToFieldMap(2021), 
+		FormProcessor.publishDraft(bean, 2021, "ir4-%1$s.pdf", IR4FieldMapper.instance(), 
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");
 	}
 

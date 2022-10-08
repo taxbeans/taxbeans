@@ -43,6 +43,8 @@ import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.UseValueMappings;
+import com.github.taxbeans.forms.nz.IRFieldMapKey;
+import com.github.taxbeans.forms.nz.IRFieldMapper;
 import com.github.taxbeans.forms.utils.TaxReturnUtils;
 
 public class FormProcessor {
@@ -172,8 +174,9 @@ public class FormProcessor {
 	}
 
 	public static File publishDraft(Object pojo, int year, String fileNameTemplate,
-			Map<String, String> propertyToFieldMap, String fullName, String outputFormat) {
+			IRFieldMapper fieldMapper, String fullName, String outputFormat) {
 		Map.Entry<String, Object> currentEntry = null;
+		Map<IRFieldMapKey, String> propertyToFieldMap = fieldMapper.getPropertyToFieldMap(year);
 		try {
 			fileName = String.format(fileNameTemplate, year);
 			File form = new File(new File("target/classes"), // new File(System.getProperty("user.home"),
@@ -249,7 +252,7 @@ public class FormProcessor {
 								continue;
 							}
 							Object childValue = childEntry.getValue();
-							String fieldName = propertyToFieldMap.get(childKey);
+							String fieldName = getValue(propertyToFieldMap, year, childKey);
 							PDField pdField = acroForm.getField(fieldName);
 							System.out.println(fieldName + "->" + pdField);
 							pdField.setValue(String.valueOf(childValue));
@@ -264,13 +267,13 @@ public class FormProcessor {
 							continue;
 						}
 						int dayOfMonth = localDate.getDayOfMonth();
-						processField(acroForm, propertyToFieldMap.get(key + "_day"),
+						processField(acroForm, getValue(propertyToFieldMap, year, key + "_day"),
 								dayOfMonth >= 10 ? dayOfMonth : "0" + dayOfMonth, f);
 						int monthValue = localDate.getMonthValue();
-						processField(acroForm, propertyToFieldMap.get(key + "_month"),
+						processField(acroForm, getValue(propertyToFieldMap, year, key + "_month"),
 								monthValue >= 10 ? monthValue : "0" + monthValue, f);
 						int year2 = localDate.getYear();
-						processField(acroForm, propertyToFieldMap.get(key + "_year"), year2 >= 10 ? year2 : "0" + year2,
+						processField(acroForm, getValue(propertyToFieldMap, year, key + "_year"), year2 >= 10 ? year2 : "0" + year2,
 								f);
 					} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
 						if (value == null) {
@@ -279,8 +282,8 @@ public class FormProcessor {
 						}
 						String mappedKey = (Boolean) value ? (key + "_true")
 								: (key + "_false");
-						String mappedValue = propertyToFieldMap.get(mappedKey);
-						String fieldName = propertyToFieldMap.get(key);
+						String mappedValue = getValue(propertyToFieldMap, year, mappedKey);
+						String fieldName = getValue(propertyToFieldMap, year, key);
 						if (fieldName == null || mappedValue == null) {
 							propertyToFieldMap.entrySet().forEach(
 									action -> LOG.error(String.format("%s -> %s", action.getKey(), action.getValue())));
@@ -290,10 +293,10 @@ public class FormProcessor {
 						}
 						processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseValueMappings.class) != null) {
-						String mappedValue = propertyToFieldMap.get(key + "_" + value);
-						processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
+						String mappedValue = getValue(propertyToFieldMap, year, key + "_" + value);
+						processField(acroForm, getValue(propertyToFieldMap, year, key), mappedValue, f);
 					} else {
-						processField(acroForm, propertyToFieldMap.get(key), value, f);
+						processField(acroForm, getValue(propertyToFieldMap, year, key), value, f);
 					}
 				}
 				// Second pass:
@@ -377,7 +380,7 @@ public class FormProcessor {
 								}
 							}
 							f.set(pojo, sumMoney);
-							processField(acroForm, propertyToFieldMap.get(key), sumMoney, f);
+							processField(acroForm, getValue(propertyToFieldMap, year, key), sumMoney, f);
 						}
 					}
 				}
@@ -401,6 +404,11 @@ public class FormProcessor {
 		} catch (Exception e) {
 			throw new TaxBeansException("Is field in the enum? Entry: " + currentEntry, e);
 		}
+	}
+
+	private static String getValue(Map<IRFieldMapKey, String> map, int year, String childKey) {
+		IRFieldMapKey key = new IRFieldMapKey(childKey, year);
+		return map.get(key);
 	}
 
 	public static void setCsvMappingFileName(String csvMappingFileName) {

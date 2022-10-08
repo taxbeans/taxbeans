@@ -3,12 +3,14 @@ package com.github.taxbeans.forms.nz;
 import java.math.BigDecimal;
 
 import org.javamoney.moneta.Money;
+import org.junit.Test;
 
 import com.github.taxbeans.forms.common.FormProcessor;
 
 public class IR7Form2018Test {
 
-	public static void main(String[] args) {
+	@Test
+	public void test() {
 		// MJHL IR7
 		IR7Form2018 bean = new IR7Form2018();
 		bean.setYearEnded(2018);
@@ -45,7 +47,7 @@ public class IR7Form2018Test {
 	    bean.setTotalIncomeAfterExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
 		//bean.setOtherIncomeRadio(false);
 		
-		FormProcessor.publishDraft(bean, 2018, "ir7-%1$s.pdf", IR7FieldMapper.getPropertyToFieldMap(2018), 
+		FormProcessor.publishDraft(bean, 2018, "ir7-%1$s.pdf", new IR7FieldMapper(), 
 				"Example Partnership", "ir7-%1$s-%2$s-draft.pdf");
 	}
 

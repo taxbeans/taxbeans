@@ -46,7 +46,7 @@ public class IR7Form2020Test {
 		bean.setTotalIncomeAfterExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
 		//bean.setOtherIncomeRadio(false);
 		
-		FormProcessor.publishDraft(bean, 2020, "ir7-%1$s.pdf", IR7FieldMapper.getPropertyToFieldMap(2020), 
+		FormProcessor.publishDraft(bean, 2020, "ir7-%1$s.pdf", IR7FieldMapper.instance(), 
 				"Example Partnership", "ir7-%1$s-%2$s-draft.pdf");
 	}
 

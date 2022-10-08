@@ -11,10 +11,11 @@ import com.github.taxbeans.model.nz.NZBankAccount;
 import com.github.taxbeans.model.nz.Salutation;
 
 public class IR3Form2017Test {
-	
+
 	@Test
 	public void test() {
 		IR3Form2017 bean = new IR3Form2017();
+		final int currentYear = 2017;
 		bean.setIrdNumber("55555555");
 		bean.setSalutation(Salutation.mr);
 		bean.setFirstname("JOHN");
@@ -162,8 +163,7 @@ public class IR3Form2017Test {
 		bean.setMinusSignForTotalIncome("-");
 		bean.setMinusSignForIncomeAfterExpenses("-");
 		bean.setMinusSignForTaxableIncome("-");
-		FormProcessor.publishDraft(bean, 2018, "ir3-%1$s.pdf", IR3FieldMapper.getPropertyToFieldMap(2018), 
+		FormProcessor.publishDraft(bean, currentYear, "ir3-%1$s.pdf", new IR3FieldMapper(), 
 	    		"Test", "ir3-%1$s-%2$s-draft.pdf");
 	}
-
 }
