@@ -41,6 +41,7 @@ import com.github.taxbeans.forms.Sum;
 import com.github.taxbeans.forms.Unbounded;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
+import com.github.taxbeans.forms.UseSeparateYesNoCheckboxes;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.UseValueMappings;
 import com.github.taxbeans.forms.nz.IRFieldMapKey;
@@ -152,7 +153,7 @@ public class FormProcessor {
 				String replacementValue = "";
 				if (pdfField instanceof PDButton) {
 					PDButton button = (PDButton) pdfField;
-					if ("Yes".equals(value)) {
+					if ("Yes".equals(value)  || "1".equals(value)) {
 						for (String s : button.getOnValues()) {
 							button.setValue(s);
 							replacementValue = s;
@@ -290,6 +291,25 @@ public class FormProcessor {
 							throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
 									+ "cause is missing Enum field (or enum true and false suffixes) in the IRFields enum",
 									mappedKey));
+						}
+						processField(acroForm, fieldName, mappedValue, f);
+					} else if (f.getAnnotation(UseSeparateYesNoCheckboxes.class) != null) {
+						if (value == null) {
+							//field is not applicable, so continue;
+							continue;
+						}
+						String mappedKeyFieldName = (Boolean) value ? (key + "_yes_fieldname")
+								: (key + "_no_fieldname");
+						String mappedValueKey = (Boolean) value ? (key + "_yes_fieldname_true")
+								: (key + "_no_fieldname_false");
+						String mappedValue = getValue(propertyToFieldMap, year, mappedValueKey);
+						String fieldName = getValue(propertyToFieldMap, year, mappedKeyFieldName);
+						if (fieldName == null || mappedValue == null) {
+							propertyToFieldMap.entrySet().forEach(
+									action -> LOG.error(String.format("%s -> %s", action.getKey(), action.getValue())));
+							throw new AssertionError(String.format("Boolean seperate yes/no checkbox field: %s mapped to null, possible "
+									+ "cause is missing Enum field (or enum true and false suffixes) in the IRFields enum",
+									mappedKeyFieldName));
 						}
 						processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseValueMappings.class) != null) {

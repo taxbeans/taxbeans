@@ -3,7 +3,7 @@ package com.github.taxbeans.forms.nz;
 import java.util.Objects;
 
 public class IRFieldMapKey {
-	
+
 	private String field;
 	
 	private int key;
@@ -47,4 +47,8 @@ public class IRFieldMapKey {
 		this.key = key;
 	}
 
+	@Override
+	public String toString() {
+		return "IRFieldMapKey [field=" + field + ", key=" + key + "]";
+	}
 }

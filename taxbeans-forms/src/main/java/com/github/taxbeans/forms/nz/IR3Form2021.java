@@ -14,13 +14,19 @@ import com.github.taxbeans.forms.SkipIfFalse;
 import com.github.taxbeans.forms.Sum;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
+import com.github.taxbeans.forms.UseSeparateYesNoCheckboxes;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.UseValueMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 import com.github.taxbeans.model.nz.NZBankAccount;
+import com.github.taxbeans.model.nz.PortfolioMethod;
 import com.github.taxbeans.model.nz.Salutation;
 
 public class IR3Form2021 implements FormDestination {
+
+	private static final String CARRYING_LOSS_BACK = "carryingLossBack";
+
+	private static final String GOVERNMENT_SUBSIDY_RECEIVED = "governmentSubsidyReceived";
 
 	private static final String EXCESS_IMPUTATION_CREDITS_BROUGHT_FORWARD_ELIGIBLE = "excessImputationCreditsBroughtForwardEligible";
 
@@ -37,6 +43,10 @@ public class IR3Form2021 implements FormDestination {
 	private static final String OTHER_INCOME_RECEIVED = "incomeOtherReceived";
 
 	private static final String RENTS_RECEIVED = "rentsReceived";
+	
+	private static final String residentialPropertyIncomeReceivedField = "residentialPropertyIncomeReceived";
+	
+	private static final String incomeFromTaxablePropertySalesReceivedField = "incomeFromTaxablePropertySalesReceived";
 
 	private static final String SCHEDULAR_PAYMENTS_RECEIVED = "schedularPaymentsReceived";
 
@@ -72,6 +82,7 @@ public class IR3Form2021 implements FormDestination {
 	private LocalDate dateEndCurrentYearTaxReturn;
 
 	@UseDayMonthYear
+	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private LocalDate dateEndExcludedOverseasIncome;
 	
 	@UseDayMonthYear
@@ -81,6 +92,7 @@ public class IR3Form2021 implements FormDestination {
 	private LocalDate dateStartCurrentYearTaxReturn;
 	
 	@UseDayMonthYear
+	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private LocalDate dateStartExcludedOverseasIncome;
 
 	@Skip
@@ -129,8 +141,11 @@ public class IR3Form2021 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean incomeFromLTCReceived;
 
-	@UseTrueFalseMappings
+	@UseSeparateYesNoCheckboxes
 	private boolean incomeFromSelfEmploymentReceived;
+	
+	@UseTrueFalseMappings
+	private boolean incomeFromTaxablePropertySalesReceived;
 	
 	@RightAlign(11)
 	private Money incomeNotLiableForAccEarnersLevy;
@@ -165,7 +180,7 @@ public class IR3Form2021 implements FormDestination {
 
 	private String minusSignForIncomeSubtotal;
 
-	@SkipIfFalse(IR3Form2021.RENTS_RECEIVED)
+	@SkipIfFalse(RENTS_RECEIVED)
 	private String minusSignForNetRents;
 
 
@@ -175,8 +190,11 @@ public class IR3Form2021 implements FormDestination {
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private String minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
 
-	@SkipIfFalse(IR3Form2021.OTHER_INCOME_RECEIVED)
+	@SkipIfFalse(IR3Form2021.incomeFromTaxablePropertySalesReceivedField)
 	private String minusSignForRLWTTaxCredit;
+	
+	@SkipIfFalse(IR3Form2021.incomeFromTaxablePropertySalesReceivedField)
+	private String minusSignForProfitFromSaleOfProperty;
 
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private String minusSignForSchedularNetPayments;
@@ -214,6 +232,30 @@ public class IR3Form2021 implements FormDestination {
 	private Money netRents;
 	
 	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money totalResidentialIncome;
+	
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money residentialRentalDeductions;
+	
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money excessResidentialRentalDeductionsBroughtForward;
+	
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money residentialRentalDeductionsClaimed;
+	
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money netResidentialRentalIncome;
+	
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money excessResidentialRentalDeductionsCarriedForward;
+	
+	@RightAlign(11)
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money netSchedularPayments;
 
@@ -221,7 +263,7 @@ public class IR3Form2021 implements FormDestination {
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money nonAllowableDeductionsThisYear;
 	
-	@UseTrueFalseMappings
+	@Skip
 	private boolean noOtherIncomeReceived = true;
 	
 	@SkipIfFalse(OTHER_INCOME_RECEIVED)
@@ -328,13 +370,32 @@ public class IR3Form2021 implements FormDestination {
 	private Money refundTransferToStudentLoan;
 
 	@UseTrueFalseMappings
+	private boolean residentialPropertyIncomeReceived;
+	
+	@UseTrueFalseMappings
 	private boolean rentsReceived;
+	
+	@UseTrueFalseMappings
+	private boolean governmentSubsidyReceived;
 
+	@UseTrueFalseMappings
+	private boolean carryingLossBack;
+
+	@UseValueMappings
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private PortfolioMethod portfolioMethod;
 
 	@RightAlign(11)
-	@SkipIfFalse(IR3Form2021.OTHER_INCOME_RECEIVED)
+	@SkipIfFalse(IR3Form2021.incomeFromTaxablePropertySalesReceivedField)
 	private Money residentialLandWithholdingTaxCredit;
+	
+	@RightAlign(11)
+	@SkipIfFalse(IR3Form2021.incomeFromTaxablePropertySalesReceivedField)
+	private Money profitFromSaleOfProperty;
 
+	@RightAlign(11)
+	@SkipIfFalse(GOVERNMENT_SUBSIDY_RECEIVED)
+	private Money totalGovernmentSubsidy;
 
 	@RightAlign(11)
 	private Money residualIncomeTax;
@@ -456,7 +517,6 @@ public class IR3Form2021 implements FormDestination {
 	@SkipIfFalse("dividendsFromNZReceived")
 	private Money totalGrossDividends;
 
-
 	@RightAlign(11)
 	private Money totalGrossIncome;
 
@@ -464,10 +524,12 @@ public class IR3Form2021 implements FormDestination {
 	@SkipIfFalse(INTEREST_FROM_NZ_RECEIVED)
 	private Money totalGrossInterest;
 
-
 	@RightAlign(11)
 	private Money totalIncome;
 
+	@RightAlign(11)
+	@SkipIfFalse(CARRYING_LOSS_BACK)
+	private Money lossCarryBackAmount;
 
 	@RightAlign(11)
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
@@ -517,6 +579,9 @@ public class IR3Form2021 implements FormDestination {
 	
 	@RightAlign(11)
 	private Money totalShareholderEmployeeSalary;
+	
+	@RightAlign(11)
+	private Money shareholderAIMTaxCreditAmount;
 
 	@RightAlign(11)
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
@@ -661,6 +726,14 @@ public class IR3Form2021 implements FormDestination {
 		return minusSignForRLWTTaxCredit;
 	}
 
+	public String getMinusSignForProfitFromSaleOfProperty() {
+		return minusSignForProfitFromSaleOfProperty;
+	}
+
+	public void setMinusSignForProfitFromSaleOfProperty(String minusSignForProfitFromSaleOfProperty) {
+		this.minusSignForProfitFromSaleOfProperty = minusSignForProfitFromSaleOfProperty;
+	}
+
 	public String getMinusSignForSchedularNetPayments() {
 		return minusSignForSchedularNetPayments;
 	}
@@ -707,6 +780,54 @@ public class IR3Form2021 implements FormDestination {
 	
 	public Money getNetRents() {
 		return netRents;
+	}
+
+	public Money getResidentialRentalDeductions() {
+		return residentialRentalDeductions;
+	}
+
+	public Money getExcessResidentialRentalDeductionsBroughtForward() {
+		return excessResidentialRentalDeductionsBroughtForward;
+	}
+
+	public Money getResidentialRentalDeductionsClaimed() {
+		return residentialRentalDeductionsClaimed;
+	}
+
+	public Money getNetResidentialRentalIncome() {
+		return netResidentialRentalIncome;
+	}
+
+	public Money getExcessResidentialRentalDeductionsCarriedForward() {
+		return excessResidentialRentalDeductionsCarriedForward;
+	}
+
+	public void setResidentialRentalDeductions(Money residentialRentalDeductions) {
+		this.residentialRentalDeductions = residentialRentalDeductions;
+	}
+
+	public void setExcessResidentialRentalDeductionsBroughtForward(Money excessResidentialRentalDeductionsBroughtForward) {
+		this.excessResidentialRentalDeductionsBroughtForward = excessResidentialRentalDeductionsBroughtForward;
+	}
+
+	public void setResidentialRentalDeductionsClaimed(Money residentialRentalDeductionsClaimed) {
+		this.residentialRentalDeductionsClaimed = residentialRentalDeductionsClaimed;
+	}
+
+	public void setNetResidentialRentalIncome(Money netResidentialRentalIncome) {
+		this.netResidentialRentalIncome = netResidentialRentalIncome;
+	}
+
+	public void setExcessResidentialRentalDeductionsCarriedForward(Money excessResidentialRentalDeductionsCarriedForward) {
+		this.excessResidentialRentalDeductionsCarriedForward = excessResidentialRentalDeductionsCarriedForward;
+	}
+
+	public Money getTotalResidentialIncome() {
+		return totalResidentialIncome;
+	}
+
+	public void setTotalResidentialIncome(Money totalResidentialIncome) {
+		this.totalResidentialIncome = totalResidentialIncome;
 	}
 
 	public Money getNetSchedularPayments() {
@@ -809,6 +930,38 @@ public class IR3Form2021 implements FormDestination {
 		return residentialLandWithholdingTaxCredit;
 	}
 	
+	public Money getProfitFromSaleOfProperty() {
+		return profitFromSaleOfProperty;
+	}
+
+	public Money getTotalGovernmentSubsidy() {
+		return totalGovernmentSubsidy;
+	}
+
+	public void setTotalGovernmentSubsidy(Money totalGovernmentSubsidy) {
+		this.totalGovernmentSubsidy = totalGovernmentSubsidy;
+	}
+
+	public void setProfitFromSaleOfProperty(Money profitFromSaleOfProperty) {
+		this.profitFromSaleOfProperty = profitFromSaleOfProperty;
+	}
+
+	public boolean isGovernmentSubsidyReceived() {
+		return governmentSubsidyReceived;
+	}
+
+	public boolean isCarryingLossBack() {
+		return carryingLossBack;
+	}
+
+	public void setCarryingLossBack(boolean carryingLossBack) {
+		this.carryingLossBack = carryingLossBack;
+	}
+
+	public void setGovernmentSubsidyReceived(boolean governmentSubsidyReceived) {
+		this.governmentSubsidyReceived = governmentSubsidyReceived;
+	}
+
 	public Money getResidualIncomeTax() {
 		return residualIncomeTax;
 	}
@@ -823,6 +976,14 @@ public class IR3Form2021 implements FormDestination {
 	
 	public Money getSelfEmployedNetIncome() {
 		return selfEmployedNetIncome;
+	}
+
+	public boolean isIncomeFromTaxablePropertySalesReceived() {
+		return incomeFromTaxablePropertySalesReceived;
+	}
+
+	public void setIncomeFromTaxablePropertySalesReceived(boolean incomeFromTaxablePropertySalesReceived) {
+		this.incomeFromTaxablePropertySalesReceived = incomeFromTaxablePropertySalesReceived;
 	}
 
 	public String getStreetAddressLine1() {
@@ -905,6 +1066,14 @@ public class IR3Form2021 implements FormDestination {
 		return totalIncome;
 	}
 	
+	public Money getLossCarryBackAmount() {
+		return lossCarryBackAmount;
+	}
+
+	public void setLossCarryBackAmount(Money lossCarryBackAmount) {
+		this.lossCarryBackAmount = lossCarryBackAmount;
+	}
+
 	public Money getTotalLTCTaxCredits() {
 		return totalLTCTaxCredits;
 	}
@@ -1075,6 +1244,22 @@ public class IR3Form2021 implements FormDestination {
 
 	public boolean isRentsReceived() {
 		return rentsReceived;
+	}
+
+	public boolean isResidentialPropertyIncomeReceived() {
+		return residentialPropertyIncomeReceived;
+	}
+
+	public boolean isExcludedOverseasIncomeReceived() {
+		return excludedOverseasIncomeReceived;
+	}
+
+	public void setExcludedOverseasIncomeReceived(boolean excludedOverseasIncomeReceived) {
+		this.excludedOverseasIncomeReceived = excludedOverseasIncomeReceived;
+	}
+
+	public void setResidentialPropertyIncomeReceived(boolean residentialPropertyIncomeReceived) {
+		this.residentialPropertyIncomeReceived = residentialPropertyIncomeReceived;
 	}
 
 	public boolean isResidualIncomeTaxDebitHigherThan2500Dollars() {
@@ -1493,6 +1678,14 @@ public class IR3Form2021 implements FormDestination {
 		this.rentsReceived = rentsReceived;
 	}
 
+	public PortfolioMethod getPortfolioMethod() {
+		return portfolioMethod;
+	}
+
+	public void setPortfolioMethod(PortfolioMethod portfolioMethod) {
+		this.portfolioMethod = portfolioMethod;
+	}
+
 	public void setResidentialLandWithholdingTaxCredit(Money residentialLandWithholdingTaxCredit) {
 		this.residentialLandWithholdingTaxCredit = residentialLandWithholdingTaxCredit;
 	}
@@ -1692,6 +1885,14 @@ public class IR3Form2021 implements FormDestination {
 	public void setTotalShareholderEmployeeSalary(Money totalShareholderEmployeeSalary) {
 		this.totalShareholderEmployeeSalary = totalShareholderEmployeeSalary;
 		this.minusSignForTotalShareholderEmployeeSalary = totalShareholderEmployeeSalary.signum() < 0 ? "-" : "";
+	}
+
+	public Money getShareholderAIMTaxCreditAmount() {
+		return shareholderAIMTaxCreditAmount;
+	}
+
+	public void setShareholderAIMTaxCreditAmount(Money shareholderAIMTaxCreditAmount) {
+		this.shareholderAIMTaxCreditAmount = shareholderAIMTaxCreditAmount;
 	}
 
 	public void setTotalTaxableDistributionsFromNonComplyingTrusts(Money totalTaxableDistributionsFromNonComplyingTrusts) {

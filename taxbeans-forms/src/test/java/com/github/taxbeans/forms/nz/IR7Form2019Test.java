@@ -3,13 +3,14 @@ package com.github.taxbeans.forms.nz;
 import java.math.BigDecimal;
 
 import org.javamoney.moneta.Money;
+import org.junit.Test;
 
 import com.github.taxbeans.forms.common.FormProcessor;
 
 public class IR7Form2019Test {
 
-	public static void main(String[] args) {
-		// MJHL IR7
+	@Test
+	public void test() {
 		IR7Form2019 bean = new IR7Form2019();
 		bean.setYearEnded(2019);
 		bean.setIrdNumber("888-888-888");

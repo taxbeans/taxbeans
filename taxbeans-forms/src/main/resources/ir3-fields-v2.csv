@@ -64,52 +64,64 @@ incomeFromLTCReceived_false,0,0,0,0,0,0,0,0,0,0,0
 salaryShareholderEmployeeNotTaxed,23 yes/no,24 yes/no,24 yes/no,24 yes/no,24 yes/no,21 yes/no,21 yes/no,21 yes/no,20 yes/no,20 yes/no,20 yes/no
 salaryShareholderEmployeeNotTaxed_true,1,1,1,1,1,1,1,1,1,1,1
 salaryShareholderEmployeeNotTaxed_false,0,0,0,0,0,0,0,0,0,0,0
-rentsReceived,24 yes/no,26 yes/no,26 yes/no,26 yes/no,26 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no
+residentialPropertyIncomeReceived,22yes/no,26 yes/no,26 yes/no,26 yes/no,26 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no
+residentialPropertyIncomeReceived_false,0,0,0,0,0,0,0,0,0,0,0
+residentialPropertyIncomeReceived_true,1,1,1,1,1,1,1,1,1,1,1
+rentsReceived,24 yes/no,26 yes/no,26 yes/no,26 yes/no,26 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,23 yes/no,22 yes/no
 rentsReceived_true,1,1,1,1,1,1,1,1,1,1,1
 rentsReceived_false,0,0,0,0,0,0,0,0,0,0,0
-incomeFromSelfEmploymentReceived,21 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no
+incomeFromSelfEmploymentReceived,21 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no,24 Yes,23 yes/no
+incomeFromSelfEmploymentReceived_yes_fieldname,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes
+incomeFromSelfEmploymentReceived_yes_fieldname_true,1,1,1,1,1,1,1,1,1,1,1
+incomeFromSelfEmploymentReceived_yes_fieldname_false,0,0,0,0,0,0,0,0,0,0,0
+incomeFromSelfEmploymentReceived_no_fieldname,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no
+incomeFromSelfEmploymentReceived_no_fieldname_true,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
+incomeFromSelfEmploymentReceived_no_fieldname_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 incomeFromSelfEmploymentReceived_true,1,1,1,1,1,1,1,1,1,1,1
 incomeFromSelfEmploymentReceived_false,0,0,0,0,0,0,0,0,0,0,0
-incomeOtherReceived,26 yes/no,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes
+incomeFromTaxablePropertySalesReceived,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes
+incomeFromTaxablePropertySalesReceived_true,0,0,0,0,0,0,0,0,0,0,0
+incomeFromTaxablePropertySalesReceived_false,1,1,1,1,1,1,1,1,1,1,1
+incomeOtherReceived,26 yes/no,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,27 no/yes,24 Yes
 incomeOtherReceived_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 incomeOtherReceived_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-noOtherIncomeReceived,26 yes/no skip,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no
+noOtherIncomeReceived,26 yes/no skip,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,N/A,24 no
 noOtherIncomeReceived_true,1,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 noOtherIncomeReceived_false,0,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-expensesOtherReceived,30 yes/no,30 yes/no,30 yes/no,30 yes/no,30 yes/no,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes
+expensesOtherReceived,30 yes/no,30 yes/no,30 yes/no,30 yes/no,30 yes/no,26 no/yes,26 no/yes,26 no/yes,26 no/yes,29 no/yes,26 no/yes
 expensesOtherReceived_true,1,1,1,1,1,0,0,0,0,0,0
 expensesOtherReceived_false,0,0,0,0,0,1,1,1,1,1,1
-netLossesBroughtForwardClaimed,31 / 31a,31 / 31a,31 / 31a,31 / 31a,31 / 31a,28 no/yes,28 no/yes,28 no/yes,28 no/yes,28 no/yes,28 no/yes
+netLossesBroughtForwardClaimed,31 / 31a,31 / 31a,31 / 31a,31 / 31a,31 / 31a,28 no/yes,28 no/yes,28 no/yes,28 no/yes,31 yes/no,28 no/yes
 netLossesBroughtForwardClaimed_true,0,0,0,0,0,0,0,0,0,0,0
 netLossesBroughtForwardClaimed_false,1,1,1,1,1,1,1,1,1,1,1
-independentEarnerTaxCreditEligible,34j credit/debit,34j credit/debit,34j credit/debit,34j credit/debit,34j credit/debit,30A yes/no,30A yes/no,30A yes/no,32A yes/no,32A yes/no,32A yes/no
+independentEarnerTaxCreditEligible,34j credit/debit,34j credit/debit,34j credit/debit,34j credit/debit,34j credit/debit,30A yes/no,30A yes/no,30A yes/no,32A yes/no,34A yes/no,32A yes/no
 independentEarnerTaxCreditEligible_true,1,0,0,0,0,0,0,0,0,0,0
 independentEarnerTaxCreditEligible_false,0,1,1,1,1,1,1,1,1,1,1
-excessImputationCreditsBroughtForwardEligible,35 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,31 yes/no,31 yes/no,31 yes/no,33 yes/no,33 yes/no,33 yes/no
-excessImputationCreditsBroughtForwardEligible_true,1,0,0,0,0,0,0,0,0,0,0
-excessImputationCreditsBroughtForwardEligible_false,0,1,1,1,1,1,1,1,1,1,1
-earlyPaymentDiscountEntitled,Check Box4.2.0,33 credit/debit,33 credit/debit,33 credit/debit,33 credit/debit,33 yes/no,33 yes/no,33 yes/no,35 yes/no,35 yes/no,35 yes/no
+excessImputationCreditsBroughtForwardEligible,35 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,31 yes/no,31 yes/no,31 yes/no,33 yes/no,35 yes/no,33 yes/no
+excessImputationCreditsBroughtForwardEligible_true,1,1,1,1,1,1,1,1,1,1,1
+excessImputationCreditsBroughtForwardEligible_false,0,0,0,0,0,0,0,0,0,0,0
+earlyPaymentDiscountEntitled,Check Box4.2.0,33 credit/debit,33 credit/debit,33 credit/debit,33 credit/debit,33 yes/no,33 yes/no,33 yes/no,35 yes/no,38 yes/no,35 yes/no
 earlyPaymentDiscountEntitled_true,Yes,0,0,0,0,0,0,0,0,0,0
 earlyPaymentDiscountEntitled_false,n,1,1,1,1,1,1,1,1,1,1
-transferRefundToSomeoneElsesIncomeTaxAccountAssociated,36H,36H,36H,36H,34E yes/no,34E yes/no,34E yes/no,34E yes/no,34E yes/no,34E yes/no,34E yes/no
+transferRefundToSomeoneElsesIncomeTaxAccountAssociated,36H,36H,36H,36H,34E yes/no,34E yes/no,34E yes/no,34E yes/no,34E yes/no,39C yes/no,34E yes/no
 transferRefundToSomeoneElsesIncomeTaxAccountAssociated_true,no,no,no,no,no,no,no,no,no,no,no
 transferRefundToSomeoneElsesIncomeTaxAccountAssociated_false,No,No,No,No,No,No,No,No,No,No,No
-transferRefundToSomeoneElsesStudentLoanAssociated,37,37,37,37,34H yes/no,34H yes/no,34H yes/no,34H yes/no,34H yes/no,34H yes/no,34H yes/no
+transferRefundToSomeoneElsesStudentLoanAssociated,37,37,37,37,34H yes/no,34H yes/no,34H yes/no,34H yes/no,34H yes/no,39F yes/no,34H yes/no
 transferRefundToSomeoneElsesStudentLoanAssociated_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 transferRefundToSomeoneElsesStudentLoanAssociated_false,No,No,No,No,No,No,No,No,No,No,No
-residualIncomeTaxDebitHigherThan2500Dollars,38,35 credit/debit,35 credit/debit,35 credit/debit,35 credit/debit,35 no/yes,35 no/yes,35 no/yes,37 no/yes,37 no/yes,37 no/yes
+residualIncomeTaxDebitHigherThan2500Dollars,38,35 credit/debit,35 credit/debit,35 credit/debit,35 credit/debit,35 no/yes,35 no/yes,35 no/yes,37 no/yes,40 no/yes,37 no/yes
 residualIncomeTaxDebitHigherThan2500Dollars_true,Yes,1,1,1,1,1,1,1,1,1,1
 residualIncomeTaxDebitHigherThan2500Dollars_false,No,0,0,0,0,0,0,0,0,0,0
-disclosureRequiredToHoldRightsDuringIncomeYear,39,36 credit/debit,36 credit/debit,36 credit/debit,36 credit/debit,36 no/yes,36 no/yes,36 no/yes,38 no/yes,38 no/yes,38 no/yes
+disclosureRequiredToHoldRightsDuringIncomeYear,39,36 credit/debit,36 credit/debit,36 credit/debit,36 credit/debit,36 no/yes,36 no/yes,36 no/yes,38 no/yes,41 no/yes,38 no/yes
 disclosureRequiredToHoldRightsDuringIncomeYear_true,Yes,1,1,1,1,1,1,1,1,1,1
 disclosureRequiredToHoldRightsDuringIncomeYear_false,No,0,0,0,0,0,0,0,0,0,0
-returnForPartYear,39,39,39,39,39,37 no/yes,37 no/yes,37 no/yes,39 no/yes,39 no/yes,39 no/yes
+returnForPartYear,39,39,39,39,39,37 no/yes,37 no/yes,37 no/yes,39 no/yes,42 no/yes,39 no/yes
 returnForPartYear_true,No,No,No,No,No,No,No,No,No,No,No
 returnForPartYear_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-residualIncomeTaxIsCredit,36E,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,34a credit/debit,34a credit/debit,34a credit/debit
+residualIncomeTaxIsCredit,36E,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,32a credit/debit,34a credit/debit,37A credit/debit,34a credit/debit
 residualIncomeTaxIsCredit_true,No,0,0,0,0,0,0,0,0,0,0
 residualIncomeTaxIsCredit_false,Yes,1,1,1,1,1,1,1,1,1,1
-taxOnTaxableIncomeIsCredit,Check Box4.1.0,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,34b credit/debit,34b credit/debit,34b credit/debit
+taxOnTaxableIncomeIsCredit,Check Box4.1.0,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,32b credit/debit,34b credit/debit,37B credit/debit,34b credit/debit
 taxOnTaxableIncomeIsCredit_true,c,0,0,0,0,0,0,0,0,0,0
 taxOnTaxableIncomeIsCredit_false,d,1,1,1,1,1,1,1,1,1,1
 totalSchedularTaxDeducted,box 12A,box 12A,box 12A,box 12A,box 12A,box 12A,box 12A,box 12A,box 12A,box 12A,box 12A
@@ -138,56 +150,78 @@ adjustedLTCIncome,11.2.1.1.1.5,11.2.1.1.1.7,11.2.1.1.1.7,11.2.1.1.1.7,11.2.1.1.1
 taxCreditSubtotal,11.2.1.0.0.1,11.2.1.1.1.10.0.1,11.2.1.1.1.10.0.1,11.2.1.1.1.10.0.1,11.2.1.1.1.10.0.1,box 20A,box 20A,box 20A,box 21A,box 21A,box 21A
 incomeSubtotal,11.2.1.1.1.6,11.2.1.1.1.10.0.0,11.2.1.1.1.10.0.0,11.2.1.1.1.10.0.0,11.2.1.1.1.10.0.0,box 20B,box 20B,box 20B,box 21B,box 21B,box 21B
 totalShareholderEmployeeSalary,11.2.1.1.1.7,11.2.1.1.1.8,11.2.1.1.1.8,11.2.1.1.1.8,11.2.1.1.1.8,box 21,box 21,box 21,box 20,box 20,box 20
-netRents,11.2.1.1.1.8,11.2.1.1.1.9,11.2.1.1.1.9,11.2.1.1.1.9,11.2.1.1.1.9,box 22,box 22,box 22,box 22E,box 22E,box 22E
-selfEmployedNetIncome,11.2.1.0.0.2,11.2.1.0.0.2,11.2.1.0.0.2,11.2.1.0.0.2,11.2.1.0.0.2,box 23,box 23,box 23,box 23,box 23,box 23
-totalOtherNetIncome,11.2.1.1.1.12,11.2.1.1.1.12,11.2.1.1.1.12,11.2.1.1.1.12,11.2.1.1.1.12,box 24,box 24,box 24,box 24,box 24,box 24
+shareholderAIMTaxCreditAmount,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,box 20B,N/A
+totalResidentialIncome,box 22A,box 22A,box 22A,box 22A,box 22A,box 22A,box 22A,box 22A,box 22A,box 22A,box 22A
+residentialRentalDeductions,box 22B,box 22B,box 22B,box 22B,box 22B,box 22B,box 22B,box 22B,box 22B,box 22B,box 22B
+excessResidentialRentalDeductionsBroughtForward,box 22C,box 22C,box 22C,box 22C,box 22C,box 22C,box 22C,box 22C,box 22C,box 22C,box 22C
+residentialRentalDeductionsClaimed,box 22D,box 22D,box 22D,box 22D,box 22D,box 22D,box 22D,box 22D,box 22D,box 22D,box 22D
+netResidentialRentalIncome,box 22E,box 22E,box 22E,box 22E,box 22E,box 22E,box 22E,box 22E,box 22E,box 22E,box 22E
+excessResidentialRentalDeductionsCarriedForward,box 22F,box 22F,box 22F,box 22F,box 22F,box 22F,box 22F,box 22F,box 22F,box 22F,box 22F
+portfolioMethod,22 tick,22 tick,22 tick,22 tick,22 tick,22 tick,22 tick,22 tick,22 tick,22 tick,22 tick
+portfolioMethod_portfolio,0,0,0,0,0,0,0,0,0,0,0
+portfolioMethod_individual,1,1,1,1,1,1,1,1,1,1,1
+portfolioMethod_combination,2,2,2,2,2,2,2,2,2,2,2
+portfolioMethod_none,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
+netRents,11.2.1.1.1.8,11.2.1.1.1.9,11.2.1.1.1.9,11.2.1.1.1.9,11.2.1.1.1.9,box 22,box 22,box 22,box 22E,box 23,box 22E
+selfEmployedNetIncome,11.2.1.0.0.2,11.2.1.0.0.2,11.2.1.0.0.2,11.2.1.0.0.2,11.2.1.0.0.2,box 23,box 23,box 23,box 23,box 24,box 23
+totalOtherNetIncome,11.2.1.1.1.12,11.2.1.1.1.12,11.2.1.1.1.12,11.2.1.1.1.12,11.2.1.1.1.12,box 24,box 24,box 24,box 24,27,box 24
 residentialLandWithholdingTaxCredit,box 24A,box 24A,box 24A,box 24A,box 24A,box 24A,box 24A,box 24A,box 25A,box 25A,box 25A
-totalIncome,11.2.1.1.1.12,30c.0.1,30c.0.1,30c.0.1,30c.0.1,box 25,box 25,box 25,box 27,box 27,box 27
-totalOtherExpensesClaimed,30c.0,30c.0.0,30c.0.0,30c.0.0,30c.0.0,box 26,box 26,box 26,box 28,box 28,box 28
-incomeAfterExpenses,30c.2.0,30c.2.0,30c.2.0,30c.2.0,30c.2.0,box 27,box 27,box 27,box 29,box 29,box 29
-amountBroughtForward,box 28A,box 28A,box 28A,box 28A,box 28A,box 28A,box 28A,box 28A,box 30A,box 30A,box 30A
-amountClaimedThisYear,box 28B,box 28B,box 28B,box 28B,box 28B,box 28B,box 28B,box 28B,box 30B,box 30B,box 30B
+profitFromSaleOfProperty,box 25B,box 25B,box 25B,box 25B,box 25B,box 25B,box 25B,box 25B,box 25B,box 25B,box 25B
+minusSignForProfitFromSaleOfProperty,box 25B minus,box 25B minus,box 25B minus,box 25B minus,box 25B minus,box 25B minus,box 25B minus,box 25B minus,box 25B minus,box 25B minus,box 25B minus
+governmentSubsidyReceived,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes,26 no/yes
+governmentSubsidyReceived_true,0,0,0,0,0,0,0,0,0,0,0
+governmentSubsidyReceived_false,1,1,1,1,1,1,1,1,1,1,1
+totalGovernmentSubsidy,26,26,26,26,26,26,26,26,26,26,26
+totalIncome,11.2.1.1.1.12,30c.0.1,30c.0.1,30c.0.1,30c.0.1,box 25,box 25,box 25,box 27,28,box 27
+carryingLossBack,33 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no
+carryingLossBack_true,1,1,1,1,1,1,1,1,1,1,1
+carryingLossBack_false,0,0,0,0,0,0,0,0,0,0,0
+lossCarryBackAmount,33,33,33,33,33,33,33,33,33,33,33
+totalOtherExpensesClaimed,30c.0,30c.0.0,30c.0.0,30c.0.0,30c.0.0,box 26,box 26,box 26,box 28,29,box 28
+incomeAfterExpenses,30c.2.0,30c.2.0,30c.2.0,30c.2.0,30c.2.0,box 27,box 27,box 27,box 29,30,box 29
+amountBroughtForward,box 28A,box 28A,box 28A,box 28A,box 28A,box 28A,box 28A,box 28A,box 30A,box 31A,box 30A
+amountClaimedThisYear,box 28B,box 28B,box 28B,box 28B,box 28B,box 28B,box 28B,box 28B,box 30B,box 31B,box 30B
 taxableIncome,30c.7,30c.7.0,30c.7.0,30c.7.0,30c.7.0,box 29,box 29,box 29,box 31,32,box 31
-excessImputationCreditsBroughtForward,box 31,box 31,box 31,box 31,box 31,box 31,box 31,box 31,box 33,box 33,box 33
-taxOnTaxableIncome,11.2.1.1.1.1.2,30c.1.0,30c.1.0,30c.1.0,30c.1.0,box 32,box 32,box 32,box 34,box 34,box 34
-residualIncomeTax,11.2.1.1.1.1.3.0.0,30c.1.1,30c.1.1,30c.1.1,30c.1.1,box 32A,box 32A,box 32A,box 36A,box 36A,box 36A
-taxCalculationResult,11.2.1.1.1.1.3.0.1.0,30c.1.2,30c.1.2,30c.1.2,30c.1.2,box 32B,box 32B,box 32B,box 36B,box 36B,box 36B
-refundIsTransferredToCurrentYear,36 check,36 check,36 check,36 check,36 check,34 check,34 check,34 check,34 check,34 check,34 check
+excessImputationCreditsBroughtForward,box 31,box 31,box 31,box 31,box 31,box 31,box 31,box 31,box 33,35,box 33
+taxOnTaxableIncome,11.2.1.1.1.1.2,30c.1.0,30c.1.0,30c.1.0,30c.1.0,box 32,box 32,box 32,box 34,37,box 34
+residualIncomeTax,11.2.1.1.1.1.3.0.0,30c.1.1,30c.1.1,30c.1.1,30c.1.1,box 32A,box 32A,box 32A,box 36A,37A,box 36A
+taxCalculationResult,11.2.1.1.1.1.3.0.1.0,30c.1.2,30c.1.2,30c.1.2,30c.1.2,box 32B,box 32B,box 32B,box 36B,37B,box 36B
+refundIsTransferredToCurrentYear,36 check,36 check,36 check,36 check,36 check,34 check,34 check,34 check,34 check,39 check,34 check
 refundIsTransferredToCurrentYear_true,1,1,1,1,1,1,1,1,1,1,1
 refundIsTransferredToCurrentYear_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-refundIsTransferredToStudentLoan,36 check a,36 check a,36 check a,36 check a,36 check a,34 check a,34 check a,34 check a,34 check a,34 check a,34 check a
+refundIsTransferredToStudentLoan,36 check a,36 check a,36 check a,36 check a,36 check a,34 check a,34 check a,34 check a,34 check a,39 check a,34 check a
 refundIsTransferredToStudentLoan_true,2,2,2,2,2,2,2,2,2,2,2
 refundIsTransferredToStudentLoan_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-refundIsTransferredToSomeoneElsesTaxAccount,36H,36H,36H,36H,36H,34 check b,34 check b,34 check b,34 check b,34 check b,34 check b
+refundIsTransferredToSomeoneElsesTaxAccount,36H,36H,36H,36H,36H,34 check b,34 check b,34 check b,34 check b,39 check b,34 check b
 refundIsTransferredToSomeoneElsesTaxAccount_true,3,3,3,3,3,3,3,3,3,3,3
 refundIsTransferredToSomeoneElsesTaxAccount_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-refundIsTransferredToSomeoneElsesStudentLoan,37,37,37,37,37,34 check c,34 check c,34 check c,36 check c,36 check c,36 check c
+refundIsTransferredToSomeoneElsesStudentLoan,37,37,37,37,37,34 check c,34 check c,34 check c,36 check c,39 check c,36 check c
 refundIsTransferredToSomeoneElsesStudentLoan_true,4,4,4,4,4,4,4,4,4,4,4
 refundIsTransferredToSomeoneElsesStudentLoan_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-refundIsTransferredToOther,36 other,36 other,36 other,36 other,34 other,34 other,34 other,34 other,34 other,34 other,34 other
+refundIsTransferredToOther,36 other,36 other,36 other,36 other,34 other,34 other,34 other,34 other,34 other,39 other,34 other
 refundIsTransferredToOther_true,4,4,4,4,4,4,4,4,4,4,4
 refundIsTransferredToOther_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-refundOtherTaxAccountReceiverName,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,36 name of taxpayer 1,36 name of taxpayer 1,36 name of taxpayer 1
-refundOtherTaxAccountReceiverIRD,box 34F,box 34F,box 34F,box 34F,box 34F,box 34F,box 34F,box 34F,box 36F,box 36F,box 36F
-refundOtherTaxAccountReceiverAmount,box 34G,box 34G,box 34G,box 34G,box 34G,box 34G,box 34G,box 34G,box 36G,box 36G,box 36G
+refundOtherTaxAccountReceiverName,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1,36 name of taxpayer 1,39 name of taxpayer 1,36 name of taxpayer 1
+refundOtherTaxAccountReceiverIRD,box 34F,box 34F,box 34F,box 34F,box 34F,box 34F,box 34F,box 34F,box 36F,39D,box 36F
+refundOtherTaxAccountReceiverAmount,box 34G,box 34G,box 34G,box 34G,box 34G,box 34G,box 34G,box 34G,box 36G,39E,box 36G
 refundOtherTaxAccountReceiverYearEnded31March,34 year end,34 year end,34 year end,34 year end,34 year end,34 year end,34 year end,34 year end,36 year end,39 year end,36 year end
-refundOtherStudentLoanReceiverName,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,36 name of taxpayer 2,36 name of taxpayer 2,36 name of taxpayer 2
-refundOtherStudentLoanReceiverIRD,box 34I,box 34I,box 34I,box 34I,box 34I,box 34I,box 34I,box 34I,box 36I,box 36I,box 36I
-refundOtherStudentLoanReceiverAmount,box 34J,box 34J,box 34J,box 34J,box 34J,box 34J,box 34J,box 34J,box 36J,box 36J,box 36J
-refundCopied,11.2.1.1.1.1.3.1.0,11.2.1.1.1.1.3.1.0,11.2.1.1.1.1.3.1.0,11.2.1.1.1.1.3.1.0,box 34,box 34,box 34,box 34,box 36,box 36,box 36
+refundOtherStudentLoanReceiverName,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2,36 name of taxpayer 2,39 name of taxpayer 2,36 name of taxpayer 2
+refundOtherStudentLoanReceiverIRD,box 34I,box 34I,box 34I,box 34I,box 34I,box 34I,box 34I,box 34I,box 36I,39G,box 36I
+refundOtherStudentLoanReceiverAmount,box 34J,box 34J,box 34J,box 34J,box 34J,box 34J,box 34J,box 34J,box 36J,39H,box 36J
+refundCopied,11.2.1.1.1.1.3.1.0,11.2.1.1.1.1.3.1.0,11.2.1.1.1.1.3.1.0,11.2.1.1.1.1.3.1.0,box 34,box 34,box 34,box 34,box 36,39,box 36
 refundOverpaymentCurrentYear,11.2.1.1.1.1.3.1.1,11.2.1.1.1.1.3.1.1,11.2.1.1.1.1.3.1.1,11.2.1.1.1.1.3.1.1,box 34A,box 34A,box 34A,box 34A,box 36A,box 36A,box 36A
 refundCopiedPlusOverpaymentCurrentYear,11.2.1.1.1.1.3.1.2,11.2.1.1.1.1.3.1.2,11.2.1.1.1.1.3.1.2,11.2.1.1.1.1.3.1.2,box 34B,box 34B,box 34B,box 34B,box 36B,box 36B,box 36B
-refundTransferToCurrentYear,11.2.1.1.1.1.3.1.3,11.2.1.1.1.1.3.1.3,11.2.1.1.1.1.3.1.3,11.2.1.1.1.1.3.1.3,box 34C,box 34C,box 34C,box 34C,box 36C,box 36C,box 36C
-refundTransferToStudentLoan,11.2.1.1.1.1.3.0.3,11.2.1.1.1.1.3.0.3,11.2.1.1.1.1.3.0.3,11.2.1.1.1.1.3.0.3,box 34D,box 34D,box 34D,box 34D,box 36D,box 36D,box 36D
-refundTotal,11.2.1.1.1.1.3.3.0,11.2.1.1.1.1.3.3.0,11.2.1.1.1.1.3.3.0,11.2.1.1.1.1.3.3.0,box 34K,box 34K,box 34K,box 34K,box 36K,box 36K,box 36K
-taxPaymentSEROptionCurrentYear,35A,35A,35A,35A,35A,35A,35A,35A,37A,37A,37A
-taxPaymentCurrentYear,box 35B,box 35B,box 35B,box 35B,box 35B,box 35B,box 35B,box 35B,box 37B,box 37B,box 37B
-dateStartCurrentYearTaxReturn_day,37B from day,37B from day,37B from day,37B from day,37B from day,37B from day,37B from day,37B from day,39B from day,39B from day,39B from day
-dateStartCurrentYearTaxReturn_month,37B from month,37B from month,37B from month,37B from month,37B from month,37B from month,37B from month,37B from month,39B from month,39B from month,39B from month
-dateStartCurrentYearTaxReturn_year,37B from year,37B from year,37B from year,37B from year,37B from year,37B from year,37B from year,37B from year,39B from year,39B from year,39B from year
-dateEndCurrentYearTaxReturn_day,37C to day,37C to day,37C to day,37C to day,37C to day,37C to day,37C to day,37C to day,39C to day,39C to day,39C to day
-dateEndCurrentYearTaxReturn_month,37C to month,37C to month,37C to month,37C to month,37C to month,37C to month,37C to month,37C to month,39C to month,39C to month,39C to month
-dateEndCurrentYearTaxReturn_year,37C to year,37C to year,37C to year,37C to year,37C to year,37C to year,37C to year,37C to year,39C to year,39C to year,39C to year
+refundTransferToCurrentYear,11.2.1.1.1.1.3.1.3,11.2.1.1.1.1.3.1.3,11.2.1.1.1.1.3.1.3,11.2.1.1.1.1.3.1.3,box 34C,box 34C,box 34C,box 34C,box 36C,39A,box 36C
+refundTransferToStudentLoan,11.2.1.1.1.1.3.0.3,11.2.1.1.1.1.3.0.3,11.2.1.1.1.1.3.0.3,11.2.1.1.1.1.3.0.3,box 34D,box 34D,box 34D,box 34D,box 36D,39B,box 36D
+refundTotal,11.2.1.1.1.1.3.3.0,11.2.1.1.1.1.3.3.0,11.2.1.1.1.1.3.3.0,11.2.1.1.1.1.3.3.0,box 34K,box 34K,box 34K,box 34K,box 36K,39I,box 36K
+taxPaymentSEROptionCurrentYear,35A,35A,35A,35A,35A,35A,35A,35A,37A,40A,37A
+taxPaymentCurrentYear,box 35B,box 35B,box 35B,box 35B,box 35B,box 35B,box 35B,box 35B,box 37B,40B,box 37B
+dateStartCurrentYearTaxReturn_day,37B from day,37B from day,37B from day,37B from day,37B from day,37B from day,37B from day,37B from day,39B from day,42B from day,39B from day
+dateStartCurrentYearTaxReturn_month,37B from month,37B from month,37B from month,37B from month,37B from month,37B from month,37B from month,37B from month,39B from month,42B from month,39B from month
+dateStartCurrentYearTaxReturn_year,37B from year,37B from year,37B from year,37B from year,37B from year,37B from year,37B from year,37B from year,39B from year,42B from year,39B from year
+dateEndCurrentYearTaxReturn_day,37C to day,37C to day,37C to day,37C to day,37C to day,37C to day,37C to day,37C to day,39C to day,42C to day,39C to day
+dateEndCurrentYearTaxReturn_month,37C to month,37C to month,37C to month,37C to month,37C to month,37C to month,37C to month,37C to month,39C to month,42C to month,39C to month
+dateEndCurrentYearTaxReturn_year,37C to year,37C to year,37C to year,37C to year,37C to year,37C to year,37C to year,37C to year,39C to year,42C to year,39C to year
 dateEndExcludedOverseasIncome_day,30B end day,30B end day,30B end day,30B end day,30B end day,30B end day,30B end day,30B end day,32B end day,34B end day,32B end day
 dateEndExcludedOverseasIncome_month,30B end month,30B end month,30B end month,30B end month,30B end month,30B end month,30B end month,30B end month,32B end month,34B end month,32B end month
 dateEndExcludedOverseasIncome_year,30B end year,30B end year,30B end year,30B end year,30B end year,30B end year,30B end year,30B end year,32B end year,34B end year,32B end year
@@ -209,7 +243,7 @@ shareholderEmployeeSalaryOnlyInFuture_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,
 unpaidMajorWorkingShareholderWfFTCELigible,21 yes/no,21 yes/no,21 yes/no,21 yes/no,21 yes/no,21B check,21B check,21B check,20C check,20C check,20C check
 unpaidMajorWorkingShareholderWfFTCELigible_true,1,1,1,1,1,1,1,1,Yes,Yes,Yes
 unpaidMajorWorkingShareholderWfFTCELigible_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-reasonForTaxReturnPartYear,37a,37a,37a,37a,37a,37a,37a,37a,39a,39a,39a
+reasonForTaxReturnPartYear,37a,37a,37a,37a,37a,37a,37a,37a,39a,42a,39a
 reasonForTaxReturnPartYear_0,0,0,0,0,0,0,0,0,0,0,0
 reasonForTaxReturnPartYear_1,1,1,1,1,1,1,1,1,1,1,1
 reasonForTaxReturnPartYear_2,2,2,2,2,2,2,2,2,2,2,2
@@ -217,12 +251,12 @@ reasonForTaxReturnPartYear_3,3,3,3,3,3,3,3,3,3,3,3
 reasonForTaxReturnPartYear_4,4,4,4,4,4,4,4,4,4,4,4
 reasonForTaxReturnPartYear_5,5,5,5,5,5,5,5,5,5,5,5
 reasonForTaxReturnPartYear_none,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-otherIncomePayer,24 first names,24 first names,24 first names,24 first names,24 first names,24 first names,24 first names,24 first names,26 first names,26 first names,26 first names
-otherIncomeType,24 surname,24 surname,24 surname,24 surname,24 surname,24 surname,24 surname,24 surname,26 surname,26 surname,26 surname
-alternativePersonFirstNamesCompletedReturn,26 first names,26 first names,26 first names,26 first names,26 first names,26 first names,26 first names,26 first names,28 first names,28 first names,28 first names
-alternativePersonSurnameCompletedReturn,26 surname,26 surname,26 surname,26 surname,26 surname,26 surname,26 surname,26 surname,28 surname,28 surname,28 surname
-taxCreditQualifyingMonthsNumber,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C
-taxCreditValue,box 30,box 30,box 30,box 30,box 30,box 30,box 30,box 30,box 30,box 30,box 30
+otherIncomePayer,24 first names,24 first names,24 first names,24 first names,24 first names,24 first names,24 first names,24 first names,26 first names,27 first names,26 first names
+otherIncomeType,24 surname,24 surname,24 surname,24 surname,24 surname,24 surname,24 surname,24 surname,26 surname,27 surname,26 surname
+alternativePersonFirstNamesCompletedReturn,26 first names,26 first names,26 first names,26 first names,26 first names,26 first names,26 first names,26 first names,28 first names,29 first names,28 first names
+alternativePersonSurnameCompletedReturn,26 surname,26 surname,26 surname,26 surname,26 surname,26 surname,26 surname,26 surname,28 surname,29 surname,28 surname
+taxCreditQualifyingMonthsNumber,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,box 30C,34C,box 30C
+taxCreditValue,box 30,box 30,box 30,box 30,box 30,box 30,box 30,box 30,box 30,box 34,box 30
 minusSignForSchedularPaymentsExpenses,box 12C minus,box 12C minus,box 12C minus,box 12C minus,box 12C minus,box 12C minus,box 12C minus,box 12C minus,box 12C minus,box 12C minus,box 12C minus
 minusSignForSchedularNetPayments,box 12D minus,box 12D minus,box 12D minus,box 12D minus,box 12D minus,box 12D minus,box 12D minus,box 12D minus,box 12D minus,box 12D minus,box 12D minus
 minusSignForTotalGrossInterestReceivedFromEligibleEntities,minus 13B,minus 13B,minus 13B,minus 13B,minus 13B,minus 13B,minus 13B,minus 13B,minus 13B,minus 13B,minus 13B
@@ -237,7 +271,7 @@ minusSignForTotalShareholderEmployeeSalary,17b minus sign.1.5,17b minus sign.1.5
 minusSignForNetRents,17b minus sign.1.6.1.0,17b minus sign.1.6.1.0,17b minus sign.1.6.1.0,17b minus sign.1.6.1.0,17b minus sign.1.6.1.0,22 minus,22 minus,22 minus,22E minus,22E minus,22E minus
 minusSignForSelfEmployedNetIncome,17b minus sign.1.6.1.1,17b minus sign.1.6.1.1,17b minus sign.1.6.1.1,17b minus sign.1.6.1.1,17b minus sign.1.6.1.1,23 minus,23 minus,23 minus,23 minus,23 minus,23 minus
 minusSignForTotalOtherNetIncome,17b minus sign.1.7,17b minus sign.1.7,17b minus sign.1.7,17b minus sign.1.7,17b minus sign.1.7,box 24 minus sign,box 24 minus sign,box 24 minus sign,box 27 minus sign,box 27 minus sign,box 27 minus sign
-minusSignForRLWTTaxCredit,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 25B minus,box 25B minus,box 25B minus
-minusSignForTotalIncome,17b minus sign.1.7,30a.0.1,30a.0.1,30a.0.1,30a.0.1,box 25 minus sign,box 25 minus sign,box 25 minus sign,box 27 minus,box 27 minus,box 27 minus
+minusSignForRLWTTaxCredit,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 24A minus sign,box 25B minus,box 25A minus,box 25B minus
+minusSignForTotalIncome,17b minus sign.1.7,30a.0.1,30a.0.1,30a.0.1,30a.0.1,box 25 minus sign,box 25 minus sign,box 25 minus sign,box 27 minus,box 28 minus,box 27 minus
 minusSignForIncomeAfterExpenses,30a.2,30a.2,30a.2,30a.2,30a.2,box 27 minus sign,box 27 minus sign,box 27 minus sign,box 29 minus,box 29 minus,box 29 minus
-minusSignForTaxableIncome,30a.7,30a.7.0,30a.7.0,30a.7.0,30a.7.0,box 29 minus sign,box 29 minus sign,box 29 minus sign,box 31 minus,box 31 minus,box 31 minus
+minusSignForTaxableIncome,30a.7,30a.7.0,30a.7.0,30a.7.0,30a.7.0,box 29 minus sign,box 29 minus sign,box 29 minus sign,box 31 minus,box 32 minus,box 31 minus
