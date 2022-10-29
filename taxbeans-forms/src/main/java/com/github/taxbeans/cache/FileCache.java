@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
 public class FileCache {
 
@@ -24,6 +25,15 @@ public class FileCache {
 		}
 		return cacheLocation;
 	}
+	
+	public static File obtainFileFromCache(String name) {
+		File obtained = new File(getCacheLocation(), name);
+		if (!obtained.exists()) {
+			System.out.println(Arrays.asList(getCacheLocation().list()));
+			throw new RuntimeException("File does not exist");
+		}
+		return obtained;
+	}
 
 	public static void writeStringToCache(String filename, String data) {
 		File f = new File(getCacheLocation(), filename);
@@ -41,5 +51,10 @@ public class FileCache {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static File newOrReplaceExistingFileInCache(String name) {
+		File obtained = new File(getCacheLocation(), name);
+		return obtained;
 	}
 }
