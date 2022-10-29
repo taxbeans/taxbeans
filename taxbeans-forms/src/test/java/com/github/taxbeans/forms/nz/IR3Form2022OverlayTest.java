@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.cache.FileCache;
 
-public class IR3Form2021OverlayTest {
+public class IR3Form2022OverlayTest {
 	
-	final static Logger logger = LoggerFactory.getLogger(IR3Form2021OverlayTest.class);
+	final static Logger logger = LoggerFactory.getLogger(IR3Form2022OverlayTest.class);
 	
 	@Test
 	public void test() throws Exception {
@@ -39,8 +39,8 @@ public class IR3Form2021OverlayTest {
 
 		PDPageContentStream contentStream = new PDPageContentStream(overlayDoc, page);
 		
-		FileCache.populateCacheFromCurrentDirectory("target/classes/ir3-2021.pdf");
-		PDDocument originalDoc = PDDocument.load(FileCache.obtainFileFromCache("ir3-2021.pdf"));
+		FileCache.populateCacheFromCurrentDirectory("target/classes/ir3-2022.pdf");
+		PDDocument originalDoc = PDDocument.load(FileCache.obtainFileFromCache("ir3-2022.pdf"));
 		PDDocumentCatalog pdCatalog = originalDoc.getDocumentCatalog();
 		PDAcroForm pdAcroForm = pdCatalog.getAcroForm();
 
@@ -99,7 +99,7 @@ public class IR3Form2021OverlayTest {
 				logger.info("entered new page, updating content stream");
 				
 				contentStream.close();
-				File f = FileCache.newOrReplaceExistingFileInCache("ir3-2021-overlay-page"+pageNum+".pdf");
+				File f = FileCache.newOrReplaceExistingFileInCache("ir3-2022-overlay-page"+pageNum+".pdf");
 				overlayDoc.save(f);
 				filePages.add(f);
 				overlayDoc.close();
@@ -129,7 +129,7 @@ public class IR3Form2021OverlayTest {
 				logger.info("reached last field, updating content stream");
 				
 				contentStream.close();
-				File f = FileCache.newOrReplaceExistingFileInCache("ir3-2021-overlay-page"+(pageNum+1)+".pdf");
+				File f = FileCache.newOrReplaceExistingFileInCache("ir3-2022-overlay-page"+(pageNum+1)+".pdf");
 				overlayDoc.save(f);
 				filePages.add(f);
 				overlayDoc.close();
@@ -151,7 +151,7 @@ public class IR3Form2021OverlayTest {
 
 		overlayObj.overlay(ovmap);
 
-		originalDoc.save(FileCache.newOrReplaceExistingFileInCache("ir3-2021-overlay.pdf"));
+		originalDoc.save(FileCache.newOrReplaceExistingFileInCache("ir3-2022-overlay.pdf"));
 		overlayDoc.close();
 		originalDoc.close();
 	}

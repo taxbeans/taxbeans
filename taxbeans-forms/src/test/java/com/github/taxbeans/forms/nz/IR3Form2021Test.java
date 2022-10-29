@@ -145,6 +145,10 @@ public class IR3Form2021Test {
 		bean.setDateEndExcludedOverseasIncome(LocalDate.of(currentYear, 2, 16));
 		bean.setTaxCreditQualifyingMonthsNumber("12");
 		bean.setTaxCreditValue(Money.of(new BigDecimal("122.22"), "NZD"));
+		bean.setPortfolioInvestmentEntityIncomeReceived(true);
+		bean.setPieCalculationOutcome(Money.of(new BigDecimal("-9.99"), "NZD"));
+		bean.setTotalPIEDeductions(Money.of(new BigDecimal("-10.10"), "NZD"));
+		bean.setTotalPIEIncome(Money.of(new BigDecimal("-11.11"), "NZD"));
 		bean.setReasonForTaxReturnPartYear(2);
 		bean.setAlternativePersonFirstNamesCompletedReturn("JOHN JEFF");
 		bean.setAlternativePersonSurnameCompletedReturn("DOE");

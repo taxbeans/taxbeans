@@ -2,6 +2,7 @@ package com.github.taxbeans.forms.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,10 +28,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.exception.TaxBeansException;
+import com.github.taxbeans.forms.AutoMinusField;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.LeftAlign;
 import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.Percent2DecimalPlaces;
+import com.github.taxbeans.forms.RelativeFieldName;
 import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.RoundToDollars;
@@ -70,7 +73,12 @@ public class FormProcessor {
 			LOG.warn("Null value - may indicate either blank field or issue");
 			return;
 		}
+		boolean isNegativeMoney = false;
+		String overrideFieldName = "";
 		if (value instanceof Money) {
+			if (((Money) value).isNegative()) {
+				isNegativeMoney = true;
+			}
 			if (field.getAnnotation(OmitCents.class) != null) {
 				value = TaxReturnUtils.formatDollarsField((Money) value);
 				if (field.getAnnotation(IncludeFormatSpacing.class) != null) {
@@ -81,16 +89,16 @@ public class FormProcessor {
 						value = valueText;
 						//PDTextField pdfTextField = (PDTextField) pdfField;
 						//Also, I found this:Cour -> Courier CoBo -> Courier-Bold CoOb -> Courier-Oblique CoBO ->
-						//Courier-BoldOblique Helv -> Helvetica HeBo -> Helvetica-Bold HeOb -> Helvetica-Oblique HeBO -> 
-						//Helvetica-BoldOblique Symb -> Symbol TiRo -> Times-Roman TiBo -> Times-Bold TiIt -> Times-Italic TiBI -> 
-						//Times-BoldItalic ZaDb -> ZapfDingbats. I used HeBo and it worked fine to bold the font 
-						//(instead of /Helv I used /HeBo – user972391 May 16 '15 at 4:45 
+						//Courier-BoldOblique Helv -> Helvetica HeBo -> Helvetica-Bold HeOb -> Helvetica-Oblique HeBO ->
+						//Helvetica-BoldOblique Symb -> Symbol TiRo -> Times-Roman TiBo -> Times-Bold TiIt -> Times-Italic TiBI ->
+						//Times-BoldItalic ZaDb -> ZapfDingbats. I used HeBo and it worked fine to bold the font
+						//(instead of /Helv I used /HeBo – user972391 May 16 '15 at 4:45
 						//pdfTextField.setDefaultAppearance("/HeBo 14 Tf 0 g");
 						//COSDictionary cosObject = pdfTextField.getCOSObject();
 						//cosObject.
 						//pdfTextField.setDefaultStyleString(defaultStyleString);
 					}
-					
+
 				}
 			} else if (field.getAnnotation(RoundToDollars.class) != null) {
 				value = TaxReturnUtils.formatDollarsFieldRounded((Money) value);
@@ -107,8 +115,10 @@ public class FormProcessor {
 			}
 		}
 		if (field.getAnnotation(RightAlign.class) != null) {
-			int size = field.getAnnotation(RightAlign.class).value();
+			RightAlign annotation = field.getAnnotation(RightAlign.class);
+			int size = annotation.value();
 			value = StringUtils.leftPad(String.valueOf(value), size);
+			overrideFieldName = annotation.fieldName();
 		} else if (field.getAnnotation(LeftAlign.class) != null) {
 			int size = field.getAnnotation(LeftAlign.class).value();
 			value = StringUtils.rightPad(String.valueOf(value), size);
@@ -146,7 +156,18 @@ public class FormProcessor {
 		}
 		if (field.getAnnotation(Unbounded.class) == null) {
 			try {
+				LOG.info(String.format("Setting PDF Field for %s: %s to %s", field.getName(), pdfField.getFullyQualifiedName(), value));
+				if (!"".equals(overrideFieldName)) {
+					pdfField = acroForm.getField(overrideFieldName);
+				}
 				pdfField.setValue(String.valueOf(value));
+				if (isNegativeMoney) {
+					AutoMinusField annotation = field.getAnnotation(AutoMinusField.class);
+					if (annotation != null) {
+						String fieldName2 = annotation.fieldName();
+						acroForm.getField(fieldName2).setValue("-");
+					}
+				}
 			} catch (IllegalArgumentException e) {
 				//auto detect the checkbox if possible:
 				boolean handled = false;
@@ -281,9 +302,15 @@ public class FormProcessor {
 							//field is not applicable, so continue;
 							continue;
 						}
+						String overrideFieldName = f.getAnnotation(UseTrueFalseMappings.class).fieldName();
+						String trueValue = f.getAnnotation(UseTrueFalseMappings.class).trueValue();
+						String falseValue = f.getAnnotation(UseTrueFalseMappings.class).falseValue();
 						String mappedKey = (Boolean) value ? (key + "_true")
 								: (key + "_false");
 						String mappedValue = getValue(propertyToFieldMap, year, mappedKey);
+						if (!trueValue.equals("") && !falseValue.equals("")) {
+							mappedValue = (Boolean) value ? trueValue : falseValue;
+						}
 						String fieldName = getValue(propertyToFieldMap, year, key);
 						if (fieldName == null || mappedValue == null) {
 							propertyToFieldMap.entrySet().forEach(
@@ -291,6 +318,9 @@ public class FormProcessor {
 							throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
 									+ "cause is missing Enum field (or enum true and false suffixes) in the IRFields enum",
 									mappedKey));
+						}
+						if (!overrideFieldName.equals("")) {
+							fieldName = overrideFieldName;
 						}
 						processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseSeparateYesNoCheckboxes.class) != null) {
@@ -314,7 +344,21 @@ public class FormProcessor {
 						processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseValueMappings.class) != null) {
 						String mappedValue = getValue(propertyToFieldMap, year, key + "_" + value);
-						processField(acroForm, getValue(propertyToFieldMap, year, key), mappedValue, f);
+
+						// check for annotation override
+						if (value instanceof Enum) {
+							Annotation annotation2 =  value.getClass().getField(((Enum<?>) value).name()).getAnnotation(RelativeFieldName.class);
+							RelativeFieldName relativeFieldName = (RelativeFieldName) annotation2;
+							if (relativeFieldName != null) {
+								String relativeFieldNameValue = relativeFieldName.value();
+								if (!"".equals(relativeFieldNameValue)) {
+									mappedValue = relativeFieldNameValue;
+								}
+							}
+						}
+						String value2 = getValue(propertyToFieldMap, year, key);
+						LOG.info("For field name value: "+ value2 + ", Mapped Value = " + mappedValue);
+						processField(acroForm, value2, mappedValue, f);
 					} else {
 						processField(acroForm, getValue(propertyToFieldMap, year, key), value, f);
 					}
@@ -329,7 +373,7 @@ public class FormProcessor {
 							// todo exclude fields by annotation
 							continue;
 						}
-						LOG.info("key = " + key);
+						LOG.debug("key = " + key);
 						Field f = pojo.getClass().getDeclaredField(key);
 						f.setAccessible(true);
 						// Object field = f.get(pojo);

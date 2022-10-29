@@ -8,19 +8,17 @@ import org.junit.Test;
 
 import com.github.taxbeans.forms.common.FormProcessor;
 import com.github.taxbeans.model.nz.NZBankAccount;
+import com.github.taxbeans.model.nz.PortfolioMethod;
+import com.github.taxbeans.model.nz.ResidentialPropertyInterestClaimedReason;
 import com.github.taxbeans.model.nz.Salutation;
 
 public class IR3Form2022Test {
 	
 	@Test
 	public void test() {
-		if (true) {
-			//TODO fix this test
-			return;
-		}
 		final int currentYear = 2022;
 		final int previousYear = 2021;
-		IR3Form2021 bean = new IR3Form2021();
+		IR3Form2022 bean = new IR3Form2022();
 		bean.setIrdNumber("55555555");
 		bean.setSalutation(Salutation.mr);
 		bean.setFirstname("JOHN");
@@ -59,11 +57,13 @@ public class IR3Form2022Test {
 		bean.setIncomeFromLTCReceived(true);
 		bean.setTrustOrEstateIncomeFromNZReceived(true);
 		bean.setSalaryShareholderEmployeeNotTaxed(true);
+		bean.setShareholderEmployeeSalaryOnlyInFuture(true);
 		bean.setRentsReceived(true);
 		bean.setIncomeFromSelfEmploymentReceived(true);
 		bean.setIncomeOtherReceived(true);
 		bean.setExpensesOtherReceived(true);
 		bean.setNetLossesBroughtForwardClaimed(true);
+		bean.setShareholderAIMTaxCreditAmount(Money.of(new BigDecimal("148.15"), "NZD"));
 		bean.setIndependentEarnerTaxCreditEligible(true);
 		bean.setExcessImputationCreditsBroughtForwardEligible(true);
 		bean.setEarlyPaymentDiscountEntitled(true);
@@ -106,9 +106,26 @@ public class IR3Form2022Test {
 		bean.setIncomeSubtotal(Money.of(new BigDecimal("18224.78"), "NZD"));
 		bean.setTotalShareholderEmployeeSalary(Money.of(new BigDecimal("14800.15"), "NZD"));
 		bean.setNetRents(Money.of(new BigDecimal("12630.39"), "NZD"));
+		bean.setResidentialPropertyIncomeReceived(true);
+		bean.setResidentialPropertyInterestClaimedReason(ResidentialPropertyInterestClaimedReason.newBuildException);
+		bean.setTotalResidentialIncome(Money.of(new BigDecimal("12688.39"), "NZD"));
+		bean.setTotalPIEDeductions(Money.of(new BigDecimal("-10.10"), "NZD"));
+		bean.setTotalPIEIncome(Money.of(new BigDecimal("-11.11"), "NZD"));
+		bean.setPortfolioInvestmentEntityIncomeReceived(true);
+		bean.setPieCalculationOutcome(Money.of(new BigDecimal("-12.12"), "NZD"));
+		bean.setResidentialRentalDeductions(Money.of(new BigDecimal("12688.01"), "NZD"));
+		bean.setExcessResidentialRentalDeductionsBroughtForward(Money.of(new BigDecimal("12688.02"), "NZD"));
+		bean.setResidentialRentalDeductionsClaimed(Money.of(new BigDecimal("12688.03"), "NZD"));
+		bean.setNetResidentialRentalIncome(Money.of(new BigDecimal("12688.04"), "NZD"));
+		bean.setExcessResidentialRentalDeductionsCarriedForward(Money.of(new BigDecimal("12688.05"), "NZD"));
+		bean.setPortfolioMethod(PortfolioMethod.individual);
 		bean.setSelfEmployedNetIncome(Money.of(new BigDecimal("10754.21"), "NZD"));
 		bean.setTotalOtherNetIncome(Money.of(new BigDecimal("1200.60"), "NZD"));
 		bean.setResidentialLandWithholdingTaxCredit(Money.of(new BigDecimal("13223.26"), "NZD"));
+		bean.setIncomeFromTaxablePropertySalesReceived(true);
+		bean.setProfitFromSaleOfProperty(Money.of(new BigDecimal("13223.28"), "NZD"));
+		bean.setGovernmentSubsidyReceived(true);
+		bean.setTotalGovernmentSubsidy(Money.of(new BigDecimal("5.00"), "NZD"));
 		bean.setTotalIncome(Money.of(new BigDecimal("18354.64"), "NZD"));
 		bean.setTotalOtherExpensesClaimed(Money.of(new BigDecimal("14556.90"), "NZD"));
 		bean.setIncomeAfterExpenses(Money.of(new BigDecimal("13455.86"), "NZD"));
@@ -119,14 +136,15 @@ public class IR3Form2022Test {
 		bean.setTaxOnTaxableIncome(Money.of(new BigDecimal("14333.43"), "NZD"));
 		bean.setResidualIncomeTax(Money.of(new BigDecimal("13343.65"), "NZD"));
 		bean.setTaxCalculationResult(Money.of(new BigDecimal("14268.24"), "NZD"));
+		bean.setRefundDue(true);
 		bean.setRefundCopied(bean.getTaxCalculationResult());
-		bean.setRefundOverpaymentCurrentYear(Money.of(new BigDecimal("1265.44"), "NZD"));
 		bean.setRefundTransferToCurrentYear(Money.of(new BigDecimal("13523.54"), "NZD"));
 		bean.setRefundTransferToStudentLoan(Money.of(new BigDecimal("1345.24"), "NZD"));
 		bean.setRefundTotal(Money.of(new BigDecimal("3248.24"), "NZD"));
 		bean.setTaxPaymentCurrentYear(Money.of(new BigDecimal("18258.89"), "NZD"));
 		bean.setDateStartCurrentYearTaxReturn(LocalDate.of(previousYear, 9, 15));
 		bean.setDateEndCurrentYearTaxReturn(LocalDate.of(currentYear, 2, 26));
+		bean.setExcludedOverseasIncomeReceived(true);
 		bean.setDateStartExcludedOverseasIncome(LocalDate.of(previousYear, 5, 13));
 		bean.setDateEndExcludedOverseasIncome(LocalDate.of(currentYear, 2, 16));
 		bean.setReasonForTaxReturnPartYear(2);
@@ -136,7 +154,6 @@ public class IR3Form2022Test {
 		bean.setOtherIncomeType("SALARY");
 		bean.setTaxCreditValue(Money.of(new BigDecimal("234.67"), "NZD"));;
 		bean.setTaxCreditQualifyingMonthsNumber("7");
-		bean.setRefundCopiedPlusOverpaymentCurrentYear(Money.of(new BigDecimal("3618.67"), "NZD"));;
 		bean.setTaxPaymentSEROptionCurrentYear("S");
 		bean.setRefundIsTransferredToCurrentYear(true);
 		bean.setRefundIsTransferredToStudentLoan(true);
@@ -144,12 +161,15 @@ public class IR3Form2022Test {
 		bean.setRefundIsTransferredToSomeoneElsesStudentLoan(true);
 		bean.setRefundIsTransferredToOther(false);
 		bean.setRefundOtherTaxAccountReceiverName("JAKE JEFF DOE");
-		bean.setRefundOtherTaxAccountReceiverIRD("55 555555");
-		bean.setRefundOtherTaxAccountReceiverAmount(Money.of(new BigDecimal("12231.53"), "NZD"));;;
+		bean.setRefundOtherTaxAccountReceiverIRD("553553553");
+		bean.setRefundOtherTaxAccountReceiverAmount(Money.of(new BigDecimal("12231.53"), "NZD"));
 		bean.setRefundOtherTaxAccountReceiverYearEnded31March(String.valueOf(currentYear));
 		bean.setRefundOtherStudentLoanReceiverName("JAKE JEFF DOE");
-		bean.setRefundOtherStudentLoanReceiverIRD("55 555555");
-		bean.setRefundOtherStudentLoanReceiverAmount(Money.of(new BigDecimal("342.34"), "NZD"));;;
+		bean.setRefundOtherStudentLoanReceiverIRD("553553553");
+		bean.setRefundOtherStudentLoanReceiverAmount(Money.of(new BigDecimal("342.34"), "NZD"));
+		bean.setResidentialPropertyInterestIncurred(true);
+		bean.setResidentialPropertInterestClaimed(Money.of(new BigDecimal("8.00"), "NZD"));
+		bean.setTotalInterestOnResidentialProperty(Money.of(new BigDecimal("18.00"), "NZD"));
 		bean.setMinusSignForSchedularPaymentsExpenses("-");
 		bean.setMinusSignForSchedularNetPayments("-");
 		bean.setMinusSignForTotalGrossInterestReceivedFromEligibleEntities("-");
@@ -165,6 +185,7 @@ public class IR3Form2022Test {
 		bean.setMinusSignForSelfEmployedNetIncome("-");
 		bean.setMinusSignForTotalOtherNetIncome("-");
 		bean.setMinusSignForRLWTTaxCredit("-");
+		bean.setMinusSignForProfitFromSaleOfProperty("-");
 		bean.setMinusSignForTotalIncome("-");
 		bean.setMinusSignForIncomeAfterExpenses("-");
 		bean.setMinusSignForTaxableIncome("-");

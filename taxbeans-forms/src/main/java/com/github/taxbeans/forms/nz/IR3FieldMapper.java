@@ -19,8 +19,6 @@ public class IR3FieldMapper implements IRFieldMapper {
 
 	final static Logger LOG = LoggerFactory.getLogger(IR3FieldMapper.class);
 
-	//private static volatile Map<String, String[]> map = null;
-	
 	private static volatile Map<Integer, Map<IRFieldMapKey, String[]>> yearMap = new ConcurrentHashMap<Integer, Map<IRFieldMapKey, String[]>>();
 
 	private static String csvMappingFileName;
@@ -54,7 +52,7 @@ public class IR3FieldMapper implements IRFieldMapper {
 		String[] strings = map.get(IRFieldMapUtils.getMapKey(fieldName, year));
 		if (strings == null) {
 			for (Entry<IRFieldMapKey, String[]> entry : map.entrySet()) {
-				LOG.warn(entry.getKey() + " -> " + entry.getValue());
+				LOG.debug(entry.getKey() + " -> " + entry.getValue());
 			}
 			LOG.warn(fieldName + " resulted in null Strings, mapping to null");
 			return null;
@@ -83,18 +81,6 @@ public class IR3FieldMapper implements IRFieldMapper {
 		}
 		return map;
 	}
-
-//	public static Map<String, String> getFieldToPropertyMap(int year) {
-//		Map<String, String> map = new HashMap<String, String>();
-//		for (IR3Fields field : IR3Fields.values()) {
-//			if (year > 2018 && field.name().contains("2018")) {
-//				// workaround for field naming issue
-//				continue;
-//			}
-//			map.put(IRFieldMapperUtils.getMapKey(field, year), field.name());
-//		}
-//		return map;
-//	}
 
 	public static String getCsvMappingFileName() {
 		return csvMappingFileName;

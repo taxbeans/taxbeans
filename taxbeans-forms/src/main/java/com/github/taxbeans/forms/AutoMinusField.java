@@ -4,10 +4,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RightAlign {
+public @interface AutoMinusField {
 
-	int value();
-
-	String fieldName() default "";
+	String fieldName();
 
 }

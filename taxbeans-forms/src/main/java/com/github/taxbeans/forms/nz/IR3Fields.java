@@ -1,5 +1,10 @@
 package com.github.taxbeans.forms.nz;
 
+import org.javamoney.moneta.Money;
+
+import com.github.taxbeans.forms.RightAlign;
+import com.github.taxbeans.forms.SkipIfFalse;
+
 public enum IR3Fields {
 
 	irdNumber,
@@ -68,10 +73,21 @@ public enum IR3Fields {
 	salaryShareholderEmployeeNotTaxed,
 	rentsReceived_false,
 	rentsReceived_true,
+	rentsReceived_yes_fieldname,
+	rentsReceived_yes_fieldname_true,
+	rentsReceived_yes_fieldname_false,
+	rentsReceived_no_fieldname,
+	rentsReceived_no_fieldname_true,
+	rentsReceived_no_fieldname_false,
 	rentsReceived,
 	residentialPropertyIncomeReceived_false,
 	residentialPropertyIncomeReceived_true,
 	residentialPropertyIncomeReceived,
+	residentialPropertyInterestIncurred_false,
+	residentialPropertyInterestIncurred_true,
+	residentialPropertyInterestIncurred,
+	totalInterestOnResidentialProperty,
+	residentialPropertInterestClaimed,
 	incomeFromSelfEmploymentReceived_true,
 	incomeFromSelfEmploymentReceived_false,
 	incomeFromSelfEmploymentReceived_yes_fieldname,
@@ -161,6 +177,19 @@ public enum IR3Fields {
 	portfolioMethod_portfolio, 
 	portfolioMethod_individual, 
 	portfolioMethod_combination,
+	residentialPropertyInterestClaimedReason,
+	residentialPropertyInterestClaimedReason_maoriExemptCompany,
+	residentialPropertyInterestClaimedReason_schedule15Exclusion,
+	residentialPropertyInterestClaimedReason_earlyLoanDate,
+	residentialPropertyInterestClaimedReason_newBuildException,
+	residentialPropertyInterestClaimedReason_developmentBusinessExemption,
+	residentialPropertyInterestClaimedReason_emergencyHousing,
+	portfolioInvestmentEntityIncomeReceived,
+	portfolioInvestmentEntityIncomeReceived_true,
+	portfolioInvestmentEntityIncomeReceived_false,
+	totalPIEDeductions,
+	totalPIEIncome,
+	pieCalculationOutcome,
 	selfEmployedNetIncome,
 	totalOtherNetIncome,
 	residentialLandWithholdingTaxCredit,

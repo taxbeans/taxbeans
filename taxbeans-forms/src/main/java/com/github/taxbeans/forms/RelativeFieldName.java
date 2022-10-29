@@ -4,10 +4,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RightAlign {
+public @interface RelativeFieldName {
 
-	int value();
-
-	String fieldName() default "";
+	String value() default "";
 
 }

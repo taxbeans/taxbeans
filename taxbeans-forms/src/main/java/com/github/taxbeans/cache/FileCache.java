@@ -47,7 +47,7 @@ public class FileCache {
 	public static void copyFileIntoCache(File file) {
 		File f = new File(getCacheLocation(), file.getName());
 		try {
-			Files.copy(file.toPath(),f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(file.toPath(), f.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -56,5 +56,9 @@ public class FileCache {
 	public static File newOrReplaceExistingFileInCache(String name) {
 		File obtained = new File(getCacheLocation(), name);
 		return obtained;
+	}
+
+	public static void populateCacheFromCurrentDirectory(String string) {
+		copyFileIntoCache(new File(string));
 	}
 }
