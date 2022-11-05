@@ -119,6 +119,9 @@ public class FormProcessor {
 			int size = annotation.value();
 			value = StringUtils.leftPad(String.valueOf(value), size);
 			overrideFieldName = annotation.fieldName();
+			if (!"".equals(overrideFieldName)) {
+				pdfField = acroForm.getField(overrideFieldName);
+			}
 		} else if (field.getAnnotation(LeftAlign.class) != null) {
 			int size = field.getAnnotation(LeftAlign.class).value();
 			value = StringUtils.rightPad(String.valueOf(value), size);
@@ -312,15 +315,15 @@ public class FormProcessor {
 							mappedValue = (Boolean) value ? trueValue : falseValue;
 						}
 						String fieldName = getValue(propertyToFieldMap, year, key);
+						if (!overrideFieldName.equals("")) {
+							fieldName = overrideFieldName;
+						}
 						if (fieldName == null || mappedValue == null) {
 							propertyToFieldMap.entrySet().forEach(
 									action -> LOG.error(String.format("%s -> %s", action.getKey(), action.getValue())));
 							throw new AssertionError(String.format("Boolean field: %s mapped to null, possible "
 									+ "cause is missing Enum field (or enum true and false suffixes) in the IRFields enum",
 									mappedKey));
-						}
-						if (!overrideFieldName.equals("")) {
-							fieldName = overrideFieldName;
 						}
 						processField(acroForm, fieldName, mappedValue, f);
 					} else if (f.getAnnotation(UseSeparateYesNoCheckboxes.class) != null) {

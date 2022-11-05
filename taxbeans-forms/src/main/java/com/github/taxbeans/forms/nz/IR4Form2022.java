@@ -13,7 +13,7 @@ import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 import com.github.taxbeans.model.nz.NZBankAccount;
 
-public class IR4Form2020 implements FormDestination {
+public class IR4Form2022 implements FormDestination {
 
 	@Skip
 	private String destinationDirectory;
@@ -87,28 +87,31 @@ public class IR4Form2020 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean propertySalesIncome;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="24 yes/no")
 	private boolean otherIncome;
 	
 	@RightAlign(11)
 	private Money businessNetProfit;
 	
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="25")
 	private Money netProfitBeforeDonations;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="26 yes/no")
 	private boolean donations;
 	
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="27")
 	private Money netProfitAfterDonations;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="28 yes/no")
+	//@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private boolean netLossesBroughtForward;
 	
 	@RightAlign(11)
+	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private Money netProfitAfterLossesBroughtForward;
 	
 	@UseTrueFalseMappings
+	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private boolean netLossesFromOtherCompanies;
 	
 	@RightAlign(11)
@@ -203,9 +206,6 @@ public class IR4Form2020 implements FormDestination {
 	@RightAlign(11)
 	private Money shareholder1SubventionPayments;
 	
-	@RightAlign(11)
-	private Money shareholder1AimTaxCredits;
-	
 	private String shareholder2IrdNumber;
 	
 	@RightAlign(11)
@@ -224,14 +224,17 @@ public class IR4Form2020 implements FormDestination {
 	private Money shareholder2SubventionPayments;
 	
 	@RightAlign(11)
+	private Money shareholder1AimTaxCredits;
+	
+	@RightAlign(11)
 	private Money shareholder2AimTaxCredits;
 	
-	final Logger logger = LoggerFactory.getLogger(IR4Form2020.class);
+	final Logger logger = LoggerFactory.getLogger(IR4Form2022.class);
 
 	@Skip
 	private String personalisedNaming;
 
-	private int year = 2020;
+	private int year = 2022;
 	
 	public String calculateMinusSign(Money value) {
 		return value.signum() < 0 ? "-" : "";

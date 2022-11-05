@@ -10,7 +10,7 @@ import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 
-public class IR7Form2020 implements FormDestination {
+public class IR7Form2021 implements FormDestination {
 	
 	@Skip
 	private int yearEnded;
@@ -24,9 +24,9 @@ public class IR7Form2020 implements FormDestination {
 	@RightAlign(9)
 	private String irdNumber;
 
-	final static Logger logger = LoggerFactory.getLogger(IR7Form2020.class);
+	final static Logger logger = LoggerFactory.getLogger(IR7Form2021.class);
 
-	private int year = 2020;
+	private int year = 2021;
 
 	@Skip
 	private String personalisedNaming;

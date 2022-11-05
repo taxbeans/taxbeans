@@ -10,7 +10,7 @@ import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 
-public class IR7Form2020 implements FormDestination {
+public class IR7Form2022 implements FormDestination {
 	
 	@Skip
 	private int yearEnded;
@@ -24,9 +24,9 @@ public class IR7Form2020 implements FormDestination {
 	@RightAlign(9)
 	private String irdNumber;
 
-	final static Logger logger = LoggerFactory.getLogger(IR7Form2020.class);
+	final static Logger logger = LoggerFactory.getLogger(IR7Form2022.class);
 
-	private int year = 2020;
+	private int year = 2022;
 
 	@Skip
 	private String personalisedNaming;
@@ -84,37 +84,40 @@ public class IR7Form2020 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean businessIncome;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="19", falseValue="No", trueValue="Yes")
+	private boolean interestFromResidentialProperty;
+
+	@UseTrueFalseMappings(fieldName="18")
 	private boolean rentalIncomeRadio;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="20")
 	private boolean otherRentalIncomeRadio;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="22")
 	private boolean otherIncomeRadio;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="24 y/n")
 	private boolean expenseClaimRadio;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="21")
 	private boolean taxablePropertySalesIncomeRadio;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="27 y/n")
 	private boolean partnershipOrLTCRadio;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="28 y/n")
 	private boolean partnershipCFCRadio;
 	
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="26 y/n")
 	private boolean laqcTransitionRadio;
 	
 	@RightAlign(11)
 	private Money netProfitOrLoss;
 	
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="23")
 	private Money totalIncome;
 	
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="25")
 	private Money totalIncomeAfterExpenses;
 
 //	private String calculateMinusSign(Money value) {
@@ -431,6 +434,14 @@ public class IR7Form2020 implements FormDestination {
 
 	public void setTaxablePropertySalesIncome(boolean taxablePropertySalesIncomeRadio) {
 		this.taxablePropertySalesIncomeRadio = taxablePropertySalesIncomeRadio;
+	}
+
+	public boolean isInterestFromResidentialProperty() {
+		return interestFromResidentialProperty;
+	}
+
+	public void setInterestFromResidentialProperty(boolean interestFromResidentialProperty) {
+		this.interestFromResidentialProperty = interestFromResidentialProperty;
 	}
 
 }
