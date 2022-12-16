@@ -77,10 +77,10 @@ rentsReceived_true,1,1,1,1,1,1,1,1,1,1,1
 rentsReceived_false,0,0,0,0,0,0,0,0,0,0,0
 rentsReceived_yes_fieldname,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes
 rentsReceived_yes_fieldname_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-rentsReceived_yes_fieldname_false,0,0,0,0,0,0,0,0,0,0,0
+rentsReceived_yes_fieldname_false,0,0,0,0,0,0,0,0,0,0,Off
 rentsReceived_no_fieldname,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no
-rentsReceived_no_fieldname_true,1,1,1,1,1,1,1,1,1,1,1
-rentsReceived_no_fieldname_false,0,0,0,0,0,0,0,0,0,0,0
+rentsReceived_no_fieldname_true,1,1,1,1,1,1,1,1,1,1,Yes
+rentsReceived_no_fieldname_false,0,0,0,0,0,0,0,0,0,0,Off
 incomeFromSelfEmploymentReceived,21 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no,24 Yes,24 Yes
 incomeFromSelfEmploymentReceived_yes_fieldname,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes
 incomeFromSelfEmploymentReceived_yes_fieldname_true,1,1,1,1,1,1,1,1,1,1,1

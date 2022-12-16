@@ -14,10 +14,7 @@ import com.github.taxbeans.model.nz.Salutation;
 
 public class IR3Form2022Test {
 	
-	@Test
-	public void test() {
-		final int currentYear = 2022;
-		final int previousYear = 2021;
+	public IR3Form2022 setupBean(int currentYear, int previousYear) {
 		IR3Form2022 bean = new IR3Form2022();
 		bean.setIrdNumber("55555555");
 		bean.setSalutation(Salutation.mr);
@@ -189,8 +186,26 @@ public class IR3Form2022Test {
 		bean.setMinusSignForTotalIncome("-");
 		bean.setMinusSignForIncomeAfterExpenses("-");
 		bean.setMinusSignForTaxableIncome("-");
-		FormProcessor.publishDraft(bean, currentYear, "ir3-%1$s.pdf", IR3FieldMapper.instance(), 
-	    		"Test", "ir3-%1$s-%2$s-draft.pdf");
+		return bean;
 	}
 
+	@Test
+	public void testWithRentsReceivedTrue() {
+		final int currentYear = 2022;
+		final int previousYear = 2021;
+
+		FormProcessor.publishDraft(setupBean(currentYear, previousYear), currentYear, "ir3-%1$s.pdf", IR3FieldMapper.instance(), 
+			"Test", "ir3-%1$s-%2$s-draft.pdf");
+	}
+
+	@Test
+	public void testWithRentsReceivedFalse() {
+		final int currentYear = 2022;
+		final int previousYear = 2021;
+
+		IR3Form2022 bean = setupBean(currentYear, previousYear);
+		bean.setRentsReceived(false);
+		FormProcessor.publishDraft(bean, currentYear, "ir3-%1$s.pdf", IR3FieldMapper.instance(), 
+			"Test", "ir3-%1$s-%2$s-draft.pdf");
+	}
 }

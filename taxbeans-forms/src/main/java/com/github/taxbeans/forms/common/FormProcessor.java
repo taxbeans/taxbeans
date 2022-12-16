@@ -334,7 +334,7 @@ public class FormProcessor {
 						String mappedKeyFieldName = (Boolean) value ? (key + "_yes_fieldname")
 								: (key + "_no_fieldname");
 						String mappedValueKey = (Boolean) value ? (key + "_yes_fieldname_true")
-								: (key + "_no_fieldname_false");
+								: (key + "_no_fieldname_true");
 						String mappedValue = getValue(propertyToFieldMap, year, mappedValueKey);
 						String fieldName = getValue(propertyToFieldMap, year, mappedKeyFieldName);
 						if (fieldName == null || mappedValue == null) {
