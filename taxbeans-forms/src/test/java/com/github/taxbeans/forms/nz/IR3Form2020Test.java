@@ -117,6 +117,8 @@ public class IR3Form2020Test {
 		bean.setRefundOverpaymentCurrentYear(Money.of(new BigDecimal("1265.44"), "NZD"));
 		bean.setRefundTransferToCurrentYear(Money.of(new BigDecimal("13523.54"), "NZD"));
 		bean.setRefundTransferToStudentLoan(Money.of(new BigDecimal("1345.24"), "NZD"));
+		bean.setRefundIsTransferredToSomeoneElsesStudentLoan(true);
+		bean.setTransferRefundToSomeoneElsesIncomeTaxAccountAssociated(true);
 		bean.setRefundTotal(Money.of(new BigDecimal("3248.24"), "NZD"));
 		bean.setTaxPaymentCurrentYear(Money.of(new BigDecimal("18258.89"), "NZD"));
 		bean.setDateStartCurrentYearTaxReturn(LocalDate.of(2019, 9, 15));

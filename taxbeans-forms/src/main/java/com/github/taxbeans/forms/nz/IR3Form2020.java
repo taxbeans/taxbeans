@@ -73,25 +73,25 @@ public class IR3Form2020 implements FormDestination {
 
 	@UseDayMonthYear
 	private LocalDate dateEndExcludedOverseasIncome;
-	
+
 	@UseDayMonthYear
 	private LocalDate dateOfBirth;
-	
+
 	@UseDayMonthYear
 	private LocalDate dateStartCurrentYearTaxReturn;
-	
+
 	@UseDayMonthYear
 	private LocalDate dateStartExcludedOverseasIncome;
 
 	@Skip
 	private String destinationDirectory;
-	
+
 	@UseTrueFalseMappings
 	private boolean disclosureRequiredToHoldRightsDuringIncomeYear;
-	
+
 	@UseTrueFalseMappings
 	private boolean dividendsFromEligibleEntitiesReceived;
-	
+
 	@UseTrueFalseMappings
 	private boolean dividendsFromNZReceived;
 
@@ -108,7 +108,7 @@ public class IR3Form2020 implements FormDestination {
 	@Skip
 	private boolean excludedOverseasIncomeReceived;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="28 no/yes")
 	private boolean expensesOtherReceived;
 
 	@RightAlign(11)
@@ -119,35 +119,35 @@ public class IR3Form2020 implements FormDestination {
 	private boolean familyTaxCreditReceived;
 
 	private String firstname;
-	
+
 	@UseTrueFalseMappings
 	private boolean incomeAdjustmentsRequired;
 
 	@RightAlign(11)
 	private Money incomeAfterExpenses;
-	
+
 	@UseTrueFalseMappings
 	private boolean incomeFromLTCReceived;
 
 	@UseTrueFalseMappings
 	private boolean incomeFromSelfEmploymentReceived;
-	
+
 	@RightAlign(11)
 	private Money incomeNotLiableForAccEarnersLevy;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="26 no/yes", trueValue="0", falseValue="1")
 	private boolean incomeOtherReceived;
-	
+
 	@RightAlign(11)
 	private Money incomeSubtotal;
 
 	@UseTrueFalseMappings
 	private boolean incomeWithTaxDeductedReceived;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="32A yes/no", trueValue="1", falseValue="0")
 	private boolean independentEarnerTaxCreditEligible;
-	
-	@UseTrueFalseMappings
+
+	@UseTrueFalseMappings(fieldName="box 13C Check Box")
 	private boolean interestFromEligibleEntitiesReceived;
 
 	@UseTrueFalseMappings
@@ -155,7 +155,7 @@ public class IR3Form2020 implements FormDestination {
 
 	@RightAlign(9)
 	private String irdNumber;
-	
+
 	final Logger logger = LoggerFactory.getLogger(IR3Form2020.class);
 
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
@@ -205,14 +205,14 @@ public class IR3Form2020 implements FormDestination {
 	private String minusSignForTotalOverseasIncome;
 
 	private String minusSignForTotalShareholderEmployeeSalary;
-	
-	@UseTrueFalseMappings
+
+	@UseTrueFalseMappings(fieldName="30 yes/no", falseValue="0", trueValue="1")
 	private boolean netLossesBroughtForwardClaimed;
-	
+
 	@RightAlign(11)
 	@SkipIfFalse(RENTS_RECEIVED)
 	private Money netRents;
-	
+
 	@RightAlign(11)
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money netSchedularPayments;
@@ -220,10 +220,10 @@ public class IR3Form2020 implements FormDestination {
 	@RightAlign(11)
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money nonAllowableDeductionsThisYear;
-	
+
 	@UseTrueFalseMappings
 	private boolean noOtherIncomeReceived = true;
-	
+
 	@SkipIfFalse(OTHER_INCOME_RECEIVED)
 	private String otherIncomePayer;
 
@@ -240,13 +240,13 @@ public class IR3Form2020 implements FormDestination {
 	private String personalisedNaming;
 
 	private String phoneNumberExcludingPrefix;
-	
+
 	private String phonePrefix;
-	
+
 	private String postalAddressLine1;
-	
+
 	private String postalAddressLine2;
-	
+
 	@RightAlign(11)
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money priorYearsNonAllowableDeductionsClaimedThisYear;
@@ -265,7 +265,7 @@ public class IR3Form2020 implements FormDestination {
 
 	@Skip
 	private boolean refundDue;
-	
+
 	@UseTrueFalseMappings
 	private boolean refundIsTransferredToCurrentYear;
 
@@ -276,7 +276,7 @@ public class IR3Form2020 implements FormDestination {
 
 	@UseTrueFalseMappings
 	private boolean refundIsTransferredToSomeoneElsesStudentLoan;
-	
+
 	@UseTrueFalseMappings
 	private boolean refundIsTransferredToSomeoneElsesTaxAccount;
 
@@ -287,7 +287,7 @@ public class IR3Form2020 implements FormDestination {
 	@RightAlign(11)
 	@SkipIfFalse("refundIsTransferredToSomeoneElsesStudentLoan")
 	private Money refundOtherStudentLoanReceiverAmount;
-	
+
 	@RightAlign(9)
 	@SkipIfFalse("refundIsTransferredToSomeoneElsesStudentLoan")
 	private String refundOtherStudentLoanReceiverIRD;
@@ -330,13 +330,16 @@ public class IR3Form2020 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean rentsReceived;
 
+	@UseTrueFalseMappings(fieldName="25 no/yes", falseValue="1", trueValue="0")
+	private boolean incomeFromTaxablePropertySalesReceived;
+
 
 	@RightAlign(11)
 	@SkipIfFalse(IR3Form2020.OTHER_INCOME_RECEIVED)
 	private Money residentialLandWithholdingTaxCredit;
 
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 34A")
 	private Money residualIncomeTax;
 
 	@UseTrueFalseMappings
@@ -393,7 +396,7 @@ public class IR3Form2020 implements FormDestination {
 	@RightAlign(11)
 	private Money taxableIncome;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 34B")
 	private Money taxCalculationResult;
 
 
@@ -403,7 +406,6 @@ public class IR3Form2020 implements FormDestination {
 
 
 	@RightAlign(11)
-	@Sum("totalTaxDeducted")
 	private Money taxCreditSubtotal;
 
 	@RightAlign(5)
@@ -480,7 +482,7 @@ public class IR3Form2020 implements FormDestination {
 	@RightAlign(11)
 	@SkipIfFalse("taxableDistributionsFromMaoriAuthorityReceived")
 	private Money totalMaoriAuthorityDistributions;
-	
+
 	@RightAlign(11)
 	@SkipIfFalse(EXPENSES_OTHER_RECEIVED)
 	private Money totalOtherExpensesClaimed;
@@ -492,7 +494,7 @@ public class IR3Form2020 implements FormDestination {
 	@RightAlign(11)
 	@SkipIfFalse("overseasIncomeReceived")
 	private Money totalOverseasIncome;
-	
+
 	@RightAlign(11)
 	@SkipIfFalse("overseasIncomeReceived")
 	private Money totalOverseasTaxPaid;
@@ -502,7 +504,7 @@ public class IR3Form2020 implements FormDestination {
 
 	@RightAlign(11)
 	private Money totalPAYEDeducted;
-	
+
 	@RightAlign(11)
 	@SkipIfFalse(INTEREST_FROM_NZ_RECEIVED)
 	private Money totalRWT;
@@ -514,7 +516,7 @@ public class IR3Form2020 implements FormDestination {
 	@RightAlign(11)
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money totalSchedularTaxDeducted;
-	
+
 	@RightAlign(11)
 	private Money totalShareholderEmployeeSalary;
 
@@ -524,19 +526,19 @@ public class IR3Form2020 implements FormDestination {
 
 	@RightAlign(11)
 	private Money totalTaxDeducted;
-	
+
 	@RightAlign(11)
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private Money totalTaxPaidByTrustees;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="36E yes/no")
 	@SkipIfFalse("refundDue")
 	private boolean transferRefundToSomeoneElsesIncomeTaxAccountAssociated;
-	
+
 	@UseTrueFalseMappings
 	@SkipIfFalse("refundDue")
 	private boolean transferRefundToSomeoneElsesStudentLoanAssociated;
-	
+
 	@UseTrueFalseMappings
 	private boolean trustOrEstateIncomeFromNZReceived;
 
@@ -544,7 +546,7 @@ public class IR3Form2020 implements FormDestination {
 	private boolean unpaidMajorWorkingShareholderWfFTCELigible;
 
 	private int year = 2020;
-	
+
 	private String calculateMinusSign(Money value) {
 		return value.signum() < 0 ? "-" : "";
 	}
@@ -556,7 +558,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getAdjustedLTCIncome() {
 		return adjustedLTCIncome;
 	}
-	
+
 	public String getAlternativePersonFirstNamesCompletedReturn() {
 		return alternativePersonFirstNamesCompletedReturn;
 	}
@@ -568,7 +570,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getAmountBroughtForward() {
 		return amountBroughtForward;
 	}
-	
+
 	public Money getAmountClaimedThisYear() {
 		return amountClaimedThisYear;
 	}
@@ -580,7 +582,7 @@ public class IR3Form2020 implements FormDestination {
 	public String getBusinessIndustryClassificationCode() {
 		return businessIndustryClassificationCode;
 	}
-	
+
 	public LocalDate getDateEndCurrentYearTaxReturn() {
 		return dateEndCurrentYearTaxReturn;
 	}
@@ -592,7 +594,7 @@ public class IR3Form2020 implements FormDestination {
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
-	
+
 	public LocalDate getDateStartCurrentYearTaxReturn() {
 		return dateStartCurrentYearTaxReturn;
 	}
@@ -612,39 +614,39 @@ public class IR3Form2020 implements FormDestination {
 	public Money getFamilyTaxCreditAmount() {
 		return familyTaxCreditAmount;
 	}
-	
+
 	public String getFirstname() {
 		return firstname;
 	}
-	
+
 	public Money getIncomeAfterExpenses() {
 		return incomeAfterExpenses;
 	}
-	
+
 	public Money getIncomeNotLiableForAccEarnersLevy() {
 		return incomeNotLiableForAccEarnersLevy;
 	}
-	
+
 	public Money getincomeSubtotal() {
 		return incomeSubtotal;
 	}
-	
+
 	public String getIrdNumber() {
 		return irdNumber;
 	}
-	
+
 	public String getMinusSignForAdjustedLTCIncome() {
 		return minusSignForAdjustedLTCIncome;
 	}
-	
+
 	public String getMinusSignForIncomeAfterExpenses() {
 		return minusSignForIncomeAfterExpenses;
 	}
-	
+
 	public String getMinusSignForIncomeSubtotal() {
 		return minusSignForIncomeSubtotal;
 	}
-	
+
 	public String getMinusSignForNetRents() {
 		return minusSignForNetRents;
 	}
@@ -664,19 +666,19 @@ public class IR3Form2020 implements FormDestination {
 	public String getMinusSignForSchedularNetPayments() {
 		return minusSignForSchedularNetPayments;
 	}
-	
+
 	public String getMinusSignForSchedularPaymentsExpenses() {
 		return minusSignForSchedularPaymentsExpenses;
 	}
-	
+
 	public String getMinusSignForSelfEmployedNetIncome() {
 		return minusSignForSelfEmployedNetIncome;
 	}
-	
+
 	public String getMinusSignForTaxableIncome() {
 		return minusSignForTaxableIncome;
 	}
-	
+
 	public String getMinusSignForTotalActiveLTCIncome() {
 		return minusSignForTotalActiveLTCIncome;
 	}
@@ -684,11 +686,11 @@ public class IR3Form2020 implements FormDestination {
 	public String getMinusSignForTotalActivePartnershipIncome() {
 		return minusSignForTotalActivePartnershipIncome;
 	}
-	
+
 	public String getMinusSignForTotalGrossInterestReceivedFromEligibleEntities() {
 		return minusSignForTotalGrossInterestReceivedFromEligibleEntities;
 	}
-	
+
 	public String getMinusSignForTotalIncome() {
 		return minusSignForTotalIncome;
 	}
@@ -696,15 +698,15 @@ public class IR3Form2020 implements FormDestination {
 	public String getMinusSignForTotalOtherNetIncome() {
 		return minusSignForTotalOtherNetIncome;
 	}
-	
+
 	public String getMinusSignForTotalOverseasIncome() {
 		return minusSignForTotalOverseasIncome;
 	}
-	
+
 	public String getMinusSignForTotalShareholderEmployeeSalary() {
 		return minusSignForTotalShareholderEmployeeSalary;
 	}
-	
+
 	public Money getNetRents() {
 		return netRents;
 	}
@@ -712,15 +714,15 @@ public class IR3Form2020 implements FormDestination {
 	public Money getNetSchedularPayments() {
 		return netSchedularPayments;
 	}
-	
+
 	public Money getNonAllowableDeductionsThisYear() {
 		return nonAllowableDeductionsThisYear;
 	}
-	
+
 	public String getOtherIncomePayer() {
 		return otherIncomePayer;
 	}
-	
+
 	public String getOtherIncomeType() {
 		return otherIncomeType;
 	}
@@ -740,11 +742,11 @@ public class IR3Form2020 implements FormDestination {
 	public String getPostalAddressLine1() {
 		return postalAddressLine1;
 	}
-	
+
 	public String getPostalAddressLine2() {
 		return postalAddressLine2;
 	}
-	
+
 	public Money getPriorYearsNonAllowableDeductionsClaimedThisYear() {
 		return priorYearsNonAllowableDeductionsClaimedThisYear;
 	}
@@ -752,31 +754,31 @@ public class IR3Form2020 implements FormDestination {
 	public int getReasonForTaxReturnPartYear() {
 		return reasonForTaxReturnPartYear;
 	}
-	
+
 	public Money getRefundCopied() {
 		return refundCopied;
 	}
-	
+
 	public Money getRefundCopiedPlusOverpaymentCurrentYear() {
 		return refundCopiedPlusOverpaymentCurrentYear;
 	}
-	
+
 	public Money getRefundOtherStudentLoanReceiverAmount() {
 		return refundOtherStudentLoanReceiverAmount;
 	}
-	
+
 	public String getRefundOtherStudentLoanReceiverIRD() {
 		return refundOtherStudentLoanReceiverIRD;
 	}
-	
+
 	public String getRefundOtherStudentLoanReceiverName() {
 		return refundOtherStudentLoanReceiverName;
 	}
-	
+
 	public Money getRefundOtherTaxAccountReceiverAmount() {
 		return refundOtherTaxAccountReceiverAmount;
 	}
-	
+
 	public String getRefundOtherTaxAccountReceiverIRD() {
 		return refundOtherTaxAccountReceiverIRD;
 	}
@@ -788,39 +790,39 @@ public class IR3Form2020 implements FormDestination {
 	public String getRefundOtherTaxAccountReceiverYearEnded31March() {
 		return refundOtherTaxAccountReceiverYearEnded31March;
 	}
-	
+
 	public Money getRefundOverpaymentCurrentYear() {
 		return refundOverpaymentCurrentYear;
 	}
-	
+
 	public Money getRefundTotal() {
 		return refundTotal;
 	}
-	
+
 	public Money getRefundTransferToCurrentYear() {
 		return refundTransferToCurrentYear;
 	}
-	
+
 	public Money getRefundTransferToStudentLoan() {
 		return refundTransferToStudentLoan;
 	}
-	
+
 	public Money getResidentialLandWithholdingTaxCredit() {
 		return residentialLandWithholdingTaxCredit;
 	}
-	
+
 	public Money getResidualIncomeTax() {
 		return residualIncomeTax;
 	}
-	
+
 	public Salutation getSalutation() {
 		return salutation;
 	}
-	
+
 	public Money getSchedularPaymentExpenses() {
 		return schedularPaymentExpenses;
 	}
-	
+
 	public Money getSelfEmployedNetIncome() {
 		return selfEmployedNetIncome;
 	}
@@ -832,7 +834,7 @@ public class IR3Form2020 implements FormDestination {
 	public String getStreetAddressLine2() {
 		return streetAddressLine2;
 	}
-	
+
 	public String getSurname() {
 		return surname;
 	}
@@ -844,7 +846,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTaxCalculationResult() {
 		return taxCalculationResult;
 	}
-	
+
 	public String getTaxCreditQualifyingMonthsNumber() {
 		return taxCreditQualifyingMonthsNumber;
 	}
@@ -856,7 +858,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTaxCreditValue() {
 		return taxCreditValue;
 	}
-	
+
 	public Money getTaxOnTaxableIncome() {
 		return taxOnTaxableIncome;
 	}
@@ -868,7 +870,7 @@ public class IR3Form2020 implements FormDestination {
 	public String getTaxPaymentSEROptionCurrentYear() {
 		return taxPaymentSEROptionCurrentYear;
 	}
-	
+
 	public Money getTotalActiveLTCIncome() {
 		return totalActiveLTCIncome;
 	}
@@ -880,7 +882,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalDividendImputationCredits() {
 		return totalDividendImputationCredits;
 	}
-	
+
 	public Money getTotalDividendRWTAndPaymentsForForeignDividends() {
 		return totalDividendRWTAndPaymentsForForeignDividends;
 	}
@@ -892,7 +894,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalGrossDividends() {
 		return totalGrossDividends;
 	}
-	
+
 	public Money getTotalGrossIncome() {
 		return totalGrossIncome;
 	}
@@ -904,7 +906,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalIncome() {
 		return totalIncome;
 	}
-	
+
 	public Money getTotalLTCTaxCredits() {
 		return totalLTCTaxCredits;
 	}
@@ -916,7 +918,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalMaoriAuthorityDistributions() {
 		return totalMaoriAuthorityDistributions;
 	}
-	
+
 	public Money getTotalOtherExpensesClaimed() {
 		return totalOtherExpensesClaimed;
 	}
@@ -928,7 +930,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalOverseasIncome() {
 		return totalOverseasIncome;
 	}
-	
+
 	public Money getTotalOverseasTaxPaid() {
 		return totalOverseasTaxPaid;
 	}
@@ -940,7 +942,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalPAYEDeducted() {
 		return totalPAYEDeducted;
 	}
-	
+
 	public Money getTotalRWT() {
 		return totalRWT;
 	}
@@ -952,7 +954,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalSchedularTaxDeducted() {
 		return totalSchedularTaxDeducted;
 	}
-	
+
 	public Money getTotalShareholderEmployeeSalary() {
 		return totalShareholderEmployeeSalary;
 	}
@@ -964,7 +966,7 @@ public class IR3Form2020 implements FormDestination {
 	public Money getTotalTaxDeducted() {
 		return totalTaxDeducted;
 	}
-	
+
 	public Money getTotalTaxPaidByTrustees() {
 		return totalTaxPaidByTrustees;
 	}
@@ -976,7 +978,7 @@ public class IR3Form2020 implements FormDestination {
 	public boolean isDisclosureRequiredToHoldRightsDuringIncomeYear() {
 		return disclosureRequiredToHoldRightsDuringIncomeYear;
 	}
-	
+
 	public boolean isDividendsFromEligibleEntitiesReceived() {
 		return dividendsFromEligibleEntitiesReceived;
 	}
@@ -988,7 +990,7 @@ public class IR3Form2020 implements FormDestination {
 	public boolean isEarlyPaymentDiscountEntitled() {
 		return earlyPaymentDiscountEntitled;
 	}
-	
+
 	public boolean isExcessImputationCreditsBroughtForwardEligible() {
 		return excessImputationCreditsBroughtForwardEligible;
 	}
@@ -1000,7 +1002,7 @@ public class IR3Form2020 implements FormDestination {
 	public boolean isFamilyTaxCreditReceived() {
 		return familyTaxCreditReceived;
 	}
-	
+
 	public boolean isIncomeAdjustmentsRequired() {
 		return incomeAdjustmentsRequired;
 	}
@@ -1012,7 +1014,7 @@ public class IR3Form2020 implements FormDestination {
 	public boolean isIncomeFromSelfEmploymentReceived() {
 		return incomeFromSelfEmploymentReceived;
 	}
-	
+
 	public boolean isIncomeOtherReceived() {
 		return incomeOtherReceived;
 	}
@@ -1024,7 +1026,7 @@ public class IR3Form2020 implements FormDestination {
 	public boolean isIndependentEarnerTaxCreditEligible() {
 		return independentEarnerTaxCreditEligible;
 	}
-	
+
 	public boolean isInterestFromEligibleEntitiesReceived() {
 		return interestFromEligibleEntitiesReceived;
 	}
@@ -1128,7 +1130,7 @@ public class IR3Form2020 implements FormDestination {
 	public boolean isUnpaidMajorWorkingShareholderWfFTCELigible() {
 		return unpaidMajorWorkingShareholderWfFTCELigible;
 	}
-	
+
 	public void setAccEarnersLevy(Money accEarnersLevy) {
 		this.accEarnersLevy = accEarnersLevy;
 	}
@@ -1204,7 +1206,7 @@ public class IR3Form2020 implements FormDestination {
 	public void setExcessImputationCreditsBroughtForward(Money excessImputationCreditsBroughtForward) {
 		this.excessImputationCreditsBroughtForward = excessImputationCreditsBroughtForward;
 	}
-	
+
 	public void setExcessImputationCreditsBroughtForwardEligible(boolean excessImputationCreditsBroughtForwardEligible) {
 		this.excessImputationCreditsBroughtForwardEligible = excessImputationCreditsBroughtForwardEligible;
 	}
@@ -1360,7 +1362,7 @@ public class IR3Form2020 implements FormDestination {
 	public void setNetSchedularPayments(Money netSchedularPayments) {
 		this.netSchedularPayments = netSchedularPayments;
 	}
-	
+
 	public void setNonAllowableDeductionsThisYear(Money nonAllowableDeductionsThisYear) {
 		this.nonAllowableDeductionsThisYear = nonAllowableDeductionsThisYear;
 	}
@@ -1368,7 +1370,7 @@ public class IR3Form2020 implements FormDestination {
 	public void setNoOtherIncomeReceived(boolean noOtherIncomeReceived) {
 		this.noOtherIncomeReceived = noOtherIncomeReceived;
 	}
-	
+
 	public void setOtherIncomePayer(String otherIncomePayer) {
 		this.otherIncomePayer = otherIncomePayer;
 	}
@@ -1384,7 +1386,7 @@ public class IR3Form2020 implements FormDestination {
 	public void setPartnershipIncomeReceived(boolean partnershipIncomeReceived) {
 		this.partnershipIncomeReceived = partnershipIncomeReceived;
 	}
-	
+
 	public void setPersonalisedNaming(String personalisedNaming) {
 		this.personalisedNaming = personalisedNaming;
 	}
@@ -1400,7 +1402,7 @@ public class IR3Form2020 implements FormDestination {
 	public void setPostalAddressLine1(String postalAddressLine1) {
 		this.postalAddressLine1 = postalAddressLine1;
 	}
-	
+
 	public void setPostalAddressLine2(String postalAddressLine2) {
 		this.postalAddressLine2 = postalAddressLine2;
 	}
@@ -1408,7 +1410,7 @@ public class IR3Form2020 implements FormDestination {
 	public void setPriorYearsNonAllowableDeductionsClaimedThisYear(Money priorYearsNonAllowableDeductionsClaimedThisYear) {
 		this.priorYearsNonAllowableDeductionsClaimedThisYear = priorYearsNonAllowableDeductionsClaimedThisYear;
 	}
-	
+
 	public void setReasonForTaxReturnPartYear(int reasonForTaxReturnPartYear) {
 		this.reasonForTaxReturnPartYear = reasonForTaxReturnPartYear;
 	}
@@ -1652,7 +1654,7 @@ public class IR3Form2020 implements FormDestination {
 	public void setTotalMaoriAuthorityDistributions(Money totalMaoriAuthorityDistributions) {
 		this.totalMaoriAuthorityDistributions = totalMaoriAuthorityDistributions;
 	}
-	
+
 	public void setTotalOtherExpensesClaimed(Money totalOtherExpensesClaimed) {
 		this.totalOtherExpensesClaimed = totalOtherExpensesClaimed;
 	}
@@ -1724,5 +1726,13 @@ public class IR3Form2020 implements FormDestination {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public boolean isIncomeFromTaxablePropertySalesReceived() {
+		return incomeFromTaxablePropertySalesReceived;
+	}
+
+	public void setIncomeFromTaxablePropertySalesReceived(boolean incomeFromTaxablePropertySalesReceived) {
+		this.incomeFromTaxablePropertySalesReceived = incomeFromTaxablePropertySalesReceived;
 	}
 }

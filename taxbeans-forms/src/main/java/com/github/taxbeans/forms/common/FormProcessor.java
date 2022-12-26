@@ -2,10 +2,12 @@ package com.github.taxbeans.forms.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -159,7 +161,7 @@ public class FormProcessor {
 		}
 		if (field.getAnnotation(Unbounded.class) == null) {
 			try {
-				LOG.info(String.format("Setting PDF Field for %s: %s to %s", field.getName(), pdfField.getFullyQualifiedName(), value));
+				LOG.debug(String.format("Setting PDF Field for %s: %s to %s", field.getName(), pdfField.getFullyQualifiedName(), value));
 				if (!"".equals(overrideFieldName)) {
 					pdfField = acroForm.getField(overrideFieldName);
 				}
@@ -212,6 +214,15 @@ public class FormProcessor {
 				File cacheDir = new File(homeDir, ".cache");
 				File taxBeansCache = new File(cacheDir, "taxbeans");
 				form = new File(taxBeansCache, fileName);
+				if (!form.exists()) {
+					//load from classpath
+					InputStream stream = FormProcessor.class.getClassLoader().getResourceAsStream(fileName);
+					form.getParentFile().mkdirs();  //create any required folders on demand
+					Files.copy(stream, form.toPath());
+					if (!form.exists()) {
+						throw new AssertionError("Form should exist after loading into cache from classpath");
+					}
+				}
 			}
 			LOG.info("Loading: " + form.getAbsolutePath());
 			PDDocument pdfTemplate = PDDocument.load(form);
@@ -331,12 +342,16 @@ public class FormProcessor {
 							//field is not applicable, so continue;
 							continue;
 						}
+						UseSeparateYesNoCheckboxes annotation2 = f.getAnnotation(UseSeparateYesNoCheckboxes.class);
+						String fieldName = annotation2.fieldName();
 						String mappedKeyFieldName = (Boolean) value ? (key + "_yes_fieldname")
 								: (key + "_no_fieldname");
 						String mappedValueKey = (Boolean) value ? (key + "_yes_fieldname_true")
 								: (key + "_no_fieldname_true");
 						String mappedValue = getValue(propertyToFieldMap, year, mappedValueKey);
-						String fieldName = getValue(propertyToFieldMap, year, mappedKeyFieldName);
+						if ("".equals(fieldName)) {
+							fieldName = getValue(propertyToFieldMap, year, mappedKeyFieldName);
+						}
 						if (fieldName == null || mappedValue == null) {
 							propertyToFieldMap.entrySet().forEach(
 									action -> LOG.error(String.format("%s -> %s", action.getKey(), action.getValue())));

@@ -86,16 +86,16 @@ incomeFromSelfEmploymentReceived_yes_fieldname,24 Yes,24 Yes,24 Yes,24 Yes,24 Ye
 incomeFromSelfEmploymentReceived_yes_fieldname_true,1,1,1,1,1,1,1,1,1,1,1
 incomeFromSelfEmploymentReceived_yes_fieldname_false,0,0,0,0,0,0,0,0,0,0,0
 incomeFromSelfEmploymentReceived_no_fieldname,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no
-incomeFromSelfEmploymentReceived_no_fieldname_true,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
-incomeFromSelfEmploymentReceived_no_fieldname_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+incomeFromSelfEmploymentReceived_no_fieldname_true,Off,Off,Off,Off,Off,Off,Off,Off,Off,1,Off
+incomeFromSelfEmploymentReceived_no_fieldname_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,0,Yes
 incomeFromSelfEmploymentReceived_true,1,1,1,1,1,1,1,1,1,1,1
 incomeFromSelfEmploymentReceived_false,0,0,0,0,0,0,0,0,0,0,0
 incomeFromTaxablePropertySalesReceived,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes,25 no/yes
 incomeFromTaxablePropertySalesReceived_true,0,0,0,0,0,0,0,0,0,0,0
 incomeFromTaxablePropertySalesReceived_false,1,1,1,1,1,1,1,1,1,1,1
 incomeOtherReceived,26 yes/no,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,24 Yes,27 no/yes,28 no/yes
-incomeOtherReceived_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-incomeOtherReceived_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
+incomeOtherReceived_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,0,0
+incomeOtherReceived_false,Off,Off,Off,Off,Off,Off,Off,Off,Off,1,1
 noOtherIncomeReceived,26 yes/no skip,24 no,24 no,24 no,24 no,24 no,24 no,24 no,24 no,N/A,N/A
 noOtherIncomeReceived_true,1,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 noOtherIncomeReceived_false,0,Off,Off,Off,Off,Off,Off,Off,Off,Off,Off
@@ -106,7 +106,7 @@ netLossesBroughtForwardClaimed,31 / 31a,31 / 31a,31 / 31a,31 / 31a,31 / 31a,28 n
 netLossesBroughtForwardClaimed_true,0,0,0,0,0,0,0,0,0,0,0
 netLossesBroughtForwardClaimed_false,1,1,1,1,1,1,1,1,1,1,1
 independentEarnerTaxCreditEligible,34j credit/debit,34j credit/debit,34j credit/debit,34j credit/debit,34j credit/debit,30A yes/no,30A yes/no,30A yes/no,32A yes/no,34A yes/no,34A yes/no
-independentEarnerTaxCreditEligible_true,1,0,0,0,0,0,0,0,0,0,0
+independentEarnerTaxCreditEligible_true,1,0,,0,0,0,0,0,0,0,0
 independentEarnerTaxCreditEligible_false,0,1,1,1,1,1,1,1,1,1,1
 excessImputationCreditsBroughtForwardEligible,35 yes/no,33 yes/no,33 yes/no,33 yes/no,33 yes/no,31 yes/no,31 yes/no,31 yes/no,33 yes/no,35 yes/no,35 yes/no
 excessImputationCreditsBroughtForwardEligible_true,1,1,1,1,1,1,1,1,1,1,1
@@ -117,7 +117,7 @@ earlyPaymentDiscountEntitled_false,n,1,1,1,1,1,1,1,1,1,1
 transferRefundToSomeoneElsesIncomeTaxAccountAssociated,36H,36H,36H,36H,34E yes/no,34E yes/no,34E yes/no,34E yes/no,34E yes/no,39C yes/no,39C yes/no
 transferRefundToSomeoneElsesIncomeTaxAccountAssociated_true,no,no,no,no,no,no,no,no,no,no,no
 transferRefundToSomeoneElsesIncomeTaxAccountAssociated_false,No,No,No,No,No,No,No,No,No,No,No
-transferRefundToSomeoneElsesStudentLoanAssociated,37,37,37,37,34H yes/no,34H yes/no,34H yes/no,34H yes/no,34H yes/no,39F yes/no,39F yes/no
+transferRefundToSomeoneElsesStudentLoanAssociated,37,37,37,37,34H yes/no,34H yes/no,34H yes/no,36H yes/no,36H yes/no,39F yes/no,39F yes/no
 transferRefundToSomeoneElsesStudentLoanAssociated_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 transferRefundToSomeoneElsesStudentLoanAssociated_false,No,No,No,No,No,No,No,No,No,No,No
 residualIncomeTaxDebitHigherThan2500Dollars,38,35 credit/debit,35 credit/debit,35 credit/debit,35 credit/debit,35 no/yes,35 no/yes,35 no/yes,37 no/yes,40 no/yes,40 no/yes

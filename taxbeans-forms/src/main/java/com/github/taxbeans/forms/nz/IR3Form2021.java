@@ -123,7 +123,7 @@ public class IR3Form2021 implements FormDestination {
 	@Skip
 	private boolean excludedOverseasIncomeReceived;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="29 no/yes")
 	private boolean expensesOtherReceived;
 
 	@RightAlign(11)
@@ -147,13 +147,10 @@ public class IR3Form2021 implements FormDestination {
 	@UseSeparateYesNoCheckboxes
 	private boolean incomeFromSelfEmploymentReceived;
 
-	@UseTrueFalseMappings
-	private boolean incomeFromTaxablePropertySalesReceived;
-
 	@RightAlign(11)
 	private Money incomeNotLiableForAccEarnersLevy;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="27 no/yes")
 	private boolean incomeOtherReceived;
 
 	@RightAlign(11)
@@ -162,13 +159,13 @@ public class IR3Form2021 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean incomeWithTaxDeductedReceived;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="34A yes/no", trueValue="1", falseValue="0")
 	private boolean independentEarnerTaxCreditEligible;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="box 13C Check Box")
 	private boolean interestFromEligibleEntitiesReceived;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="13 yes/no")
 	private boolean interestFromNZReceived;
 
 	@RightAlign(9)
@@ -227,7 +224,7 @@ public class IR3Form2021 implements FormDestination {
 
 	private String minusSignForTotalShareholderEmployeeSalary;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="31 yes/no", falseValue="0", trueValue="1")
 	private boolean netLossesBroughtForwardClaimed;
 
 	@RightAlign(11)
@@ -378,6 +375,9 @@ public class IR3Form2021 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean rentsReceived;
 
+	@UseTrueFalseMappings(fieldName="25 no/yes", falseValue="1", trueValue="0")
+	private boolean incomeFromTaxablePropertySalesReceived;
+
 	@UseTrueFalseMappings
 	private boolean governmentSubsidyReceived;
 
@@ -467,7 +467,6 @@ public class IR3Form2021 implements FormDestination {
 
 
 	@RightAlign(11)
-	@Sum("totalTaxDeducted")
 	private Money taxCreditSubtotal;
 
 	@RightAlign(5)
@@ -711,7 +710,7 @@ public class IR3Form2021 implements FormDestination {
 		return incomeNotLiableForAccEarnersLevy;
 	}
 
-	public Money getincomeSubtotal() {
+	public Money getIncomeSubtotal() {
 		return incomeSubtotal;
 	}
 
@@ -997,14 +996,6 @@ public class IR3Form2021 implements FormDestination {
 
 	public Money getSelfEmployedNetIncome() {
 		return selfEmployedNetIncome;
-	}
-
-	public boolean isIncomeFromTaxablePropertySalesReceived() {
-		return incomeFromTaxablePropertySalesReceived;
-	}
-
-	public void setIncomeFromTaxablePropertySalesReceived(boolean incomeFromTaxablePropertySalesReceived) {
-		this.incomeFromTaxablePropertySalesReceived = incomeFromTaxablePropertySalesReceived;
 	}
 
 	public String getStreetAddressLine1() {
@@ -1982,5 +1973,13 @@ public class IR3Form2021 implements FormDestination {
 
 	public static String getRentsReceived() {
 		return RENTS_RECEIVED;
+	}
+
+	public boolean isIncomeFromTaxablePropertySalesReceived() {
+		return incomeFromTaxablePropertySalesReceived;
+	}
+
+	public void setIncomeFromTaxablePropertySalesReceived(boolean incomeFromTaxablePropertySalesReceived) {
+		this.incomeFromTaxablePropertySalesReceived = incomeFromTaxablePropertySalesReceived;
 	}
 }

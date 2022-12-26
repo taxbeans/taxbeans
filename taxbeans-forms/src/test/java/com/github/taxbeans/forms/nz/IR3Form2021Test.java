@@ -12,7 +12,7 @@ import com.github.taxbeans.model.nz.PortfolioMethod;
 import com.github.taxbeans.model.nz.Salutation;
 
 public class IR3Form2021Test {
-	
+
 	@Test
 	public void test() {
 		final int currentYear = 2021;
@@ -186,8 +186,8 @@ public class IR3Form2021Test {
 		bean.setMinusSignForTotalIncome("-");
 		bean.setMinusSignForIncomeAfterExpenses("-");
 		bean.setMinusSignForTaxableIncome("-");
-		FormProcessor.publishDraft(bean, currentYear, "ir3-%1$s.pdf", IR3FieldMapper.instance(), 
-	    		"Test", "ir3-%1$s-%2$s-draft.pdf");
+		FormProcessor.publishDraft(bean, currentYear, "ir3-%1$s.pdf", IR3FieldMapper.instance(),
+				"Test", "ir3-%1$s-%2$s-draft.pdf");
 	}
 
 }

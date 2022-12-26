@@ -1,19 +1,14 @@
 package com.github.taxbeans.forms.nz;
 
-import org.javamoney.moneta.Money;
-
-import com.github.taxbeans.forms.RightAlign;
-import com.github.taxbeans.forms.SkipIfFalse;
-
 public enum IR3Fields {
 
 	irdNumber,
 	salutation,
-	salutation_mr, 
-	salutation_mrs, 
-	salutation_miss, 
+	salutation_mr,
+	salutation_mrs,
+	salutation_miss,
 	salutation_ms,
-	firstname, 
+	firstname,
 	surname,
 	postalAddressLine1,
 	postalAddressLine2,
@@ -38,11 +33,11 @@ public enum IR3Fields {
 	familyTaxCreditAmount,
 	incomeWithTaxDeductedReceived_false,
 	incomeWithTaxDeductedReceived_true,
-	incomeWithTaxDeductedReceived, 
-	totalPAYEDeducted, 
+	incomeWithTaxDeductedReceived,
+	totalPAYEDeducted,
 	totalGrossIncome,
-	accEarnersLevy, 
-	incomeNotLiableForAccEarnersLevy, 
+	accEarnersLevy,
+	incomeNotLiableForAccEarnersLevy,
 	totalTaxDeducted,
 	schedularPaymentsReceived_false,
 	schedularPaymentsReceived_true,
@@ -174,8 +169,8 @@ public enum IR3Fields {
 	netResidentialRentalIncome,
 	excessResidentialRentalDeductionsCarriedForward,
 	portfolioMethod,
-	portfolioMethod_portfolio, 
-	portfolioMethod_individual, 
+	portfolioMethod_portfolio,
+	portfolioMethod_individual,
 	portfolioMethod_combination,
 	residentialPropertyInterestClaimedReason,
 	residentialPropertyInterestClaimedReason_maoriExemptCompany,

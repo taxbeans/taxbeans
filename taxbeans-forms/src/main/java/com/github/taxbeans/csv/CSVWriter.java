@@ -1,14 +1,15 @@
 package com.github.taxbeans.csv;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.List;
 
 public class CSVWriter {
 
-    public static void writeCSV(String filename, List<String[]> parseFile) {
+    public static void writeCSV(File file, List<String[]> parseFile) {
         try {
-        FileWriter fw = new FileWriter("target/" + filename);
+        FileWriter fw = new FileWriter(file);
         PrintWriter pw = new PrintWriter(fw);
         for (Object[] rows : parseFile) {
             int i = 0;
@@ -25,7 +26,11 @@ public class CSVWriter {
             throw new IllegalStateException(e);
         }
     }
-    
+
+    public static void writeCSV(String filename, List<String[]> parseFile) {
+        writeCSV(new File("target/" + filename), parseFile);
+    }
+
     public static void writeCSV(String filename, Object[][] parseFile) {
         try {
         FileWriter fw = new FileWriter("target/" + filename);
@@ -51,7 +56,7 @@ public class CSVWriter {
 		int count = 0;
 		for (String s : titles) {
 			count++;
-			if (count == 1) 
+			if (count == 1)
 				continue;
 			result = result + "," + s;
         }
