@@ -10,7 +10,7 @@ import com.github.taxbeans.forms.common.FormProcessor;
 import com.github.taxbeans.model.nz.NZBankAccount;
 
 public class IR4Form2022Test {
-	
+
 	@Test
 	public void test() {
 		IR4Form2022 bean = new IR4Form2022();
@@ -20,7 +20,7 @@ public class IR4Form2022Test {
 		nzBankAccount.setBranchNumber("5555");
 		nzBankAccount.setBankAccountNumber("5555555");
 		nzBankAccount.setBankSuffix("55");
-		
+
 		bean.setCompanyTradingNameLine1("Company Name Line 1");
 		bean.setPostalAddressLine1("Postal address 1");
 		bean.setPostalAddressLine2("Postal address 2");
@@ -51,7 +51,7 @@ public class IR4Form2022Test {
 		bean.setCopyOfTaxableIncome(
 				copyOfTaxableIncome);
 		bean.setTotalTaxPayable(copyOfTaxableIncome.multiply(new BigDecimal("0.28")));
-		
+
 		BigDecimal overseasTaxPaid = BigDecimal.ZERO;
 		bean.setOverseasTaxPaid(Money.of(overseasTaxPaid, "NZD"));
 		bean.setBox29D(bean.getTotalTaxPayable().subtract(bean.getOverseasTaxPaid()));
@@ -77,15 +77,17 @@ public class IR4Form2022Test {
 		bean.setShareholder1LossOffsets(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder1SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder1AimTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
+		bean.setShareholder1CurrentAccountIsDebit(false);
 		bean.setShareholder2IrdNumber("555555555");
 		bean.setShareholder2Remuneration(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2ValueOfLoans(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2CurrentAccountBalance(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2LossOffsets(Money.of(BigDecimal.ZERO, "NZD"));
-		bean.setShareholder2SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));	
+		bean.setShareholder2SubventionPayments(Money.of(BigDecimal.ZERO, "NZD"));
 		bean.setShareholder2AimTaxCredits(Money.of(BigDecimal.ZERO, "NZD"));
-		
-		FormProcessor.publishDraft(bean, 2022, "ir4-%1$s.pdf", IR4FieldMapper.instance(), 
+		bean.setShareholder2CurrentAccountIsDebit(false);
+
+		FormProcessor.publishDraft(bean, 2022, "ir4-%1$s.pdf", IR4FieldMapper.instance(),
 	    		"Test", "ir4-%1$s-%2$s-draft.pdf");
 	}
 

@@ -20,222 +20,228 @@ public class IR4Form2022 implements FormDestination {
 
 	@RightAlign(9)
 	private String irdNumber;
-	
+
 	private String companyTradingNameLine1;
-	
+
 	private String companyTradingNameLine2;
-	
+
 	private String postalAddressLine1;
-	
+
 	private String postalAddressLine2;
-	
+
 	private String streetAddressLine1;
-	
+
 	private String streetAddressLine2;
-	
+
 	private String bicCode;
-	
+
 	private String phonePrefix;
-	
+
 	private String phoneNumber;
-	
+
 	@UseChildFields
 	private NZBankAccount bankAccount;
-	
+
 	@UseTrueFalseMappings
 	private boolean nonResident;
-	
+
 	@UseTrueFalseMappings
 	private boolean imputationReturnIncluded;
-	
+
 	@UseTrueFalseMappings
 	private boolean imputationMonetaryEntries;
-	
+
 	@UseTrueFalseMappings
 	private boolean companyCeased;
-	
+
 	@UseTrueFalseMappings
 	private boolean schedularPayments;
-	
+
 	@UseTrueFalseMappings
 	private boolean nzInterest;
-	
+
 	@UseTrueFalseMappings
 	private boolean nzDividends;
-	
+
 	@UseTrueFalseMappings
 	private boolean maoriDistributions;
-	
+
 	@UseTrueFalseMappings
 	private boolean partnershipIncome;
-	
+
 	@RightAlign(11)
 	private Money totalTaxCredits;
-	
+
 	@UseTrueFalseMappings
 	private boolean overseasIncome;
 
 	@UseTrueFalseMappings
 	private boolean	residentialPropertyIncome;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="21", falseValue="Yes", trueValue="No")
 	private boolean businessIncome;
 
 	@UseTrueFalseMappings
 	private boolean overseasPremiums;
-	
+
 	@UseTrueFalseMappings
 	private boolean propertySalesIncome;
 
 	@UseTrueFalseMappings(fieldName="24 yes/no")
 	private boolean otherIncome;
-	
+
 	@RightAlign(11)
 	private Money businessNetProfit;
-	
+
 	@RightAlign(value=11, fieldName="25")
 	private Money netProfitBeforeDonations;
-	
+
 	@UseTrueFalseMappings(fieldName="26 yes/no")
 	private boolean donations;
-	
+
 	@RightAlign(value=11, fieldName="27")
 	private Money netProfitAfterDonations;
-	
-	@UseTrueFalseMappings(fieldName="28 yes/no")
-	//@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
+
+	@UseTrueFalseMappings(fieldName="28 yes/no", falseValue="No", trueValue="Yes")
 	private boolean netLossesBroughtForward;
-	
-	@RightAlign(11)
-	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
+
+	@RightAlign(value=11, fieldName="29")
 	private Money netProfitAfterLossesBroughtForward;
-	
-	@UseTrueFalseMappings
-	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
+
+	@UseTrueFalseMappings(fieldName="30 yes/no")
 	private boolean netLossesFromOtherCompanies;
-	
-	@RightAlign(11)
+
+	@RightAlign(value=11, fieldName="31")
 	private Money taxableIncome;
-	
+
 	@RightAlign(9)
 	@OmitCents
 	@IncludeFormatSpacing
 	private Money copyOfTaxableIncome;
-	
+
 	@RightAlign(11)
 	private Money totalTaxPayable;
-	
+
 	@RightAlign(11)
 	private Money overseasTaxPaid;
-	
+
 	@RightAlign(11)
 	private Money box29D;
-	
+
 	@RightAlign(11)
 	private Money foreignInvestorTaxCredit;
-	
+
 	@RightAlign(11)
 	private Money box29F;
 
 	@RightAlign(11)
 	private Money copyOfTotalImputationCredits;
-	
+
 	@RightAlign(11)
 	private Money box29H;
-	
+
 	@RightAlign(11)
 	private Money copyOfTotalTaxCredits;
-	
+
 	@RightAlign(11)
 	private Money copyOfRLWTCredit;
-	
+
 	@RightAlign(11)
 	private Money residualIncomeTax;
-	
+
 	@UseTrueFalseMappings
 	private boolean creditOrDebit;
-	
+
 	@RightAlign(11)
 	private Money provisionalTaxPaid;
-	
+
 	@RightAlign(11)
 	private Money taxAmountOwed;
-	
+
 	@UseTrueFalseMappings
 	private boolean refundOrTaxToPay;
-	
+
 	@UseTrueFalseMappings
 	private boolean initialProvisionalTaxLiability;
-	
+
 	private String provisionalTaxOption;
-	
+
 	@RightAlign(11)
 	private Money provisionalTaxDue;
-	
+
 	@UseTrueFalseMappings
 	private boolean nonResidentPayments;
-	
+
 	@UseTrueFalseMappings
 	private boolean cfcOrFifIncome;
-	
+
 	@UseTrueFalseMappings
 	private boolean sharesRepurchased;
-	
+
 	@UseTrueFalseMappings
 	private boolean foreignSourcedDividends;
-	
+
 	@UseTrueFalseMappings
 	private boolean controlledByNonResidents;
-	
+
 	private String lowestEconomicInterests;
-	
+
 	private String shareholder1IrdNumber;
-	
+
 	@RightAlign(11)
 	private Money shareholder1Remuneration;
-	
+
 	@RightAlign(11)
 	private Money shareholder1ValueOfLoans;
 
 	@RightAlign(11)
 	private Money shareholder1CurrentAccountBalance;
-	
+
 	@RightAlign(11)
 	private Money shareholder1LossOffsets;
-	
+
 	@RightAlign(11)
 	private Money shareholder1SubventionPayments;
-	
+
 	private String shareholder2IrdNumber;
-	
+
 	@RightAlign(11)
 	private Money shareholder2Remuneration;
-	
+
 	@RightAlign(11)
 	private Money shareholder2ValueOfLoans;
-	
+
 	@RightAlign(11)
 	private Money shareholder2CurrentAccountBalance;
-	
+
 	@RightAlign(11)
 	private Money shareholder2LossOffsets;
-	
+
 	@RightAlign(11)
 	private Money shareholder2SubventionPayments;
-	
+
 	@RightAlign(11)
 	private Money shareholder1AimTaxCredits;
-	
+
 	@RightAlign(11)
 	private Money shareholder2AimTaxCredits;
-	
+
+	@UseTrueFalseMappings(fieldName="20 tick", falseValue="No", trueValue="Yes")
+	private boolean residentialPropertyInterestIncurred;
+
+	@UseTrueFalseMappings(fieldName="CR/DR", falseValue="No", trueValue="Yes")
+	private Boolean shareholder1CurrentAccountIsDebit;
+
+	@UseTrueFalseMappings(fieldName="CR/DRa", falseValue="No", trueValue="Yes")
+	private Boolean shareholder2CurrentAccountIsDebit;
+
 	final Logger logger = LoggerFactory.getLogger(IR4Form2022.class);
 
 	@Skip
 	private String personalisedNaming;
 
 	private int year = 2022;
-	
+
 	public String calculateMinusSign(Money value) {
 		return value.signum() < 0 ? "-" : "";
 	}
@@ -247,7 +253,7 @@ public class IR4Form2022 implements FormDestination {
 	public String getIrdNumber() {
 		return irdNumber;
 	}
-	
+
 	public String getPersonalisedNaming() {
 		return personalisedNaming;
 	}
@@ -846,5 +852,29 @@ public class IR4Form2022 implements FormDestination {
 
 	public void setCompanyTradingNameLine2(String companyTradingNameLine2) {
 		this.companyTradingNameLine2 = companyTradingNameLine2;
+	}
+
+	public Boolean getShareholder1CurrentAccountIsDebit() {
+		return shareholder1CurrentAccountIsDebit;
+	}
+
+	public Boolean getShareholder2CurrentAccountIsDebit() {
+		return shareholder2CurrentAccountIsDebit;
+	}
+
+	public void setShareholder1CurrentAccountIsDebit(Boolean shareholder1CurrentAccountIsDebit) {
+		this.shareholder1CurrentAccountIsDebit = shareholder1CurrentAccountIsDebit;
+	}
+
+	public void setShareholder2CurrentAccountIsDebit(Boolean shareholder2CurrentAccountIsDebit) {
+		this.shareholder2CurrentAccountIsDebit = shareholder2CurrentAccountIsDebit;
+	}
+
+	public boolean isResidentialPropertyInterestIncurred() {
+		return residentialPropertyInterestIncurred;
+	}
+
+	public void setResidentialPropertyInterestIncurred(boolean residentialPropertyInterestIncurred) {
+		this.residentialPropertyInterestIncurred = residentialPropertyInterestIncurred;
 	}
 }

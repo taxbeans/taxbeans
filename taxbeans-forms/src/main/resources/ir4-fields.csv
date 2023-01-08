@@ -44,32 +44,32 @@ totalTaxCredits,12A.8,12A.8,12A.8,17A,17A,17A
 overseasIncome,17,17,17,18,18,18
 overseasIncome_false,Yes,Yes,Yes,Yes,Yes,Yes
 overseasIncome_true,No,No,No,No,No,No
-businessIncome,18,18,18,20 tick,20 tick,20 tick
+businessIncome,18,18,18,20 tick,20 tick,21
 businessIncome_false,Yes,Yes,Yes,No,No,No
 businessIncome_true,No,No,No,Yes,Yes,Yes
-businessNetProfit,12A.15,12A.15,12A.15,20,20B,20B
-propertySalesIncome,N/A,N/A,N/A,21,21,21
+businessNetProfit,12A.15,12A.15,12A.15,20,20B,21B
+propertySalesIncome,N/A,N/A,N/A,21,21,22 yes/no
 propertySalesIncome_false,N/A,N/A,N/A,Yes,Yes,Yes
 propertySalesIncome_true,N/A,N/A,N/A,No,No,No
-overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no,22 yes/no,22 yes/no
+overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no,22 yes/no,23 yes/no
 overseasPremiums_false,Yes,Yes,Yes,Yes,Yes,Yes
 overseasPremiums_true,No,No,No,No,No,No
-otherIncome,20 yes/no,20 yes/no,20 yes/no,23 yes/no,23 yes/no,23 yes/no
+otherIncome,20 yes/no,20 yes/no,20 yes/no,23 yes/no,23 yes/no,24 yes/no
 otherIncome_false,Yes,Yes,Yes,Yes,Yes,Yes
 otherIncome_true,No,No,No,No,No,No
 residentialPropertyIncome,N/A,N/A,N/A,19 yes/no,19 yes/no,19 yes/no
 residentialPropertyIncome_false,N/A,N/A,N/A,0,0,0
 residentialPropertyIncome_true,N/A,N/A,N/A,1,1,1
 netProfitBeforeDonations,12A.11.0,12A.11.0,12A.11.0,24,24,24
-donations,22,22,22,25 yes/no,25 yes/no,25 yes/no
-donations_false,Yes,Yes,Yes,Yes,Yes,Yes
-donations_true,No,No,No,No,No,No
+donations,22,22,22,25 yes/no,25 yes/no,26 yes/no
+donations_false,Yes,Yes,Yes,Yes,Yes,No
+donations_true,No,No,No,No,No,Yes
 netProfitAfterDonations,12A.11.4,12A.11.4,12A.11.4,26,26,26
-netLossesBroughtForward,24,24,24,27 yes/no,27 yes/no,27 yes/no
+netLossesBroughtForward,24,24,24,27 yes/no,27 yes/no,28 yes/no
 netLossesBroughtForward_false,Yes,Yes,Yes,Yes,Yes,Yes
 netLossesBroughtForward_true,No,No,No,No,No,No
 netProfitAfterLossesBroughtForward,12A.11.9,12A.11.9,12A.11.9,28,28,28
-netLossesFromOtherCompanies,26 yes/no,26 yes/no,26 yes/no,29 yes/no,28 yes/no,28 yes/no
+netLossesFromOtherCompanies,26 yes/no,26 yes/no,26 yes/no,29 yes/no,28 yes/no,30 yes/no
 netLossesFromOtherCompanies_false,Yes,Yes,Yes,Yes,Yes,Yes
 netLossesFromOtherCompanies_true,No,No,No,No,No,No
 taxableIncome,12A.11.12,12A.11.12,12A.11.12,30,30,30
