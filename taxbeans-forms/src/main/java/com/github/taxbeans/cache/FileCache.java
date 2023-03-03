@@ -135,4 +135,9 @@ public class FileCache {
 		}
 		return form;
 	}
+
+	public static void setSourceControlPathRelativeToHome(String string) {
+		File f = new File(System.getProperty("user.home"), string);
+		setSourceControlPath(f);
+	}
 }
