@@ -117,6 +117,9 @@ public class FormProcessor {
 			}
 		}
 		if (field.getAnnotation(RightAlign.class) != null) {
+			if (field.getName().equals("overseasTaxPaid")) {
+				LOG.trace("Example of where to place a breakpoint for debugging purposes");
+			}
 			RightAlign annotation = field.getAnnotation(RightAlign.class);
 			int size = annotation.value();
 			value = StringUtils.leftPad(String.valueOf(value), size);

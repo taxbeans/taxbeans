@@ -122,7 +122,7 @@ public class IR4Form2020 implements FormDestination {
 	@RightAlign(11)
 	private Money totalTaxPayable;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="31C")
 	private Money overseasTaxPaid;
 
 	@RightAlign(11)
