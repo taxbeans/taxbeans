@@ -6,12 +6,12 @@ import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.forms.AutoMinusField;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.SkipIfFalse;
-import com.github.taxbeans.forms.Sum;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
@@ -217,9 +217,13 @@ public class IR3Form2020 implements FormDestination {
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money netSchedularPayments;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 19C")
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money nonAllowableDeductionsThisYear;
+
+	@RightAlign(value=11, fieldName="box 19D")
+	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
+	private Money priorYearsNonAllowableDeductionsClaimedThisYear;
 
 	@UseTrueFalseMappings
 	private boolean noOtherIncomeReceived = true;
@@ -246,10 +250,6 @@ public class IR3Form2020 implements FormDestination {
 	private String postalAddressLine1;
 
 	private String postalAddressLine2;
-
-	@RightAlign(11)
-	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
-	private Money priorYearsNonAllowableDeductionsClaimedThisYear;
 
 	@UseValueMappings
 	@SkipIfFalse("returnForPartYear")
@@ -434,6 +434,7 @@ public class IR3Form2020 implements FormDestination {
 
 	@RightAlign(11)
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
+	@AutoMinusField(fieldName="19b minus")
 	private Money totalActiveLTCIncome;
 
 	@RightAlign(11)

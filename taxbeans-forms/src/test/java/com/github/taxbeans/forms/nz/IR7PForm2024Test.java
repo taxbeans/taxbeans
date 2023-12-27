@@ -7,14 +7,14 @@ import org.junit.Test;
 
 import com.github.taxbeans.forms.common.FormProcessor;
 
-public class IR7PForm2022Test {
+public class IR7PForm2024Test {
 
-	private static final int FINANCIAL_YEAR = 2022;
+	private static final int FINANCIAL_YEAR = 2024;
 
 	@Test
 	public void test() {
-		IR7PForm2022 bean = new IR7PForm2022();
-		bean.setYearEnded(2022);
+		IR7PForm2024 bean = new IR7PForm2024();
+		bean.setYearEnded(2024);
 		bean.setIrdNumber("888-888-888");
 		bean.setFullname("Example Partnership");
 		bean.setPartnershipName("Example Partnership Name");

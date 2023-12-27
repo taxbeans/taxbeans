@@ -23,19 +23,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.forms.nz.IR3FormBean;
-
 public class RBNZHistoricalExchangeRatesReader {
 
-	final static Logger logger = LoggerFactory.getLogger(IR3FormBean.class);
-	
+	final static Logger logger = LoggerFactory.getLogger(RBNZHistoricalExchangeRatesReader.class);
+
 	private static volatile Map<String, ExchangeRateInfo> exchangeRateInfo = new HashMap<>();
 
 	public static void main(String[] args) throws IOException {
-		logger.debug(String.format("1 NZD is %1$s USD", getForeignToNZDRate(LocalDate.of(2017,1,17), "USD")));
+		logger.trace(String.format("1 NZD is %1$s USD", getForeignToNZDRate(LocalDate.of(2017,1,17), "USD")));
 		//loadAllRates();
 	}
-	
+
 	private static ExchangeRateInfo loadAllRates(String currency) {
 		ExchangeRateInfo exchangeRateInfo = new ExchangeRateInfo();
 		Map<LocalDate, BigDecimal> exchangeRates = new HashMap<>();
@@ -68,19 +66,19 @@ public class RBNZHistoricalExchangeRatesReader {
 
 		// suppose your formula is in B3
 		for (int rowNum = 6;rowNum<2000;rowNum++) {
-			CellReference cellReference = new CellReference(String.format("%1$s%2$s", currencyColumn, rowNum)); 
-			Row row = sheet.getRow(cellReference.getRow());	
+			CellReference cellReference = new CellReference(String.format("%1$s%2$s", currencyColumn, rowNum));
+			Row row = sheet.getRow(cellReference.getRow());
 			if (row == null) {
-				logger.debug("NZD/USD Rate Loading Complete, number of rates loaded = " + exchangeRates.size());
+				logger.trace("NZD/USD Rate Loading Complete, number of rates loaded = " + exchangeRates.size());
 				break;
 			}
 			Cell cell = row.getCell(cellReference.getCol());
-			
+
 			BigDecimal rate = new BigDecimal(cell.getNumericCellValue()+"");
 			logger.trace("rate = " + rate);
 
-			cellReference = new CellReference(String.format("A%1$s", rowNum)); 
-			row = sheet.getRow(cellReference.getRow());	
+			cellReference = new CellReference(String.format("A%1$s", rowNum));
+			row = sheet.getRow(cellReference.getRow());
 			cell = row.getCell(cellReference.getCol());
 			//spreadsheet is in Pacific/Auckland timezone
 			LocalDate dateCellValue = ZonedDateTime.ofInstant(cell.getDateCellValue().toInstant(), ZoneId.of("Pacific/Auckland")).toLocalDate();
@@ -93,9 +91,9 @@ public class RBNZHistoricalExchangeRatesReader {
 			throw new IllegalStateException("could not load RBNZ rates XLS");
 		}
 	}
-	
+
 	public static BigDecimal getCrossRate(LocalDate date, String fxFrom, String fxTo) {
-		
+
 		return getForeignToNZDRate(date, fxFrom).multiply(getNZDtoForeignRate(date, fxTo));
 		//FileInputStream fis = new FileInputStream("/rbnz-historical-exchange-rates.xlsx");
 //		Workbook wb = new XSSFWorkbook("./target/classes/rbnz-historical-exchange-rates.xlsx");
@@ -103,15 +101,15 @@ public class RBNZHistoricalExchangeRatesReader {
 //		FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
 //
 //		// suppose your formula is in B3
-//		CellReference cellReference = new CellReference("C6"); 
-//		Row row = sheet.getRow(cellReference.getRow());	
+//		CellReference cellReference = new CellReference("C6");
+//		Row row = sheet.getRow(cellReference.getRow());
 //		Cell cell = row.getCell(cellReference.getCol());
 //		return new BigDecimal(cell.getNumericCellValue()+"");
 	}
 
 	@Deprecated
 	public static BigDecimal getForeignToNZDRate(LocalDate date, String foreignCurrency) {
-		
+
 		return BigDecimal.ONE.divide(getNZDtoForeignRate(date, foreignCurrency), MathContext.DECIMAL128);
 		//FileInputStream fis = new FileInputStream("/rbnz-historical-exchange-rates.xlsx");
 //		Workbook wb = new XSSFWorkbook("./target/classes/rbnz-historical-exchange-rates.xlsx");
@@ -119,26 +117,26 @@ public class RBNZHistoricalExchangeRatesReader {
 //		FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
 //
 //		// suppose your formula is in B3
-//		CellReference cellReference = new CellReference("C6"); 
-//		Row row = sheet.getRow(cellReference.getRow());	
+//		CellReference cellReference = new CellReference("C6");
+//		Row row = sheet.getRow(cellReference.getRow());
 //		Cell cell = row.getCell(cellReference.getCol());
 //		return new BigDecimal(cell.getNumericCellValue()+"");
 	}
 
 	@Deprecated
 	public static BigDecimal getNZDtoForeignRate(LocalDate date, String foreignCurrency) {
-		logger.debug("date = " + date);
-		logger.debug("Day of week = " + date.getDayOfWeek());
+		logger.trace("date = " + date);
+		logger.trace("Day of week = " + date.getDayOfWeek());
 		ExchangeRateInfo exchangeRateInfo2 = exchangeRateInfo.get(foreignCurrency);
 		if (exchangeRateInfo2 == null) {
 			exchangeRateInfo.put(foreignCurrency, (exchangeRateInfo2 = loadAllRates(foreignCurrency)));
 		}
 		if (exchangeRateInfo2.isWeekdaysOnly()) {
 			if (date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-				logger.debug("Date requested for Sunday, rewinding to Friday");
+				logger.trace("Date requested for Sunday, rewinding to Friday");
 				date = date.minusDays(2);
 			} else if (date.getDayOfWeek() == DayOfWeek.SATURDAY) {
-				logger.debug("Date requested for Saturday, rewinding to Friday");
+				logger.trace("Date requested for Saturday, rewinding to Friday");
 				date = date.minusDays(1);
 			}
 		}
@@ -153,7 +151,7 @@ public class RBNZHistoricalExchangeRatesReader {
 	public static BigDecimal getForeignToNZDRate(ZonedDateTime zonedDateTime, CurrencyUnit currency) {
 		LocalDate localDate = zonedDateTime.toLocalDate();
 		return getForeignToNZDRate(localDate, currency.getCurrencyCode());
-		
+
 	}
 
 }
