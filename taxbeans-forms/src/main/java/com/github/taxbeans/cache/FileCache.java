@@ -136,8 +136,18 @@ public class FileCache {
 		return form;
 	}
 
+	public static File getUserHome() {
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean isWindows = os.contains("win");
+        File location = new File(System.getProperty("user.home"));
+        if (isWindows) {
+        	location = new File(System.getenv("USERPROFILE"));
+        }
+        return location;
+	}
+
 	public static void setSourceControlPathRelativeToHome(String string) {
-		File f = new File(System.getProperty("user.home"), string);
+		File f = new File(getUserHome(), string);
 		setSourceControlPath(f);
 	}
 }
