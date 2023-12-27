@@ -126,6 +126,11 @@ public class FormProcessor {
 			overrideFieldName = annotation.fieldName();
 			if (!"".equals(overrideFieldName)) {
 				pdfField = acroForm.getField(overrideFieldName);
+				if (pdfField == null) {
+					String s = String.format("Annotation set for field: %s -> %s, but not in form metadata", field.getName(), overrideFieldName);
+					LOG.error(s);
+					throw new IllegalStateException(s);
+				}
 			}
 		} else if (field.getAnnotation(LeftAlign.class) != null) {
 			int size = field.getAnnotation(LeftAlign.class).value();
@@ -221,6 +226,9 @@ public class FormProcessor {
 					//load from classpath
 					InputStream stream = FormProcessor.class.getClassLoader().getResourceAsStream(fileName);
 					form.getParentFile().mkdirs();  //create any required folders on demand
+					if (stream == null) {
+						throw new AssertionError("File doesn't exist: " + fileName);
+					}
 					Files.copy(stream, form.toPath());
 					if (!form.exists()) {
 						throw new AssertionError("Form should exist after loading into cache from classpath");

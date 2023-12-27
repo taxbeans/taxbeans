@@ -1,50 +1,36 @@
 package com.github.taxbeans.forms.nz;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDResources;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.exception.TaxBeansException;
+import com.github.taxbeans.forms.AutoMinusField;
 import com.github.taxbeans.forms.IncludeFormatSpacing;
 import com.github.taxbeans.forms.OmitCents;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.SkipIfFalse;
+import com.github.taxbeans.forms.Sum;
 import com.github.taxbeans.forms.UseChildFields;
 import com.github.taxbeans.forms.UseDayMonthYear;
+import com.github.taxbeans.forms.UseSeparateYesNoCheckboxes;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.UseValueMappings;
-import com.github.taxbeans.forms.utils.TaxReturnUtils;
+import com.github.taxbeans.forms.common.FormDestination;
 import com.github.taxbeans.model.nz.NZBankAccount;
+import com.github.taxbeans.model.nz.PortfolioMethod;
+import com.github.taxbeans.model.nz.ResidentialPropertyInterestClaimedReason;
 import com.github.taxbeans.model.nz.Salutation;
 
-public class IR3FormBean {
+public class IR3Form2023 implements FormDestination {
 
-	static {
-		if (true) {
-		throw new AssertionError();
-		}
-	}
+	private static final String PORTFOLIO_INVESTMENT_ENTITY_INCOME_RECEIVED = "portfolioInvestmentEntityIncomeReceived";
+
+	private static final String RESIDENTIAL_PROPERTY_INTEREST_INCURRED = "residentialPropertyInterestIncurred";
+
+	private static final String GOVERNMENT_SUBSIDY_RECEIVED = "governmentSubsidyReceived";
 
 	private static final String EXCESS_IMPUTATION_CREDITS_BROUGHT_FORWARD_ELIGIBLE = "excessImputationCreditsBroughtForwardEligible";
 
@@ -62,6 +48,10 @@ public class IR3FormBean {
 
 	private static final String RENTS_RECEIVED = "rentsReceived";
 
+	private static final String residentialPropertyIncomeReceivedField = "residentialPropertyIncomeReceived";
+
+	private static final String incomeFromTaxablePropertySalesReceivedField = "incomeFromTaxablePropertySalesReceived";
+
 	private static final String SCHEDULAR_PAYMENTS_RECEIVED = "schedularPaymentsReceived";
 
 	private static final String TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED = "trustOrEstateIncomeFromNZReceived";
@@ -74,10 +64,10 @@ public class IR3FormBean {
 	private Money adjustedLTCIncome;
 
 	@SkipIfFalse(EXPENSES_OTHER_RECEIVED)
-	private String alternativePersonFirstNamesCompletedReturn;
+	private String alternativePersonFirstNamesCompletedReturn = "";
 
 	@SkipIfFalse(EXPENSES_OTHER_RECEIVED)
-	private String alternativePersonSurnameCompletedReturn;
+	private String alternativePersonSurnameCompletedReturn = "";
 
 	@RightAlign(11)
 	@SkipIfFalse("netLossesBroughtForwardClaimed")
@@ -93,18 +83,20 @@ public class IR3FormBean {
 	private String businessIndustryClassificationCode;
 
 	@UseDayMonthYear
-	private LocalDate dateEnd2018TaxReturn;
+	private LocalDate dateEndCurrentYearTaxReturn;
 
 	@UseDayMonthYear
+	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private LocalDate dateEndExcludedOverseasIncome;
 
 	@UseDayMonthYear
 	private LocalDate dateOfBirth;
 
 	@UseDayMonthYear
-	private LocalDate dateStart2018TaxReturn;
+	private LocalDate dateStartCurrentYearTaxReturn;
 
 	@UseDayMonthYear
+	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private LocalDate dateStartExcludedOverseasIncome;
 
 	@Skip
@@ -153,8 +145,11 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean incomeFromLTCReceived;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="25 no/yes", falseValue="1", trueValue="0")
 	private boolean incomeFromSelfEmploymentReceived;
+
+	@UseTrueFalseMappings(fieldName="26 no/yes")
+	private boolean incomeFromTaxablePropertySalesReceived;
 
 	@RightAlign(11)
 	private Money incomeNotLiableForAccEarnersLevy;
@@ -177,10 +172,13 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean interestFromNZReceived;
 
+	@UseTrueFalseMappings
+	private boolean residentialPropertyInterestIncurred;
+
 	@RightAlign(9)
 	private String irdNumber;
 
-	final Logger logger = LoggerFactory.getLogger(IR3FormBean.class);
+	final Logger logger = LoggerFactory.getLogger(IR3Form2023.class);
 
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private String minusSignForAdjustedLTCIncome;
@@ -189,9 +187,9 @@ public class IR3FormBean {
 
 	private String minusSignForIncomeSubtotal;
 
-	@SkipIfFalse(IR3FormBean.RENTS_RECEIVED)
+	@SkipIfFalse(RENTS_RECEIVED)
+	@RightAlign(value=1, fieldName="box 24 minus")
 	private String minusSignForNetRents;
-
 
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private String minusSignForNZTotalEstateOrCompliantTrustIncome;
@@ -199,8 +197,11 @@ public class IR3FormBean {
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private String minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust;
 
-	@SkipIfFalse(IR3FormBean.OTHER_INCOME_RECEIVED)
+	@Skip
 	private String minusSignForRLWTTaxCredit;
+
+	@SkipIfFalse(incomeFromTaxablePropertySalesReceivedField)
+	private String minusSignForProfitFromSaleOfProperty;
 
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private String minusSignForSchedularNetPayments;
@@ -208,7 +209,7 @@ public class IR3FormBean {
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private String minusSignForSchedularPaymentsExpenses;
 
-	@SkipIfFalse(IR3FormBean.IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED)
+	@SkipIfFalse(IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED)
 	private String minusSignForSelfEmployedNetIncome;
 
 	private String minusSignForTaxableIncome;
@@ -238,6 +239,38 @@ public class IR3FormBean {
 	private Money netRents;
 
 	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money totalResidentialIncome;
+
+	@RightAlign(11)
+	@SkipIfFalse(RESIDENTIAL_PROPERTY_INTEREST_INCURRED)
+	private Money totalInterestOnResidentialProperty;
+
+	@RightAlign(11)
+	@SkipIfFalse(RESIDENTIAL_PROPERTY_INTEREST_INCURRED)
+	private Money residentialPropertInterestClaimed;
+
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money residentialRentalDeductions;
+
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money excessResidentialRentalDeductionsBroughtForward;
+
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money residentialRentalDeductionsClaimed;
+
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money netResidentialRentalIncome;
+
+	@RightAlign(11)
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money excessResidentialRentalDeductionsCarriedForward;
+
+	@RightAlign(11)
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
 	private Money netSchedularPayments;
 
@@ -245,7 +278,7 @@ public class IR3FormBean {
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
 	private Money nonAllowableDeductionsThisYear;
 
-	@UseTrueFalseMappings
+	@Skip
 	private boolean noOtherIncomeReceived = true;
 
 	@SkipIfFalse(OTHER_INCOME_RECEIVED)
@@ -283,15 +316,14 @@ public class IR3FormBean {
 	@SkipIfFalse("refundDue")
 	private Money refundCopied;
 
-	@RightAlign(11)
-	@SkipIfFalse("refundDue")
-	private Money refundCopiedPlusOverpayment2018;
+	@Skip
+	private Money refundCopiedPlusOverpaymentCurrentYear;
 
 	@Skip
 	private boolean refundDue;
 
 	@UseTrueFalseMappings
-	private boolean refundIsTransferredTo2018;
+	private boolean refundIsTransferredToCurrentYear;
 
 	@UseTrueFalseMappings
 	@SkipIfFalse("refundDue")
@@ -306,7 +338,6 @@ public class IR3FormBean {
 
 	@UseTrueFalseMappings
 	private boolean refundIsTransferredToStudentLoan;
-
 
 	@RightAlign(11)
 	@SkipIfFalse("refundIsTransferredToSomeoneElsesStudentLoan")
@@ -334,31 +365,67 @@ public class IR3FormBean {
 	@SkipIfFalse("refundIsTransferredToSomeoneElsesTaxAccount")
 	private String refundOtherTaxAccountReceiverYearEnded31March;
 
-
-	@RightAlign(11)
-	@SkipIfFalse("refundDue")
-	private Money refundOverpayment2018;
+	@Skip
+	private Money refundOverpaymentCurrentYear;
 
 	@RightAlign(11)
 	@SkipIfFalse("refundDue")
 	private Money refundTotal;
 
 	@RightAlign(11)
-	@SkipIfFalse("refundIsTransferredTo2018")
-	private Money refundTransferTo2018;
+	@SkipIfFalse("refundIsTransferredToCurrentYear")
+	private Money refundTransferToCurrentYear;
 
 	@RightAlign(11)
 	@SkipIfFalse("refundIsTransferredToStudentLoan")
 	private Money refundTransferToStudentLoan;
 
 	@UseTrueFalseMappings
+	private boolean residentialPropertyIncomeReceived;
+
+	@UseSeparateYesNoCheckboxes
 	private boolean rentsReceived;
 
+	@UseTrueFalseMappings(fieldName="27 no/yes")
+	private boolean governmentSubsidyReceived;
+
+	@UseTrueFalseMappings
+	private boolean portfolioInvestmentEntityIncomeReceived;
 
 	@RightAlign(11)
-	@SkipIfFalse(IR3FormBean.OTHER_INCOME_RECEIVED)
+	@SkipIfFalse(PORTFOLIO_INVESTMENT_ENTITY_INCOME_RECEIVED)
+	@AutoMinusField(fieldName="36A minus")
+	private Money totalPIEDeductions;
+
+	@RightAlign(11)
+	@SkipIfFalse(PORTFOLIO_INVESTMENT_ENTITY_INCOME_RECEIVED)
+	@AutoMinusField(fieldName="36B minus")
+	private Money totalPIEIncome;
+
+	@RightAlign(11)
+	@SkipIfFalse(PORTFOLIO_INVESTMENT_ENTITY_INCOME_RECEIVED)
+	@AutoMinusField(fieldName="36C minus")
+	private Money pieCalculationOutcome;
+
+	@UseValueMappings
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private PortfolioMethod portfolioMethod;
+
+	@UseValueMappings
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private ResidentialPropertyInterestClaimedReason residentialPropertyInterestClaimedReason;
+
+	@RightAlign(11)
+	@SkipIfFalse(incomeFromTaxablePropertySalesReceivedField)
 	private Money residentialLandWithholdingTaxCredit;
 
+	@RightAlign(11)
+	@SkipIfFalse(incomeFromTaxablePropertySalesReceivedField)
+	private Money profitFromSaleOfProperty;
+
+	@RightAlign(value=11)
+	@SkipIfFalse(GOVERNMENT_SUBSIDY_RECEIVED)
+	private Money totalGovernmentSubsidy;
 
 	@RightAlign(11)
 	private Money residualIncomeTax;
@@ -366,10 +433,8 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean residualIncomeTaxDebitHigherThan2500Dollars;
 
-
 	@UseTrueFalseMappings
 	private boolean residualIncomeTaxIsCredit;
-
 
 	@UseTrueFalseMappings
 	private boolean returnForPartYear;
@@ -377,10 +442,8 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean salaryShareholderEmployeeNotTaxed;
 
-
 	@UseValueMappings
 	private Salutation salutation;
-
 
 	@RightAlign(11)
 	@SkipIfFalse(SCHEDULAR_PAYMENTS_RECEIVED)
@@ -389,30 +452,24 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean schedularPaymentsReceived;
 
-
 	@RightAlign(11)
 	@SkipIfFalse(IS_INCOME_FROM_SELF_EMPLOYMENT_RECEIVED)
 	private Money selfEmployedNetIncome;
-
 
 	@UseTrueFalseMappings
 	private boolean shareholderEmployeeSalaryOnlyInFuture;
 
 	private String streetAddressLine1;
 
-
 	private String streetAddressLine2;
-
 
 	@UseTrueFalseMappings
 	private boolean superannuationSchemeIncomeFromOverseas;
 
 	private String surname;
 
-
 	@UseTrueFalseMappings
 	private boolean taxableDistributionsFromMaoriAuthorityReceived;
-
 
 	@RightAlign(11)
 	private Money taxableIncome;
@@ -420,23 +477,20 @@ public class IR3FormBean {
 	@RightAlign(11)
 	private Money taxCalculationResult;
 
-
 	@RightAlign(2)
 	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private String taxCreditQualifyingMonthsNumber;
 
-
 	@RightAlign(11)
+	@Sum("totalTaxDeducted")
 	private Money taxCreditSubtotal;
 
 	@RightAlign(5)
 	@SkipIfFalse("excludedOverseasIncomeReceived")
 	private Money taxCreditValue;
 
-
 	@RightAlign(11)
 	private Money taxOnTaxableIncome;
-
 
 	@UseTrueFalseMappings
 	private boolean taxOnTaxableIncomeIsCredit;
@@ -445,12 +499,11 @@ public class IR3FormBean {
 	@OmitCents
 	@IncludeFormatSpacing
 	@SkipIfFalse("residualIncomeTaxDebitHigherThan2500Dollars")
-	private Money taxPayment2018;
-
+	private Money taxPaymentCurrentYear;
 
 	@RightAlign(1)
 	@SkipIfFalse("residualIncomeTaxDebitHigherThan2500Dollars")
-	private String taxPaymentSEROption2018;
+	private String taxPaymentSEROptionCurrentYear;
 
 
 	@RightAlign(11)
@@ -460,11 +513,9 @@ public class IR3FormBean {
 	@RightAlign(11)
 	private Money totalActivePartnershipIncome;
 
-
 	@RightAlign(11)
 	@SkipIfFalse("dividendsFromNZReceived")
 	private Money totalDividendImputationCredits;
-
 
 	@RightAlign(11)
 	@SkipIfFalse("dividendsFromNZReceived")
@@ -474,11 +525,9 @@ public class IR3FormBean {
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private Money totalEstateOrTrustIncome;
 
-
 	@RightAlign(11)
 	@SkipIfFalse("dividendsFromNZReceived")
 	private Money totalGrossDividends;
-
 
 	@RightAlign(11)
 	private Money totalGrossIncome;
@@ -487,10 +536,8 @@ public class IR3FormBean {
 	@SkipIfFalse(INTEREST_FROM_NZ_RECEIVED)
 	private Money totalGrossInterest;
 
-
 	@RightAlign(11)
 	private Money totalIncome;
-
 
 	@RightAlign(11)
 	@SkipIfFalse(INCOME_FROM_LTC_RECEIVED)
@@ -542,6 +589,9 @@ public class IR3FormBean {
 	private Money totalShareholderEmployeeSalary;
 
 	@RightAlign(11)
+	private Money shareholderAIMTaxCreditAmount;
+
+	@RightAlign(11)
 	@SkipIfFalse(TRUST_OR_ESTATE_INCOME_FROM_NZ_RECEIVED)
 	private Money totalTaxableDistributionsFromNonComplyingTrusts;
 
@@ -566,7 +616,7 @@ public class IR3FormBean {
 	@UseTrueFalseMappings
 	private boolean unpaidMajorWorkingShareholderWfFTCELigible;
 
-	private int year = 2017;
+	private int year = 2023;
 
 	private String calculateMinusSign(Money value) {
 		return value.signum() < 0 ? "-" : "";
@@ -604,8 +654,8 @@ public class IR3FormBean {
 		return businessIndustryClassificationCode;
 	}
 
-	public LocalDate getDateEnd2018TaxReturn() {
-		return dateEnd2018TaxReturn;
+	public LocalDate getDateEndCurrentYearTaxReturn() {
+		return dateEndCurrentYearTaxReturn;
 	}
 
 	public LocalDate getDateEndExcludedOverseasIncome() {
@@ -616,8 +666,8 @@ public class IR3FormBean {
 		return dateOfBirth;
 	}
 
-	public LocalDate getDateStart2018TaxReturn() {
-		return dateStart2018TaxReturn;
+	public LocalDate getDateStartCurrentYearTaxReturn() {
+		return dateStartCurrentYearTaxReturn;
 	}
 
 	public LocalDate getDateStartExcludedOverseasIncome() {
@@ -635,10 +685,6 @@ public class IR3FormBean {
 	public Money getFamilyTaxCreditAmount() {
 		return familyTaxCreditAmount;
 	}
-
-//	private Map<String, String> getFieldToPropertyMap() {
-//		return IR3FieldMapper.getFieldToPropertyMap(year);
-//	}
 
 	public String getFirstname() {
 		return firstname;
@@ -686,6 +732,14 @@ public class IR3FormBean {
 
 	public String getMinusSignForRLWTTaxCredit() {
 		return minusSignForRLWTTaxCredit;
+	}
+
+	public String getMinusSignForProfitFromSaleOfProperty() {
+		return minusSignForProfitFromSaleOfProperty;
+	}
+
+	public void setMinusSignForProfitFromSaleOfProperty(String minusSignForProfitFromSaleOfProperty) {
+		this.minusSignForProfitFromSaleOfProperty = minusSignForProfitFromSaleOfProperty;
 	}
 
 	public String getMinusSignForSchedularNetPayments() {
@@ -736,6 +790,54 @@ public class IR3FormBean {
 		return netRents;
 	}
 
+	public Money getResidentialRentalDeductions() {
+		return residentialRentalDeductions;
+	}
+
+	public Money getExcessResidentialRentalDeductionsBroughtForward() {
+		return excessResidentialRentalDeductionsBroughtForward;
+	}
+
+	public Money getResidentialRentalDeductionsClaimed() {
+		return residentialRentalDeductionsClaimed;
+	}
+
+	public Money getNetResidentialRentalIncome() {
+		return netResidentialRentalIncome;
+	}
+
+	public Money getExcessResidentialRentalDeductionsCarriedForward() {
+		return excessResidentialRentalDeductionsCarriedForward;
+	}
+
+	public void setResidentialRentalDeductions(Money residentialRentalDeductions) {
+		this.residentialRentalDeductions = residentialRentalDeductions;
+	}
+
+	public void setExcessResidentialRentalDeductionsBroughtForward(Money excessResidentialRentalDeductionsBroughtForward) {
+		this.excessResidentialRentalDeductionsBroughtForward = excessResidentialRentalDeductionsBroughtForward;
+	}
+
+	public void setResidentialRentalDeductionsClaimed(Money residentialRentalDeductionsClaimed) {
+		this.residentialRentalDeductionsClaimed = residentialRentalDeductionsClaimed;
+	}
+
+	public void setNetResidentialRentalIncome(Money netResidentialRentalIncome) {
+		this.netResidentialRentalIncome = netResidentialRentalIncome;
+	}
+
+	public void setExcessResidentialRentalDeductionsCarriedForward(Money excessResidentialRentalDeductionsCarriedForward) {
+		this.excessResidentialRentalDeductionsCarriedForward = excessResidentialRentalDeductionsCarriedForward;
+	}
+
+	public Money getTotalResidentialIncome() {
+		return totalResidentialIncome;
+	}
+
+	public void setTotalResidentialIncome(Money totalResidentialIncome) {
+		this.totalResidentialIncome = totalResidentialIncome;
+	}
+
 	public Money getNetSchedularPayments() {
 		return netSchedularPayments;
 	}
@@ -776,11 +878,6 @@ public class IR3FormBean {
 		return priorYearsNonAllowableDeductionsClaimedThisYear;
 	}
 
-	//this class is no longer used, year specific classes are used instead
-//	private Map<String, String> getPropertyToFieldMap() {
-//		return IR3FieldMapper.getPropertyToFieldMap(year);
-//	}
-
 	public int getReasonForTaxReturnPartYear() {
 		return reasonForTaxReturnPartYear;
 	}
@@ -789,8 +886,8 @@ public class IR3FormBean {
 		return refundCopied;
 	}
 
-	public Money getRefundCopiedPlusOverpayment2018() {
-		return refundCopiedPlusOverpayment2018;
+	public Money getRefundCopiedPlusOverpaymentCurrentYear() {
+		return refundCopiedPlusOverpaymentCurrentYear;
 	}
 
 	public Money getRefundOtherStudentLoanReceiverAmount() {
@@ -821,16 +918,16 @@ public class IR3FormBean {
 		return refundOtherTaxAccountReceiverYearEnded31March;
 	}
 
-	public Money getRefundOverpayment2018() {
-		return refundOverpayment2018;
+	public Money getRefundOverpaymentCurrentYear() {
+		return refundOverpaymentCurrentYear;
 	}
 
 	public Money getRefundTotal() {
 		return refundTotal;
 	}
 
-	public Money getRefundTransferTo2018() {
-		return refundTransferTo2018;
+	public Money getRefundTransferToCurrentYear() {
+		return refundTransferToCurrentYear;
 	}
 
 	public Money getRefundTransferToStudentLoan() {
@@ -839,6 +936,30 @@ public class IR3FormBean {
 
 	public Money getResidentialLandWithholdingTaxCredit() {
 		return residentialLandWithholdingTaxCredit;
+	}
+
+	public Money getProfitFromSaleOfProperty() {
+		return profitFromSaleOfProperty;
+	}
+
+	public Money getTotalGovernmentSubsidy() {
+		return totalGovernmentSubsidy;
+	}
+
+	public void setTotalGovernmentSubsidy(Money totalGovernmentSubsidy) {
+		this.totalGovernmentSubsidy = totalGovernmentSubsidy;
+	}
+
+	public void setProfitFromSaleOfProperty(Money profitFromSaleOfProperty) {
+		this.profitFromSaleOfProperty = profitFromSaleOfProperty;
+	}
+
+	public boolean isGovernmentSubsidyReceived() {
+		return governmentSubsidyReceived;
+	}
+
+	public void setGovernmentSubsidyReceived(boolean governmentSubsidyReceived) {
+		this.governmentSubsidyReceived = governmentSubsidyReceived;
 	}
 
 	public Money getResidualIncomeTax() {
@@ -855,6 +976,14 @@ public class IR3FormBean {
 
 	public Money getSelfEmployedNetIncome() {
 		return selfEmployedNetIncome;
+	}
+
+	public boolean isIncomeFromTaxablePropertySalesReceived() {
+		return incomeFromTaxablePropertySalesReceived;
+	}
+
+	public void setIncomeFromTaxablePropertySalesReceived(boolean incomeFromTaxablePropertySalesReceived) {
+		this.incomeFromTaxablePropertySalesReceived = incomeFromTaxablePropertySalesReceived;
 	}
 
 	public String getStreetAddressLine1() {
@@ -893,12 +1022,12 @@ public class IR3FormBean {
 		return taxOnTaxableIncome;
 	}
 
-	public Money getTaxPayment2018() {
-		return taxPayment2018;
+	public Money getTaxPaymentCurrentYear() {
+		return taxPaymentCurrentYear;
 	}
 
-	public String getTaxPaymentSEROption2018() {
-		return taxPaymentSEROption2018;
+	public String getTaxPaymentSEROptionCurrentYear() {
+		return taxPaymentSEROptionCurrentYear;
 	}
 
 	public Money getTotalActiveLTCIncome() {
@@ -1085,8 +1214,8 @@ public class IR3FormBean {
 		return refundDue;
 	}
 
-	public boolean isRefundIsTransferredTo2018() {
-		return refundIsTransferredTo2018;
+	public boolean isRefundIsTransferredToCurrentYear() {
+		return refundIsTransferredToCurrentYear;
 	}
 
 	public boolean isRefundIsTransferredToOther() {
@@ -1107,6 +1236,22 @@ public class IR3FormBean {
 
 	public boolean isRentsReceived() {
 		return rentsReceived;
+	}
+
+	public boolean isResidentialPropertyIncomeReceived() {
+		return residentialPropertyIncomeReceived;
+	}
+
+	public boolean isExcludedOverseasIncomeReceived() {
+		return excludedOverseasIncomeReceived;
+	}
+
+	public void setExcludedOverseasIncomeReceived(boolean excludedOverseasIncomeReceived) {
+		this.excludedOverseasIncomeReceived = excludedOverseasIncomeReceived;
+	}
+
+	public void setResidentialPropertyIncomeReceived(boolean residentialPropertyIncomeReceived) {
+		this.residentialPropertyIncomeReceived = residentialPropertyIncomeReceived;
 	}
 
 	public boolean isResidualIncomeTaxDebitHigherThan2500Dollars() {
@@ -1161,190 +1306,13 @@ public class IR3FormBean {
 		return unpaidMajorWorkingShareholderWfFTCELigible;
 	}
 
-//	public void processField(PDAcroForm acroForm, String fieldName, Object value, Field f) throws IOException {
-//		PDField pdField = acroForm.getField(fieldName);
-//		if (pdField == null) {
-//			logger.error(fieldName + "->" + pdField);
-//		}
-//		if (f.getAnnotation(Skip.class) != null) {
-//			return;
-//		}
-//		if (value instanceof Money) {
-//			if (f.getAnnotation(OmitCents.class) != null) {
-//				value = TaxReturnUtils.formatDollarsField((Money) value);
-//				if (f.getAnnotation(IncludeFormatSpacing.class) != null) {
-//					String valueText = (String)value;
-//					if (valueText.length() >= 4) {
-//						valueText = valueText.substring(0, valueText.length()-3) + " " +
-//								valueText.substring(valueText.length()-3);
-//						value = valueText;
-//					}
-//				}
-//			} else {
-//				value = TaxReturnUtils.formatMoneyField((Money) value);
-//			}
-//		}
-//		if (f.getAnnotation(RightAlign.class) != null) {
-//			int size = f.getAnnotation(RightAlign.class).value();
-//			value = StringUtils.leftPad(String.valueOf(value), size);
-//		}
-//		if (f.getAnnotation(UseValueMappings.class) != null && pdField instanceof PDNonTerminalField) {
-//			PDNonTerminalField nonTerminalField = (PDNonTerminalField) pdField;
-//			nonTerminalField.getChildren().get(Integer.parseInt(String.valueOf(value))).setValue("a");
-//		} else if (f.getAnnotation(UseValueMappings.class) != null) {
-//			if (pdField instanceof PDCheckBox) {
-//				pdField.setValue(String.valueOf(value));
-//				return;
-//			}
-//		}
-//		if (pdField == null) {
-//			List<PDField> fields = acroForm.getFields();
-//			for (PDField field1 : fields) {
-//				System.out.println("Candidate field: " + field1.getFullyQualifiedName());
-//			}
-//		}
-//		pdField.setValue(String.valueOf(value));
-//	}
+	public boolean isResidentialPropertyInterestIncurred() {
+		return residentialPropertyInterestIncurred;
+	}
 
-	//assumes the forms are in the user's Downloads folder
-//	public void publishDraft() {
-//		try {
-//			File ir3Form = new File(
-//					new File("target/classes"), //new File(System.getProperty("user.home"), "Downloads"),
-//					String.format("ir3-%1$s.pdf", year));
-//			PDDocument pdfTemplate = PDDocument.load(ir3Form);
-//
-//			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
-//			PDAcroForm acroForm = docCatalog.getAcroForm();
-//			Map<String, Object> describe = PropertyUtils.describe(this);
-//			Map<IRFieldMapKey, String> propertyToFieldMap = this.getPropertyToFieldMap();
-//			String key = null;
-//			try {
-//				for (Map.Entry<String, Object> entry : describe.entrySet()) {
-//					key = entry.getKey();
-//					Object value = entry.getValue();
-//					if ("describeForm".equals(value)) {
-//						// acroForm.get
-//						List<PDField> fieldList = acroForm.getFields();
-//
-//						String[] fieldArray = new String[fieldList.size()];
-//						int i = 0;
-//						for (PDField sField : fieldList) {
-//							fieldArray[i] = sField.getFullyQualifiedName();
-//							i++;
-//						}
-//						for (String f : fieldArray) {
-//							// PDField field = acroForm.getField(f);
-//							logger.info("Field name is: " + f);
-//						}
-//						throw new AssertionError("Exiting due to issue with fields");
-//					}
-//					System.out.println(key + "->" + value);
-//					if (key.equals("reasonForTaxReturnPartYear")) {
-//						System.out.println("incomeOtherReceived");
-//					}
-//					if (key.equals("class") || key.equals("year")) {
-//						// todo exclude fields by annotation
-//						continue;
-//					}
-//					Field f = this.getClass().getDeclaredField(key);
-//					f.setAccessible(true);
-//					Object field = f.get(this);
-//					SkipIfFalse annotation = f.getAnnotation(SkipIfFalse.class);
-//					if (annotation != null) {
-//						Field declaredField = this.getClass().getDeclaredField(annotation.value());
-//						declaredField.setAccessible(true);
-//						if (!(boolean) declaredField.get(this)) {
-//							continue;
-//						}
-//					}
-//					if (f.getAnnotation(UseChildFields.class) != null) {
-//						Map<String, Object> describeChild = PropertyUtils.describe(field);
-//						for (Map.Entry<String, Object> childEntry : describeChild.entrySet()) {
-//							String childKey = childEntry.getKey();
-//							if ("class".equals(childKey)) {
-//								continue;
-//							}
-//							Object childValue = childEntry.getValue();
-//							String fieldName = propertyToFieldMap.get(childKey);
-//							PDField pdField = acroForm.getField(fieldName);
-//							System.out.println(fieldName + "->" + pdField);
-//							pdField.setValue(String.valueOf(childValue));
-//							System.out.println(fieldName + "->" + pdField);
-//						}
-//					} else {
-//						// String fieldName = propertyToFieldMap.get(key);
-//						if (f.getAnnotation(UseDayMonthYear.class) != null) {
-//							LocalDate localDate = (LocalDate) value;
-//							if (value == null) {
-//								//leave the field blank
-//								continue;
-//							}
-//							int dayOfMonth = localDate.getDayOfMonth();
-//							processField(acroForm, propertyToFieldMap.get(key + "_day"),
-//									dayOfMonth >= 10 ? dayOfMonth : "0" + dayOfMonth, f);
-//							int monthValue = localDate.getMonthValue();
-//							processField(acroForm, propertyToFieldMap.get(key + "_month"),
-//									monthValue >= 10 ? monthValue : "0" + monthValue, f);
-//							int year2 = localDate.getYear();
-//							processField(acroForm, propertyToFieldMap.get(key + "_year"),
-//									year2 >= 10 ? year2 : "0" + year2, f);
-//						} else if (f.getAnnotation(UseTrueFalseMappings.class) != null) {
-//							String mappedValue = (Boolean) value ? propertyToFieldMap.get(key + "_true")
-//									: propertyToFieldMap.get(key + "_false");
-//							String fieldName = propertyToFieldMap.get(key);
-//							if (fieldName == null) {
-//								propertyToFieldMap.entrySet().forEach(action ->
-//									logger.error(String.format("%s -> %s", action.getKey(), action.getValue())));
-//								throw new AssertionError(String.format("Boolean field: %s mapped to null, possible " +
-//									"cause is missing Enum field in IR3Fields", key));
-//							}
-//							processField(acroForm, fieldName, mappedValue, f);
-//						} else if (f.getAnnotation(UseValueMappings.class) != null) {
-//							String mappedValue = propertyToFieldMap.get(key + "_" + value);
-//							processField(acroForm, propertyToFieldMap.get(key), mappedValue, f);
-//						} else {
-//							processField(acroForm, propertyToFieldMap.get(key), value, f);
-//						}
-//					}
-//				}
-//			} catch (NullPointerException e) {
-//				logger.error("Error processing: {}", key);
-//				throw e;
-//			}
-//			File parent = destinationDirectory != null ? new File(destinationDirectory)
-//					: new File("target/classes"); //new File(System.getProperty("user.home"), "Downloads");
-//			String lowerCase = this.getFirstname().split(" ")[0].toLowerCase();
-//			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
-//			File ir3DraftForm = new File(
-//					parent,
-//					String.format("ir3-%1$s-%2$s-draft.pdf", year, lowerCase));
-//			//flattening causes fields to disappear
-////			acroForm.setNeedAppearances(false);
-////
-////			for (PDPage page : pdfTemplate.getPages()) {
-////				for (PDAnnotation annot : page.getAnnotations()) {
-////					annot.setPage(page);
-////				}
-////			}
-////
-////			// Add the missing resources to the form
-////			PDResources dr = new PDResources();
-////			dr.put(COSName.getPDFName("Courier"), PDType1Font.COURIER);
-////			dr.put(COSName.getPDFName("Helvetica"), PDType1Font.HELVETICA);
-////
-////			acroForm.setDefaultResources(dr);
-////
-////			acroForm.flatten();
-//			acroForm.setXFA(null);
-//			acroForm.setNeedAppearances(true);
-//			pdfTemplate.save(ir3DraftForm);
-//			pdfTemplate.close();
-//			logger.info("IR3 Form Completed Successfully");
-//		} catch (Exception e) {
-//			throw new TaxBeansException(e);
-//		}
-//	}
+	public void setResidentialPropertyInterestIncurred(boolean residentialPropertyInterestIncurred) {
+		this.residentialPropertyInterestIncurred = residentialPropertyInterestIncurred;
+	}
 
 	public void setAccEarnersLevy(Money accEarnersLevy) {
 		this.accEarnersLevy = accEarnersLevy;
@@ -1378,8 +1346,8 @@ public class IR3FormBean {
 		this.businessIndustryClassificationCode = businessIndustryClassificationCode;
 	}
 
-	public void setDateEnd2018TaxReturn(LocalDate dateEnd2018TaxReturn) {
-		this.dateEnd2018TaxReturn = dateEnd2018TaxReturn;
+	public void setDateEndCurrentYearTaxReturn(LocalDate dateEndCurrentYearTaxReturn) {
+		this.dateEndCurrentYearTaxReturn = dateEndCurrentYearTaxReturn;
 	}
 
 	public void setDateEndExcludedOverseasIncome(LocalDate dateEndExcludedOverseasIncome) {
@@ -1390,8 +1358,8 @@ public class IR3FormBean {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public void setDateStart2018TaxReturn(LocalDate dateStart2018TaxReturn) {
-		this.dateStart2018TaxReturn = dateStart2018TaxReturn;
+	public void setDateStartCurrentYearTaxReturn(LocalDate dateStartCurrentYearTaxReturn) {
+		this.dateStartCurrentYearTaxReturn = dateStartCurrentYearTaxReturn;
 	}
 
 	public void setDateStartExcludedOverseasIncome(LocalDate dateStartExcludedOverseasIncome) {
@@ -1634,16 +1602,16 @@ public class IR3FormBean {
 		this.refundCopied = refundCopied;
 	}
 
-	public void setRefundCopiedPlusOverpayment2018(Money refundCopiedPlusOverpayment2018) {
-		this.refundCopiedPlusOverpayment2018 = refundCopiedPlusOverpayment2018;
+	public void setRefundCopiedPlusOverpaymentCurrentYear(Money refundCopiedPlusOverpaymentCurrentYear) {
+		this.refundCopiedPlusOverpaymentCurrentYear = refundCopiedPlusOverpaymentCurrentYear;
 	}
 
 	public void setRefundDue(boolean refundDue) {
 		this.refundDue = refundDue;
 	}
 
-	public void setRefundIsTransferredTo2018(boolean refundIsTransferredTo2018) {
-		this.refundIsTransferredTo2018 = refundIsTransferredTo2018;
+	public void setRefundIsTransferredToCurrentYear(boolean refundIsTransferredToCurrentYear) {
+		this.refundIsTransferredToCurrentYear = refundIsTransferredToCurrentYear;
 	}
 
 	public void setRefundIsTransferredToOther(boolean refundIsTransferredToOther) {
@@ -1690,16 +1658,16 @@ public class IR3FormBean {
 		this.refundOtherTaxAccountReceiverYearEnded31March = refundOtherTaxAccountReceiverYearEnded31March;
 	}
 
-	public void setRefundOverpayment2018(Money refundOverpayment2018) {
-		this.refundOverpayment2018 = refundOverpayment2018;
+	public void setRefundOverpaymentCurrentYear(Money refundOverpaymentCurrentYear) {
+		this.refundOverpaymentCurrentYear = refundOverpaymentCurrentYear;
 	}
 
 	public void setRefundTotal(Money refundTotal) {
 		this.refundTotal = refundTotal;
 	}
 
-	public void setRefundTransferTo2018(Money refundTransferTo2018) {
-		this.refundTransferTo2018 = refundTransferTo2018;
+	public void setRefundTransferToCurrentYear(Money refundTransferToCurrentYear) {
+		this.refundTransferToCurrentYear = refundTransferToCurrentYear;
 	}
 
 	public void setRefundTransferToStudentLoan(Money refundTransferToStudentLoan) {
@@ -1708,6 +1676,14 @@ public class IR3FormBean {
 
 	public void setRentsReceived(boolean rentsReceived) {
 		this.rentsReceived = rentsReceived;
+	}
+
+	public PortfolioMethod getPortfolioMethod() {
+		return portfolioMethod;
+	}
+
+	public void setPortfolioMethod(PortfolioMethod portfolioMethod) {
+		this.portfolioMethod = portfolioMethod;
 	}
 
 	public void setResidentialLandWithholdingTaxCredit(Money residentialLandWithholdingTaxCredit) {
@@ -1811,12 +1787,12 @@ public class IR3FormBean {
 		this.taxOnTaxableIncomeIsCredit = taxOnTaxableIncomeIsCredit;
 	}
 
-	public void setTaxPayment2018(Money taxPayment2018) {
-		this.taxPayment2018 = taxPayment2018;
+	public void setTaxPaymentCurrentYear(Money taxPaymentCurrentYear) {
+		this.taxPaymentCurrentYear = taxPaymentCurrentYear;
 	}
 
-	public void setTaxPaymentSEROption2018(String taxPaymentSEROption2018) {
-		this.taxPaymentSEROption2018 = taxPaymentSEROption2018;
+	public void setTaxPaymentSEROptionCurrentYear(String taxPaymentSEROptionCurrentYear) {
+		this.taxPaymentSEROptionCurrentYear = taxPaymentSEROptionCurrentYear;
 	}
 
 	public void setTotalActiveLTCIncome(Money totalActiveLTCIncome) {
@@ -1911,6 +1887,30 @@ public class IR3FormBean {
 		this.minusSignForTotalShareholderEmployeeSalary = totalShareholderEmployeeSalary.signum() < 0 ? "-" : "";
 	}
 
+	public Money getTotalInterestOnResidentialProperty() {
+		return totalInterestOnResidentialProperty;
+	}
+
+	public Money getResidentialPropertInterestClaimed() {
+		return residentialPropertInterestClaimed;
+	}
+
+	public void setTotalInterestOnResidentialProperty(Money totalInterestOnResidentialProperty) {
+		this.totalInterestOnResidentialProperty = totalInterestOnResidentialProperty;
+	}
+
+	public void setResidentialPropertInterestClaimed(Money residentialPropertInterestClaimed) {
+		this.residentialPropertInterestClaimed = residentialPropertInterestClaimed;
+	}
+
+	public Money getShareholderAIMTaxCreditAmount() {
+		return shareholderAIMTaxCreditAmount;
+	}
+
+	public void setShareholderAIMTaxCreditAmount(Money shareholderAIMTaxCreditAmount) {
+		this.shareholderAIMTaxCreditAmount = shareholderAIMTaxCreditAmount;
+	}
+
 	public void setTotalTaxableDistributionsFromNonComplyingTrusts(Money totalTaxableDistributionsFromNonComplyingTrusts) {
 		this.totalTaxableDistributionsFromNonComplyingTrusts = totalTaxableDistributionsFromNonComplyingTrusts;
 	}
@@ -1941,5 +1941,46 @@ public class IR3FormBean {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public ResidentialPropertyInterestClaimedReason getResidentialPropertyInterestClaimedReason() {
+		return residentialPropertyInterestClaimedReason;
+	}
+
+	public void setResidentialPropertyInterestClaimedReason(
+			ResidentialPropertyInterestClaimedReason residentialPropertyInterestClaimedReason) {
+		this.residentialPropertyInterestClaimedReason = residentialPropertyInterestClaimedReason;
+	}
+
+	public boolean isPortfolioInvestmentEntityIncomeReceived() {
+		return portfolioInvestmentEntityIncomeReceived;
+	}
+
+	public void setPortfolioInvestmentEntityIncomeReceived(boolean portfolioInvestmentEntityIncomeReceived) {
+		this.portfolioInvestmentEntityIncomeReceived = portfolioInvestmentEntityIncomeReceived;
+	}
+
+	public Money getTotalPIEDeductions() {
+		return totalPIEDeductions;
+	}
+
+	public Money getTotalPIEIncome() {
+		return totalPIEIncome;
+	}
+
+	public Money getPieCalculationOutcome() {
+		return pieCalculationOutcome;
+	}
+
+	public void setTotalPIEDeductions(Money totalPIEDeductions) {
+		this.totalPIEDeductions = totalPIEDeductions;
+	}
+
+	public void setTotalPIEIncome(Money totalPIEIncome) {
+		this.totalPIEIncome = totalPIEIncome;
+	}
+
+	public void setPieCalculationOutcome(Money pieCalculationOutcome) {
+		this.pieCalculationOutcome = pieCalculationOutcome;
 	}
 }

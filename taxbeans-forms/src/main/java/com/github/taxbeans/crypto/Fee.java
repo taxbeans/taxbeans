@@ -3,11 +3,11 @@ package com.github.taxbeans.crypto;
 import javax.money.MonetaryAmount;
 
 public class Fee {
-	
+
 	private MonetaryAmount amount;
-	
+
 	private CryptoAmount cryptoAmount;
-	
+
 	private boolean isCrypto;
 
 	public static Fee of(MonetaryAmount amount) {
@@ -15,7 +15,7 @@ public class Fee {
 		fee.amount = amount;
 		return fee;
 	}
-	
+
 	public static Fee of(CryptoAmount amount) {
 		Fee fee = new Fee();
 		fee.cryptoAmount = amount;
