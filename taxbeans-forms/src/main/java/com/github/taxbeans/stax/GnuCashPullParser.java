@@ -46,7 +46,7 @@ public class GnuCashPullParser {
 	private String filename;
 
 	private boolean cacheData = true;
-	
+
 	/**
 	 * Timezone for interpreting gnucash dates, usually the system timezone
 	 */
@@ -229,28 +229,42 @@ public class GnuCashPullParser {
 				return map.get(pathName);
 			}
 		}
-		File fileName2 = new File(pathName);
-		if (!fileName2.exists()) {
+		File fileNameResult;
+		File fileNameWithTargetClassesPrepended = new File(pathName);
+		if (!fileNameWithTargetClassesPrepended.exists()) {
 			File fileCache = FileCache.getCacheLocation();
-			fileName2 = new File(fileCache, filename);
-			if (!fileName2.exists()) {
-				throw new RuntimeException(String.format(
-						"Neither %s, nor %s exists", pathName, fileName2.toString()));
+			File fileNameWithCachePathPrepended = new File(fileCache, filename);
+			if (!fileNameWithCachePathPrepended.exists()) {
+				File relativeFileName = new File(filename);
+				if (!relativeFileName.exists()) {
+					throw new RuntimeException(String.format(
+							"Neither %s, %s nor %s exists, and the current working directory is %s",
+							fileNameWithTargetClassesPrepended.toString(),
+							fileNameWithCachePathPrepended.toString(),
+							relativeFileName,
+							System.getProperty("user.dir")));
+				} else {
+					fileNameResult = relativeFileName;
+				}
+			} else {
+				fileNameResult = fileNameWithCachePathPrepended;
 			}
+		} else {
+			fileNameResult = fileNameWithTargetClassesPrepended;
 		}
 		/*
 		 * For some reason the prolog is causing a parsing error, could try removing
 		 * BOMs using: xml = xml.trim().replaceFirst("^([\\W]+)<","<");
 		 */
-		logger.info("Removing prolog from : " + fileName2.getCanonicalPath());
+		logger.info("Removing prolog from : " + fileNameResult.getCanonicalPath());
 		boolean removeFirstLine = true;
 		if (removeFirstLine) {
 			List<String> lines = null;
 			try {
-				lines = Files.readAllLines(Paths.get(fileName2.getPath()), 
+				lines = Files.readAllLines(Paths.get(fileNameResult.getPath()),
 						Charset.forName("UTF-8"));
 			} catch (MalformedInputException e) {
-				lines = Files.readAllLines(Paths.get(fileName2.getPath()), 
+				lines = Files.readAllLines(Paths.get(fileNameResult.getPath()),
 						Charset.forName("ISO-8859-1"));
 			}
 			File fout = File.createTempFile("tmp", "guncash");
@@ -271,11 +285,11 @@ public class GnuCashPullParser {
 				bw.newLine();
 			}
 			bw.close();
-			fileName2 = fout;
+			fileNameResult = fout;
 		}
-		logger.info("About to parse: " + fileName2.getCanonicalPath());
+		logger.info("About to parse: " + fileNameResult.getCanonicalPath());
 		XMLStreamReader streamReader = XMLInputFactory.newFactory().createXMLStreamReader(
-				new FileReader(fileName2));
+				new FileReader(fileNameResult));
 		//int transactionCount = 0;
 		//int accountCount = 0;
 		List<Transaction> transactions = new ArrayList<Transaction>();

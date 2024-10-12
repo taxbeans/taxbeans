@@ -486,6 +486,9 @@ public class FormProcessor {
 			String lowerCase = fullName.split(" ")[0].toLowerCase();
 
 			String personalisedNaming = ((FormDestination) pojo).getDestinationDirectory();
+			if (personalisedNaming != null && personalisedNaming.contains("/")) {
+				personalisedNaming = null;  //reset to null if it is solely a destination directory
+			}
 			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
 			File result = new File(parent, String.format(outputFormat, year, lowerCase));
 			acroForm.setXFA(null);

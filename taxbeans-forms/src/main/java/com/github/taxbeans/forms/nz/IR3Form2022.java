@@ -481,7 +481,6 @@ public class IR3Form2022 implements FormDestination {
 	private String taxCreditQualifyingMonthsNumber;
 
 	@RightAlign(11)
-	@Sum("totalTaxDeducted")
 	private Money taxCreditSubtotal;
 
 	@RightAlign(5)
