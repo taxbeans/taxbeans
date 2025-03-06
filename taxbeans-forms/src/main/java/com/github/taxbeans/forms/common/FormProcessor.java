@@ -490,6 +490,9 @@ public class FormProcessor {
 				personalisedNaming = null;  //reset to null if it is solely a destination directory
 			}
 			lowerCase = personalisedNaming != null ? personalisedNaming : lowerCase;
+			if (!parent.exists()) {
+				throw new IllegalStateException("parent directory doesn't exist: " + parent.getAbsolutePath());
+			}
 			File result = new File(parent, String.format(outputFormat, year, lowerCase));
 			acroForm.setXFA(null);
 			acroForm.setNeedAppearances(true);

@@ -4,18 +4,18 @@ import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.taxbeans.forms.Unbounded;
 import com.github.taxbeans.forms.Required;
 import com.github.taxbeans.forms.RightAlign;
 import com.github.taxbeans.forms.RoundToDollars;
 import com.github.taxbeans.forms.RoundedSum;
 import com.github.taxbeans.forms.Skip;
 import com.github.taxbeans.forms.Sum;
+import com.github.taxbeans.forms.Unbounded;
 import com.github.taxbeans.forms.UseTrueFalseMappings;
 import com.github.taxbeans.forms.common.FormDestination;
 
 public class IR10FormPublishedMarch2019 implements FormDestination {
-	
+
 	private int yearEnded;
 
 	private String fullName;
@@ -29,147 +29,190 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean multipleActivityRadio;
 
+	@RightAlign(9)
 	@RoundToDollars
 	private Money grossIncome;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money openingStock;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money purchases;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money closingStock;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum("grossIncome")
 	private Money grossProfit;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money interestReceived;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money dividends;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money leasePayments;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money otherIncome;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum({"grossProfit", "interestReceived", "dividends", "leasePayments",
 			"otherIncome"})
 	private Money totalIncome;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money badDebts;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money depreciation;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money insurance;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money interestExpenses;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money consultingFees;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money rates;
 
+	@RightAlign(9)
 	@RoundToDollars
 	private Money leasePaymentExpenses;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money repairs;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money researchAndDevelopment;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money relatedPartyRenumeration;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money salaryAndWages;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money subcontractorPayments;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money otherExpenses;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum({"badDebts", "depreciation", "insurance", "interestExpenses",
 			"consultingFees", "rates", "leasePaymentExpenses", "repairs",
-			"researchAndDevelopment", "relatedPartyRenumeration", "salaryAndWages", "subcontractorPayments", 
-			"otherExpenses"})			
+			"researchAndDevelopment", "relatedPartyRenumeration", "salaryAndWages", "subcontractorPayments",
+			"otherExpenses"})
 	private Money totalExpenses;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money exceptionalItems;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum(value={"totalIncome", "exceptionalItems"}, negate="totalExpenses")
 	private Money netProfitBeforeTax;
 
+	@RightAlign(9)
 	@Unbounded
 	@Sum(value={"totalIncome", "exceptionalItems"}, negate="totalExpenses")
 	private Money netProfitBeforeTaxUnrounded;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money taxAdjustments;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum(value="netProfitBeforeTax", negate="taxAdjustments")
 	private Money taxableProfit;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money accountsReceivable;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money cashAndDeposits;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money otherCurrentAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money vehicleAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money plantAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money furnitureAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money land;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money buildings;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money otherFixedAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money intangibles;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money sharesAndDebentures;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money termDeposits;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money otherNonCurrentAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum({"accountsReceivable", "cashAndDeposits", "otherCurrentAssets", "vehicleAssets",
@@ -177,61 +220,76 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 			"otherFixedAssets", "intangibles", "sharesAndDebentures", "termDeposits",
 			"otherNonCurrentAssets"})
 	private Money totalAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money provisions;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money accountsPayable;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money currentLoans;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money otherCurrentLiabilities;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum({"provisions", "accountsPayable", "currentLoans", "otherCurrentLiabilities"})
 	private Money totalCurrentLiabilities;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money nonCurrentLiabilities;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum({"totalCurrentLiabilities", "nonCurrentLiabilities"})
 	private Money totalLiabilities;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	@Required
 	@RoundedSum(value="totalAssets", negate="totalLiabilities")
 	private Money ownersEquity;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money taxDepreciation;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money untaxedRealisedGains;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money additionsToFixedAssets;
-	
+
 	@RoundToDollars
 	private Money disposalsOfFixedAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money dividendsPaid;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money drawings;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money currentAccountClosingBalance;
 
+	@RightAlign(9)
 	@RoundToDollars
 	private Money deductibleLossOnDisposal;
-	
+
 	@Required
 	private String currentAccountMinusSign;
 

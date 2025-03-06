@@ -14,6 +14,7 @@ public class IR10Form2020Test {
 	@Test
 	public void test() {
 		IR10FormPublishedMarch2019 bean = new IR10FormPublishedMarch2019();
+		bean.setDestinationDirectory(System.getProperty("user.home"+"/.cache"));
 		bean.setYearEnded(FINANCIAL_YEAR);
 		bean.setIrdNumber("888-888-888");
 		bean.setFullname("Example Partnership");
@@ -26,10 +27,10 @@ public class IR10Form2020Test {
 		bean.setInterestReceived(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setDividends(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setLeasePayments(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setOtherIncome(Money.of(new BigDecimal("888.88"), "NZD"));		
+		bean.setOtherIncome(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setBadDebts(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setDepreciation(Money.of(new BigDecimal("888.88"), "NZD"));
-		//bean.setInsurance(Money.of(new BigDecimal("888.88"), "NZD"));
+		bean.setInsurance(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setInterestExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setConsultingFees(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setRates(Money.of(new BigDecimal("888.88"), "NZD"));
@@ -40,7 +41,7 @@ public class IR10Form2020Test {
 		bean.setSalaryAndWages(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setSubcontractorPayments(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setOtherExpenses(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setExceptionalItems(Money.of(new BigDecimal("888.88"), "NZD"));		
+		bean.setExceptionalItems(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setTaxAdjustments(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setAccountsReceivable(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setCashAndDeposits(Money.of(new BigDecimal("888.88"), "NZD"));
@@ -54,12 +55,12 @@ public class IR10Form2020Test {
 		bean.setIntangibles(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setSharesAndDebentures(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setTermDeposits(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setOtherNonCurrentAssets(Money.of(new BigDecimal("888.88"), "NZD"));		
+		bean.setOtherNonCurrentAssets(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setProvisions(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setAccountsPayable(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setCurrentLoans(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setOtherCurrentLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));
-		bean.setNonCurrentLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));				
+		bean.setNonCurrentLiabilities(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setTaxDepreciation(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setUntaxedRealisedGains(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setTaxDepreciation(Money.of(new BigDecimal("888.88"), "NZD"));
@@ -70,7 +71,7 @@ public class IR10Form2020Test {
 		bean.setDrawings(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setCurrentAccountClosingBalance(Money.of(new BigDecimal("888.88"), "NZD"));
 		bean.setDeductibleLossOnDisposal(Money.of(new BigDecimal("888.88"), "NZD"));
-		FormProcessor.publishDraft(bean, FINANCIAL_YEAR, "ir10-%1$s.pdf", IR10FieldMapper.instance(), 
+		FormProcessor.publishDraft(bean, FINANCIAL_YEAR, "ir10-%1$s.pdf", IR10FieldMapper.instance(),
 	    		"Sample", "ir10-%1$s-%2$s-draft.pdf");
 	}
 
