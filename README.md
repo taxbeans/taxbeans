@@ -8,7 +8,9 @@ Currently includes:
 * Fill out any PDF form from Java POJOs
 * Parsing of GnuCash files to the Model using STAX
 * Automatic import of CSV data export from exchanges such as Kraken and Poloniex
-* CSV parsing package for Kraken
+* CSV parsing package for Bitfinex, BitMEX, BitPanda, BTCPop, Kraken, Poloniex and Stellar
+* Infinite precision decimals to handle any coin
+* Full and correct timezone date handling via. ZonedDateTime
 
 Are you looking for a full crypto API with tax profit/loss calculation support?
 

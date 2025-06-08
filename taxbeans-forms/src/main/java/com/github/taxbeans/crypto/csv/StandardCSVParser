@@ -1,0 +1,57 @@
+package com.github.taxbeans.crypto.csv;
+
+import java.io.InputStream;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+
+import javax.money.Monetary;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.taxbeans.csv.CSVParser;
+import com.github.taxbeans.crypto.CryptoEvent;
+import com.github.taxbeans.crypto.CurrencyBatchGroup;
+import com.github.taxbeans.crypto.CurrencyTradeData;
+import com.github.taxbeans.crypto.CurrencyTradingParser;
+
+public class StandardFormatCSVParser {
+
+	final static Logger logger = LoggerFactory.getLogger(StandardFormatCSVParser.class);
+
+	public static List<CryptoEvent> processResource(String resource, List<CryptoEvent> events, CurrencyBatchGroup batch)
+			throws ParseException {
+		InputStream resourceAsStream = StandardFormatCSVParser.class.getClassLoader().getResourceAsStream(resource);
+		if (resourceAsStream == null) {
+			throw new MissingResourceException("The resource couldn't be found on the classpath: " + resource, resource, "StandardFormatParser");
+		}
+		return StandardFormatCSVParser.process(CSVParser.newInstance()
+					.parseFile(resourceAsStream, true), events, batch).getCryptoEvents();
+	}
+
+
+	public static CurrencyTradeData process(List<String[]> list, List<CryptoEvent> events, CurrencyBatchGroup batch)
+			throws ParseException {
+		if (batch == null) {
+			batch = CurrencyBatchGroup.of(Monetary.getCurrency("NZD"));
+		}
+		if (list == null) {
+			String tradesCSV = "standardformat/Stellar/lobstr-exchange-balance-manual.csv";
+			list = CSVParser.newInstance()
+					.parseFile(StandardFormatCSVParser.class.getClassLoader().getResourceAsStream(tradesCSV), true);
+		}
+		if (events == null) {
+			events = new ArrayList<CryptoEvent>();
+		}
+		return CurrencyTradingParser.process(list, events, batch);
+	}
+
+	/*
+	 * this parser parsers all of them
+	 */
+	public static void main(String[] args) throws ParseException {
+		process(null, null, null);
+	}
+}

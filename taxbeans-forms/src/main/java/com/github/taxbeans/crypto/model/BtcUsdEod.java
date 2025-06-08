@@ -46,7 +46,7 @@ public class BtcUsdEod {
 
 	public static Map<LocalDate, BtcUsdEod> loadFromCSV() {
 		List<String[]> parsedFile = CSVParser.newInstance().parseFile(
-				"target/classes/trades/BTC-USD.csv", true);
+				"target/classes/data/BTC-USD.csv", true);
 		Map<LocalDate, BtcUsdEod> map = new HashMap<>();
 		parsedFile.forEach(line -> addToMap(map , line));
 		BtcUsdEod.map = map;

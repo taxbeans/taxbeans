@@ -1,0 +1,597 @@
+package com.github.taxbeans.crypto.csv;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.money.MonetaryAmount;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.taxbeans.forms.utils.ZonedDateTimeUtils;
+import com.github.taxbeans.CSVWriter;
+import com.github.taxbeans.crypto.CryptoEvent;
+import com.github.taxbeans.crypto.CurrencyAmount;
+import com.github.taxbeans.crypto.CurrencyBalance;
+import com.github.taxbeans.crypto.CurrencyBatch;
+import com.github.taxbeans.crypto.CurrencyBatchGroup;
+import com.github.taxbeans.crypto.CurrencyBatchSet;
+import com.github.taxbeans.crypto.CurrencyCode;
+import com.github.taxbeans.crypto.CurrencyConversion;
+import com.github.taxbeans.crypto.CurrencyDeposit;
+import com.github.taxbeans.crypto.CurrencyEventProcessorSession;
+import com.github.taxbeans.crypto.CurrencyExchange;
+import com.github.taxbeans.crypto.CurrencyLoan;
+import com.github.taxbeans.crypto.CurrencyRepayment;
+import com.github.taxbeans.crypto.CurrencyTradeLoss;
+import com.github.taxbeans.crypto.CurrencyTradeProfit;
+import com.github.taxbeans.crypto.CurrencyTransfer;
+import com.github.taxbeans.crypto.CurrencyWithdrawal;
+import com.github.taxbeans.crypto.ExchangeCurrencyBalance;
+import com.github.taxbeans.crypto.FormatUtils;
+import com.github.taxbeans.crypto.FormattedComment;
+
+public class StandardFormatWriter {
+
+	private static final boolean OMIT_ZERO_BALANCE_FIGURES = false;
+
+	final static Logger logger = LoggerFactory.getLogger(StandardFormatWriter.class);
+	private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
+
+	public static File writeEventsToCSV(List<CryptoEvent> cryptoEvents, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Type", "Buy", "Cur.", "Sell", "Cur.", "Fee", "Cur.", "Exchange", "Group", "Comment", "Date"};
+		lines.add(line);
+		logger.warn("Sorting events, could be slow...");
+		 // may not be necessary to sort, but sort just in case
+		if (Boolean.getBoolean("crypto.sortOldestFirst")) {
+			Collections.sort(cryptoEvents);
+		} else {
+			Collections.sort(cryptoEvents, Collections.reverseOrder());
+		}
+		for (CryptoEvent event : cryptoEvents) {
+			line = new String[11];
+			line[7] = event.getCurrencyExchange().name();
+			line[8] = event.getGroup() == null ? "" : event.getGroup();
+			line[9] = optionalFormattedComment(event.getFormattedComment(), event.getComment());
+			ZonedDateTime time = parseDateTime("2021-10-10 19:57:28", -1);
+			if (event.getWhen().isEqual(time)) {
+				line[9] = "Airdrop:Imported by Bitcoin Accounting";
+			}
+			line[10] = ZonedDateTimeUtils.format(event.getWhen());
+			if (event instanceof CurrencyConversion) {
+				CurrencyConversion conversion = (CurrencyConversion) event;
+				if (conversion.isIncomplete()) {
+					throw new AssertionError("incomplete event");
+				}
+				line[0] = EventType.Trade.name();
+				line[1] = conversion.getTo().getBigDecimal().stripTrailingZeros().toPlainString() + "";
+				line[2] = conversion.getTo().getCurrencyCode().getCurrencyCode() + "";
+				CurrencyAmount from = conversion.getFrom();
+				line[3] = from == null ? "" : from.getBigDecimal().stripTrailingZeros().toPlainString() + "";
+				line[4] = from == null ? "" : from.getCurrencyCode().getCurrencyCode() + "";
+				line[5] = conversion.getFee().getAmount().getBigDecimal().toPlainString() + "";
+				line[6] = conversion.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+			} else if (event instanceof CurrencyDeposit) {
+				CurrencyDeposit deposit = (CurrencyDeposit) event;
+				line[0] = EventType.Deposit.name();
+				BigDecimal depositAmount = deposit.getAmount().getBigDecimal().stripTrailingZeros();
+				String depositAmountString = depositAmount.toPlainString();
+				if (!deposit.getAmount().isCrypto()) {
+					depositAmountString = FormatUtils.format(deposit.getAmount().getMonetaryAmount());
+				}
+				line[1] = deposit.getAmount() == null ? "NaN" : depositAmountString + "";
+				line[2] = deposit.getAmount() == null ? "N/A"
+						: deposit.getAmount().getCurrencyCode().getCurrencyCode() + "";
+				line[3] = "";
+				line[4] = "";
+				line[5] = deposit.getFee().getAmount().getBigDecimal().stripTrailingZeros().toPlainString() + "";
+				line[6] = deposit.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+			} else if (event instanceof CurrencyLoan) {
+				CurrencyLoan loan = (CurrencyLoan) event;
+				line[0] = EventType.Loan.name();
+				BigDecimal loanAmount = loan.getInitialLoanAmount().getBigDecimal().stripTrailingZeros();
+				String loanAmountString = loanAmount.toPlainString();
+				if (!loan.getInitialLoanAmount().isCrypto()) {
+					loanAmountString = FormatUtils.format(loan.getInitialLoanAmount().getMonetaryAmount());
+				}
+				line[1] = loan.getInitialLoanAmount() == null ? "NaN" : loanAmountString + "";
+				line[2] = loan.getInitialLoanAmount() == null ? "N/A"
+						: loan.getInitialLoanAmount().getCurrencyCode().getCurrencyCode() + "";
+				line[3] = "";
+				line[4] = "";
+				line[5] = "0.00";
+				line[6] = "NZD";
+			} else if (event instanceof CurrencyRepayment) {
+				CurrencyRepayment repayment = (CurrencyRepayment) event;
+				line[0] = EventType.Repayment.name();
+				CurrencyAmount repaymentAmount2 = repayment.getRepaymentAmount();
+				BigDecimal repaymentAmount = repaymentAmount2.getBigDecimal().stripTrailingZeros();
+				String loanAmountString = repaymentAmount.toPlainString();
+				if (!repaymentAmount2.isCrypto()) {
+					loanAmountString = FormatUtils.format(repaymentAmount2.getMonetaryAmount());
+				}
+				line[1] = repaymentAmount2 == null ? "NaN" : loanAmountString + "";
+				line[2] = repaymentAmount2 == null ? "N/A"
+						: repaymentAmount2.getCurrencyCode().getCurrencyCode() + "";
+				line[3] = "";
+				line[4] = "";
+				line[5] = "0.00";
+				line[6] = "NZD";
+			} else if (event instanceof CurrencyWithdrawal) {
+				CurrencyWithdrawal withdrawal = (CurrencyWithdrawal) event;
+				line[0] = EventType.Withdrawal.name();
+				line[1] = "";
+				line[2] = "";
+				line[3] = withdrawal.getAmount().getBigDecimal().abs().stripTrailingZeros().toPlainString() + "";
+				line[4] = withdrawal.getAmount().getCurrencyCode().getCurrencyCode() + "";
+				line[5] = withdrawal.getFee().getAmount().getBigDecimal().stripTrailingZeros().toPlainString() + "";
+				line[6] = withdrawal.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+			} else if (event instanceof CurrencyTradeProfit) {
+				CurrencyTradeProfit currencytradeProfit = (CurrencyTradeProfit) event;
+				line[0] = EventType.Income.name();
+				line[1] = currencytradeProfit.getProfit().getBigDecimal().abs().stripTrailingZeros().toPlainString() + "";
+				line[2] = currencytradeProfit.getProfit().getCurrencyCode().getCurrencyCode() + "";;
+				line[3] = "";
+				line[4] = "";
+				line[5] = "";
+				line[6] = "";
+			} else if (event instanceof CurrencyTradeLoss) {
+				CurrencyTradeLoss currencytradeLoss = (CurrencyTradeLoss) event;
+				line[0] = EventType.Lost.name();
+				line[1] = "";
+				line[2] = "";
+				line[3] = currencytradeLoss.getLoss().getBigDecimal().abs().stripTrailingZeros().toPlainString() + "";;
+				line[4] = currencytradeLoss.getLoss().getCurrencyCode().getCurrencyCode() + "";;
+				line[5] = "";
+				line[6] = "";
+			} else if (event instanceof ExchangeCurrencyBalance) {
+				ExchangeCurrencyBalance exchangeCurrencyBalance = (ExchangeCurrencyBalance) event;
+				line[0] = EventType.ExchangeBalance.name();
+				line[1] = "";
+				line[2] = "";
+				line[3] = exchangeCurrencyBalance.getBalance().getBigDecimal().abs().stripTrailingZeros().toPlainString() + "";
+				line[4] = exchangeCurrencyBalance.getBalance().getCurrencyCode().getCurrencyCode() + "";
+				line[5] =  "";
+				line[6] = "";
+			} else {
+				continue;
+			}
+			lines.add(line);
+		}
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/Stellar/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+			return location;
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	private static String optionalFormattedComment(FormattedComment formattedComment, String string) {
+		if (formattedComment == null) {
+			return string;
+		} else {
+			return String.valueOf(formattedComment);
+		}
+	}
+
+	private static ZonedDateTime parseDateTime(String dateString, int rowNum) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime localDateTime = null;
+		try {
+			localDateTime = LocalDateTime.parse(dateString, formatter);
+		} catch (DateTimeParseException e) {
+			logger.info("rowNum = {}, dateString = {}", rowNum, dateString);
+			throw e;
+		}
+		return ZonedDateTime.of(localDateTime, UTC_ZONE);
+	}
+
+	public static void writeProfitToCSVFromSession(CurrencyEventProcessorSession session, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Net Profit","Drawings","Funds Introduced","Fees (at market value) (already taken into account by profit calculation as per readme)"};
+		lines.add(line);
+
+		line = new String[] {session.getTotalProfit().toString(), session.getDrawings().toString(),
+				session.getFundsIntroduced().toString(), session.getTotalFees().toString()};
+		lines.add(line);
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	public static void writeProfitToCSV(MonetaryAmount monetaryAmount, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Net Profit","Drawings","Funds Introduced","Fees (included in profit)","Asset Balance (total batch base amount remaining)"};
+		lines.add(line);
+		line = new String[] {monetaryAmount.toString()};
+		lines.add(line);
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+
+	public static void writeProfitToCSVFromSessionAll(CurrencyEventProcessorSession session, String filename,
+			CurrencyAmount totalBaseCurrencyBatchBalance) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Net Profit","Drawings","Funds Introduced","Fees (at market value) (already taken into account by profit calculation as per readme)",
+				"Asset Balance (total batch base amount remaining"};
+		lines.add(line);
+
+		line = new String[] {session.getTotalProfit().toString(), session.getDrawings().toString(),
+				session.getFundsIntroduced().toString(), session.getTotalFees().toString(),
+				totalBaseCurrencyBatchBalance.toRoundedString()};
+		lines.add(line);
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	public static void writeTransfersToCSV(List<CurrencyTransfer> transfers, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"From", "To", "Amount", "Currency","Date"};
+		lines.add(line);
+		logger.warn("Sorting events, could be slow...");
+		Collections.sort(transfers); // may not be necessary, but just in case
+		for (CurrencyTransfer transfer : transfers) {
+			lines.add(transfer.toCSVStringArray());
+		}
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	public static void writeFundsIntroducedToCSV(List<CurrencyDeposit> deposits, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Amount", "Amount Currency", "Base Amount", "Base Currency", "Fee", "Fee Currency", "Exchange", "Date",
+				"Comment"};
+		lines.add(line);
+		logger.warn("Sorting events, could be slow...");
+		Collections.sort(deposits); // may not be necessary, but just in case
+		for (CurrencyDeposit deposit : deposits) {
+			lines.add(deposit.toCSVStringArray());
+		}
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	public static void writeDrawingsToCSV(List<CurrencyWithdrawal> withdrawals, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Amount", "Amount Currency", "Base Amount", "Base Currency", "Fee", "Fee Currency", "Exchange", "Date", "Comment"};
+		lines.add(line);
+		logger.warn("Sorting events, could be slow...");
+		Collections.sort(withdrawals); // may not be necessary, but just in case
+		for (CurrencyWithdrawal withdrawal : withdrawals) {
+			lines.add(withdrawal.toCSVStringArray());
+		}
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	public static void writeStatistics(int year, CurrencyEventProcessorSession session, String filename,
+			CurrencyAmount totalBaseCurrencyBatchBalance, CurrencyAmount totalBaseCurrencyExchangeBalance) {
+		writeStatistics(year, session, filename, totalBaseCurrencyBatchBalance, totalBaseCurrencyExchangeBalance,
+				CurrencyAmount.of("0.00", "NZD"),
+				CurrencyAmount.of("0.00", "BTC"),	CurrencyAmount.of("0.00", "BTC"),
+				CurrencyAmount.of("0.00", "ETH"),	CurrencyAmount.of("0.00", "ETH"),
+				CurrencyAmount.of("0.00", "EUR"),	CurrencyAmount.of("0.00", "EUR"),
+				CurrencyAmount.of("0.00", "USD"),	CurrencyAmount.of("0.00", "USD")
+			);
+
+	}
+
+	public static void writeStatistics(int year, CurrencyEventProcessorSession session, String filename,
+			CurrencyAmount totalBaseCurrencyBatchBalance, CurrencyAmount totalBaseCurrencyExchangeBalance, CurrencyAmount nzdBalance,
+			CurrencyAmount btcBatchBalance, CurrencyAmount btcExchangeBalance,
+			CurrencyAmount ethBatchBalance, CurrencyAmount ethExchangeBalance,
+			CurrencyAmount eurBatchBalance, CurrencyAmount eurExchangeBalance,
+			CurrencyAmount usdBatchBalance, CurrencyAmount usdExchangeBalance) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"No. of Transactions,No. of Trades","Batch Bal.","NZD Balance","Exchange Bal.","BTC Batch Bal.",
+				"BTC Exchange Bal.","BTC Diff. (batch-exchange)","ETH Batch Bal.","ETH Exchange Bal.","ETH Diff. (batch-exchange)",
+				"EUR Batch Bal.", "EUR Exchange Bal.", "EUR Diff. (batch-exchange)",
+				"USD Batch Bal.", "USD Exchange Bal.", "USD Diff. (batch-exchange)"
+				};
+		lines.add(line);
+		int transactionCount = session.getTransactionCount();
+		int tradeCount = session.getTradeCount();
+		lines.add(new String[] {transactionCount+"", tradeCount+"",
+				String.valueOf(totalBaseCurrencyBatchBalance),
+				String.valueOf(nzdBalance),
+				String.valueOf(totalBaseCurrencyExchangeBalance),
+				String.valueOf(btcBatchBalance),
+				String.valueOf(btcExchangeBalance),
+				String.valueOf(btcBatchBalance.subtract(btcExchangeBalance)),
+				String.valueOf(ethBatchBalance),
+				String.valueOf(ethExchangeBalance),
+				String.valueOf(ethBatchBalance.subtract(ethExchangeBalance)),
+				String.valueOf(eurBatchBalance),
+				String.valueOf(eurExchangeBalance),
+				String.valueOf(eurBatchBalance.subtract(eurExchangeBalance)),
+				String.valueOf(usdBatchBalance),
+				String.valueOf(usdExchangeBalance),
+				String.valueOf(usdBatchBalance.subtract(usdExchangeBalance))
+		});
+		//6,3,3520 NZD,3520 NZD
+		if (year == 2016) {
+			Assert.assertEquals(6, transactionCount);
+			Assert.assertEquals(3, tradeCount);
+			//Assert.assertEquals(CurrencyAmount.of("3520", "NZD"), totalBaseCurrencyBatchBalance);
+			//Assert.assertEquals(CurrencyAmount.of("3520", "NZD"), totalBaseCurrencyBatchBalance);
+		}
+
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	public static CurrencyAmount[] writeBatchesToCSV(CurrencyBatchGroup batchGroup, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"ID,Date Purchased,Cost,Amount Remaining,Status,Cost Per Unit,Parent ID,Initial Amount,Base Amount Remaining,Running Total BTC"};
+		lines.add(line);
+		CurrencyBatchSet allBatches = batchGroup.getAllBatches();
+		CurrencyAmount totalBaseCurrencyAmountRemaining = CurrencyAmount.getZeroNZD();
+		CurrencyAmount btcAmount = CurrencyAmount.of("0", "BTC");
+		CurrencyAmount ethAmount = CurrencyAmount.of("0", "ETH");
+		CurrencyAmount eurAmount = CurrencyAmount.of("0", "EUR");
+		CurrencyAmount usdAmount = CurrencyAmount.of("0", "USD");
+		CurrencyAmount bchAmount = CurrencyAmount.of("0", "BCH");
+		CurrencyAmount xrpAmount = CurrencyAmount.of("0", "XRP");
+		CurrencyAmount nanoAmount = CurrencyAmount.of("0", "NANO");
+		CurrencyAmount xlmAmount = CurrencyAmount.of("0", "XLM");
+		for (CurrencyBatch batch : allBatches) {
+			CurrencyAmount baseCurrencyAmountRemaining = batch.deriveBaseCurrencyAmountRemaining();
+			totalBaseCurrencyAmountRemaining = totalBaseCurrencyAmountRemaining.add(baseCurrencyAmountRemaining);
+			CurrencyAmount amountRemaining = batch.getAmountRemaining();
+			if ("BTC".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				btcAmount = btcAmount.add(amountRemaining);
+			}
+			if ("ETH".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				ethAmount = ethAmount.add(amountRemaining);
+			}
+			if ("EUR".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				eurAmount = eurAmount.add(amountRemaining);
+			}
+			if ("USD".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				usdAmount = usdAmount.add(amountRemaining);
+			}
+			if ("BCH".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				bchAmount = bchAmount.add(amountRemaining);
+			}
+			if ("XRP".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				xrpAmount = xrpAmount.add(amountRemaining);
+			}
+			if ("NANO".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				nanoAmount = nanoAmount.add(amountRemaining);
+			}
+			if ("XLM".equals(batch.getAmountRemaining().getCurrencyCode().toString())) {
+				xlmAmount = xlmAmount.add(amountRemaining);
+			}
+			ArrayList<String> lineList = new ArrayList<String>(Arrays.asList(batch.toCSVString()));
+			lineList.add(btcAmount.toString());
+			line = lineList.toArray(new String[0]);
+			lines.add(line);
+		}
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+		return new CurrencyAmount[] {totalBaseCurrencyAmountRemaining, btcAmount, ethAmount, eurAmount, usdAmount, bchAmount, xrpAmount,
+				nanoAmount, xlmAmount};
+	}
+
+	public static CurrencyAmount[] writeBalancesToCSV(ZonedDateTime balanceDate, CurrencyBatchGroup batchGroup,
+			CurrencyBalance ledgerBalance, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Balance Date,Exchange Balance,Total Historical Cost,Weighted Average Cost"};
+		lines.add(line);
+//		for (CurrencyExchange exchange : CurrencyExchange.values()) {
+//			ledgerBalance.getCurrencyMap(exchange);
+//			CurrencyCode.of(currencyString)
+//			ledgerBalance.getBalance(exchange, currencyCode)
+//		}
+		CurrencyAmount sumTotalCostAmount = CurrencyAmount.getZeroNZD();
+		CurrencyAmount sumNZSDAmount = CurrencyAmount.getZeroNZD();
+		CurrencyAmount sumBTCAmount = CurrencyAmount.of("0", "BTC");
+		CurrencyAmount sumETHAmount = CurrencyAmount.of("0", "ETH");
+		CurrencyAmount sumEURAmount = CurrencyAmount.of("0", "EUR");
+		CurrencyAmount sumUSDAmount = CurrencyAmount.of("0", "USD");
+		CurrencyAmount sumBCHAmount = CurrencyAmount.of("0", "BCH");
+		CurrencyAmount sumXRPAmount = CurrencyAmount.of("0", "XRP");
+		CurrencyAmount sumNANOAmount = CurrencyAmount.of("0", "NANO");
+		CurrencyAmount sumXLMAmount = CurrencyAmount.of("0", "XLM");
+		for (CurrencyExchange exchange : CurrencyExchange.values()) {
+			Map<CurrencyCode, CurrencyAmount> currencyMap = ledgerBalance.getCurrencyMap(exchange);
+			if (currencyMap != null) {
+				for (Map.Entry<CurrencyCode, CurrencyAmount> entry : currencyMap.entrySet()) {
+					//System.err.println(entry.getKey() + "-> " + entry.getValue());
+					CurrencyCode currency = entry.getKey();
+					CurrencyAmount amount = entry.getValue();
+					if (StandardFormatWriter.OMIT_ZERO_BALANCE_FIGURES && amount.isZero()) {
+						continue;
+					}
+					CurrencyAmount weightedAverageCost = null;
+					MonetaryAmount totalCost = null;
+					if (currency.isSameCurrency(batchGroup.getBaseCurrency())) {
+						weightedAverageCost = amount;  //CurrencyAmount.of("1", "NZD");
+						totalCost = amount.getMonetaryAmount();
+						if (!"NZD".equals(totalCost.getCurrency().toString())) {
+							throw new IllegalStateException("currency not nzd");
+						}
+						sumNZSDAmount = sumNZSDAmount.add(amount);
+					} else {
+						weightedAverageCost = batchGroup.calculateWeightedAverageCost(currency);
+						totalCost = batchGroup.calculateTotalHistoricalCostOfAmount(currency, amount);
+						if ("BTC".equals(currency.getCurrencyCode())) {
+							sumBTCAmount = sumBTCAmount.add(amount);
+						}
+						if ("ETH".equals(currency.getCurrencyCode())) {
+							sumETHAmount = sumETHAmount.add(amount);
+						}
+						if ("EUR".equals(currency.getCurrencyCode())) {
+							sumEURAmount = sumEURAmount.add(amount);
+						}
+						if ("USD".equals(currency.getCurrencyCode())) {
+							sumUSDAmount = sumUSDAmount.add(amount);
+						}
+						if ("BCH".equals(currency.getCurrencyCode())) {
+							sumBCHAmount = sumBCHAmount.add(amount);
+						}
+						if ("XRP".equals(currency.getCurrencyCode())) {
+							sumXRPAmount = sumXRPAmount.add(amount);
+						}
+						if ("NANO".equals(currency.getCurrencyCode())) {
+							sumNANOAmount = sumNANOAmount.add(amount);
+						}
+						if ("XLM".equals(currency.getCurrencyCode())) {
+							sumXLMAmount = sumXLMAmount.add(amount);
+						}
+						if (!"NZD".equals(totalCost.getCurrency().toString())) {
+							throw new IllegalStateException("currency not nzd");
+						}
+					}
+					CurrencyAmount totalCostAmount = totalCost == null ? CurrencyAmount.getZeroNZD() : CurrencyAmount.of(totalCost);
+					String csvLine = String.format("%s,%s,%s,%s,%s", balanceDate, exchange.name(), amount,
+							totalCostAmount, weightedAverageCost);
+					sumTotalCostAmount = sumTotalCostAmount.add(totalCostAmount);
+					line = csvLine.split(",");
+					lines.add(line);
+				}
+			}
+		}
+//		ledgerBalance.getBalanceDate();
+//		CurrencyBatchSet allBatches = batchGroup.getAllBatches();
+//		for (CurrencyBatch batch : allBatches) {
+//			line = batch.toCSVString().split(",");
+//			lines.add(line);
+//		}
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else {
+			throw new AssertionError("Please specify CSV file destination");
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/all/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+		return new CurrencyAmount[] {sumTotalCostAmount, sumNZSDAmount, sumBTCAmount, sumETHAmount, sumEURAmount, sumUSDAmount,
+				sumBCHAmount, sumXRPAmount, sumNANOAmount, sumXLMAmount};
+	}
+}

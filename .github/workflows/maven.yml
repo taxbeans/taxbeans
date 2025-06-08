@@ -10,7 +10,7 @@ on:
       skip-tests:
         description: 'Skip tests during build'
         required: false
-        default: 'true'
+        default: 'false'
       dependency-graph:
         description: 'Submit Maven dependency graph to GitHub'
         required: false
@@ -33,7 +33,7 @@ jobs:
       - name: Build with Maven
         run: |
           cd taxbeans-forms
-          SKIP_TESTS=${{ github.event.inputs.skip-tests || 'true' }}
+          SKIP_TESTS=${{ github.event.inputs.skip-tests || 'false' }}
           mvn -B package -DskipTests=$SKIP_TESTS --file pom.xml
 
       - name: Update dependency graph

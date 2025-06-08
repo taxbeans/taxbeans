@@ -43,7 +43,7 @@ public class EthUsdEod {
 
 	public static Map<LocalDate, EthUsdEod> loadFromCSV() {
 		List<String[]> parsedFile = CSVParser.newInstance().parseFile(
-				"target/classes/trades/ETH-USD.csv", true);
+				"target/classes/data/ETH-USD.csv", true);
 		Map<LocalDate, EthUsdEod> map = new HashMap<>();
 		parsedFile.forEach(line -> addToMap(map , line));
 		EthUsdEod.map = map;

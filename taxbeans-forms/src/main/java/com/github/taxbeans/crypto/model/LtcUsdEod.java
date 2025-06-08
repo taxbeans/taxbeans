@@ -45,7 +45,7 @@ public class LtcUsdEod {
 
 	public static Map<LocalDate, LtcUsdEod> loadFromCSV() {
 		List<String[]> parsedFile = CSVParser.newInstance().parseFile(
-				"target/classes/trades/LTC-USD.csv", true);
+				"target/classes/data/LTC-USD.csv", true);
 		Map<LocalDate, LtcUsdEod> map = new HashMap<>();
 		parsedFile.forEach(line -> addToMap(map , line));
 		LtcUsdEod.map = map;

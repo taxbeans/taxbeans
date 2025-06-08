@@ -45,7 +45,7 @@ public class NanoUsdEod {
 
 	public static Map<LocalDate, NanoUsdEod> loadFromCSV() {
 		List<String[]> parsedFile = CSVParser.newInstance().parseFile(
-				"target/classes/trades/NANO-USD2.csv", true);
+				"target/classes/data/NANO-USD2.csv", true);
 		Map<LocalDate, NanoUsdEod> map = new HashMap<>();
 		parsedFile.forEach(line -> addToMap(map , line));
 		NanoUsdEod.map = map;

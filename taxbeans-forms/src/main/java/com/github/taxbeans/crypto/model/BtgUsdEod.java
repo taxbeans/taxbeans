@@ -45,7 +45,7 @@ public class BtgUsdEod {
 
 	public static Map<LocalDate, BtgUsdEod> loadFromCSV() {
 		List<String[]> parsedFile = CSVParser.newInstance().parseFile(
-				"target/classes/trades/BTG-USD.csv", true);
+				"target/classes/data/BTG-USD.csv", true);
 		Map<LocalDate, BtgUsdEod> map = new HashMap<>();
 		parsedFile.forEach(line -> addToMap(map , line));
 		BtgUsdEod.map = map;

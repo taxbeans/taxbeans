@@ -1,0 +1,8 @@
+package com.github.taxbeans.crypto.csv;
+
+public enum StellarCSVType {
+
+	INCOME,
+	SPENDING,
+	TRADES
+}

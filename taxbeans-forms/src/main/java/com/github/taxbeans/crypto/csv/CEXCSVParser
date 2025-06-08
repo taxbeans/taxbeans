@@ -1,0 +1,337 @@
+package com.github.taxbeans.crypto.csv;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.money.Monetary;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.taxbeans.forms.utils.ZonedDateTimeUtils;
+import com.github.taxbeans.csv.CSVParser;
+import com.github.taxbeans.csv.CSVWriter;
+import com.github.taxbeans.crypto.CoinTrackingParser;
+import com.github.taxbeans.crypto.CryptoEvent;
+import com.github.taxbeans.crypto.CurrencyAmount;
+import com.github.taxbeans.crypto.CurrencyBatchGroup;
+import com.github.taxbeans.crypto.CurrencyCode;
+import com.github.taxbeans.crypto.CurrencyConversion;
+import com.github.taxbeans.crypto.CurrencyDeposit;
+import com.github.taxbeans.crypto.CurrencyExchange;
+import com.github.taxbeans.crypto.CurrencyFee;
+import com.github.taxbeans.crypto.CurrencyWithdrawal;
+import com.github.taxbeans.crypto.ExchangeCurrencyBalance;
+import com.github.taxbeans.crypto.FormatUtils;
+
+public class CEXCSVParser {
+
+	private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
+	final static Logger logger = LoggerFactory.getLogger(CEXCSVParser.class);
+
+	public static List<CryptoEvent> parseCEXCSVLines(List<String[]> csv, List<CryptoEvent> cryptoEvents, CurrencyBatchGroup batchGroup)
+			throws ParseException {
+		int eventCount = 0, withdrawals = 0, deposits = 0;
+		int rowNum = 1; // due to title row
+		for (String[] row : csv) {
+			rowNum++;
+			if (row[8].contains("Sell Order")) {
+				logger.info("skipping as this row is informational only");
+				continue;
+			}
+			if (row[8].contains("Buy Order")) {
+				logger.info(
+						"skipping as this row is informational only, TODO come back to this as there may be a small fee to account for");
+				continue;
+			}
+			if ("costsNothing".equals(row[4])) {
+				logger.info("Skipping excess amount not required to fulfill order");
+				continue;
+			}
+			if ("checksum".equals(row[4])) {
+				logger.info("Skipping because this is a checksum");
+				continue;
+			}
+			CryptoEvent cryptoEvent = null;
+			boolean cryptoEventAlreadyDefined = false;
+			EventType type = EventType.valueOf("Trade");
+			boolean isWithdrawal = "withdraw".equals(row[4]);
+			ZonedDateTime dateTime;
+			CurrencyFee fee = null;
+			String group = "";
+			CurrencyAmount buyAmount = null;
+			dateTime = parseDateTime(row[0], rowNum);
+			if (rowNum == 2 && !isWithdrawal) {
+				throw new AssertionError(
+						"expecting a withdrawl for row 2 in this csv, 'withdraw' not equal to: " + row[4]);
+			} else if ("deposit".equals(row[4])) {
+				BigDecimal bigDecimal = new BigDecimal(row[1]);
+				if ("USD".contentEquals(row[2])) {
+					bigDecimal = bigDecimal.setScale(2, RoundingMode.FLOOR);
+				}
+				CurrencyAmount depositAmount = CurrencyAmount.of(bigDecimal, CurrencyCode.of(row[2]));
+				CurrencyAmount feeAmount = CurrencyAmount.of(BigDecimal.ZERO,
+						batchGroup.getBaseCurrency().getCurrencyCode());
+				String feeString = row[7];
+				String feeCurrency = row[6];
+				if (StringUtils.isBlank(feeString)) {
+					fee = CurrencyFee.of(feeAmount);
+				} else {
+					feeAmount = CurrencyAmount.of(new BigDecimal(feeString), feeCurrency);
+					fee = CurrencyFee.of(feeAmount);
+				}
+				cryptoEvent = CurrencyDeposit.of(batchGroup, depositAmount, dateTime, fee);
+				cryptoEvent.setRowNum(rowNum);
+				type = EventType.Deposit;
+				cryptoEventAlreadyDefined = true;
+			} else if ("withdraw".equals(row[4])) {
+				CurrencyAmount withdrawalAmount = CurrencyAmount.of(new BigDecimal(row[1]), CurrencyCode.of(row[2]));
+				CurrencyAmount feeAmount = CurrencyAmount.of(BigDecimal.ZERO,
+						batchGroup.getBaseCurrency().getCurrencyCode());
+				String feeString = row[7];
+				String feeCurrency = row[6];
+				if (StringUtils.isBlank(feeString)) {
+					fee = CurrencyFee.of(feeAmount);
+				} else {
+					feeAmount = CurrencyAmount.of(new BigDecimal(feeString), feeCurrency);
+					fee = CurrencyFee.of(feeAmount);
+				}
+				cryptoEvent = CurrencyWithdrawal.of(batchGroup, withdrawalAmount, dateTime,
+						fee);
+				cryptoEvent.setRowNum(rowNum);
+				type = EventType.Withdrawal;
+				cryptoEventAlreadyDefined = true;
+			}
+			CurrencyAmount sellAmount = CurrencyAmount.of(new BigDecimal(row[1]), CurrencyCode.of(row[2]));
+			if (!cryptoEventAlreadyDefined) {
+				String market = row[5];
+				int pos = market.indexOf("/");
+				String code1 = market.substring(0, pos);
+				String code2 = market.substring(pos + 1);
+				boolean isSale = "sell".equals(row[4]);
+				String amountBought = isSale ? row[1] : row[1];
+				String buyCurrency = isSale ? code2 : code1;
+				// derive amount sold if necessary:
+				String amountSold;
+				BigDecimal feeDecimal = new BigDecimal(row[7]);
+				String feeCurrency = row[6];
+				String sellCurrency = isSale ? code1 : code2;
+				if (isSale) {
+					amountSold = row[8].split(" ")[1];
+				} else {
+					// precision)
+					BigDecimal amount = new BigDecimal(row[8].split(" ")[1]);
+					BigDecimal price = new BigDecimal(row[8].split(" ")[4]);
+					amountSold = amount.multiply(price).toString();
+					if ("USD".equals(feeCurrency) && "USD".equals(sellCurrency)) {
+						//special case for sell USD/buy XLM that was split into 2 trades
+						amountSold = new BigDecimal(amountSold).add(feeDecimal).toPlainString();
+					}
+				}
+				if (!isSale) {
+					// obtain previous row in CSV to get information
+					String[] strings = csv.get(rowNum - 3);
+					if (strings[8].contains("Buy Order")) {
+						BigDecimal newAmountSold = new BigDecimal(strings[1]).negate();
+						BigDecimal difference = newAmountSold.subtract(new BigDecimal(amountSold));
+						if (difference.compareTo(new BigDecimal("0.5")) > 0) {
+							logger.warn("Rounding error with buy trade is too large: " + difference);
+							logger.warn("continuing because there must be multiple trades");
+						} else {
+							amountSold = newAmountSold.toPlainString();
+						}
+					} else {
+						logger.warn("continuing because there are multiple trades for this one buy order");
+					}
+					if ("USD".contentEquals(sellCurrency)) {
+						String previousValue = amountSold;
+						amountSold = new BigDecimal(amountSold).setScale(2, RoundingMode.FLOOR).toPlainString();
+						if (!previousValue.equals(amountSold)) {
+							logger.warn("Rounded {} to {}", previousValue, amountSold);
+						}
+					}
+				}
+				String feeString;
+				String feeStringAssert;
+
+				BigDecimal buyBigDecimal = new BigDecimal(amountBought);
+				BigDecimal sellBigDecimal = new BigDecimal(amountSold);
+				buyAmount = amountBought.isBlank() ? null : CurrencyAmount.of(buyBigDecimal, buyCurrency);
+
+				if (isSale) {
+					feeStringAssert = feeDecimal.toPlainString();
+					feeString = feeStringAssert;
+					Assert.assertEquals(feeStringAssert, feeString);
+					feeCurrency = row[6];
+				} else {
+					feeStringAssert = new BigDecimal(amountBought).multiply(feeDecimal).setScale(8, RoundingMode.DOWN)
+							.toPlainString();
+					feeString = feeStringAssert;
+					feeCurrency = row[6];
+					Assert.assertEquals(feeStringAssert, feeString);
+				}
+				CurrencyAmount feeAmount = CurrencyAmount.of(BigDecimal.ZERO,
+						batchGroup.getBaseCurrency().getCurrencyCode());
+				feeString = row[7];
+				feeCurrency = row[6];
+				if (StringUtils.isBlank(feeString)) {
+					fee = CurrencyFee.of(feeAmount);
+				} else {
+					feeAmount = CurrencyAmount.of(new BigDecimal(feeString), feeCurrency);
+					fee = CurrencyFee.of(feeAmount);
+				}
+				if (buyAmount.getCurrencyCode().toString().equals(feeCurrency)) {
+					//buyAmount = buyAmount.subtract(feeAmount);
+				} else if (sellAmount.getCurrencyCode().toString().equals(sellCurrency)) {
+					//buyAmount = buyAmount.subtract(feeAmount);
+					//do nothing, i.e. assume inclusive of fees already
+				} else {
+					//do nothing
+				}
+				eventCount++;
+				sellAmount = amountSold.isBlank() ? null : CurrencyAmount.of(sellBigDecimal, sellCurrency);
+			}
+			if (EventType.Deposit.equals(type) || EventType.Loan.equals(type)) {
+				deposits++;
+			}
+			if (EventType.Withdrawal.equals(type) || EventType.Spend.equals(type) || EventType.Repayment.equals(type)) {
+				withdrawals++;
+				// convert from CEX CSV, which is exclusive, to standard CSV, which is
+				// inclusive of fee in terms of balance affect
+				cryptoEvent = CurrencyWithdrawal.of(batchGroup,	sellAmount, dateTime, fee);
+			}
+			logger.info("rowNum = " + rowNum);
+			if (EventType.Trade.equals(type)) {
+				cryptoEvent = CurrencyConversion.of(batchGroup, buyAmount, dateTime, sellAmount, fee);
+
+			}
+			if (cryptoEvent != null) {
+				String balance = row[3];
+				String symbol = row[2];
+				CurrencyAmount balanceAmount = CurrencyAmount.of(balance, symbol);
+				ExchangeCurrencyBalance currencyExchangeBalance = new ExchangeCurrencyBalance();
+				currencyExchangeBalance.setBalance(balanceAmount);
+				currencyExchangeBalance.setWhen(dateTime);
+				currencyExchangeBalance.setGroup(group);
+				currencyExchangeBalance.setRowNum(rowNum);
+				currencyExchangeBalance.setCurrencyExchange(CurrencyExchange.CEX);
+
+				cryptoEvent.setGroup(group);
+				cryptoEvent.setRowNum(rowNum);
+				cryptoEvent.setCurrencyExchange(CurrencyExchange.CEX);
+				cryptoEvents.add(cryptoEvent);
+				cryptoEvents.add(currencyExchangeBalance);
+			} else {
+				throw new AssertionError("Crypto Event should never be null");
+			}
+		}
+		logger.info("Statistics, event count = {}, withdrawal count = {}, deposit count = {}", eventCount, withdrawals, deposits);
+		return cryptoEvents;
+	}
+//
+//	public static void writeEventsToCSV(List<CryptoEvent> cryptoEvents) {
+//		List<String[]> lines = new ArrayList<String[]>();
+//		String[] line = new String[] {"Type", "Buy", "Cur.", "Sell", "Cur.", "Fee", "Cur.", "Exchange", "Group", "Comment", "Date"};
+//		lines.add(line);
+//		logger.warn("Sorting CEX events, could be slow...");
+//		Collections.sort(cryptoEvents, Collections.reverseOrder()); // may not be necessary, but just in case
+//		for (CryptoEvent event : cryptoEvents) {
+//			line = new String[11];
+//			line[7] = "CEX";
+//			line[8] = "";
+//			line[9] = "Imported by Bitcoin Accounting";
+//			line[10] = ZonedDateTimeUtils.format(event.getWhen());
+//			if (event instanceof CurrencyConversion) {
+//				CurrencyConversion conversion = (CurrencyConversion) event;
+//				if (conversion.isIncomplete()) {
+//					throw new AssertionError("incomplete event");
+//				}
+//				line[0] = EventType.Trade.name();
+//				line[1] = conversion.getTo().getBigDecimal().toPlainString() + "";
+//				line[2] = conversion.getTo().getCurrencyCode().getCurrencyCode() + "";
+//				CurrencyAmount from = conversion.getFrom();
+//				line[3] = from == null ? "" : from.getBigDecimal().toPlainString() + "";
+//				line[4] = from == null ? "" : from.getCurrencyCode().getCurrencyCode() + "";
+//				line[5] = conversion.getFee().getAmount().getBigDecimal().toPlainString() + "";
+//				line[6] = conversion.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+//			} else if (event instanceof CurrencyDeposit) {
+//				CurrencyDeposit deposit = (CurrencyDeposit) event;
+//				line[0] = EventType.Deposit.name();
+//				BigDecimal depositAmount = deposit.getAmount().getBigDecimal();
+//				String depositAmountString = depositAmount.toPlainString();
+//				if (!deposit.getAmount().isCrypto()) {
+//					depositAmountString = FormatUtils.format(deposit.getAmount().getMonetaryAmount());
+//				}
+//				line[1] = deposit.getAmount() == null ? "NaN" : depositAmountString + "";
+//				line[2] = deposit.getAmount() == null ? "N/A"
+//						: deposit.getAmount().getCurrencyCode().getCurrencyCode() + "";
+//				line[3] = "";
+//				line[4] = "";
+//				line[5] = deposit.getFee().getAmount().getBigDecimal().toPlainString() + "";
+//				line[6] = deposit.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+//			} else if (event instanceof CurrencyWithdrawal) {
+//				CurrencyWithdrawal withdrawal = (CurrencyWithdrawal) event;
+//				line[0] = EventType.Withdrawal.name();
+//				line[1] = "";
+//				line[2] = "";
+//				line[3] = withdrawal.getAmount().getBigDecimal().negate().toPlainString() + "";
+//				line[4] = withdrawal.getAmount().getCurrencyCode().getCurrencyCode() + "";
+//				line[5] = withdrawal.getFee().getAmount().getBigDecimal().toPlainString() + "";
+//				line[6] = withdrawal.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+//			} else {
+//				continue;
+//			}
+//			lines.add(line);
+//		}
+//		File location = CSVWriter.writeCSV("cex-all-standard-format.csv", lines);
+//		try {
+//			logger.info("Writing csv: " + location.getCanonicalPath());
+//			File sourceControlLocation = new File("src/main/resources/cointracking/cex/" + location.getName());
+//			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+//			FileUtils.copyFile(location, sourceControlLocation);
+//		} catch (IOException e) {
+//			throw new AssertionError(e);
+//		}
+//	}
+
+	private static ZonedDateTime parseDateTime(String dateString, int rowNum) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime localDateTime = null;
+		try {
+			localDateTime = LocalDateTime.parse(dateString, formatter);
+		} catch (DateTimeParseException e) {
+			logger.info("rowNum = {}, dateString = {}", rowNum, dateString);
+			throw e;
+		}
+		return ZonedDateTime.of(localDateTime, UTC_ZONE);
+	}
+
+	public static void main(String[] args) throws ParseException, IOException {
+		String cexTradesCSV = "cointracking/cex/cex-fy2022-transactions-2021-04-01-2022-03-31.csv";
+		CurrencyBatchGroup batchGroup = CurrencyBatchGroup.of(Monetary.getCurrency("NZD"));
+		List<String[]> cexCSV = CSVParser.newInstance()
+				.parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(cexTradesCSV), true);
+
+		List<CryptoEvent> cexEvents = new ArrayList<CryptoEvent>();
+		cexEvents = parseCEXCSVLines(cexCSV, cexEvents , batchGroup);
+		File location = CoinTrackingWriter.writeEventsToCSV(cexEvents, "cex-all-standard-format.csv");
+		logger.info("Writing csv: " + location.getCanonicalPath());
+		File sourceControlLocation = new File("src/main/resources/cointracking/cex/" + location.getName());
+		logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+		FileUtils.copyFile(location, sourceControlLocation);
+	}
+}
