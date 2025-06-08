@@ -8,6 +8,7 @@ Currently includes:
 * Fill out any PDF form from Java POJOs
 * Parsing of GnuCash files to the Model using STAX
 * Automatic import of CSV data export from exchanges such as Kraken and Poloniex
+* CSV parsing package for Kraken
 
 Are you looking for a full crypto API with tax profit/loss calculation support?
 
