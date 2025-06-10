@@ -2,6 +2,7 @@ package com.github.taxbeans.crypto;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,9 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
-	
+
+	/*
+	 * N.B. this class is just a stateless wrapper
+	 * actual state should be added to currency batch group
+	 */
+
 	private static Map<CurrencyCode, ZonedDateTime> lastBatchDates = new HashMap<CurrencyCode, ZonedDateTime>();
-	
+
 	public static CurrencyBatchSet of() {
 		return CurrencyBatchSet.of(new ArrayList<CurrencyBatch>());
 	}
@@ -26,6 +32,12 @@ public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
 
 	private List<CurrencyBatch> batches;
 
+	private List<CurrencyBatch> archivedSplitBatches = new ArrayList<CurrencyBatch>();
+
+	private List<CurrencyBatch> archivedUsedBatches =  new ArrayList<CurrencyBatch>();
+
+	private List<CurrencyAmount> lending = new ArrayList<CurrencyAmount>();
+
 	public void add(CurrencyBatch batch) {
 		batches.add(batch);
 	}
@@ -33,7 +45,7 @@ public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
 	private void add(CurrencyBatchSet batchSet) {
 		batches.addAll(batchSet.batches);
 	}
- 
+
 	@Override
 	public Iterator<CurrencyBatch> iterator() {
 		return batches.iterator();
@@ -52,6 +64,16 @@ public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
 		return amount;
 	}
 
+	public CurrencyAmount sum(CurrencyCode currencyAmount) {
+		CurrencyAmount amount = CurrencyAmount.of(BigDecimal.ZERO, currencyAmount);
+		for (CurrencyBatch batch : batches) {
+			if (batch.getAmountRemaining().isSameCurrency(currencyAmount)) {
+				amount = batch.getAmountRemaining().add(amount);
+			}
+		}
+		return amount;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -61,11 +83,19 @@ public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns all fully used batches
+	 */
 	public CurrencyBatchSet use(CurrencyAmount currencyAmount) {
-		CurrencyBatchSet batchSet = CurrencyBatchSet.of();
+		CurrencyBatchSet fullyUsedBatches = CurrencyBatchSet.of();
 		if (useMethod == UseMethod.FIFO ||
-				useMethod == UseMethod.WAC) {		
+				useMethod == UseMethod.WAC) {
+			if ("USD".equals(currencyAmount.getCurrencyString())) {
+				System.out.println("code = " + "USD");
+			}
 			List<CurrencyBatch> batchesToRemove = new ArrayList<CurrencyBatch>();
+			List<CurrencyBatch> batchesToAdd = new ArrayList<CurrencyBatch>();
+
 			for (CurrencyBatch batch : batches) {
 				if (batch.isFullyUsed()) {
 					//batch is already fully used
@@ -76,9 +106,18 @@ public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
 					continue;
 				}
 				if (batch.canUse(currencyAmount)) {
-					batchSet.add(batch.use(currencyAmount));
-					if (batch.isFullyUsed()) {
-						batchesToRemove.add(batch);
+					CurrencyBatchSet result = batch.use(currencyAmount);
+					List<CurrencyBatch> resultBatches = result.batches;
+					for (CurrencyBatch resultBatch : resultBatches) {
+						if (resultBatch.split && resultBatch.fullyUsed) {
+							archivedSplitBatches.add(resultBatch);
+							batchesToRemove.add(resultBatch);
+						} else if (resultBatch.fullyUsed) {
+							archivedUsedBatches.add(resultBatch);
+							fullyUsedBatches.add(resultBatch);
+						} else {
+							//batchesToAdd.add(resultBatch);
+						}
 					}
 					break;
 				} else {
@@ -86,11 +125,25 @@ public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
 						throw new AssertionError("amount remaining, " + batch.getAmountRemaining() + " cannot be used");
 					} else {
 						CurrencyAmount amountUsed = batch.getAmountRemaining();
-						batchSet.add(batch.use(amountUsed));
+
+						CurrencyBatchSet result = batch.use(amountUsed);
+						List<CurrencyBatch> resultBatches = result.batches;
+						for (CurrencyBatch resultBatch : resultBatches) {
+							if (resultBatch.split && resultBatch.fullyUsed) {
+								archivedSplitBatches.add(resultBatch);
+								batchesToRemove.add(resultBatch);
+							} else if (resultBatch.fullyUsed) {
+								archivedUsedBatches.add(resultBatch);
+								fullyUsedBatches.add(resultBatch);
+							} else {
+								//batchesToAdd.add(resultBatch);
+							}
+						}
 						CurrencyCode currencyCode = amountUsed.getCurrencyCode();
 						ZonedDateTime lastBatchDate = lastBatchDates.get(currencyCode);
-						if (lastBatchDate != null && lastBatchDate.compareTo(batch.getWhen()) > 0) {
-							throw new AssertionError(String.format("Batch out of order %s, %s for %s", 
+						//TODO fix FIFO order
+						if (lastBatchDate != null && lastBatchDate.isAfter(batch.getWhen())) {
+							throw new AssertionError(String.format("Batch out of order %s, %s for %s",
 									lastBatchDate, batch.getWhen(), currencyCode));
 						}
 						lastBatchDate = batch.getWhen();
@@ -103,7 +156,13 @@ public class CurrencyBatchSet implements Iterable<CurrencyBatch> {
 				}
 			}
 			batches.removeAll(batchesToRemove);
+			batches.addAll(batchesToAdd);
 		}
-		return batchSet;
+		return fullyUsedBatches;
+	}
+
+	public void lend(CurrencyAmount amountLent) {
+		System.err.println("Lending amount of: " + amountLent);
+		lending.add(amountLent);
 	}
 }

@@ -6,9 +6,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.money.CurrencyUnit;
 
 public class CurrencyCode implements Comparable<CurrencyCode> {
-	
+
 	private static Map<String, CurrencyCode> map = new ConcurrentHashMap<String, CurrencyCode>();
-	
+
+	public static final CurrencyCode USD = CurrencyCode.of("USD");
+
+	public static final CurrencyCode BTC = CurrencyCode.of("BTC");
+
+	public static final CurrencyCode ETH = CurrencyCode.of("ETH");
+
+	public static final CurrencyCode NZD = CurrencyCode.of("NZD");
 
 	public static CurrencyCode of(String currencyString) {
 		CurrencyCode currencyCode2 = map.get(currencyString);
@@ -20,7 +27,7 @@ public class CurrencyCode implements Comparable<CurrencyCode> {
 		};
 		return currencyCode2;
 	}
-	
+
 	private String currencyCode;
 
 	public String getCurrencyCode() {
@@ -29,6 +36,10 @@ public class CurrencyCode implements Comparable<CurrencyCode> {
 
 	public void setCurrencyCode(String currencyCode) {
 		this.currencyCode = currencyCode;
+	}
+
+	String getCurrencyString() {
+		return getCurrencyCode();
 	}
 
 	@Override
@@ -65,4 +76,12 @@ public class CurrencyCode implements Comparable<CurrencyCode> {
 		return this.currencyCode.equals(baseCurrency.getCurrencyCode());
 	}
 
+	@Override
+	public String toString() {
+		return String.format(currencyCode);
+	}
+
+	public boolean isSameCurrency(CurrencyCode currencyCode) {
+		return this.currencyCode.equals(currencyCode.currencyCode);
+	}
 }

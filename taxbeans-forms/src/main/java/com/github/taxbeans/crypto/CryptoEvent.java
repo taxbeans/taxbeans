@@ -26,4 +26,12 @@ public interface CryptoEvent extends Comparable<CryptoEvent> {
 
 	public void setBusinessExpense(boolean b);
 
+	public CryptoEventType getCryptoEventType();
+
+	public String getSourceCSVLine();
+
+	public void setSourceCSVLine(String s);
+
+	public boolean isLeveraged();
+
 }
