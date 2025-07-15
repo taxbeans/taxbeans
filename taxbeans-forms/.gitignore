@@ -2,3 +2,4 @@
 /target/
 .classpath
 /build/
+node_modules/

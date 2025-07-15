@@ -35,8 +35,6 @@ public class IR3Form2025Test {
 		nzBankAccount.setBankSuffix("55");
 		bean.setAccount(nzBankAccount);
 		bean.setIncomeAdjustmentsRequired(true);
-		bean.setFamilyTaxCreditReceived(true);
-		bean.setFamilyTaxCreditAmount(Money.of(new BigDecimal("5555.55"), "NZD"));
 		bean.setIncomeWithTaxDeductedReceived(true);
 		bean.setTotalPAYEDeducted(Money.of(new BigDecimal("7777.77"), "NZD"));
 		bean.setTotalGrossIncome(Money.of(new BigDecimal("88888.88"), "NZD"));

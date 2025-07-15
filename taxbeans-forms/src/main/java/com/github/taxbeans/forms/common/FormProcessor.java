@@ -494,6 +494,9 @@ public class FormProcessor {
 				throw new IllegalStateException("parent directory doesn't exist: " + parent.getAbsolutePath());
 			}
 			File result = new File(parent, String.format(outputFormat, year, lowerCase));
+			if (result.exists()) {
+				result.delete();
+			}
 			acroForm.setXFA(null);
 			acroForm.setNeedAppearances(true);
 			pdfTemplate.save(result);

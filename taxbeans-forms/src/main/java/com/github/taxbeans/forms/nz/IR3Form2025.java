@@ -127,13 +127,6 @@ public class IR3Form2025 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean expensesOtherReceived;
 
-	@RightAlign(11)
-	@SkipIfFalse("familyTaxCreditReceived")
-	private Money familyTaxCreditAmount;
-
-	@UseTrueFalseMappings
-	private boolean familyTaxCreditReceived;
-
 	private String firstname;
 
 	@UseTrueFalseMappings
@@ -681,10 +674,6 @@ public class IR3Form2025 implements FormDestination {
 		return excessImputationCreditsBroughtForward;
 	}
 
-	public Money getFamilyTaxCreditAmount() {
-		return familyTaxCreditAmount;
-	}
-
 	public String getFirstname() {
 		return firstname;
 	}
@@ -1157,10 +1146,6 @@ public class IR3Form2025 implements FormDestination {
 		return expensesOtherReceived;
 	}
 
-	public boolean isFamilyTaxCreditReceived() {
-		return familyTaxCreditReceived;
-	}
-
 	public boolean isIncomeAdjustmentsRequired() {
 		return incomeAdjustmentsRequired;
 	}
@@ -1395,14 +1380,6 @@ public class IR3Form2025 implements FormDestination {
 
 	public void setExpensesOtherReceived(boolean expensesOtherReceived) {
 		this.expensesOtherReceived = expensesOtherReceived;
-	}
-
-	public void setFamilyTaxCreditAmount(Money familyTaxCreditAmount) {
-		this.familyTaxCreditAmount = familyTaxCreditAmount;
-	}
-
-	public void setFamilyTaxCreditReceived(boolean familyTaxCreditReceived) {
-		this.familyTaxCreditReceived = familyTaxCreditReceived;
 	}
 
 	public void setFirstname(String firstname) {
