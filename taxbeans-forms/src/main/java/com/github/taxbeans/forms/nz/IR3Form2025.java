@@ -227,13 +227,25 @@ public class IR3Form2025 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean netLossesBroughtForwardClaimed;
 
-	@RightAlign(11)
+	@RightAlign(value=11)
 	@SkipIfFalse(RENTS_RECEIVED)
 	private Money netRents;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 22A")
 	@SkipIfFalse(residentialPropertyIncomeReceivedField)
-	private Money totalResidentialIncome;
+	private Money grossResidentialResidentialIncome;
+
+	@RightAlign(value=11, fieldName="box 22D")
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money totalCombinedResidentialIncome;
+
+	@RightAlign(value=11, fieldName="box 22B")
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money netBrightLineProfit;
+
+	@RightAlign(value=11, fieldName="box 22C")
+	@SkipIfFalse(residentialPropertyIncomeReceivedField)
+	private Money otherResidentialIncome;
 
 	@RightAlign(11)
 	@SkipIfFalse(RESIDENTIAL_PROPERTY_INTEREST_INCURRED)
@@ -243,23 +255,23 @@ public class IR3Form2025 implements FormDestination {
 	@SkipIfFalse(RESIDENTIAL_PROPERTY_INTEREST_INCURRED)
 	private Money residentialPropertInterestClaimed;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 22E")
 	@SkipIfFalse(residentialPropertyIncomeReceivedField)
 	private Money residentialRentalDeductions;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 22F")
 	@SkipIfFalse(residentialPropertyIncomeReceivedField)
 	private Money excessResidentialRentalDeductionsBroughtForward;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 22G")
 	@SkipIfFalse(residentialPropertyIncomeReceivedField)
 	private Money residentialRentalDeductionsClaimed;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 22H")
 	@SkipIfFalse(residentialPropertyIncomeReceivedField)
 	private Money netResidentialRentalIncome;
 
-	@RightAlign(11)
+	@RightAlign(value=11, fieldName="box 22I")
 	@SkipIfFalse(residentialPropertyIncomeReceivedField)
 	private Money excessResidentialRentalDeductionsCarriedForward;
 
@@ -818,12 +830,12 @@ public class IR3Form2025 implements FormDestination {
 		this.excessResidentialRentalDeductionsCarriedForward = excessResidentialRentalDeductionsCarriedForward;
 	}
 
-	public Money getTotalResidentialIncome() {
-		return totalResidentialIncome;
+	public Money getTotalCombinedResidentialIncome() {
+		return totalCombinedResidentialIncome;
 	}
 
-	public void setTotalResidentialIncome(Money totalResidentialIncome) {
-		this.totalResidentialIncome = totalResidentialIncome;
+	public void setTotalCombinedResidentialIncome(Money totalCombinedResidentialIncome) {
+		this.totalCombinedResidentialIncome = totalCombinedResidentialIncome;
 	}
 
 	public Money getNetSchedularPayments() {
@@ -1958,5 +1970,29 @@ public class IR3Form2025 implements FormDestination {
 
 	public void setPieCalculationOutcome(Money pieCalculationOutcome) {
 		this.pieCalculationOutcome = pieCalculationOutcome;
+	}
+
+	public Money getNetBrightLineProfit() {
+		return netBrightLineProfit;
+	}
+
+	public void setNetBrightLineProfit(Money netBrightLineProfit) {
+		this.netBrightLineProfit = netBrightLineProfit;
+	}
+
+	public Money getOtherResidentialIncome() {
+		return otherResidentialIncome;
+	}
+
+	public void setOtherResidentialIncome(Money otherResidentialIncome) {
+		this.otherResidentialIncome = otherResidentialIncome;
+	}
+
+	public Money getGrossResidentialResidentialIncome() {
+		return grossResidentialResidentialIncome;
+	}
+
+	public void setGrossResidentialResidentialIncome(Money grossResidentialResidentialIncome) {
+		this.grossResidentialResidentialIncome = grossResidentialResidentialIncome;
 	}
 }

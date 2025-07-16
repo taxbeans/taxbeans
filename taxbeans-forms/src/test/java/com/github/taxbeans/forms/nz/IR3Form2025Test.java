@@ -103,7 +103,10 @@ public class IR3Form2025Test {
 		bean.setNetRents(Money.of(new BigDecimal("12630.39"), "NZD"));
 		bean.setResidentialPropertyIncomeReceived(true);
 		bean.setResidentialPropertyInterestClaimedReason(ResidentialPropertyInterestClaimedReason.newBuildException);
-		bean.setTotalResidentialIncome(Money.of(new BigDecimal("12688.39"), "NZD"));
+		bean.setTotalCombinedResidentialIncome(Money.of(new BigDecimal("12688.39"), "NZD"));
+		bean.setGrossResidentialResidentialIncome(Money.of(new BigDecimal("25000.00"), "NZD"));
+		bean.setNetBrightLineProfit(Money.of(new BigDecimal("15000.00"), "NZD"));
+		bean.setOtherResidentialIncome(Money.of(new BigDecimal("8000.00"), "NZD"));
 		bean.setTotalPIEDeductions(Money.of(new BigDecimal("-10.10"), "NZD"));
 		bean.setTotalPIEIncome(Money.of(new BigDecimal("-11.11"), "NZD"));
 		bean.setPortfolioInvestmentEntityIncomeReceived(true);
