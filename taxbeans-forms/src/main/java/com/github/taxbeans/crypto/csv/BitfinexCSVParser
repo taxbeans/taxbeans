@@ -1,0 +1,367 @@
+package com.github.taxbeans.crypto.csv;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.money.Monetary;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.taxbeans.csv.CSVParser;
+import com.github.taxbeans.crypto.CoinTrackingParser;
+import com.github.taxbeans.crypto.CryptoEvent;
+import com.github.taxbeans.crypto.CurrencyAmount;
+import com.github.taxbeans.crypto.CurrencyBalance;
+import com.github.taxbeans.crypto.CurrencyBatchGroup;
+import com.github.taxbeans.crypto.CurrencyCode;
+import com.github.taxbeans.crypto.CurrencyConversion;
+import com.github.taxbeans.crypto.CurrencyDeposit;
+import com.github.taxbeans.crypto.CurrencyExchange;
+import com.github.taxbeans.crypto.CurrencyFee;
+import com.github.taxbeans.crypto.CurrencyTradeLoss;
+import com.github.taxbeans.crypto.CurrencyTradeProfit;
+import com.github.taxbeans.crypto.CurrencyWithdrawal;
+import com.github.taxbeans.crypto.ExchangeCurrencyBalance;
+import com.github.taxbeans.crypto.FormattedComment;
+
+public class BitfinexCSVParser {
+
+	private static final CurrencyExchange BITFINEX = CurrencyExchange.BITFINEX;
+	private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
+	final static Logger logger = LoggerFactory.getLogger(BitfinexCSVParser.class);
+
+	public static List<CryptoEvent> parseCSVLines(List<String[]> csv, List<CryptoEvent> cryptoEvents,
+			CurrencyBatchGroup batchGroup) throws ParseException {
+
+		int bothKrakenTradeSidesHaveFees = 0;
+		int conversionHalfCount = 0;
+		int deposits = 0;
+		int specialCaseMarginGain = 0;
+		int sellAmountEqualsFeeAmountForKrakenMargin = 0;
+		int withdrawals = 0;
+		int eventCount = 0;
+		int incomeTypeCount = 0;
+		int buyAmountEqualsFeeAmountForKrakenMargin = 0;
+		int lossTypeCount = 0;
+		int rowNum = 1; // due to title row
+		Map<String, CryptoEvent> transactionIDMap = new HashMap<String, CryptoEvent>();
+		Map<String, ZonedDateTime> withdrawalRefMap = new HashMap<String, ZonedDateTime>();
+		Map<ZonedDateTime, CurrencyFee> tradingFeeMap = new HashMap<ZonedDateTime, CurrencyFee>();
+		Map<ZonedDateTime, ExchangeCurrencyBalance> tradingFeeBalanceMap = new HashMap<ZonedDateTime, ExchangeCurrencyBalance>();
+		Map<ZonedDateTime, CurrencyConversion> tradeMap = new HashMap<ZonedDateTime, CurrencyConversion>();
+		Map<ZonedDateTime, CurrencyFee> withdrawalFeeMap = new HashMap<ZonedDateTime, CurrencyFee>();
+		CurrencyBalance btcBalance = CurrencyBalance.of();
+		CryptoEvent cryptoEvent = null;
+		FormattedComment formattedComment = null;
+		for (String[] row : csv) {
+			rowNum++;
+			String ref = row[0];
+			String longType = row[1];
+			if (longType.contains("airdrop") || longType.contains("redenomination") || longType.contains("Bitcoin Cash fork")) {
+				// ignore insignificant dust amounts
+				continue;
+			}
+			EventType type = EventType.Deposit;
+			ZonedDateTime dateTime = parseDateTime(row[5], rowNum);
+			if (row[0].isBlank() && type.equals(EventType.Withdrawal)) { // Kraken txid
+				logger.warn("Using blank transaction ID to save the date");
+				withdrawalRefMap.put(ref, dateTime);
+				// continue;
+			}
+			if (row[0].isBlank()) { // Kraken txid
+				logger.warn("Ignoring blank transaction ID");
+				continue;
+			}
+			CurrencyFee blankFee = CurrencyFee
+					.of(CurrencyAmount.of(BigDecimal.ZERO, batchGroup.getBaseCurrency().getCurrencyCode()));
+			BigDecimal buyBigDecimal = BigDecimal.ZERO;
+			BigDecimal sellBigDecimal = BigDecimal.ZERO;
+			CurrencyAmount buyAmount;
+			CurrencyAmount sellAmount;
+			if (buyBigDecimal.signum() < 0) {
+				buyAmount = null;
+				sellAmount = CurrencyAmount.of(sellBigDecimal.negate(), "USD");
+			} else {
+				buyAmount = CurrencyAmount.of(buyBigDecimal, "USD");
+				sellAmount = null;
+			}
+			if (longType.contains("Withdrawal")) {
+				type = EventType.Withdrawal;
+				String withdrawalAmount = row[3];
+				String withdrawalCurrency = row[2];
+				CurrencyFee withdrawalFee = CurrencyFee.of(CurrencyAmount.of(BigDecimal.ZERO, withdrawalCurrency));
+				CurrencyAmount withdrawalCurrencyAmount = CurrencyAmount.of(withdrawalAmount, withdrawalCurrency).negate();
+				CurrencyWithdrawal currencyWithdrawal = CurrencyWithdrawal.of(batchGroup,
+						withdrawalCurrencyAmount.negate(), dateTime, withdrawalFee);
+				CurrencyFee currencyFee = withdrawalFeeMap.get(dateTime);
+				if (currencyFee != null) {
+					currencyWithdrawal.setFee(currencyFee);
+				}
+				cryptoEvent = currencyWithdrawal;
+				ExchangeCurrencyBalance exchangeCurrencyBalance = new ExchangeCurrencyBalance();
+				exchangeCurrencyBalance.setWhen(dateTime);
+				exchangeCurrencyBalance.setBalance(CurrencyAmount.of(row[4], row[2]).negate());
+				exchangeCurrencyBalance.setCurrencyExchange(BITFINEX);
+				cryptoEvents.add(exchangeCurrencyBalance);
+			} else if (longType.contains("Withdrawal fees")) {
+				CurrencyFee tradingFee = CurrencyFee
+						.of(CurrencyAmount.of(new BigDecimal(row[3]).negate(), CurrencyCode.of(row[2])));
+				withdrawalFeeMap.put(dateTime, tradingFee);
+				continue;
+			} else if (longType.contains("Trading fees")) {
+				CurrencyFee tradingFee = CurrencyFee
+						.of(CurrencyAmount.of(new BigDecimal(row[3]).negate(), CurrencyCode.of(row[2])));
+				tradingFeeMap.put(dateTime, tradingFee);
+				ExchangeCurrencyBalance exchangeCurrencyBalance = new ExchangeCurrencyBalance();
+				exchangeCurrencyBalance.setWhen(dateTime);
+				exchangeCurrencyBalance.setBalance(CurrencyAmount.of(row[4], row[2]).negate());
+				exchangeCurrencyBalance.setCurrencyExchange(BITFINEX);
+				tradingFeeBalanceMap.put(dateTime, exchangeCurrencyBalance);
+				continue;
+			} else if (longType.contains("Exchange")) {
+				type = EventType.Trade;
+				String longExchangeString = row[1];
+				String buy = longExchangeString.split(" ")[1];
+				String buyCurrency = longExchangeString.split(" ")[2];
+				String sell = buy;
+				String sellCurrency = longExchangeString.split(" ")[4];
+				String price = longExchangeString.split(" ")[6];
+				String feeString = "";
+				String feeCurrency = buyCurrency;
+				String amountSoldString = new BigDecimal(buy).multiply(new BigDecimal(price)).stripTrailingZeros().toPlainString();
+				CurrencyAmount amountBought = CurrencyAmount.of(buy, buyCurrency);
+				CurrencyAmount amountSold = CurrencyAmount.of(amountSoldString, sellCurrency);
+				//String feeString = row[8];
+				//String feeCurrency = currencyCode;
+				CurrencyExchange exchange = BITFINEX;
+				String group = "";
+
+				eventCount++;
+
+				CurrencyAmount balance = CurrencyAmount.of(row[4], row[2]);
+				formattedComment = FormattedComment.of(balance, balance, "Imported By Bitcoin Accounting");
+				CurrencyFee fee;
+				if (StringUtils.isBlank(feeString)) {
+					fee = CurrencyFee
+							.of(CurrencyAmount.of(BigDecimal.ZERO, batchGroup.getBaseCurrency().getCurrencyCode()));
+				} else {
+					CurrencyAmount feeAmount = CurrencyAmount.of(new BigDecimal(feeString), feeCurrency);
+					fee = CurrencyFee.of(feeAmount.negate());
+				}
+				CurrencyFee currencyFee = tradingFeeMap.get(dateTime);
+				fee = optional(currencyFee, fee);
+
+				if (currencyFee != null &&
+						currencyFee.getAmount().getCurrencyCode().equals(amountBought.getCurrencyCode())) {
+					amountBought = amountBought.subtract(currencyFee.getAmount().abs());
+				}
+
+				CurrencyConversion trade = CurrencyConversion.of(batchGroup, amountBought, dateTime, amountSold, fee);
+				ExchangeCurrencyBalance exchangeCurrencyBalance = new ExchangeCurrencyBalance();
+				exchangeCurrencyBalance.setWhen(dateTime);
+				exchangeCurrencyBalance.setBalance(CurrencyAmount.of(row[4], row[2]).negate());
+				exchangeCurrencyBalance.setCurrencyExchange(BITFINEX);
+
+				ExchangeCurrencyBalance exchangeCurrencyBalance2 = tradingFeeBalanceMap.get(dateTime);
+				if (exchangeCurrencyBalance2 != null &&
+						exchangeCurrencyBalance2.getBalance().getCurrencyCode()
+						.equals(exchangeCurrencyBalance.getBalance().getCurrencyCode())) {
+					exchangeCurrencyBalance = exchangeCurrencyBalance2;
+				}
+				cryptoEvents.add(exchangeCurrencyBalance);
+				if (tradeMap.containsKey(dateTime)) {
+					CurrencyConversion sameTrade = tradeMap.get(dateTime);
+					//trade.setTo(sameTrade.getFrom().negate());
+					cryptoEvent = trade;
+				} else {
+					cryptoEvent = CurrencyConversion.of(batchGroup, amountBought, dateTime, amountSold, fee);
+					tradeMap.put(dateTime,  trade);
+					continue;
+				}
+
+				if ("BTC".equals(buyCurrency)) {
+					if (sellAmount != null) {
+						btcBalance.subtract(sellAmount, BITFINEX);
+					} else {
+						btcBalance.add(buyAmount, BITFINEX);
+					}
+					btcBalance.subtract(fee.getAmount(), BITFINEX);
+				}
+				logger.warn("Bitfinex BTC balance = {}", btcBalance.toString());
+				if (EventType.Deposit.equals(type) || EventType.Loan.equals(type)) {
+					deposits++;
+					CurrencyDeposit currencyDeposit = CurrencyDeposit.of(batchGroup, buyAmount, dateTime, fee);
+					currencyDeposit.setComment("");
+					// TODO, ideally should be conditional upon whether this is a transfer
+					logger.warn("alternatively, this could be conditional upon whether this is a transfer");
+//					if (testIncludeDeposits) {
+//						batchGroup.add(CurrencyBatch.of(currencyDeposit.getAmount(), currencyDeposit.getWhen(), currencyDeposit.getAmount()));
+//					} else if (testIncludeFiatDeposits  && !currencyDeposit.getAmount().isCrypto()) {
+//						batchGroup.add(CurrencyBatch.of(currencyDeposit.getAmount(), currencyDeposit.getWhen(), currencyDeposit.getAmount()));
+//					}
+					cryptoEvent = currencyDeposit;
+				} else if (EventType.Spend.equals(type) || EventType.Repayment.equals(type)) {
+					withdrawals++;
+					// convert from Kraken CSV, which is exclusive, to standard CSV, which is
+					// inclusive of fee
+					// in terms of balance affect
+					CurrencyWithdrawal currencyWithdrawal = CurrencyWithdrawal.of(batchGroup,
+							sellAmount.negate().add(fee.getAmount()), dateTime, fee);
+					cryptoEvent = currencyWithdrawal;
+					ZonedDateTime time = withdrawalRefMap.get(ref);
+					if (time != null) {
+						currencyWithdrawal.setWhen(time);
+					}
+				}
+			}
+			if (EventType.Withdrawal.equals(type)) {
+				withdrawals++;
+				// convert from Kraken CSV, which is exclusive, to standard CSV, which is
+				// inclusive of fee
+				// in terms of balance affect
+//				CurrencyWithdrawal currencyWithdrawal = CurrencyWithdrawal.of(batchGroup,
+//						sellAmount.negate().add(fee.getAmount()), dateTime, fee);
+//				cryptoEvent = currencyWithdrawal;
+//				ZonedDateTime time = withdrawalRefMap.get(ref);
+//				if (time != null) {
+//					currencyWithdrawal.setWhen(time);
+//				}
+			}
+
+			logger.info("rowNum = " + rowNum);
+			if (EventType.Income.equals(type)) {
+				CurrencyTradeProfit tradeProfit = CurrencyTradeProfit.of(batchGroup, buyAmount, dateTime, blankFee);
+				cryptoEvent = tradeProfit;
+				incomeTypeCount++;
+			} else if (EventType.Lost.equals(type) || EventType.Expense.equals(type)) {
+				CurrencyTradeLoss tradeLoss = CurrencyTradeLoss.of(batchGroup, sellAmount, dateTime, blankFee);
+				cryptoEvent = tradeLoss;
+				lossTypeCount++;
+			} else if (EventType.Margin.equals(type)) {
+				// CurrencyAmount zeroAmount = CurrencyAmount.of(BigDecimal.ZERO, sellCurrency);
+				boolean isLoss = buyAmount == null || (buyBigDecimal.compareTo(BigDecimal.ZERO) == 0);
+				CryptoEvent tradeProfitOrLoss;
+				if (isLoss) {
+					// fee isn't included in balance affect so add it into the amount
+					// if (sellAmount == null) {
+					// buyAmount = CurrencyAmount.of(BigDecimal.ZERO,
+					// fee.getAmount().getCurrencyCode().getCurrencyCode());
+
+					if (sellAmount == null) {
+						sellAmount = CurrencyAmount.of(BigDecimal.ZERO,
+								blankFee.getAmount().getCurrencyCode().getCurrencyCode());
+					}
+					BigDecimal sellBigDecimal2 = sellAmount.getBigDecimal();
+					BigDecimal feeBigDecimal = blankFee.getAmount().getBigDecimal();
+					tradeProfitOrLoss = CurrencyTradeLoss.of(batchGroup, CurrencyAmount
+							.of(sellBigDecimal2.add(feeBigDecimal), sellAmount.getCurrencyCode().getCurrencyCode()),
+							dateTime, blankFee);
+//					} else {
+//						tradeProfitOrLoss =
+//								CurrencyTradeLoss.of(batchGroup,
+//										CurrencyAmount.of(sellAmount.getBigDecimal().negate().add(fee.getAmount().getBigDecimal()),
+//												buyAmount.getCurrencyCode().getCurrencyCode()),
+//										dateTime, fee);
+//					}
+				} else {
+					// CurrencyAmount feeAmount = CurrencyAmount.of(BigDecimal.ZERO,
+					// buyAmount.getCurrencyCode().getCurrencyCode());
+					tradeProfitOrLoss = CurrencyTradeProfit.of(batchGroup, buyAmount.subtract(blankFee.getAmount()),
+							dateTime, blankFee);
+				}
+				cryptoEvent = tradeProfitOrLoss;
+				lossTypeCount++;
+			} else if (EventType.Rollover.equals(type)) {
+				// CurrencyAmount zeroAmount = CurrencyAmount.of(BigDecimal.ZERO, sellCurrency);
+				CurrencyTradeLoss tradeLoss = CurrencyTradeLoss.of(batchGroup, blankFee.getAmount(), dateTime,
+						blankFee);
+				tradeLoss.setRollover(true);
+				cryptoEvent = tradeLoss;
+				lossTypeCount++;
+			} else if (EventType.Trade.equals(type)) {
+				//continue;
+			}
+//			else {
+//				CurrencyConversion conversion = CurrencyConversion.of(batchGroup, buyAmount, dateTime, sellAmount,
+//						blankFee);
+//				conversion.setIncomplete(true);
+//				cryptoEvent = conversion;
+//				conversionHalfCount++;
+//			}
+			if (cryptoEvent != null) {
+				cryptoEvent.setFormattedComment(formattedComment);
+				if (!(cryptoEvent instanceof CurrencyConversion)
+						|| !((CurrencyConversion) cryptoEvent).isIncomplete()) {
+					cryptoEvent.setGroup("");
+					cryptoEvent.setRowNum(rowNum);
+					cryptoEvent.setCurrencyExchange(BITFINEX);
+					cryptoEvents.add(cryptoEvent);
+				}
+			} else {
+				throw new AssertionError("Crypto Event should never be null");
+			}
+		}
+		// transactionIDMap.put(ref, cryptoEvent);
+		return cryptoEvents;
+	}
+
+	private static <T> T optional(T currencyFee, T fee) {
+		if (currencyFee == null) {
+			return fee;
+		} else {
+			return currencyFee;
+		}
+	}
+
+	private static String optionalFormattedComment(FormattedComment formattedComment, String string) {
+		if (formattedComment == null) {
+			return string;
+		} else {
+			return String.valueOf(formattedComment);
+		}
+	}
+
+	private static ZonedDateTime parseDateTime(String dateString, int rowNum) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm:ss.SSS");
+		LocalDateTime localDateTime = null;
+		try {
+			localDateTime = LocalDateTime.parse(dateString, formatter);
+		} catch (DateTimeParseException e) {
+			logger.info("rowNum = {}, dateString = {}", rowNum, dateString);
+			throw e;
+		}
+		return ZonedDateTime.of(localDateTime, UTC_ZONE);
+	}
+
+	public static List<CryptoEvent> process(List<CryptoEvent> events, CurrencyBatchGroup batch) throws ParseException {
+		String tradesCSV = "cointracking/bitfinex/bitfinex-fy2020-to-fy-2022.csv";
+		List<String[]> list = CSVParser.newInstance()
+				.parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(tradesCSV), true);
+
+		if (events == null) {
+			events = new ArrayList<CryptoEvent>();
+		}
+		events = parseCSVLines(list, events, batch);
+		CoinTrackingWriter.writeEventsToCSV(events, "bitfinex-standard-format.csv");
+		return events;
+	}
+
+	/*
+	 * this parser parsers all of them
+	 */
+	public static void main(String[] args) throws ParseException {
+		CurrencyBatchGroup batch = CurrencyBatchGroup.of(Monetary.getCurrency("NZD"));
+		process(null, batch);
+	}
+}

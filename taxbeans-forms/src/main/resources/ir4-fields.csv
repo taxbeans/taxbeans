@@ -1,0 +1,129 @@
+fieldName,2017,2018,2019,2020,2021,2022,2023,2024,2025
+irdNumber,1 IRD 1,1 IRD 1,1 IRD 1,1 IRD number,1 IRD number,1 IRD number,1 IRD number,1 IRD number,1 IRD number
+companyTradingNameLine1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1
+companyTradingNameLine2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2
+postalAddressLine1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1
+postalAddressLine2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2
+streetAddressLine1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1
+streetAddressLine2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2
+bicCode,6,6,6,6,6.2,6.2,6.2,6.2,6.2
+phonePrefix,7 prefix,7 prefix,7 prefix,7 prefix,7 prefix,7 prefix,7 prefix,7 prefix,7 prefix
+phoneNumber,7 ph number,7 ph number,7 ph number,7 ph number,7 ph number,7 ph number,7 ph number,7 ph number,7 ph number
+bankNumber,8 bank,8 bank,8 bank,8 bank,8 bank,8 bank,8 bank,8 bank,8 bank
+branchNumber,8 branch,8 branch,8 branch,8 branch,8 branch,8 branch,8 branch,8 branch,8 branch
+bankAccountNumber,8 account no,8 account no,8 account no,8 account no,8 account no,8 account no,8 account no,8 account no,8 account no
+bankSuffix,8 suffix,8 suffix,8 suffix,8 suffix,8 suffix,8 suffix,8 suffix,8 suffix,8 suffix
+nonResident,9,9,9,9,9,9,9,9,9
+nonResident_true,No,No,No,No,No,No,No,No,No
+nonResident_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+imputationReturnIncluded,10,10,10,10,10,10,10,10,10
+imputationReturnIncluded_true,No,No,No,No,No,No,No,No,No
+imputationReturnIncluded_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+imputationMonetaryEntries,10A,10A,10A,10A,10A,10A,10A,10A,10A
+imputationMonetaryEntries_true,No,No,No,No,No,No,No,No,No
+imputationMonetaryEntries_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+companyCeased,11,11,11,11,11,11,11,11,11
+companyCeased_true,No,No,No,No,No,No,No,No,No
+companyCeased_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+schedularPayments,12,12,12,12,12,12,12,12,12
+schedularPayments_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+schedularPayments_false,No,No,No,No,No,No,No,No,No
+nzInterest,13,13,13,13,13,13,13,13,13
+nzInterest_true,No,No,No,No,No,No,No,No,No
+nzInterest_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+nzDividends,14 yes/no,14 yes/no,14 yes/no,14 yes/no,14 yes/no,14 yes/no,14 yes/no,14 yes/no,14 yes/no
+nzDividends_true,No,No,No,No,No,No,No,No,No
+nzDividends_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+maoriDistributions,15,15,15,15,15,15,15,15,15
+maoriDistributions_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+maoriDistributions_true,No,No,No,No,No,No,No,No,No
+partnershipIncome,16,16,16,16,16,16,16,16,16
+partnershipIncome_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+partnershipIncome_true,No,No,No,No,No,No,No,No,No
+totalTaxCredits,12A.8,12A.8,12A.8,17A,17A,17A,17A,17A,17A
+overseasIncome,17,17,17,18,18,18,18,18,18
+overseasIncome_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+overseasIncome_true,No,No,No,No,No,No,No,No,No
+businessIncome,18,18,18,20 tick,20 tick,21,21,21,21
+businessIncome_false,Yes,Yes,Yes,No,No,No,No,No,No
+businessIncome_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes
+businessNetProfit,12A.15,12A.15,12A.15,20,20B,21B,21B,21B,21B
+propertySalesIncome,N/A,N/A,N/A,21,21,22 yes/no,22 yes/no,22 yes/no,22 yes/no
+propertySalesIncome_false,N/A,N/A,N/A,Yes,Yes,Yes,Yes,Yes,Yes
+propertySalesIncome_true,N/A,N/A,N/A,No,No,No,No,No,No
+overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no,22 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no
+overseasPremiums_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+overseasPremiums_true,No,No,No,No,No,No,No,No,No
+otherIncome,20 yes/no,20 yes/no,20 yes/no,23 yes/no,23 yes/no,24 yes/no,24 yes/no,24 yes/no,24 yes/no
+otherIncome_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+otherIncome_true,No,No,No,No,No,No,No,No,No
+residentialPropertyIncome,N/A,N/A,N/A,19 yes/no,19 yes/no,19 yes/no,19 yes/no,19 yes/no,19 yes/no
+residentialPropertyIncome_false,N/A,N/A,N/A,0,0,0,0,0,0
+residentialPropertyIncome_true,N/A,N/A,N/A,1,1,1,1,1,1
+netProfitBeforeDonations,12A.11.0,12A.11.0,12A.11.0,24,24,24,24,24,24
+donations,22,22,22,25 yes/no,25 yes/no,26 yes/no,26 yes/no,26 yes/no,26 yes/no
+donations_false,Yes,Yes,Yes,Yes,Yes,No,No,No,No
+donations_true,No,No,No,No,No,Yes,Yes,Yes,Yes
+netProfitAfterDonations,12A.11.4,12A.11.4,12A.11.4,26,26,26,26,26,26
+netLossesBroughtForward,24,24,24,27 yes/no,27 yes/no,28 yes/no,28 yes/no,28 yes/no,28 yes/no
+netLossesBroughtForward_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+netLossesBroughtForward_true,No,No,No,No,No,No,No,No,No
+netProfitAfterLossesBroughtForward,12A.11.9,12A.11.9,12A.11.9,28,28,28,28,28,28B
+netLossesFromOtherCompanies,26 yes/no,26 yes/no,26 yes/no,29 yes/no,28 yes/no,30 yes/no,30 yes/no,30 yes/no,30 yes/no
+netLossesFromOtherCompanies_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+netLossesFromOtherCompanies_true,No,No,No,No,No,No,No,No,No
+taxableIncome,12A.11.12,12A.11.12,12A.11.12,30,30,30,30,30,30
+copyOfTaxableIncome,12A.11.13,12A.11.13,12A.11.13,31A,32A,32A,32A,32A,32A
+totalTaxPayable,12A.11.14,12A.11.14,12A.11.14,31B,32B,32B,32B,32B,32B
+overseasTaxPaid,12A.11.15,12A.11.15,12A.11.15,31C,32C,32C,32C,32C,32C
+box29D,12A.11.17,12A.11.17,12A.11.17,31D,32D,32D,32D,32D,32D
+foreignInvestorTaxCredit,12A.11.18,12A.11.18,12A.11.18,31E,32E,32E,32E,32E,32E
+box29F,12A.11.20,12A.11.20,12A.11.20,31F,32F,32F,32F,32F,32F
+copyOfTotalImputationCredits,12A.11.21,12A.11.21,12A.11.21,31G,32G,32G,32G,32G,32G
+box29H,12A.11.22,12A.11.22,12A.11.22,31H,32H,32H,32H,32H,32H
+copyOfTotalTaxCredits,12A.11.23,12A.11.23,12A.11.23,31I,32I,32I,32I,32I,32I
+copyOfRLWTCredit,12A.11.24,12A.11.24,12A.11.24,31IA,32IA,32IA,32IA,32IA,32IA
+residualIncomeTax,12A.11.25,12A.11.25,12A.11.25,31J,32J,32J,32J,32J,32J
+creditOrDebit,28J credit/debit,28J credit/debit,28J credit/debit,31 credit/debit,32 credit/debit,32 credit/debit,32 credit/debit,32 credit/debit,32 credit/debit
+creditOrDebit_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+creditOrDebit_true,No,No,No,No,No,No,No,No,No
+provisionalTaxPaid,12A.11.26,12A.11.26,12A.11.26,31K,32K,32K,32K,32K,32K
+taxAmountOwed,12A.11.27,12A.11.27,12A.11.27,31L,32L,32L,32L,32L,32L
+refundOrTaxToPay,28L refund/tax to pay,28L refund/tax to pay,28L refund/tax to pay,31 refund/tax to pay,32 refund/tax to pay,32 refund/tax to pay,32 refund/tax to pay,32 refund/tax to pay,32 refund/tax to pay
+refundOrTaxToPay_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+refundOrTaxToPay_true,No,No,No,No,No,No,No,No,No
+initialProvisionalTaxLiability,30 yes/no,30 yes/no,30 yes/no,33 yes/no,34 yes/no,34 yes/no,34 yes/no,34 yes/no,34 yes/no
+initialProvisionalTaxLiability_false,Yes,Yes,Yes,No,No,No,No,No,No
+initialProvisionalTaxLiability_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes
+provisionalTaxOption,31A,31A,31A,34A,35A,35A,35A,35A,35A
+provisionalTaxDue,12A.11.7.4,12A.11.7.4,12A.11.7.4,34B,35B,35B,35B,35B,35B
+nonResidentPayments,32 yes/no,32 yes/no,32 yes/no,35,36,36,36,36,36
+nonResidentPayments_false,Yes,Yes,Yes,No,No,No,No,No,No
+nonResidentPayments_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes
+cfcOrFifIncome,33,33,33,36,36,36,36,36,36
+cfcOrFifIncome_false,Yes,Yes,Yes,No,No,No,No,No,No
+cfcOrFifIncome_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes
+sharesRepurchased,34,34,34,37,37,37,37,37,37
+sharesRepurchased_false,Yes,Yes,Yes,No,No,No,No,No,No
+sharesRepurchased_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes
+foreignSourcedDividends,35,35,35,38,38,38,38,38,38
+foreignSourcedDividends_false,Yes,Yes,Yes,No,No,No,No,No,No
+foreignSourcedDividends_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes
+controlledByNonResidents,36,36,36,39,39,39,39,39,39
+controlledByNonResidents_false,Yes,Yes,Yes,No,No,No,No,No,No
+controlledByNonResidents_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes
+lowestEconomicInterests,37,37,37,40,41 Interest,41 Interest,41 Interest,41 Interest,41 Interest
+shareholder1IrdNumber,39a.0,39a.0,39a.0,41A,42A,42A,42A,42A,42A
+shareholder1Remuneration,39b.0.0,39b.0.0,39b.0.0,41B,42B,42B,42B,42B,42B
+shareholder1ValueOfLoans,39b.0.1,39b.0.1,39b.0.1,41D,42D,42D,42D,42D,42D
+shareholder1CurrentAccountBalance,39b.1.0,39b.1.0,39b.1.0,41E,42E,42E,42E,42E,42E
+shareholder1LossOffsets,39b.1.1.0,39b.1.1.0,39b.1.1.0,41F,42F,42F,42F,42F,42F
+shareholder1SubventionPayments,39b.1.1.1,39b.1.1.1,39b.1.1.1,41G,42G,42G,42G,42G,42G
+shareholder2IrdNumber,39a.1,39a.1,39a.1,41Aa,42Aa,42Aa,42Aa,42Aa,42Aa
+shareholder2Remuneration,39b.2.0,39b.2.0,39b.2.0,41Ba,42Ba,42Ba,42Ba,42Ba,42Ba
+shareholder2ValueOfLoans,39b.2.1.0,39b.2.1.0,39b.2.1.0,41Da,42Da,42Da,42Da,42Da,42Da
+shareholder2CurrentAccountBalance,39b.3.0,39b.3.0,39b.3.0,41Ea,42Ea,42Ea,42Ea,42Ea,42Ea
+shareholder2LossOffsets,39b.3.1.0,39b.3.1.0,39b.3.1.0,41Fa,42Fa,42Fa,42Fa,42Fa,42Fa
+shareholder2SubventionPayments,39b.3.1.1,39b.3.1.1,39b.3.1.1,41Ga,42Ga,42Ga,42Ga,42Ga,42Ga
+shareholder1AimTaxCredits,0,0,0,41C,42C,42C,42C,42C,42C
+shareholder2AimTaxCredits,0,0,0,41Ca,42Ca,42Ca,42Ca,42Ca,42Ca

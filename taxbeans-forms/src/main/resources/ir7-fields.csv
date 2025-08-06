@@ -1,0 +1,125 @@
+,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+irdNumber,ird 1,ird 1,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird,1 ird
+partnershipNameLine1,4,4,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1,2.1
+partnershipNameLine2,4.1,4.1,2.2,2.2,2.2,2.2,2.2,2.2,2.2,2.2,2.2,2.2,2.2,2.2,2.2,2.2
+partnershipTradingNameLine1,4.2,4.2,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1,3.1
+partnershipTradingNameLine2,4.3,4.3,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.2
+postalAddressLine1,4.4.0,4.4.0,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1,4.1
+postalAddressLine2,9,9,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2,4.2
+postalAddressLine3,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+postalAddressPostalCode,0,0,0,0,0,0,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3
+physicalAddressLine1,4.4.1,4.4.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1,5.1
+physicalAddressLine2,4.4.2,4.4.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2,5.2
+bicCode,14,14,6,6,6,6,6,6,6,6,6,6,6,6,6,6
+daytimePhoneNumberPrefix,15,15,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.1
+daytimePhoneNumberSuffix,16,16,7.2,7.2,7.2,7.2,7.2,7.2,7.2,7.2,7.2,7.2,7.2,7.2,7.2,7.2
+firstReturnRadio,20,20,8,8,8,8,8,8,8,8,8,8,8,8,8,8
+firstReturnRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+firstReturnRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+dayOfFirstReturn,17,17,8 day,8 day,8 day,8 day,8 day,8 day,8 day,8 day,8 day,8 day,8 day,8 day,8 day,8 day
+monthOfFirstReturn,18,18,8 month,8 month,8 month,8 month,8 month,8 month,8 month,8 month,8 month,8 month,8 month,8 month,8 month,8 month
+yearOfFirstReturn,19,19,8 year,8 year,8 year,8 year,8 year,8 year,8 year,8 year,8 year,8 year,8 year,8 year,8 year,8 year
+partnershipCeasedRadio,21,21,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+partnershipCeasedRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+partnershipCeasedRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+schedularPaymentsRadio,22,22,10,10,10,10,10,10,10,10,10,10,10,10,10,10
+schedularPaymentsRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+schedularPaymentsRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+nzInterestRadio,25,25,11,11,11,11,11,11,11,11,11,11,11,11,11,11
+nzInterestRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+nzInterestRadio_false,N0,N0,N0,N0,N0,N0,N0,N0,N0,N0,N0,N0,N0,N0,N0,N0
+totalRWT,23.0.0.0.4.0,23.0.0.0.4.0,11A,11A,11A,11A,11A,11A,11A,11A,11A,11A,11A,11A,11A,11A
+totalGrossInterest,23.0.0.0.4.1,23.0.0.0.4.1,11B,11B,11B,11B,11B,11B,11B,11B,11B,11B,11B,11B,11B,11B
+dividendsRadio,28,28,12,12,12,12,12,12,12,12,12,12,12,12,12,12
+dividendsRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+dividendsRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+totalDividendIC,23.0.0.0.10.0,23.0.0.0.10.0,12aa,12aa,12aa,12aa,12aa,12aa,12aa,12aa,12aa,12aa,12aa,12aa,12aa,12aa
+totalDividendRWT,23.0.0.0.5.0,23.0.0.0.5.0,12A,12A,12A,12A,12A,12A,12A,12A,12A,12A,12A,12A,12A,12A
+totalGrossDividends,23.0.0.0.5.1,23.0.0.0.5.1,12B,12B,12B,12B,12B,12B,12B,12B,12B,12B,12B,12B,12B,12B
+maoriTaxableDistributions,32,32,13,13,13,13,13,13,13,13,13,13,13,13,13,13
+maoriTaxableDistributions_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+maoriTaxableDistributions_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+maoriAuthorityCredits,23.0.0.0.6.0,23.0.0.0.6.0,13A,13A,13A,13A,13A,13A,13A,13A,13A,13A,13A,13A,13A,13A
+maoriAuthorityDistribution,23.0.0.0.6.1,23.0.0.0.6.1,13B,13B,13B,13B,13B,13B,13B,13B,13B,13B,13B,13B,13B,13B
+incomeFromAnotherPartnership,35,35,14,14,14,14,14,14,14,14,14,14,14,14,14,14
+incomeFromAnotherPartnership_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+incomeFromAnotherPartnership_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+incomeFromAnotherLTC,0,0,15,15,15,15,15,15,15,15,15,15,15,15,15,15
+incomeFromAnotherLTC_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+incomeFromAnotherLTC_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+partnershipTaxCredits,23.0.0.0.7.0,23.0.0.0.7.0,14A,14A,14A,14A,14A,14A,14A,14A,14A,14A,14A,14A,14A,14A
+partnershipIncome,23.0.0.0.7.1,23.0.0.0.7.1,14B,14B,14B,14B,14B,14B,14B,14B,14B,14B,14B,14B,14B,14B
+overseasIncome,38,38,16,16,16,16,16,16,16,16,16,16,16,16,16,16
+overseasIncome_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+overseasIncome_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+totalOverseasTaxPaid,23.0.0.0.8.0,23.0.0.0.8.0,16A,16A,16A,16A,16A,16A,16A,16A,16A,16A,16A,16A,16A,16A
+totalOverseasIncome,23.0.0.0.8.1,23.0.0.0.8.1,16B,17B,17B,17B,17B,17B,17B,17B,17B,17B,17B,17B,17B,17B
+businessIncome,41,41,17,17,17,17,17,17,17,17,17,17,17,17,17,17
+businessIncome_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+businessIncome_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+netProfitOrLoss,23.0.0.0.9.1,23.0.0.0.9.1,17B,18B,18B,18B,18B,18B,18B,18B,17B,17B,17B,17B,17B,17B
+rentalIncomeRadio,0,0,18,18,18,18,18,18,19,19,18,18,18,18,18,18
+rentalIncomeRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+rentalIncomeRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+netRentalIncome,0,0,18B,18B,18B,18B,18B,18B,18B,18B,18B,18B,18B,18B,18B,18B
+otherRentalIncomeRadio,0,0,18,18,18,18,18,18,19,19,19,19,19,19,19,19
+otherRentalIncomeRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+otherRentalIncomeRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+taxablePropertySalesIncomeRadio,0,0,18,18,18,18,18,18,19,19,20,20,20,20,20,20
+taxablePropertySalesIncomeRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+taxablePropertySalesIncomeRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+otherIncomeRadio,43,43,19,19,19,19,19,19,20,20,21,21,21,21,21,21
+otherIncomeRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+otherIncomeRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+totalOtherIncome,23.0.0.0.10.1,23.0.0.0.10.1,19B,19B,19B,19B,19B,19B,19B,19B,19B,19B,19B,19B,19B,19B
+laqcRadio,47,47,20,20,20,20,20,20,20,20,23,23,23,23,23,23
+laqcLoss,23.0.0.0.11.1,23.0.0.0.11.1,20B,20B,20B,20B,20B,20B,20B,20B,20B,20B,20B,20B,20B,20B
+totalIncome,23.0.0.0.12.1,23.0.0.0.12.1,21,21,21,21,21,21,21,21,22,22,22,22,22,22
+totalIncomeCopied,23.0.0.1.0,23.0.0.1.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+expenseClaimRadio,51,51,22,22,22,22,22,22,22,22,23,23,23,23,23,23
+expenseClaimRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+expenseClaimRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+totalExpenses,23.0.0.1.1,23.0.0.1.1,22aa,22aa,22aa,22aa,22aa,22aa,22aa,22aa,22aa,22aa,22aa,22aa,22aa,22aa
+totalIncomeAfterExpenses,23.0.0.1.2,23.0.0.1.2,23,23,23,23,23,23,23,23,24,24,25,25,25,25
+laqcTransitionRadio,0,0,24,24,24,24,24,24,24,24,25,25,25,25,25,25
+laqcTransitionRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+laqcTransitionRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+partnershipRadio,0,0,25,25,25,25,25,25,25,25,0,0,0,0,0,0
+partnershipCFCRadio,0,0,26,26,26,26,26,26,26,26,27,27,27,28,28,28
+partnershipCFCRadio_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+partnershipCFCRadio_false,No,No,No,No,No,No,No,No,No,No,No,No,No,no,no,no
+laqcExtinguishedLosses,0,0,24aa,24aa,24aa,24aa,24aa,24aa,24aa,24aa,24aa,24aa,24aa,24aa,24aa,24aa
+laqcExtinguishedLosses_true,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+laqcExtinguishedLosses_false,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+laqcPriorYearsDeductions,0,0,24A,24A,24A,24A,24A,24A,24A,24A,24A,24A,24A,24A,24A,24A
+laqcDeductionsClaimedThisYear,0,0,24B,24B,24B,24B,24B,24B,24B,24B,20B,20B,20B,20B,20B,20B
+partnershipOrLTCRadio,0,0,25,25,25,25,25,25,25,25,26,26,26,26,26,26
+partnershipOrLTCRadio_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+partnershipOrLTCRadio_true,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+partnersName1,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,54.0.0,partners name 1,partners name 1,partners name 1,partners name 1,partners name 1,partners name 1
+partnersAddress1,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0,55.0.0
+partnersIRDNumber1,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,56 ird 1.0.0,26A,26A,26A,26A,26A,26A
+partnersInterest1,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,23.0.0.1.3.0.0,26C,26C,26C,26C,26C,26C
+partnersDividend1,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,23.0.0.1.3.1.0,26D,26D,26D,26D,26D,26D
+partnersMA1,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,23.0.0.1.3.2.0,26E,26E,26E,26E,26E,26E
+partnersOI1,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,23.0.0.1.3.3.0,26F,26F,26F,26F,26F,26F
+partnersOtherIncome1,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,23.0.0.1.3.4.0,26I,26I,26I,26I,26I,26I
+partnersPartnershipIncome1,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,23.0.0.1.3.5.0,26K,26K,26K,26K,26K,26K
+partnersProportion1,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,23.0.1.2.1.5.1.0.0,26B,26B,26B,26B,26B,26B
+partnersOverseasTaxPaid1,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,23.0.0.1.3.7.0.0,26N,26N,26N,26N,26N,26N
+partnersImputationCredits1,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,23.0.0.1.3.7.1.0,26 O,26 O,26 O,26 O,26 O,26 O
+partnersOtherTaxCredits1,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,23.0.0.1.3.7.2.0,26P,26P,26P,26P,26P,26P
+partnersName2,54.0.1.0,54.0.1.0,54.0.1.0,54.0.1.0,54.0.1.0,54.0.1.0,54.0.1.0,54.0.1.0,54.0.1.0,54.0.1.0,partners name 2,partners name 2,partners name 2,partners name 2,partners name 2,partners name 2
+partnersAddress2,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0,55.0.1.0
+partnersIRDNumber2,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,56 ird 1.0.1.0,26A 2,26A 2,26A 2,26A 2,26A 2,26A 2
+partnersInterest2,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,23.0.0.1.3.0.1.0,26C 2,26C 2,26C 2,26C 2,26C 2,26C 2
+partnersDividend2,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,23.0.0.1.3.1.1.0,26D 2,26D 2,26D 2,26D 2,26D 2,26D 2
+partnersMA2,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,23.0.0.1.3.2.1.0,26E 2,26E 2,26E 2,26E 2,26E 2,26E 2
+partnersOI2,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,23.0.0.1.3.3.1.0,26F 2,26F 2,26F 2,26F 2,26F 2,26F 2
+partnersOtherIncome2,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,23.0.0.1.3.4.1.0,26I 2,26I 2,26I 2,26I 2,26I 2,26I 2
+partnersPartnershipIncome2,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,23.0.0.1.3.5.1.0,26K 2,26K 2,26K 2,26K 2,26K 2,26K 2
+partnersProportion2,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,23.0.1.2.1.5.1.0.1.0,26B 2,26B 2,26B 2,26B 2,26B 2,26B 2
+partnersOverseasTaxPaid2,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,23.0.0.1.3.7.0.1.0,26N 2,26N 2,26N 2,26N 2,26N 2,26N 2
+partnersImputationCredits2,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,23.0.0.1.3.7.1.1.0,26O 2,26O 2,26O 2,26O 2,26O 2,26O 2
+partnersOtherTaxCredits2,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,23.0.0.1.3.7.2.1.0,26P 2,26P 2,26P 2,26P 2,26P 2,26P 2
+cfcIncomeRadio,119,119,119,119,119,119,119,119,119,119,119,119,119,119,119,119

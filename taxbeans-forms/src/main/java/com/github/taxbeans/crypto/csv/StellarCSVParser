@@ -1,0 +1,335 @@
+package com.github.taxbeans.crypto.csv;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.money.Monetary;
+
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.taxbeans.forms.utils.ZonedDateTimeUtils;
+import com.github.taxbeans.csv.CSVParser;
+import com.github.taxbeans.csv.CSVWriter;
+import com.github.taxbeans.crypto.CoinTrackingParser;
+import com.github.taxbeans.crypto.CryptoEvent;
+import com.github.taxbeans.crypto.CurrencyAmount;
+import com.github.taxbeans.crypto.CurrencyBalance;
+import com.github.taxbeans.crypto.CurrencyBatchGroup;
+import com.github.taxbeans.crypto.CurrencyCode;
+import com.github.taxbeans.crypto.CurrencyConversion;
+import com.github.taxbeans.crypto.CurrencyDeposit;
+import com.github.taxbeans.crypto.CurrencyExchange;
+import com.github.taxbeans.crypto.CurrencyFee;
+import com.github.taxbeans.crypto.CurrencyWithdrawal;
+import com.github.taxbeans.crypto.FormatUtils;
+
+public class StellarCSVParser {
+
+	private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
+	final static Logger logger = LoggerFactory.getLogger(StellarCSVParser.class);
+
+	public static List<CryptoEvent> parseStellarCSVLines(List<String[]> csv, List<CryptoEvent> cryptoEvents, CurrencyBatchGroup batchGroup,
+			StellarCSVType csvType, CurrencyExchange exchange) throws ParseException {
+
+		int eventCount = 0, withdrawals = 0, deposits = 0;
+		int rowNum = 1; // due to title row
+		for (String[] row : csv) {
+			rowNum++;
+			CryptoEvent cryptoEvent = null;
+			boolean cryptoEventAlreadyDefined = false;
+			EventType type = EventType.valueOf("Trade");
+			ZonedDateTime dateTime;
+			CurrencyFee fee = null;
+			CurrencyAmount buyAmount = null;
+			dateTime = parseDateTime(row[0], rowNum);
+			if (csvType == StellarCSVType.INCOME) {
+				BigDecimal bigDecimal = new BigDecimal(row[6]);
+//				if ("DOGET-GDOEVDDBU6OBWKL7VHDAOKD77UP4DKHQYKOKJJT5PR3WRDBTX35HUEUX".equals(row[5])) {  //was tradeable for DOGET so don't ignore
+//					logger.warn("Ignoring worthless fake spam symbol");
+//					continue;
+//				}
+				CurrencyAmount depositAmount = CurrencyAmount.of(bigDecimal, CurrencyCode.of(row[5]));
+				CurrencyAmount feeAmount = CurrencyAmount.of(BigDecimal.ZERO,
+						batchGroup.getBaseCurrency().getCurrencyCode());
+				fee = CurrencyFee.of(feeAmount);
+				cryptoEvent = CurrencyDeposit.of(batchGroup, depositAmount, dateTime, fee);
+				cryptoEvent.setRowNum(rowNum);
+				type = EventType.Deposit;
+				cryptoEventAlreadyDefined = true;
+			} else if (csvType == StellarCSVType.SPENDING) {
+				CurrencyAmount withdrawalAmount = CurrencyAmount.of(new BigDecimal(row[6]).stripTrailingZeros().negate(), CurrencyCode.of(row[5]));
+				CurrencyAmount feeAmount = CurrencyAmount.of(BigDecimal.ZERO,
+						batchGroup.getBaseCurrency().getCurrencyCode());
+				fee = CurrencyFee.of(feeAmount);
+				cryptoEvent = CurrencyWithdrawal.of(batchGroup, withdrawalAmount, dateTime,
+						fee);
+				cryptoEvent.setRowNum(rowNum);
+				cryptoEvent.setComment(row[4]);
+				type = EventType.Withdrawal;
+				cryptoEventAlreadyDefined = true;
+			}
+			CurrencyAmount sellAmount = null;
+			if (!cryptoEventAlreadyDefined) {
+				sellAmount = CurrencyAmount.of(new BigDecimal(row[5]), CurrencyCode.of(row[6]));
+				String code1 = row[6];
+				String code2 = row[4].split("-")[0];
+				String price = row[7];
+				String amount2 = row[5];
+				String amountBought = amount2;
+				String amountSold = new BigDecimal(amount2).multiply(new BigDecimal(price)).stripTrailingZeros().toPlainString();
+				String buyCurrency = code2;
+				String sellCurrency = code1;
+				if ("SELL".equals(row[3])) {
+					amountBought = amountSold;
+					amountSold = amount2;
+					buyCurrency = sellCurrency;
+					sellCurrency = code2;
+				}
+				String feeString;
+				String feeCurrency;
+				feeString = "0";
+				feeCurrency = code1;
+				CurrencyAmount feeAmount = CurrencyAmount.of(new BigDecimal(feeString), feeCurrency);
+				fee = CurrencyFee.of(feeAmount);
+				eventCount++;
+				BigDecimal buyBigDecimal = new BigDecimal(amountBought).subtract(new BigDecimal(feeString));
+				BigDecimal sellBigDecimal = new BigDecimal(amountSold);
+				buyAmount = amountBought.isBlank() ? null : CurrencyAmount.of(buyBigDecimal, buyCurrency);
+				sellAmount = amountSold.isBlank() ? null : CurrencyAmount.of(sellBigDecimal, sellCurrency);
+			}
+			if (EventType.Deposit.equals(type) || EventType.Loan.equals(type)) {
+				deposits++;
+			}
+			if (EventType.Trade.equals(type)) {
+				cryptoEvent = CurrencyConversion.of(batchGroup, buyAmount, dateTime, sellAmount, fee);
+			}
+			if (cryptoEvent != null) {
+				cryptoEvent.setGroup(exchange.name());
+				cryptoEvent.setRowNum(rowNum);
+				cryptoEvent.setCurrencyExchange(exchange);
+				cryptoEvents.add(cryptoEvent);
+			} else {
+				throw new AssertionError("Crypto Event should never be null");
+			}
+		}
+		logger.info("Statistics, event count = {}, withdrawal count = {}, deposit count = {}", eventCount, withdrawals, deposits);
+		return cryptoEvents;
+	}
+
+	public static void writeEventsToCSV(List<CryptoEvent> cryptoEvents, StellarCSVType csvType, String filename) {
+		List<String[]> lines = new ArrayList<String[]>();
+		String[] line = new String[] {"Type", "Buy", "Cur.", "Sell", "Cur.", "Fee", "Cur.", "Exchange", "Group", "Comment", "Date"};
+		lines.add(line);
+		logger.warn("Sorting events, could be slow...");
+		Collections.sort(cryptoEvents, Collections.reverseOrder()); // may not be necessary, but just in case
+		for (CryptoEvent event : cryptoEvents) {
+			line = new String[11];
+			line[7] = event.getCurrencyExchange().name();
+			line[8] = "";
+			line[9] = "Imported by Bitcoin Accounting";
+			line[10] = ZonedDateTimeUtils.format(event.getWhen());
+			if (event instanceof CurrencyConversion) {
+				CurrencyConversion conversion = (CurrencyConversion) event;
+				if (conversion.isIncomplete()) {
+					throw new AssertionError("incomplete event");
+				}
+				line[0] = EventType.Trade.name();
+				line[1] = conversion.getTo().getBigDecimal().toPlainString() + "";
+				line[2] = conversion.getTo().getCurrencyCode().getCurrencyCode() + "";
+				CurrencyAmount from = conversion.getFrom();
+				line[3] = from == null ? "" : from.getBigDecimal().toPlainString() + "";
+				line[4] = from == null ? "" : from.getCurrencyCode().getCurrencyCode() + "";
+				line[5] = conversion.getFee().getAmount().getBigDecimal().toPlainString() + "";
+				line[6] = conversion.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+			} else if (event instanceof CurrencyDeposit) {
+				CurrencyDeposit deposit = (CurrencyDeposit) event;
+				line[0] = EventType.Deposit.name();
+				BigDecimal depositAmount = deposit.getAmount().getBigDecimal();
+				String depositAmountString = depositAmount.toPlainString();
+				if (!deposit.getAmount().isCrypto()) {
+					depositAmountString = FormatUtils.format(deposit.getAmount().getMonetaryAmount());
+				}
+				line[1] = deposit.getAmount() == null ? "NaN" : depositAmountString + "";
+				line[2] = deposit.getAmount() == null ? "N/A"
+						: deposit.getAmount().getCurrencyCode().getCurrencyCode() + "";
+				line[3] = "";
+				line[4] = "";
+				line[5] = deposit.getFee().getAmount().getBigDecimal().toPlainString() + "";
+				line[6] = deposit.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+			} else if (event instanceof CurrencyWithdrawal) {
+				CurrencyWithdrawal withdrawal = (CurrencyWithdrawal) event;
+				line[0] = EventType.Withdrawal.name();
+				line[1] = "";
+				line[2] = "";
+				line[3] = withdrawal.getAmount().getBigDecimal().negate().toPlainString() + "";
+				line[4] = withdrawal.getAmount().getCurrencyCode().getCurrencyCode() + "";
+				line[5] = withdrawal.getFee().getAmount().getBigDecimal().toPlainString() + "";
+				line[6] = withdrawal.getFee().getAmount().getCurrencyCode().getCurrencyCode();
+				line[9] = withdrawal.getComment();
+			} else {
+				continue;
+			}
+			lines.add(line);
+		}
+		File location;
+		if (filename != null) {
+			location = CSVWriter.writeCSV(filename, lines);
+		} else if (csvType == StellarCSVType.INCOME) {
+			location = CSVWriter.writeCSV("stellar-income-standard-format.csv", lines);
+		} else if (csvType == StellarCSVType.SPENDING) {
+			location = CSVWriter.writeCSV("stellar-spending-standard-format.csv", lines);
+		} else {
+			location = CSVWriter.writeCSV("stellar-all-standard-format.csv", lines);
+		}
+		try {
+			logger.info("Writing csv: " + location.getCanonicalPath());
+			File sourceControlLocation = new File("src/main/resources/cointracking/Stellar/" + location.getName());
+			logger.info("source control location = " + sourceControlLocation.getCanonicalPath());
+			FileUtils.copyFile(location, sourceControlLocation);
+		} catch (IOException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	private static ZonedDateTime parseDateTime(String dateString, int rowNum) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
+		LocalDateTime localDateTime = null;
+		try {
+			localDateTime = LocalDateTime.parse(dateString, formatter);
+		} catch (DateTimeParseException e) {
+			logger.info("rowNum = {}, dateString = {}", rowNum, dateString);
+			throw e;
+		}
+		return ZonedDateTime.of(localDateTime, UTC_ZONE);
+	}
+
+	private static void consolidate(List<CryptoEvent> events) {
+		CryptoEvent previousEvent = null;
+		int rowNum = 0;
+		List<Integer> elementsToRemove = new ArrayList<Integer>();
+		Collections.sort(events, Collections.reverseOrder());
+		int countRemoved = 0;
+		for (CryptoEvent event : events) {
+			if (previousEvent != null) {
+				if (previousEvent.getWhen().compareTo(event.getWhen()) == 0) {
+					logger.warn("Consolidation match");
+					logger.warn("Previous event = " + previousEvent);
+					logger.warn("Current event = " + event);
+					if (event instanceof CurrencyWithdrawal && "network fees".equals(previousEvent.getComment())) {
+						logger.warn("Potential network fees for a withdrawal");
+						CurrencyWithdrawal previousAmountFee = (CurrencyWithdrawal) previousEvent;
+						CurrencyFee fee = CurrencyFee.of(previousAmountFee.getAmount().negate());
+						CurrencyWithdrawal withdrawal = (CurrencyWithdrawal) event;
+						withdrawal.setFee(fee);
+						elementsToRemove.add(rowNum);
+					}
+					if (event instanceof CurrencyConversion && "network fees".equals(previousEvent.getComment())) {
+						logger.warn("Potential network fees for a currency conversion");
+						CurrencyWithdrawal previousAmountFee = (CurrencyWithdrawal) previousEvent;
+						CurrencyFee fee = CurrencyFee.of(previousAmountFee.getAmount().negate());
+						CurrencyConversion conversion = (CurrencyConversion) event;
+						conversion.setFee(fee);
+						//elementsToRemove.add(rowNum);
+					}
+					if (previousEvent instanceof CurrencyConversion && "network fees".equals(event.getComment())) {
+						logger.warn("Potential network fees for a currency conversion (reverse order)");
+						CurrencyWithdrawal amountFee = (CurrencyWithdrawal) event;
+						CurrencyFee fee = CurrencyFee.of(amountFee.getAmount().negate());
+						CurrencyConversion conversion = (CurrencyConversion) previousEvent;
+						conversion.setFee(fee);
+						elementsToRemove.add(rowNum-countRemoved);
+						countRemoved++;
+					}
+				}
+			}
+			previousEvent = event;
+			rowNum++;
+		}
+		for (int num : elementsToRemove) {
+			logger.warn("Removing index {} from list", num);
+			events.remove(num-1);
+			//TODO have to adjust offsets after removal!!
+		}
+	}
+
+	public static List<CryptoEvent> processCexAndLobstr(List<CryptoEvent> stellarEvents, CurrencyBatchGroup batch) throws ParseException {
+		String cexTradesCSV = "cointracking/cex/cex-fy2022-transactions-2021-04-01-2022-03-31.csv";
+		List<String[]> cexCSV = CSVParser.newInstance()
+				.parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(cexTradesCSV), true);
+
+		stellarEvents = CEXCSVParser.parseCEXCSVLines(cexCSV, stellarEvents, batch);
+
+		StellarCSVType csvType = StellarCSVType.TRADES;
+		String stellarCSV = "cointracking/cex/lobstr/trades-2021-GDAWDDINMMP26YRDKVTGP6LX2BR3YB7HWPJGXZYEGJ5VVC7BQOSE6PEF.csv";
+
+		List<String[]> list = CSVParser.newInstance().parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(stellarCSV), true);
+		stellarEvents = parseStellarCSVLines(list, stellarEvents, batch, csvType, CurrencyExchange.LOBSTR);
+
+		csvType = StellarCSVType.INCOME;
+		stellarCSV = "cointracking/cex/lobstr/income-2021-GDAWDDINMMP26YRDKVTGP6LX2BR3YB7HWPJGXZYEGJ5VVC7BQOSE6PEF.csv";
+		list = CSVParser.newInstance().parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(stellarCSV), true);
+		stellarEvents = parseStellarCSVLines(list, stellarEvents, batch, csvType, CurrencyExchange.LOBSTR);
+
+		csvType = StellarCSVType.SPENDING;
+		stellarCSV = "cointracking/cex/lobstr/spending-2021-GDAWDDINMMP26YRDKVTGP6LX2BR3YB7HWPJGXZYEGJ5VVC7BQOSE6PEF.csv";
+		list = CSVParser.newInstance()
+				.parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(stellarCSV), true);
+		stellarEvents = parseStellarCSVLines(list, stellarEvents, batch, csvType, CurrencyExchange.LOBSTR);
+
+		consolidate(stellarEvents);
+		return stellarEvents;
+	}
+
+	public static List<CryptoEvent> processInterstellar(List<CryptoEvent> stellarEvents, CurrencyBatchGroup batch) throws ParseException {
+
+		StellarCSVType csvType = StellarCSVType.TRADES;
+		String stellarCSV = "cointracking/cex/lobstr/interstellar-trades-2021-GAN4ZBN2FDA4HNC4HZI42PBCHG554A57RYHWQQW3XJN7WRLII643EUSJ.csv";
+
+		List<String[]> list = CSVParser.newInstance().parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(stellarCSV), true);
+		stellarEvents = parseStellarCSVLines(list, stellarEvents, batch, csvType, CurrencyExchange.INTERSTELLAR);
+
+		csvType = StellarCSVType.INCOME;
+		stellarCSV = "cointracking/cex/lobstr/interstellar-income-2021-GAN4ZBN2FDA4HNC4HZI42PBCHG554A57RYHWQQW3XJN7WRLII643EUSJ.csv";
+		list = CSVParser.newInstance().parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(stellarCSV), true);
+		stellarEvents = parseStellarCSVLines(list, stellarEvents, batch, csvType, CurrencyExchange.INTERSTELLAR);
+
+		csvType = StellarCSVType.SPENDING;
+		stellarCSV = "cointracking/cex/lobstr/interstellar-spending-2021-GAN4ZBN2FDA4HNC4HZI42PBCHG554A57RYHWQQW3XJN7WRLII643EUSJ.csv";
+		list = CSVParser.newInstance()
+				.parseFile(CoinTrackingParser.class.getClassLoader().getResourceAsStream(stellarCSV), true);
+		stellarEvents = parseStellarCSVLines(list, stellarEvents, batch, csvType, CurrencyExchange.INTERSTELLAR);
+
+		consolidate(stellarEvents);
+		return stellarEvents;
+	}
+
+	public static List<CryptoEvent> process(List<CryptoEvent> stellarEvents, CurrencyBatchGroup batch) throws ParseException {
+		stellarEvents = processCexAndLobstr(stellarEvents, batch);
+		return processInterstellar(stellarEvents, batch);
+	}
+
+	public static void main(String[] args) throws ParseException {
+		/*
+		 * Stellar transactions are available here:  https://stellar.expert/tax-export/public
+		 *
+		 * GAN4ZBN2FDA4HNC4HZI42PBCHG554A57RYHWQQW3XJN7WRLII643EUSJ Interstellar wallet. (Interstellar exchange gone now) - Group: INTERSTELLAR
+		 * GDAWDDINMMP26YRDKVTGP6LX2BR3YB7HWPJGXZYEGJ5VVC7BQOSE6PEF Lobstr Wallet - Group: LOBSTR (group in CSV to distinguish the two wallets)
+		 * Create a session warnings class and method for DOGET transactions before earliest Coincodex price to indicate the price was an estimate
+		 * since the date was before the earliest.
+		 */
+		List<CryptoEvent> events = process(new ArrayList<CryptoEvent>(), CurrencyBatchGroup.of(Monetary.getCurrency("NZD")));
+		writeEventsToCSV(events, null, "stellar-combined-standard-format.csv");
+	}
+}

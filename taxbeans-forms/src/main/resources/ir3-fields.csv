@@ -1,0 +1,257 @@
+fieldName,2017,2018,2019
+irdNumber,ird number 1,ird number 1,ird number 1
+salutation,tick,tick,tick
+salutation_mr,0,0,0
+salutation_mrs,1,1,1
+salutation_miss,2,2,2
+salutation_ms,3,3,3
+salutation_none,Off,Off,Off
+firstname,2 first names,2 first names,2 first names
+surname,2 surname,2 surname,2 surname
+postalAddressLine1,3 street address,3 street address,3 street address
+postalAddressLine2,3 town or city,3 town or city,3 town or city
+streetAddressLine1,4 street address,4 street address,4 street address
+streetAddressLine2,4 town or city,4 town or city,4 town or city
+dateOfBirth_day,5 day,5 day,5 day
+dateOfBirth_month,5 month,5 month,5 month
+dateOfBirth_year,5 year,5 year,5 year
+businessIndustryClassificationCode,6 business,6 business,6 business
+phonePrefix,7 prefix,7 prefix,7 prefix
+phoneNumberExcludingPrefix,7 phone number,7 phone number,7 phone number
+bankNumber,8 bank,8 bank,8 bank
+branchNumber,8 branch,8 branch,8 branch
+bankAccountNumber,8 account no,8 account no,8 account no
+bankSuffix,8 suffix,8 suffix,8 suffix
+incomeAdjustmentsRequired,9A Check Box,9A Check Box,9A Check Box
+incomeAdjustmentsRequired_true,Yes,Yes,Yes
+incomeAdjustmentsRequired_false,Off,Off,Off
+familyTaxCreditReceived,11 Yes/No,11 Yes/No,11 Yes/No
+familyTaxCreditReceived_true,Yes,Yes,Yes
+familyTaxCreditReceived_false,No,No,No
+familyTaxCreditAmount,box 11,box 11,box 11
+incomeWithTaxDeductedReceived,11a yes/no,11a yes/no,11a yes/no
+incomeWithTaxDeductedReceived_true,1,1,1
+incomeWithTaxDeductedReceived_false,0,0,0
+totalPAYEDeducted,box 11A,box 11A,box 11A
+totalGrossIncome,box 11B,box 11B,box 11B
+accEarnersLevy,box 11D,box 11D,box 11D
+incomeNotLiableForAccEarnersLevy,box 11C,box 11C,box 11C
+totalTaxDeducted,box 11E,box 11E,box 11E
+schedularPaymentsReceived,12 no/yes,12 no/yes,12 no/yes
+schedularPaymentsReceived_true,1,1,1
+schedularPaymentsReceived_false,0,0,0
+interestFromNZReceived,13 yes/no,13 yes/no,13 yes/no
+interestFromNZReceived_true,1,1,1
+interestFromNZReceived_false,0,0,0
+dividendsFromNZReceived,14 no/yes,14 no/yes,14 no/yes
+dividendsFromNZReceived_true,1,1,1
+dividendsFromNZReceived_false,0,0,0
+taxableDistributionsFromMaoriAuthorityReceived,15 no/yes,15 no/yes,15 no/yes
+taxableDistributionsFromMaoriAuthorityReceived_true,1,1,1
+taxableDistributionsFromMaoriAuthorityReceived_false,0,0,0
+trustOrEstateIncomeFromNZReceived,16 no/yes,16 no/yes,16 no/yes
+trustOrEstateIncomeFromNZReceived_true,1,1,1
+trustOrEstateIncomeFromNZReceived_false,0,0,0
+overseasIncomeReceived,17 no/yes,17 no/yes,17 no/yes
+overseasIncomeReceived_true,1,1,1
+overseasIncomeReceived_false,0,0,0
+partnershipIncomeReceived,18 yes/no,18 yes/no,18 yes/no
+partnershipIncomeReceived_true,1,1,1
+partnershipIncomeReceived_false,0,0,0
+incomeFromLTCReceived,19 yes/no,19 yes/no,19 yes/no
+incomeFromLTCReceived_true,1,1,1
+incomeFromLTCReceived_false,0,0,0
+salaryShareholderEmployeeNotTaxed,21 yes/no,21 yes/no,21 yes/no
+salaryShareholderEmployeeNotTaxed_true,1,1,1
+salaryShareholderEmployeeNotTaxed_false,0,0,0
+rentsReceived,22 yes/no,22 yes/no,22 yes/no
+rentsReceived_true,1,1,1
+rentsReceived_false,0,0,0
+incomeFromSelfEmploymentReceived,23 yes/no,23 yes/no,23 yes/no
+incomeFromSelfEmploymentReceived_true,1,1,1
+incomeFromSelfEmploymentReceived_false,0,0,0
+incomeOtherReceived,24 Yes,24 Yes,24 Yes
+incomeOtherReceived_true,Yes,Yes,Yes
+incomeOtherReceived_false,Off,Off,Off
+noOtherIncomeReceived,24 no,24 no,24 no
+noOtherIncomeReceived_true,Yes,Yes,Yes
+noOtherIncomeReceived_false,Off,Off,Off
+expensesOtherReceived,26 no/yes,26 no/yes,26 no/yes
+expensesOtherReceived_true,0,0,0
+expensesOtherReceived_false,1,1,1
+netLossesBroughtForwardClaimed,28 no/yes,28 no/yes,28 no/yes
+netLossesBroughtForwardClaimed_true,0,0,0
+netLossesBroughtForwardClaimed_false,1,1,1
+independentEarnerTaxCreditEligible,30A yes/no,30A yes/no,30A yes/no
+independentEarnerTaxCreditEligible_true,0,0,0
+independentEarnerTaxCreditEligible_false,1,1,1
+excessImputationCreditsBroughtForwardEligible,31 yes/no,31 yes/no,31 yes/no
+excessImputationCreditsBroughtForwardEligible_true,0,0,0
+excessImputationCreditsBroughtForwardEligible_false,1,1,1
+earlyPaymentDiscountEntitled,33 yes/no,33 yes/no,33 yes/no
+earlyPaymentDiscountEntitled_true,0,0,0
+earlyPaymentDiscountEntitled_false,1,1,1
+transferRefundToSomeoneElsesIncomeTaxAccountAssociated,34E yes/no,34E yes/no,34E yes/no
+transferRefundToSomeoneElsesIncomeTaxAccountAssociated_true,no,no,no
+transferRefundToSomeoneElsesIncomeTaxAccountAssociated_false,No,No,No
+transferRefundToSomeoneElsesStudentLoanAssociated,34H yes/no,34H yes/no,34H yes/no
+transferRefundToSomeoneElsesStudentLoanAssociated_true,Yes,Yes,Yes
+transferRefundToSomeoneElsesStudentLoanAssociated_false,No,No,No
+residualIncomeTaxDebitHigherThan2500Dollars,35 no/yes,35 no/yes,35 no/yes
+residualIncomeTaxDebitHigherThan2500Dollars_true,1,1,1
+residualIncomeTaxDebitHigherThan2500Dollars_false,0,0,0
+disclosureRequiredToHoldRightsDuringIncomeYear,36 no/yes,36 no/yes,36 no/yes
+disclosureRequiredToHoldRightsDuringIncomeYear_true,1,1,1
+disclosureRequiredToHoldRightsDuringIncomeYear_false,0,0,0
+returnForPartYear,37 no/yes,37 no/yes,37 no/yes
+returnForPartYear_true,No,No,No
+returnForPartYear_false,Yes,Yes,Yes
+residualIncomeTaxIsCredit,32a credit/debit,32a credit/debit,32a credit/debit
+residualIncomeTaxIsCredit_true,0,0,0
+residualIncomeTaxIsCredit_false,1,1,1
+taxOnTaxableIncomeIsCredit,32b credit/debit,32b credit/debit,32b credit/debit
+taxOnTaxableIncomeIsCredit_true,0,0,0
+taxOnTaxableIncomeIsCredit_false,1,1,1
+totalSchedularTaxDeducted,box 12A,box 12A,box 12A
+totalSchedularGrossPayments,box 12B,box 12B,box 12B
+schedularPaymentExpenses,box 12C,box 12C,box 12C
+netSchedularPayments,box 12D,box 12D,box 12D
+totalRWT,box 13A,box 13A,box 13A
+totalGrossInterest,box 13B,box 13B,box 13B
+totalDividendImputationCredits,box 14,box 14,box 14
+totalDividendRWTAndPaymentsForForeignDividends,box 14A,box 14A,box 14A
+totalGrossDividends,box 14B,box 14B,box 14B
+totalMaoriAuthorityCredits,box 15A,box 15A,box 15A
+totalMaoriAuthorityDistributions,box 15B,box 15B,box 15B
+totalTaxPaidByTrustees,box 16A,box 16A,box 16A
+totalEstateOrTrustIncome,box 16B,box 16B,box 16B
+totalTaxableDistributionsFromNonComplyingTrusts,box 16C,box 16C,box 16C
+totalOverseasTaxPaid,box17A,box17A,box17A
+totalOverseasIncome,box17B,box17B,box17B
+totalPartnershipTaxCredits,box 18A,box 18A,box 18A
+totalActivePartnershipIncome,box 18B,box 18B,box 18B
+totalLTCTaxCredits,box 19A,box 19A,box 19A
+totalActiveLTCIncome,box 19B,box 19B,box 19B
+nonAllowableDeductionsThisYear,box 19C,box 19C,box 19C
+priorYearsNonAllowableDeductionsClaimedThisYear,box 19D,box 19D,box 19D
+adjustedLTCIncome,box 19E,box 19E,box 19E
+taxCreditSubtotal,box 20A,box 20A,box 20A
+incomeSubtotal,box 20B,box 20B,box 20B
+totalShareholderEmployeeSalary,box 21,box 21,box 21
+netRents,box 22,box 22,box 22
+selfEmployedNetIncome,box 23,box 23,box 23
+totalOtherNetIncome,box 24,box 24,box 24
+residentialLandWithholdingTaxCredit,box 24A,box 24A,box 24A
+totalIncome,box 25,box 25,box 25
+totalOtherExpensesClaimed,box 26,box 26,box 26
+incomeAfterExpenses,box 27,box 27,box 27
+amountBroughtForward,box 28A,box 28A,box 28A
+amountClaimedThisYear,box 28B,box 28B,box 28B
+taxableIncome,box 29,box 29,box 29
+excessImputationCreditsBroughtForward,box 31,box 31,box 31
+taxOnTaxableIncome,box 32,box 32,box 32
+residualIncomeTax,box 32A,box 32A,box 32A
+taxCalculationResult,box 32B,box 32B,box 32B
+refundIsTransferredTo2018,34 check,34 check,34 check
+refundIsTransferredToCurrentYear,34 check,34 check,34 check
+refundIsTransferredToCurrentYear_true,1,1,1
+refundIsTransferredToCurrentYear_false,Off,Off,Off
+refundIsTransferredTo2018_true,1,1,1
+refundIsTransferredTo2018_false,Off,Off,Off
+refundIsTransferredToStudentLoan,34 check a,34 check a,34 check a
+refundIsTransferredToStudentLoan_true,2,2,2
+refundIsTransferredToStudentLoan_false,Off,Off,Off
+refundIsTransferredToSomeoneElsesTaxAccount,34 check b,34 check b,34 check b
+refundIsTransferredToSomeoneElsesTaxAccount_true,3,3,3
+refundIsTransferredToSomeoneElsesTaxAccount_false,Off,Off,Off
+refundIsTransferredToSomeoneElsesStudentLoan,34 check c,34 check c,34 check c
+refundIsTransferredToSomeoneElsesStudentLoan_true,4,4,4
+refundIsTransferredToSomeoneElsesStudentLoan_false,Off,Off,Off
+refundIsTransferredToOther,34 other,34 other,34 other
+refundIsTransferredToOther_true,4,4,4
+refundIsTransferredToOther_false,Off,Off,Off
+refundOtherTaxAccountReceiverName,34 name of taxpayer 1,34 name of taxpayer 1,34 name of taxpayer 1
+refundOtherTaxAccountReceiverIRD,box 34F,box 34F,box 34F
+refundOtherTaxAccountReceiverAmount,box 34G,box 34G,box 34G
+refundOtherTaxAccountReceiverYearEnded31March,34 year end,34 year end,34 year end
+refundOtherStudentLoanReceiverName,34 name of taxpayer 2,34 name of taxpayer 2,34 name of taxpayer 2
+refundOtherStudentLoanReceiverIRD,box 34I,box 34I,box 34I
+refundOtherStudentLoanReceiverAmount,box 34J,box 34J,box 34J
+refundCopied,box 34,box 34,box 34
+refundOverpayment2018,box 34A,box 34A,box 34A
+refundOverpaymentCurrentYear,box 34A,box 34A,box 34A
+refundCopiedPlusOverpayment2018,box 34B,box 34B,box 34B
+refundCopiedPlusOverpaymentCurrentYear,box 34B,box 34B,box 34B
+refundTransferTo2018,box 34C,box 34C,box 34C
+refundTransferToCurrentYear,box 34C,box 34C,box 34C
+refundTransferToStudentLoan,box 34D,box 34D,box 34D
+refundTotal,box 34K,box 34K,box 34K
+taxPaymentSEROption2018,35A,35A,35A
+taxPaymentSEROptionCurrentYear,35A,35A,35A
+taxPayment2018,box 35B,box 35B,box 35B
+taxPaymentCurrentYear,box 35B,box 35B,box 35B
+dateStart2018TaxReturn_day,37B from day,37B from day,37B from day
+dateStart2018TaxReturn_month,37B from month,37B from month,37B from month
+dateStart2018TaxReturn_year,37B from year,37B from year,37B from year
+dateEnd2018TaxReturn_day,37C to day,37C to day,37C to day
+dateEnd2018TaxReturn_month,37C to month,37C to month,37C to month
+dateEnd2018TaxReturn_year,37C to year,37C to year,37C to year
+dateStartCurrentYearTaxReturn_day,37B from day,37B from day,37B from day
+dateStartCurrentYearTaxReturn_month,37B from month,37B from month,37B from month
+dateStartCurrentYearTaxReturn_year,37B from year,37B from year,37B from year
+dateEndCurrentYearTaxReturn_day,37C to day,37C to day,37C to day
+dateEndCurrentYearTaxReturn_month,37C to month,37C to month,37C to month
+dateEndCurrentYearTaxReturn_year,37C to year,37C to year,37C to year
+dateEndExcludedOverseasIncome_day,30B end day,30B end day,30B end day
+dateEndExcludedOverseasIncome_month,30B end month,30B end month,30B end month
+dateEndExcludedOverseasIncome_year,30B end year,30B end year,30B end year
+dateStartExcludedOverseasIncome_day,30B day,30B day,30B day
+dateStartExcludedOverseasIncome_month,30B month,30B month,30B month
+dateStartExcludedOverseasIncome_year,30B year,30B year,30B year
+interestFromEligibleEntitiesReceived,box 13C Check Box,box 13C Check Box,box 13C Check Box
+interestFromEligibleEntitiesReceived_true,Yes,Yes,Yes
+interestFromEligibleEntitiesReceived_false,Off,Off,Off
+dividendsFromEligibleEntitiesReceived,14C,14C,14C
+dividendsFromEligibleEntitiesReceived_true,Yes,Yes,Yes
+dividendsFromEligibleEntitiesReceived_false,Off,Off,Off
+superannuationSchemeIncomeFromOverseas,box17C,box17C,box17C
+superannuationSchemeIncomeFromOverseas_true,1,1,1
+superannuationSchemeIncomeFromOverseas_false,Off,Off,Off
+shareholderEmployeeSalaryOnlyInFuture,21A check,21A check,21A check
+shareholderEmployeeSalaryOnlyInFuture_true,Yes,Yes,Yes
+shareholderEmployeeSalaryOnlyInFuture_false,Off,Off,Off
+unpaidMajorWorkingShareholderWfFTCELigible,21B check,21B check,21B check
+unpaidMajorWorkingShareholderWfFTCELigible_true,1,1,1
+unpaidMajorWorkingShareholderWfFTCELigible_false,Off,Off,Off
+reasonForTaxReturnPartYear,37a,37a,37a
+reasonForTaxReturnPartYear_0,0,0,0
+reasonForTaxReturnPartYear_1,1,1,1
+reasonForTaxReturnPartYear_2,2,2,2
+reasonForTaxReturnPartYear_3,3,3,3
+reasonForTaxReturnPartYear_4,4,4,4
+reasonForTaxReturnPartYear_5,5,5,5
+reasonForTaxReturnPartYear_none,Off,Off,Off
+otherIncomePayer,24 first names,24 first names,24 first names
+otherIncomeType,24 surname,24 surname,24 surname
+alternativePersonFirstNamesCompletedReturn,26 first names,26 first names,26 first names
+alternativePersonSurnameCompletedReturn,26 surname,26 surname,26 surname
+taxCreditQualifyingMonthsNumber,box 30C,box 30C,box 30C
+taxCreditValue,box 30,box 30,box 30
+minusSignForSchedularPaymentsExpenses,box 12C minus,box 12C minus,box 12C minus
+minusSignForSchedularNetPayments,box 12D minus,box 12D minus,box 12D minus
+minusSignForTotalGrossInterestReceivedFromEligibleEntities,minus 13B,minus 13B,minus 13B
+minusSignForNZTotalEstateOrCompliantTrustIncome,minus 16B,minus 16B,minus 16B
+minusSignForNZTotalTaxableDistrbutionsNonCompliantTrust,minus 16C,minus 16C,minus 16C
+minusSignForTotalOverseasIncome,17b minus,17b minus,17b minus
+minusSignForTotalActivePartnershipIncome,18b minus,18b minus,18b minus
+minusSignForTotalActiveLTCIncome,19b minus,19b minus,19b minus
+minusSignForAdjustedLTCIncome,19e minus,19e minus,19e minus
+minusSignForIncomeSubtotal,20b minus,20b minus,20b minus
+minusSignForTotalShareholderEmployeeSalary,21 minus,21 minus,21 minus
+minusSignForNetRents,22 minus,22 minus,22 minus
+minusSignForSelfEmployedNetIncome,23 minus,23 minus,23 minus
+minusSignForTotalOtherNetIncome,box 24 minus sign,box 24 minus sign,box 24 minus sign
+minusSignForRLWTTaxCredit,box 24A minus sign,box 24A minus sign,box 24A minus sign
+minusSignForTotalIncome,box 25 minus sign,box 25 minus sign,box 25 minus sign
+minusSignForIncomeAfterExpenses,box 27 minus sign,box 27 minus sign,box 27 minus sign
+minusSignForTaxableIncome,box 29 minus sign,box 29 minus sign,box 29 minus sign
