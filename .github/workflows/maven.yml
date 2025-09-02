@@ -10,7 +10,7 @@ on:
       skip-tests:
         description: 'Skip tests during build'
         required: false
-        default: 'false'
+        default: 'true'
       dependency-graph:
         description: 'Submit Maven dependency graph to GitHub'
         required: false

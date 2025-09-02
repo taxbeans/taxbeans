@@ -224,7 +224,7 @@ public class IR3Form2025 implements FormDestination {
 
 	private String minusSignForTotalShareholderEmployeeSalary;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="32 yes/no", trueValue="1", falseValue="0")
 	private boolean netLossesBroughtForwardClaimed;
 
 	@RightAlign(value=11)

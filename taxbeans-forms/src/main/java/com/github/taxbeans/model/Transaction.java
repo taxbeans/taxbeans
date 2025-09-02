@@ -19,7 +19,7 @@ public class Transaction implements Comparable<Transaction>, Cloneable {
 	 * in multiple jurisdictions
 	 */
 	private ZonedDateTime date;
-	
+
 	private ZonedDateTime dateEntered;
 
 	private String description;

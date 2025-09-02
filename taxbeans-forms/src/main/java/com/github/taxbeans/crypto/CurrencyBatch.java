@@ -394,7 +394,10 @@ public class CurrencyBatch extends AbstractCryptoEvent {
 
 	public void setInitialCost(CurrencyAmount initialCost) {
 		if (batchGroup == null) {
-			throw new IllegalStateException("batch group must be set first");
+			batchGroup = CurrencyBatchContext.getBatchGroup();
+			if (batchGroup == null) {
+				throw new IllegalStateException("batch group must be set first");
+			}
 		}
 		if (!initialCost.getCurrencyCode().isSameCurrency(batchGroup.getBaseCurrency())) {
 			throw new IllegalStateException("currency mismatch");

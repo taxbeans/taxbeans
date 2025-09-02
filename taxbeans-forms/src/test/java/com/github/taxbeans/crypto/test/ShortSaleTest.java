@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.taxbeans.crypto.CurrencyAmount;
+import com.github.taxbeans.crypto.CurrencyBatchContext;
 import com.github.taxbeans.crypto.CurrencyBatchGroup;
 import com.github.taxbeans.crypto.CurrencyConversion;
 import com.github.taxbeans.crypto.CurrencyConversionStrategy;
@@ -35,6 +36,8 @@ public class ShortSaleTest {
 
 		CurrencyBatchGroup batchGroup = CurrencyBatchGroup.of(Monetary.getCurrency("NZD"),
 				CurrencyConversionStrategy.RBNZ);
+
+		CurrencyBatchContext.setBatchGroup(batchGroup);
 
 		CurrencyEventProcessorSession session = new CurrencyEventProcessorSession(batchGroup);
 
