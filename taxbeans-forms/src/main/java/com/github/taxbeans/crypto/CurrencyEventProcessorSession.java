@@ -18,29 +18,29 @@ import org.slf4j.LoggerFactory;
 public class CurrencyEventProcessorSession {
 
 	CurrencyBalance currencyBalance;
-	
+
 	CurrencyBalance depositBalance = CurrencyBalance.of().valueAtTransactionDatetime();
-	
+
 	CurrencyBalance withdrawalBalance = CurrencyBalance.of().valueAtTransactionDatetime();
-	
+
 	CurrencyBalance ledgerBalance = CurrencyBalance.of().valueAtTransactionDatetime();
-	
+
 	MonetaryAmount profit;
-	
+
 	MonetaryAmount profitOfLast;
-	
+
 	MonetaryAmount totalCostBasis;
-	
+
 	MonetaryAmount totalAssumedDeposits;
-	
+
 	MonetaryAmount drawings = Money.of(BigDecimal.ZERO, "NZD");
-	
+
 	MonetaryAmount fundsIntroduced = Money.of(BigDecimal.ZERO, "NZD");
-	
+
 	MonetaryAmount netDrawings = Money.of(BigDecimal.ZERO, "NZD");
 
 	private CurrencyBatchGroup batchGroup;
-	
+
 	private static boolean testIncludeDeposits = false;
 
 	private static boolean testIncludeFiatDeposits = true;
@@ -50,23 +50,23 @@ public class CurrencyEventProcessorSession {
 
 	//batch issue could be timezone issue //TODO: check on that
 	private static boolean testIncludeBCHDeposits = false;
-	
-	private Map<BigDecimal, CurrencyWithdrawal> transferMap = 
+
+	private Map<BigDecimal, CurrencyWithdrawal> transferMap =
 			new HashMap<BigDecimal, CurrencyWithdrawal>();
-	
-	private Map<BigDecimal, CurrencyDeposit> depositTransferMap = 
+
+	private Map<BigDecimal, CurrencyDeposit> depositTransferMap =
 			new HashMap<BigDecimal, CurrencyDeposit>();
-	
+
 	private List<CurrencyTransfer> transfers = new ArrayList<CurrencyTransfer>();
-	
+
 	private List<CurrencyDeposit> deposits = new ArrayList<CurrencyDeposit>();
-	
+
 	final static Logger LOG = LoggerFactory.getLogger(CurrencyEventProcessorSession.class);
-	
+
 	int tradeCount = 0;
 
 	private List<BusinessExpense> businessExpenseList = new ArrayList<BusinessExpense>();
-	
+
 	public CurrencyEventProcessorSession(CurrencyBatchGroup batchGroup) {
 		this.batchGroup = batchGroup;
 		currencyBalance = CurrencyBalance.of().valueAtTransactionDatetime();
@@ -74,7 +74,7 @@ public class CurrencyEventProcessorSession {
 		totalCostBasis = Money.of(BigDecimal.ZERO, batchGroup.getBaseCurrency());
 		totalAssumedDeposits = Money.of(BigDecimal.ZERO, batchGroup.getBaseCurrency());
 	}
-	
+
 	public void process(CryptoEvent cryptoEvent) {
 		if (cryptoEvent instanceof CurrencyTradeProfit) {
 			process((CurrencyTradeProfit) cryptoEvent, cryptoEvent.getCurrencyExchange());
@@ -101,18 +101,18 @@ public class CurrencyEventProcessorSession {
 				}
 				//if (feeAmount.equals(ZERO_NZD)) {
 				//	throw new AssertionError(
-				//			String.format("fee was not zero for deposit in row %1$s", 
+				//			String.format("fee was not zero for deposit in row %1$s",
 				//					cryptoEvent.getRowNum()));
 				//}
 				profitOfLast = CurrencyAmount.of(feeAmount, cryptoEvent.getWhen())
 						.getBaseCurrencyAmount().negate();
 				Assert.assertTrue(profitOfLast.isNegative() || profitOfLast.isZero());
 				profit = profit.add(profitOfLast);
-				
+
 				if (!feeAmount.isZero()) {
 					batchGroup.subtract(feeAmount, cryptoEvent.getWhen());
 				}
-				
+
 				if (testIncludeDeposits) {
 					batchGroup.add(CurrencyBatch.of(amount, currencyDeposit.getWhen(), amount));
 				} else if (testIncludeFiatDeposits && !amount.isCrypto()) {
@@ -123,7 +123,7 @@ public class CurrencyEventProcessorSession {
 				} else if (testIncludeSpecialCaseLTCDeposit && amount.isCrypto()
 						&& amount.getCurrencyCode().equals(CurrencyCode.of("LTC"))
 						&& (amount.getBigDecimal().compareTo(new BigDecimal("0.13720906")) == 0)) {
-					batchGroup.add(CurrencyBatch.of(amount, currencyDeposit.getWhen(), amount));					
+					batchGroup.add(CurrencyBatch.of(amount, currencyDeposit.getWhen(), amount));
 				}
 				//transfer detection
 				if (!transferMap.isEmpty()) {
@@ -157,7 +157,7 @@ public class CurrencyEventProcessorSession {
 				}
 				BigDecimal transferDecimal = transferAmount.getBigDecimal().setScale(8, RoundingMode.HALF_UP);
 				depositTransferMap.put(transferDecimal, currencyDeposit);
-				
+
 				//tracking of drawings:
 				if (!depositAmount.isCrypto()) {
 					MonetaryAmount monetaryAmount = depositAmount.getBaseCurrencyAmount();
@@ -200,7 +200,7 @@ public class CurrencyEventProcessorSession {
 						BigDecimal decimal = withdrawalAmount.getBigDecimal().setScale(8, RoundingMode.HALF_UP);
 						CurrencyDeposit currencyDeposit = depositTransferMap.get(decimal);
 
-						if (currencyDeposit == null && 
+						if (currencyDeposit == null &&
 								feeAmount.getBigDecimal().compareTo(BigDecimal.ZERO) != 0) {
 							decimal = withdrawalAmount.getBigDecimal().subtract(feeAmount.getBigDecimal()).setScale(8, RoundingMode.HALF_UP);
 							currencyDeposit = depositTransferMap.get(decimal);
@@ -237,7 +237,7 @@ public class CurrencyEventProcessorSession {
 				}
 				BigDecimal transferDecimal = transferAmount.getBigDecimal().setScale(8, RoundingMode.HALF_UP);
 				transferMap.put(transferDecimal, currencyWithdrawal);
-				
+
 				//tracking of drawings:
 				MonetaryAmount monetaryAmount = withdrawalAmount.getBaseCurrencyAmount();
 				if (!withdrawalAmount.isCrypto() && !currencyWithdrawal.isBusinessExpense()) {
@@ -253,21 +253,21 @@ public class CurrencyEventProcessorSession {
 					Assert.assertTrue(profitOfLast.isNegative());
 					Assert.assertTrue(monetaryAmount.isPositive());
 					profit = profit.subtract(monetaryAmount);
-					businessExpenseList.add(BusinessExpense.of(monetaryAmount, currencyWithdrawal.getWhen(), 
+					businessExpenseList.add(BusinessExpense.of(monetaryAmount, currencyWithdrawal.getWhen(),
 							currencyWithdrawal.getComment()));
 					batchGroup.subtract(withdrawalAmount, cryptoEvent.getWhen());
 				}
-			}	
+			}
 		}
 	}
-	
+
 	public void process(CurrencyTradeLoss currencyTradeLoss, CurrencyExchange currencyExchange) {
 		MonetaryAmount thisLoss;
 		if (Configuration.calculateTradeLossAtInitialCost()) {
-			CurrencyTrade logicalTrade = CurrencyTrade.of(batchGroup, 
-					currencyTradeLoss.getLoss(), 
-					CurrencyAmount.getZeroNZD(), 
-					currencyTradeLoss.getWhen(), 
+			CurrencyTrade logicalTrade = CurrencyTrade.of(batchGroup,
+					currencyTradeLoss.getLoss(),
+					CurrencyAmount.getZeroNZD(),
+					currencyTradeLoss.getWhen(),
 					CurrencyFee.of(CurrencyAmount.getZeroNZD()));
 			thisLoss = logicalTrade.calculateBaseCurrencyCost();
 			thisLoss = currencyTradeLoss.getLossInBaseCurrency();
@@ -276,7 +276,7 @@ public class CurrencyEventProcessorSession {
 			//currency lost must be removed from the batches
 			batchGroup.subtract(currencyTradeLoss.getLoss(), currencyTradeLoss.getWhen());
 		}
-		
+
 		//MonetaryAmount rolloverFees = currencyTradeLoss.getTotalRolloverFeesInBaseCurrency();
 		//fee is informational and seems to be already included in profit/loss reported
 		profitOfLast = thisLoss;  //.negate().subtract(rolloverFees);
@@ -288,13 +288,13 @@ public class CurrencyEventProcessorSession {
 		//currencyBalance.subtract(currencyTradeLoss.getTotalRolloverFees().getAmount(), currencyExchange);
 		totalCostBasis = totalCostBasis.add(thisLoss);
 		tradeCount++;
-		
+
 		if (currencyTradeLoss.isBusinessExpense()) {
-			businessExpenseList.add(BusinessExpense.of(thisLoss.negate(), currencyTradeLoss.getWhen(), 
+			businessExpenseList.add(BusinessExpense.of(thisLoss.negate(), currencyTradeLoss.getWhen(),
 					currencyTradeLoss.getComment()));
 		}
 	}
-	
+
 	public void process(CurrencyTradeProfit currencyTradeProfit, CurrencyExchange currencyExchange) {
 		MonetaryAmount thisProfit = currencyTradeProfit.getProfitInBaseCurrency();
 		//MonetaryAmount rolloverFees = currencyTradeProfit.getTotalRolloverFeesInBaseCurrency();
@@ -337,37 +337,37 @@ public class CurrencyEventProcessorSession {
 		currencyConversion.deriveTradeAndBatch();
 		CurrencyTrade trade = currencyConversion.getTrade();
 		CurrencyExchange currencyExchange = currencyConversion.getCurrencyExchange();
-		
+
 		CurrencyAmount sellAmount = CurrencyAmount.of(trade.getCurrencyAmount(), when);
 		//CurrencyAmount feeAmount = currencyConversion.getFee().getAmount();
 		//expect some NZD here for purchases of BTC with NZD
 		//leveraged transactions affect balance!
 		ledgerBalance.subtract(sellAmount, currencyExchange);
 		currencyBalance.subtract(sellAmount, currencyExchange);
-		
+
 		//the fee is already subtracted from the ledger
 		//by means of the sell amount
 		//the fee is included in the trade profit calculation
 		//by means of deriveTradeAndBatch
 		//ledgerBalance.subtract(feeAmount, currencyExchange);
 		//currencyBalance.subtract(feeAmount, currencyExchange);
-		
+
 		//if (!trade.isLeveraged()) {
 			//expect some NZD here for purchases of BTC with NZD
-			
+
 		//}
 		//cryptoBalance.subtract(trade.getFee());  //fee already included in crypto amount above
 		processTradeEvent(trade);
 		if (!trade.isLeveraged()) {
 			totalCostBasis = totalCostBasis.subtract(trade.getCostBasis());
 		}
-		CurrencyBatch batch = currencyConversion.getBatch();				
+		CurrencyBatch batch = currencyConversion.getBatch();
 		batchGroup.add(batch);
-		
+
 		CurrencyAmount buyAmount = CurrencyAmount.of(batch.getInitialAmount(), when);
 		currencyBalance.add(buyAmount, currencyExchange);
 		ledgerBalance.add(buyAmount, currencyExchange);
-		if (!batch.isLeveraged()) {			
+		if (!batch.isLeveraged()) {
 			totalCostBasis = totalCostBasis.add(batch.getInitialCostInBaseCurrency());
 		}
 	}
@@ -375,7 +375,7 @@ public class CurrencyEventProcessorSession {
 	public MonetaryAmount getTotalCostBasis() {
 		return totalCostBasis;
 	}
-	
+
 	public void processTradeEvent(CurrencyTrade trade) {
 		CurrencyBatchSet batchesUsedToAction = trade.action();
 		if (LOG.isTraceEnabled()) {

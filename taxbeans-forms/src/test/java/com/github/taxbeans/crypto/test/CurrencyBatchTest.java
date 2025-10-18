@@ -13,8 +13,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.taxbeans.crypto.AbstractCryptoEvent;
 import com.github.taxbeans.crypto.CryptoEvent;
 import com.github.taxbeans.crypto.CurrencyAmount;
+import com.github.taxbeans.crypto.CurrencyBatchContext;
 import com.github.taxbeans.crypto.CurrencyBatchGroup;
 import com.github.taxbeans.crypto.CurrencyConversion;
 import com.github.taxbeans.crypto.CurrencyConversionStrategy;
@@ -67,6 +69,7 @@ public class CurrencyBatchTest {
 
 		CurrencyEventProcessorSession session = new CurrencyEventProcessorSession(batchGroup);
 		for (CryptoEvent event : cryptoEvents) {
+			CurrencyBatchContext.setBatchGroup(batchGroup);
 			session.process(event);
 			System.out.println(batchGroup.getAllBatches());
 		}
