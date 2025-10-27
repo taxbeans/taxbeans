@@ -32,11 +32,14 @@ public class CurrencyBatchTest {
 	@Test
 	public void testCurrencyBatch() throws ParseException {
 
+		JavaMoneyFix.fix();
 		System.setProperty("CurrencyTrading.CostMethod", "FIFO");
 		System.setProperty("CurrencyTrading.allowMultipleBatchGroups", "true");
 
 		CurrencyBatchGroup batchGroup = CurrencyBatchGroup.of(Monetary.getCurrency("NZD"),
 				CurrencyConversionStrategy.RBNZ);
+		CurrencyBatchContext.setBatchGroup(batchGroup);
+
 
 		List<CryptoEvent> cryptoEvents = new ArrayList<CryptoEvent>();
 
@@ -46,10 +49,10 @@ public class CurrencyBatchTest {
 				CurrencyAmount.of("150", "NZD"),
 				CurrencyFee.of(CurrencyAmount.of("1", "NZD")));
 		currencyConversion.setCurrencyExchange(CurrencyExchange.CEX);
-		System.err.println("currencyConversion1 = " + currencyConversion);
+		logger.info("currencyConversion1 = {}", currencyConversion);
 		cryptoEvents.add(currencyConversion);
 
-		System.out.println(batchGroup.getAllBatches());
+		logger.info("{}", batchGroup.getAllBatches());
 
 		ExchangeCurrencyBalance balance = new ExchangeCurrencyBalance();
 		balance.setBalance(CurrencyAmount.of(new BigDecimal("100"), "USD"));
@@ -62,16 +65,14 @@ public class CurrencyBatchTest {
 				CurrencyAmount.of("55", "USD"),
 				CurrencyFee.of(CurrencyAmount.of("1", "NZD")));
 		currencyConversion2.setCurrencyExchange(CurrencyExchange.CEX);
-		System.err.println("currencyConversion2 = " + currencyConversion2);
+		logger.info("currencyConversion2 = {}", currencyConversion2);
 		cryptoEvents.add(currencyConversion2);
 
-		System.out.println(batchGroup.getAllBatches());
-
+		logger.info(String.valueOf(batchGroup.getAllBatches()));
 		CurrencyEventProcessorSession session = new CurrencyEventProcessorSession(batchGroup);
 		for (CryptoEvent event : cryptoEvents) {
-			CurrencyBatchContext.setBatchGroup(batchGroup);
 			session.process(event);
-			System.out.println(batchGroup.getAllBatches());
+			logger.info(String.valueOf(batchGroup.getAllBatches()));
 		}
 	}
 
