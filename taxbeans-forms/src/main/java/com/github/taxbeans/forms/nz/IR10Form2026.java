@@ -207,9 +207,11 @@ public class IR10Form2026 {
 	@RoundToDollars
 	private Money untaxedRealisedGains;
 	
+	@RightAlign(9)
 	@RoundToDollars
 	private Money additionsToFixedAssets;
-	
+
+	@RightAlign(9)
 	@RoundToDollars
 	private Money disposalsOfFixedAssets;
 	

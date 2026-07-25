@@ -78,37 +78,52 @@ public class IR4Form2025 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean	residentialPropertyIncome;
 
+	// 2025 PDF widgets for Q21 are mis-tagged: left(No)=AP Yes, right(Yes)=AP No.
+	// Export values are therefore inverted relative to the printed labels.
 	@UseTrueFalseMappings(fieldName="21", falseValue="Yes", trueValue="No")
 	private boolean businessIncome;
 
-	@UseTrueFalseMappings
+	// No separate overseas-premiums question on 2025 IR4 page 3; CSV historically
+	// pointed this at "23 yes/no", which is Other income.
+	@Skip
 	private boolean overseasPremiums;
 
-	@UseTrueFalseMappings
+	// Same left/right AP swap as Q21
+	@UseTrueFalseMappings(fieldName="22 yes/no", falseValue="Yes", trueValue="No")
 	private boolean propertySalesIncome;
 
-	@UseTrueFalseMappings(fieldName="24 yes/no")
+	// Q23 stacked widgets: upper(No)=AP Yes, lower(Yes)=AP No
+	@UseTrueFalseMappings(fieldName="23 yes/no", falseValue="Yes", trueValue="No")
 	private boolean otherIncome;
 
 	@RightAlign(11)
 	private Money businessNetProfit;
 
-	@RightAlign(value=11, fieldName="25")
+	// Printed Box 24 (total before donations) is AcroForm field 24B
+	@RightAlign(value=11, fieldName="24B")
 	private Money netProfitBeforeDonations;
 
-	@UseTrueFalseMappings(fieldName="24 yes/no")
+	// Printed Q25 donations yes/no is AcroForm field "24 yes/no" (same AP swap)
+	@UseTrueFalseMappings(fieldName="24 yes/no", falseValue="Yes", trueValue="No")
 	private boolean donations;
 
-	@RightAlign(value=11, fieldName="27")
+	// Printed Box 26 is AcroForm field 26B
+	@RightAlign(value=11, fieldName="26B")
 	private Money netProfitAfterDonations;
 
+	// Q27 field "28 yes/no" is correctly tagged (No/Yes match print)
 	@UseTrueFalseMappings(fieldName="28 yes/no", falseValue="No", trueValue="Yes")
 	private boolean netLossesBroughtForward;
+
+	// IRD widget names inverted vs labels: export "Yes" ticks visual No.
+	@UseTrueFalseMappings(fieldName="28C yes/no", falseValue="Yes", trueValue="No")
+	private boolean businessContinuityTest;
 
 	@RightAlign(value=11, fieldName="28B")
 	private Money netProfitAfterLossesBroughtForward;
 
-	@UseTrueFalseMappings(fieldName="30 yes/no")
+	// Q29 field "30 yes/no" has the same AP swap as Q21
+	@UseTrueFalseMappings(fieldName="30 yes/no", falseValue="Yes", trueValue="No")
 	private boolean netLossesFromOtherCompanies;
 
 	@RightAlign(value=11, fieldName="31")
@@ -122,7 +137,8 @@ public class IR4Form2025 implements FormDestination {
 	@RightAlign(11)
 	private Money totalTaxPayable;
 
-	@RightAlign(11)
+	// Template box 32C (printed 30C) is MaxLen=9 (dollars+cents). RightAlign(11) overflows and blanks the box.
+	@RightAlign(9)
 	private Money overseasTaxPaid;
 
 	@RightAlign(11)
@@ -166,7 +182,9 @@ public class IR4Form2025 implements FormDestination {
 
 	private String provisionalTaxOption;
 
-	@RightAlign(11)
+	// Template box 35B (printed 33B): 9 dollar boxes; cents are pre-printed ".00".
+	@RightAlign(9)
+	@OmitCents
 	private Money provisionalTaxDue;
 
 	@UseTrueFalseMappings
@@ -500,6 +518,14 @@ public class IR4Form2025 implements FormDestination {
 
 	public void setNetLossesBroughtForward(boolean netLossesBroughtForward) {
 		this.netLossesBroughtForward = netLossesBroughtForward;
+	}
+
+	public boolean isBusinessContinuityTest() {
+		return businessContinuityTest;
+	}
+
+	public void setBusinessContinuityTest(boolean businessContinuityTest) {
+		this.businessContinuityTest = businessContinuityTest;
 	}
 
 	public Money getNetProfitAfterLossesBroughtForward() {

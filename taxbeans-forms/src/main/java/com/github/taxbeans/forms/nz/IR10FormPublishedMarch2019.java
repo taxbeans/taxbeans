@@ -271,6 +271,7 @@ public class IR10FormPublishedMarch2019 implements FormDestination {
 	@RoundToDollars
 	private Money additionsToFixedAssets;
 
+	@RightAlign(9)
 	@RoundToDollars
 	private Money disposalsOfFixedAssets;
 

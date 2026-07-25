@@ -51,23 +51,26 @@ businessNetProfit,12A.15,12A.15,12A.15,20,20B,21B,21B,21B,21B,21B
 propertySalesIncome,N/A,N/A,N/A,21,21,22 yes/no,22 yes/no,22 yes/no,22 yes/no,22 yes/no
 propertySalesIncome_false,N/A,N/A,N/A,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 propertySalesIncome_true,N/A,N/A,N/A,No,No,No,No,No,No,No
-overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no,22 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no,23 yes/no
-overseasPremiums_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-overseasPremiums_true,No,No,No,No,No,No,No,No,No,No
-otherIncome,20 yes/no,20 yes/no,20 yes/no,23 yes/no,23 yes/no,24 yes/no,24 yes/no,24 yes/no,24 yes/no,24 yes/no
+overseasPremiums,19 yes/no,19 yes/no,19 yes/no,22 yes/no,22 yes/no,23 yes/no,23 yes/no,23 yes/no,N/A,N/A
+overseasPremiums_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,N/A,N/A
+overseasPremiums_true,No,No,No,No,No,No,No,No,N/A,N/A
+otherIncome,20 yes/no,20 yes/no,20 yes/no,23 yes/no,23 yes/no,24 yes/no,24 yes/no,24 yes/no,23 yes/no,23 yes/no
 otherIncome_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 otherIncome_true,No,No,No,No,No,No,No,No,No,No
 residentialPropertyIncome,N/A,N/A,N/A,19 yes/no,19 yes/no,19 yes/no,19 yes/no,19 yes/no,19 yes/no,19 yes/no
 residentialPropertyIncome_false,N/A,N/A,N/A,0,0,0,0,0,0,0
 residentialPropertyIncome_true,N/A,N/A,N/A,1,1,1,1,1,1,1
-netProfitBeforeDonations,12A.11.0,12A.11.0,12A.11.0,24,24,24,24,24,24,24
-donations,22,22,22,25 yes/no,25 yes/no,26 yes/no,26 yes/no,26 yes/no,26 yes/no,26 yes/no
-donations_false,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No
-donations_true,No,No,No,No,No,Yes,Yes,Yes,Yes,Yes
-netProfitAfterDonations,12A.11.4,12A.11.4,12A.11.4,26,26,26,26,26,26,26
+netProfitBeforeDonations,12A.11.0,12A.11.0,12A.11.0,24,24,24,24,24,24B,24B
+donations,22,22,22,25 yes/no,25 yes/no,26 yes/no,26 yes/no,26 yes/no,24 yes/no,24 yes/no
+donations_false,Yes,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes
+donations_true,No,No,No,No,No,Yes,Yes,Yes,No,No
+netProfitAfterDonations,12A.11.4,12A.11.4,12A.11.4,26,26,26,26,26,26B,26B
 netLossesBroughtForward,24,24,24,27 yes/no,27 yes/no,28 yes/no,28 yes/no,28 yes/no,28 yes/no,28 yes/no
-netLossesBroughtForward_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-netLossesBroughtForward_true,No,No,No,No,No,No,No,No,No,No
+netLossesBroughtForward_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No
+netLossesBroughtForward_true,No,No,No,No,No,No,No,No,Yes,Yes
+businessContinuityTest,,,,,,28C yes/no,28C yes/no,28C yes/no,28C yes/no,28C yes/no
+businessContinuityTest_false,,,,,,Yes,Yes,Yes,Yes,Yes
+businessContinuityTest_true,,,,,,No,No,No,No,No
 netProfitAfterLossesBroughtForward,12A.11.9,12A.11.9,12A.11.9,28,28,28,28,28,28B,28B
 netLossesFromOtherCompanies,26 yes/no,26 yes/no,26 yes/no,29 yes/no,28 yes/no,30 yes/no,30 yes/no,30 yes/no,30 yes/no,30 yes/no
 netLossesFromOtherCompanies_false,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
@@ -100,16 +103,16 @@ provisionalTaxDue,12A.11.7.4,12A.11.7.4,12A.11.7.4,34B,35B,35B,35B,35B,35B,35B
 nonResidentPayments,32 yes/no,32 yes/no,32 yes/no,35,36,36,36,36,36,36
 nonResidentPayments_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 nonResidentPayments_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-cfcOrFifIncome,33,33,33,36,36,36,36,36,36,36
+cfcOrFifIncome,33,33,33,36,36,37,37,37,37,37
 cfcOrFifIncome_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 cfcOrFifIncome_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-sharesRepurchased,34,34,34,37,37,37,37,37,37,37
+sharesRepurchased,34,34,34,37,37,38,38,38,38,38
 sharesRepurchased_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 sharesRepurchased_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-foreignSourcedDividends,35,35,35,38,38,38,38,38,38,38
+foreignSourcedDividends,35,35,35,38,38,39,39,39,39,39
 foreignSourcedDividends_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 foreignSourcedDividends_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-controlledByNonResidents,36,36,36,39,39,39,39,39,39,39
+controlledByNonResidents,36,36,36,39,39,40,40,40,40,40
 controlledByNonResidents_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 controlledByNonResidents_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 lowestEconomicInterests,37,37,37,40,41 Interest,41 Interest,41 Interest,41 Interest,41 Interest,41 Interest

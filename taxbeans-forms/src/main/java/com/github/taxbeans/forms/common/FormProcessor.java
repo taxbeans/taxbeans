@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -25,6 +26,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDButton;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,6 +176,15 @@ public class FormProcessor {
 					pdfField = acroForm.getField(overrideFieldName);
 				}
 				pdfField.setValue(String.valueOf(value));
+				// Parent fields (e.g. IR10 "54 Add" / "55 Disp") store /V on the parent but
+				// leave kid widgets without /AP — Chromium then paints those boxes blank.
+				if (pdfField instanceof PDNonTerminalField) {
+					for (PDField child : ((PDNonTerminalField) pdfField).getChildren()) {
+						if (child instanceof PDTextField) {
+							child.setValue(String.valueOf(value));
+						}
+					}
+				}
 				if (isNegativeMoney) {
 					AutoMinusField annotation = field.getAnnotation(AutoMinusField.class);
 					if (annotation != null) {
@@ -236,7 +247,7 @@ public class FormProcessor {
 				}
 			}
 			LOG.info("Loading: " + form.getAbsolutePath());
-			PDDocument pdfTemplate = PDDocument.load(form);
+			PDDocument pdfTemplate = Loader.loadPDF(form);
 			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
 			PDAcroForm acroForm = docCatalog.getAcroForm();
 			Map<String, Object> describe = PropertyUtils.describe(pojo);

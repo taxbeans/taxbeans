@@ -78,37 +78,46 @@ public class IR4Form2026 implements FormDestination {
 	@UseTrueFalseMappings
 	private boolean	residentialPropertyIncome;
 
+	// 2026 PDF widgets for Q21 are mis-tagged: left(No)=AP Yes, right(Yes)=AP No.
 	@UseTrueFalseMappings(fieldName="21", falseValue="Yes", trueValue="No")
 	private boolean businessIncome;
 
-	@UseTrueFalseMappings
+	// No separate overseas-premiums question mapped on 2026 IR4 page 3; CSV
+	// historically pointed this at "23 yes/no", which is Other income.
+	@Skip
 	private boolean overseasPremiums;
 
-	@UseTrueFalseMappings
+	@UseTrueFalseMappings(fieldName="22 yes/no", falseValue="Yes", trueValue="No")
 	private boolean propertySalesIncome;
 
-	@UseTrueFalseMappings(fieldName="24 yes/no")
+	@UseTrueFalseMappings(fieldName="23 yes/no", falseValue="Yes", trueValue="No")
 	private boolean otherIncome;
 
 	@RightAlign(11)
 	private Money businessNetProfit;
 
-	@RightAlign(value=11, fieldName="25")
+	// 2026 AcroForm names ≠ printed boxes: 24B→23, 25→24B donations, 26B→25,
+	// 27→26A, 28B→27, 31→29. Do not write profit into field 25 or 27.
+	@RightAlign(value=11, fieldName="24B")
 	private Money netProfitBeforeDonations;
 
-	@UseTrueFalseMappings(fieldName="24 yes/no")
+	@UseTrueFalseMappings(fieldName="24 yes/no", falseValue="Yes", trueValue="No")
 	private boolean donations;
 
-	@RightAlign(value=11, fieldName="27")
+	@RightAlign(value=11, fieldName="26B")
 	private Money netProfitAfterDonations;
 
 	@UseTrueFalseMappings(fieldName="28 yes/no", falseValue="No", trueValue="Yes")
 	private boolean netLossesBroughtForward;
 
+	// IRD widget names inverted vs labels: export "Yes" ticks visual No.
+	@UseTrueFalseMappings(fieldName="28C yes/no", falseValue="Yes", trueValue="No")
+	private boolean businessContinuityTest;
+
 	@RightAlign(value=11, fieldName="28B")
 	private Money netProfitAfterLossesBroughtForward;
 
-	@UseTrueFalseMappings(fieldName="30 yes/no")
+	@UseTrueFalseMappings(fieldName="30 yes/no", falseValue="Yes", trueValue="No")
 	private boolean netLossesFromOtherCompanies;
 
 	@RightAlign(value=11, fieldName="31")
@@ -122,7 +131,8 @@ public class IR4Form2026 implements FormDestination {
 	@RightAlign(11)
 	private Money totalTaxPayable;
 
-	@RightAlign(11)
+	// Template box 32C (printed 30C) is MaxLen=9 (dollars+cents). RightAlign(11) overflows and blanks the box.
+	@RightAlign(9)
 	private Money overseasTaxPaid;
 
 	@RightAlign(11)
@@ -166,7 +176,9 @@ public class IR4Form2026 implements FormDestination {
 
 	private String provisionalTaxOption;
 
-	@RightAlign(11)
+	// Template box 35B (printed 33B): 9 dollar boxes; cents are pre-printed ".00".
+	@RightAlign(9)
+	@OmitCents
 	private Money provisionalTaxDue;
 
 	@UseTrueFalseMappings
@@ -501,6 +513,14 @@ public class IR4Form2026 implements FormDestination {
 
 	public void setNetLossesBroughtForward(boolean netLossesBroughtForward) {
 		this.netLossesBroughtForward = netLossesBroughtForward;
+	}
+
+	public boolean isBusinessContinuityTest() {
+		return businessContinuityTest;
+	}
+
+	public void setBusinessContinuityTest(boolean businessContinuityTest) {
+		this.businessContinuityTest = businessContinuityTest;
 	}
 
 	public Money getNetProfitAfterLossesBroughtForward() {

@@ -103,19 +103,28 @@ public class IR4Form2021 implements FormDestination {
 	private Money netProfitAfterDonations;
 
 	@UseTrueFalseMappings
-	//@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private boolean netLossesBroughtForward;
 
 	@RightAlign(11)
-	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private Money netProfitAfterLossesBroughtForward;
 
+	/**
+	 * IRD named the Q29 Yes/No widget {@code 28 yes/no} on the 2021 PDF.
+	 * Mapped via {@code ir4-fields.csv}.
+	 */
 	@UseTrueFalseMappings
-	@Skip    //FIXME the actual form published by the IRD has the fields in the wrong place
 	private boolean netLossesFromOtherCompanies;
 
 	@RightAlign(11)
 	private Money taxableIncome;
+
+	/**
+	 * Q31 "Are you carrying a loss back?" — IRD named the Yes/No widget
+	 * {@code 30 yes/no} on the 2021 PDF (there is no {@code 31 yes/no}).
+	 * Export values match other inverted IR4 radios: false→Yes (visual No).
+	 */
+	@UseTrueFalseMappings(fieldName = "30 yes/no", falseValue = "Yes", trueValue = "No")
+	private boolean lossCarryBack;
 
 	@RightAlign(9)
 	@OmitCents
@@ -516,6 +525,14 @@ public class IR4Form2021 implements FormDestination {
 
 	public void setNetLossesFromOtherCompanies(boolean netLossesFromOtherCompanies) {
 		this.netLossesFromOtherCompanies = netLossesFromOtherCompanies;
+	}
+
+	public boolean isLossCarryBack() {
+		return lossCarryBack;
+	}
+
+	public void setLossCarryBack(boolean lossCarryBack) {
+		this.lossCarryBack = lossCarryBack;
 	}
 
 	public Money getTaxableIncome() {

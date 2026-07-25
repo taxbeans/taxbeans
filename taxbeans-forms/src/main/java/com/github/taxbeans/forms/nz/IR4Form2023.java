@@ -105,6 +105,10 @@ public class IR4Form2023 implements FormDestination {
 	@UseTrueFalseMappings(fieldName="28 yes/no", falseValue="No", trueValue="Yes")
 	private boolean netLossesBroughtForward;
 
+	// IRD widget names inverted vs labels: export "Yes" ticks visual No.
+	@UseTrueFalseMappings(fieldName="28C yes/no", falseValue="Yes", trueValue="No")
+	private boolean businessContinuityTest;
+
 	@RightAlign(value=11, fieldName="29")
 	private Money netProfitAfterLossesBroughtForward;
 
@@ -166,7 +170,9 @@ public class IR4Form2023 implements FormDestination {
 
 	private String provisionalTaxOption;
 
-	@RightAlign(11)
+	// Template box 35B: 9 dollar boxes; cents are pre-printed ".00".
+	@RightAlign(9)
+	@OmitCents
 	private Money provisionalTaxDue;
 
 	@UseTrueFalseMappings
@@ -500,6 +506,14 @@ public class IR4Form2023 implements FormDestination {
 
 	public void setNetLossesBroughtForward(boolean netLossesBroughtForward) {
 		this.netLossesBroughtForward = netLossesBroughtForward;
+	}
+
+	public boolean isBusinessContinuityTest() {
+		return businessContinuityTest;
+	}
+
+	public void setBusinessContinuityTest(boolean businessContinuityTest) {
+		this.businessContinuityTest = businessContinuityTest;
 	}
 
 	public Money getNetProfitAfterLossesBroughtForward() {

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
@@ -1212,7 +1213,7 @@ public class IR3FormBean {
 //			File ir3Form = new File(
 //					new File("target/classes"), //new File(System.getProperty("user.home"), "Downloads"),
 //					String.format("ir3-%1$s.pdf", year));
-//			PDDocument pdfTemplate = PDDocument.load(ir3Form);
+//			PDDocument pdfTemplate = Loader.loadPDF(ir3Form);
 //
 //			PDDocumentCatalog docCatalog = pdfTemplate.getDocumentCatalog();
 //			PDAcroForm acroForm = docCatalog.getAcroForm();
