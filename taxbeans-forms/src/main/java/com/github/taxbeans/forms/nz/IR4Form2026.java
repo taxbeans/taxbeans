@@ -131,8 +131,8 @@ public class IR4Form2026 implements FormDestination {
 	@RightAlign(11)
 	private Money totalTaxPayable;
 
-	// Template box 32C (printed 30C) is MaxLen=9 (dollars+cents). RightAlign(11) overflows and blanks the box.
-	@RightAlign(9)
+	// Template box 32C (printed 30C): MaxLen=11 to match neighbour money combs (was 9 in IRD PDF).
+	@RightAlign(11)
 	private Money overseasTaxPaid;
 
 	@RightAlign(11)

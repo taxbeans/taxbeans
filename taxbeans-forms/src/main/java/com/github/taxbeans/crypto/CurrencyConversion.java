@@ -46,7 +46,10 @@ public class CurrencyConversion extends AbstractCryptoEvent {
 	public void deriveTradeAndBatch() {
 		trade = CurrencyTrade.of(batchGroup, from, to, dateTime, fee);
 		trade.setRowNum(this.getRowNum());
-		batch = CurrencyBatch.of(to, dateTime, from);
+		// Batch initial cost must be in the batch-group base currency (usually NZD).
+		// ofNonBaseCurrency keeps a base-currency sold leg as-is, otherwise values the
+		// bought leg into base currency (required for crypto↔crypto conversions).
+		batch = CurrencyBatch.ofNonBaseCurrency(to, dateTime, from, batchGroup);
 		batch.setRowNum(this.getRowNum());
 		if (this.leveraged) {
 			trade.setLeveraged(true);

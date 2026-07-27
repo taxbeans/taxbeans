@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.multipdf.Overlay;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
@@ -14,6 +15,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -35,17 +37,17 @@ public class IR3Form2022OverlayTest {
 		//page.
 		overlayDoc.addPage(page);
 		Overlay overlayObj = new Overlay();
-		PDFont font = PDType1Font.COURIER_BOLD_OBLIQUE;
+		PDFont font = new PDType1Font(Standard14Fonts.FontName.COURIER_BOLD_OBLIQUE);
 
 		PDPageContentStream contentStream = new PDPageContentStream(overlayDoc, page);
 		
 		FileCache.populateCacheFromCurrentDirectory("target/classes/ir3-2022.pdf");
-		PDDocument originalDoc = PDDocument.load(FileCache.obtainFileFromCache("ir3-2022.pdf"));
+		PDDocument originalDoc = Loader.loadPDF(FileCache.obtainFileFromCache("ir3-2022.pdf"));
 		PDDocumentCatalog pdCatalog = originalDoc.getDocumentCatalog();
 		PDAcroForm pdAcroForm = pdCatalog.getAcroForm();
 
 		contentStream.setFont(font, 8);
-		contentStream.setNonStrokingColor(0);
+		contentStream.setNonStrokingColor(0f);
 		
 		int count = 0;
 		int previousPageNum = 0;
@@ -111,15 +113,15 @@ public class IR3Form2022OverlayTest {
 				
 				contentStream = new PDPageContentStream(overlayDoc, newPage);
 				contentStream.setFont(font, 8);
-				contentStream.setNonStrokingColor(0);
+				contentStream.setNonStrokingColor(0f);
 				previousPageNum = pageNum;
 				
 			}
 			logger.info("found at page: " + pageNum);
 
 			contentStream.beginText();
-			contentStream.moveTextPositionByAmount(x, y);
-			contentStream.drawString(fieldName);  // deprecated. Use showText(String text)
+			contentStream.newLineAtOffset(x, y);
+			contentStream.showText(fieldName);
 			contentStream.endText();
 
 			if (count == 1000) {
@@ -129,13 +131,27 @@ public class IR3Form2022OverlayTest {
 				logger.info("reached last field, updating content stream");
 				
 				contentStream.close();
+				contentStream = null;
 				File f = FileCache.newOrReplaceExistingFileInCache("ir3-2022-overlay-page"+(pageNum+1)+".pdf");
 				overlayDoc.save(f);
 				filePages.add(f);
 				overlayDoc.close();
+				overlayDoc = null;
 			}
 		}
-		contentStream.close();
+		// PDFBox 3 NPEs on a second close after the stream/doc were already closed above.
+		if (contentStream != null) {
+			contentStream.close();
+			contentStream = null;
+		}
+		if (overlayDoc != null) {
+			File f = FileCache.newOrReplaceExistingFileInCache(
+					"ir3-2022-overlay-page" + (previousPageNum + 1) + ".pdf");
+			overlayDoc.save(f);
+			filePages.add(f);
+			overlayDoc.close();
+			overlayDoc = null;
+		}
 		
 		overlayObj.setOverlayPosition(Overlay.Position.FOREGROUND);
 		overlayObj.setInputPDF(originalDoc);
@@ -149,11 +165,13 @@ public class IR3Form2022OverlayTest {
 			ovmap.put(count2, f.getAbsolutePath());
 		}
 
-		overlayObj.overlay(ovmap);
-
-		originalDoc.save(FileCache.newOrReplaceExistingFileInCache("ir3-2022-overlay.pdf"));
-		overlayDoc.close();
-		originalDoc.close();
+		try {
+			overlayObj.overlay(ovmap);
+			originalDoc.save(FileCache.newOrReplaceExistingFileInCache("ir3-2022-overlay.pdf"));
+		} finally {
+			overlayObj.close();
+			originalDoc.close();
+		}
 	}
 
 }

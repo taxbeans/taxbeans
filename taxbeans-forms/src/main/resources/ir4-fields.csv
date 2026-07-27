@@ -103,16 +103,16 @@ provisionalTaxDue,12A.11.7.4,12A.11.7.4,12A.11.7.4,34B,35B,35B,35B,35B,35B,35B
 nonResidentPayments,32 yes/no,32 yes/no,32 yes/no,35,36,36,36,36,36,36
 nonResidentPayments_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 nonResidentPayments_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-cfcOrFifIncome,33,33,33,36,36,37,37,37,37,37
+cfcOrFifIncome,33,33,33,36,37,37,37,37,37,37
 cfcOrFifIncome_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 cfcOrFifIncome_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-sharesRepurchased,34,34,34,37,37,38,38,38,38,38
+sharesRepurchased,34,34,34,37,38,38,38,38,38,38
 sharesRepurchased_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 sharesRepurchased_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-foreignSourcedDividends,35,35,35,38,38,39,39,39,39,39
+foreignSourcedDividends,35,35,35,38,39,39,39,39,39,39
 foreignSourcedDividends_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 foreignSourcedDividends_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
-controlledByNonResidents,36,36,36,39,39,40,40,40,40,40
+controlledByNonResidents,36,36,36,39,40,40,40,40,40,40
 controlledByNonResidents_false,Yes,Yes,Yes,No,No,No,No,No,No,No
 controlledByNonResidents_true,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes
 lowestEconomicInterests,37,37,37,40,41 Interest,41 Interest,41 Interest,41 Interest,41 Interest,41 Interest
